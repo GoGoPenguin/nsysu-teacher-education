@@ -1,0 +1,55 @@
+version: '3.0'
+services:
+    api:
+        user: root
+        build:
+            context: ./api
+            dockerfile: Dockerfile
+        restart: always
+        tty: true
+        stdin_open: true
+        volumes:
+            - "../api:/var/www/html/api/"
+        networks:
+            net:
+                ipv4_address: 172.18.0.2
+        container_name: te-api
+        hostname: te-api
+        image: nsysu/te-api
+    db:
+        user: root
+        build:
+            context: ./db
+            dockerfile: Dockerfile
+        volumes:
+            - "./db/data:/var/lib/mysql"
+        restart: always
+        networks:
+            net:
+                ipv4_address: 172.18.0.3
+        container_name: te-db
+        hostname: te-db
+        image: nsysu/te-db
+    redis:
+        user: root
+        build:
+            context: ./redis
+            dockerfile: Dockerfile
+        volumes:
+            - "./redis/data:/data"
+        restart: always
+        networks: 
+            net: 
+                ipv4_address: 172.18.0.4
+        container_name: te-redis
+        hostname: te-redis
+        image: nsysu/te-redis
+
+networks:
+    net:
+        driver: bridge
+        ipam:
+            driver: default
+            config:
+            -
+              subnet: 172.18.0.0/24
