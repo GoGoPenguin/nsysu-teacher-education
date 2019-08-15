@@ -86,7 +86,6 @@ func callStack() string {
 			}
 			preFile = file
 			preResult = result
-
 		}
 	}
 
