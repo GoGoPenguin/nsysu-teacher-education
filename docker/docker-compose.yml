@@ -13,9 +13,9 @@ services:
         networks:
             net:
                 ipv4_address: 172.18.0.2
-        container_name: te-api
-        hostname: te-api
-        image: nsysu/te-api
+        container_name: nte-api
+        hostname: nte-api
+        image: nsysu/nte-api
     db:
         user: root
         build:
@@ -27,9 +27,9 @@ services:
         networks:
             net:
                 ipv4_address: 172.18.0.3
-        container_name: te-db
-        hostname: te-db
-        image: nsysu/te-db
+        container_name: nte-db
+        hostname: nte-db
+        image: nsysu/nte-db
     redis:
         user: root
         build:
@@ -41,9 +41,9 @@ services:
         networks: 
             net: 
                 ipv4_address: 172.18.0.4
-        container_name: te-redis
-        hostname: te-redis
-        image: nsysu/te-redis
+        container_name: nte-redis
+        hostname: nte-redis
+        image: nsysu/nte-redis
 
 networks:
     net:

@@ -1,0 +1,17 @@
+test:
+    dialect: mysql
+    datasource: root:h65FZU5gtW7EdPTHtCejf49VmyKAPRwByRR4n6hnQCqY6dxUTv2L7v3j7LLPugYW@tcp(172.18.0.3)/test?parseTime=true
+    dir: ./migrations
+    table: migrations
+
+development:
+    dialect: mysql
+    datasource: root:h65FZU5gtW7EdPTHtCejf49VmyKAPRwByRR4n6hnQCqY6dxUTv2L7v3j7LLPugYW@tcp(172.18.0.3)/teacher_education?parseTime=true
+    dir: ./migrations
+    table: migrations
+
+production:
+    dialect: mysql
+    datasource: root:h65FZU5gtW7EdPTHtCejf49VmyKAPRwByRR4n6hnQCqY6dxUTv2L7v3j7LLPugYW@tcp(172.18.0.3)/teacher_education?parseTime=true
+    dir: ./migrations
+    table: migrations
