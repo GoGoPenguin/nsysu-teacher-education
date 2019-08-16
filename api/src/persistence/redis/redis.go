@@ -9,8 +9,8 @@ import (
 	"github.com/nsysu/teacher-education/src/utils/logger"
 )
 
-// Dao is an alias of redis.Conn, for which imports redis to use
-type Dao struct {
+// Conn is an alias of redis.Conn, for which imports redis to use
+type Conn struct {
 	conn redis.Conn
 }
 
@@ -23,8 +23,8 @@ func init() {
 }
 
 // Redis get redis connection from connection pool
-func Redis() Dao {
-	return Dao{
+func Redis() *Conn {
+	return &Conn{
 		conn: pool.Get(),
 	}
 }

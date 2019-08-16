@@ -7,24 +7,24 @@ import (
 )
 
 // Close redis connection
-func (r *Dao) Close() {
+func (r *Conn) Close() {
 	r.conn.Close()
 }
 
 // Exists returns if key exists
-func (r *Dao) Exists(key string) (bool, error) {
+func (r *Conn) exists(key string) (bool, error) {
 	return redis.Bool(r.conn.Do("EXISTS", key))
 }
 
 // Expire set a timeout on key
-func (r *Dao) Expire(key string, ttl int) error {
+func (r *Conn) expire(key string, ttl int) error {
 	_, err := r.conn.Do("EXPIRE", key, ttl)
 
 	return err
 }
 
 // SetEx sets a key-value pair with expire time
-func (r *Dao) SetEx(key string, ttl int, value interface{}) error {
+func (r *Conn) setEx(key string, ttl int, value interface{}) error {
 	_, err := r.conn.Do("SETEX", key, ttl, value)
 
 	return err
@@ -32,7 +32,7 @@ func (r *Dao) SetEx(key string, ttl int, value interface{}) error {
 
 // Del removes the specified keys. A key is ignored if it does not exist.
 // Delete multiple keys should use []string for parameter {key}
-func (r *Dao) Del(key interface{}) (err error) {
+func (r *Conn) del(key interface{}) (err error) {
 	switch key.(type) {
 	case []string:
 		_, err = r.conn.Do("DEL", redis.Args{}.AddFlat(key)...)
@@ -43,14 +43,14 @@ func (r *Dao) Del(key interface{}) (err error) {
 }
 
 // Get gets value of given key
-func (r *Dao) Get(key string) (string, error) {
+func (r *Conn) get(key string) (string, error) {
 	return redis.String(r.conn.Do("GET", key))
 }
 
 // MGet Returns the values of all specified keys. For every key that
 // does not hold a string value or does not exist, the special value nil is returned.
 // Because of this, the operation never fails.
-func (r *Dao) MGet(key []string) ([]string, error) {
+func (r *Conn) mGet(key []string) ([]string, error) {
 	var result []string
 
 	value, err := r.conn.Do("MGET", redis.Args{}.AddFlat(key)...)
@@ -76,18 +76,18 @@ func (r *Dao) MGet(key []string) ([]string, error) {
 }
 
 // HSet sets field in the hash stored at key to value
-func (r *Dao) HSet(key string, field string, value interface{}) error {
+func (r *Conn) hSet(key string, field string, value interface{}) error {
 	_, err := r.conn.Do("HSET", key, field, value)
 	return err
 }
 
 // HGet gets value of a specific field of key
-func (r *Dao) HGet(key string, field string) (string, error) {
+func (r *Conn) hGet(key string, field string) (string, error) {
 	return redis.String(r.conn.Do("HGET", key, field))
 }
 
 // HDel Removes the specified fields from the hash stored at key
-func (r *Dao) HDel(key string, fieldValue interface{}) (err error) {
+func (r *Conn) hDel(key string, fieldValue interface{}) (err error) {
 	switch fieldValue.(type) {
 	case []string, []int, []int32, []int64, []float32, []float64, []interface{}:
 		_, err = r.conn.Do("HDEL", redis.Args{}.Add(key).AddFlat(fieldValue)...)
@@ -98,13 +98,13 @@ func (r *Dao) HDel(key string, fieldValue interface{}) (err error) {
 }
 
 // HMSet sets multiple fields for a specific key
-func (r *Dao) HMSet(key string, fieldValue interface{}) error {
+func (r *Conn) hMSet(key string, fieldValue interface{}) error {
 	_, err := r.conn.Do("HMSET", redis.Args{}.Add(key).AddFlat(fieldValue)...)
 	return err
 }
 
 //HMGet returns the values associated with the specified fields in the hash stored at key.
-func (r *Dao) HMGet(key string, fields interface{}) ([]string, error) {
+func (r *Conn) hMGet(key string, fields interface{}) ([]string, error) {
 	var result []string
 
 	value, err := r.conn.Do("HMGET", redis.Args{}.Add(key).AddFlat(fields)...)
@@ -127,7 +127,7 @@ func (r *Dao) HMGet(key string, fields interface{}) ([]string, error) {
 }
 
 // HGetAll get all fields for a given key
-func (r *Dao) HGetAll(key string) (map[string]string, error) {
+func (r *Conn) hGetAll(key string) (map[string]string, error) {
 	var result map[string]string
 
 	value, err := r.conn.Do("HGETALL", key)
@@ -149,7 +149,7 @@ func (r *Dao) HGetAll(key string) (map[string]string, error) {
 
 // SAdd add member to a set called key.  If key does not exist, a new set is created.
 // param 'member' support array of string, int, int32, int64, float32, float64, interface{}
-func (r *Dao) SAdd(key string, member interface{}) (err error) {
+func (r *Conn) sAdd(key string, member interface{}) (err error) {
 	switch member.(type) {
 	case []string, []int, []int32, []int64, []float32, []float64, []interface{}:
 		_, err = r.conn.Do("SADD", redis.Args{}.Add(key).AddFlat(member)...)
@@ -162,7 +162,7 @@ func (r *Dao) SAdd(key string, member interface{}) (err error) {
 
 // SRem removes the specified members from the set stored at key.
 // param 'member' support array of string, int, int32, int64, float32, float64, interface{}
-func (r *Dao) SRem(key string, member interface{}) (err error) {
+func (r *Conn) sRem(key string, member interface{}) (err error) {
 	switch member.(type) {
 	case []string, []int, []int32, []int64, []float32, []float64, []interface{}:
 		_, err = r.conn.Do("SREM", redis.Args{}.Add(key).AddFlat(member)...)
@@ -174,7 +174,7 @@ func (r *Dao) SRem(key string, member interface{}) (err error) {
 }
 
 // SIsMember Returns if member is a member of the set stored at key.
-func (r *Dao) SIsMember(key string, member interface{}) (bool, error) {
+func (r *Conn) sIsMember(key string, member interface{}) (bool, error) {
 	exist, err := r.conn.Do("SISMEMBER", key, member)
 
 	if exist.(int64) == 1 {
@@ -184,7 +184,7 @@ func (r *Dao) SIsMember(key string, member interface{}) (bool, error) {
 }
 
 // SMembers get all members from the set called key
-func (r *Dao) SMembers(key string) ([]string, error) {
+func (r *Conn) sMembers(key string) ([]string, error) {
 	var result []string
 
 	value, err := r.conn.Do("SMEMBERS", key)

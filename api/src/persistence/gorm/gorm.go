@@ -50,26 +50,26 @@ func connect(dialect string, source string) *gorm.DB {
 
 	if err != nil {
 		panic(err)
-	} else {
-		// use singular table by default
-		conn.SingularTable(true)
-
-		// generates an error on update/delete without where clause.
-		// prevent eventual error with empty objects updates/deletions
-		conn.BlockGlobalUpdate(true)
-
-		// sets the maximum number of connections in the idle connection pool.
-		conn.DB().SetMaxIdleConns(10)
-
-		// sets the maximum number of open connections to the database.
-		conn.DB().SetMaxOpenConns(100)
-
-		// sets the maximum amount of time a connection may be reused.
-		conn.DB().SetConnMaxLifetime(time.Hour)
-
-		// the number of seconds the server waits for activity on a noninteractive connection before closing it.
-		conn.Exec("SET wait_timeout=300")
-
-		return conn
 	}
+
+	// use singular table by default
+	conn.SingularTable(true)
+
+	// generates an error on update/delete without where clause.
+	// prevent eventual error with empty objects updates/deletions
+	conn.BlockGlobalUpdate(true)
+
+	// sets the maximum number of connections in the idle connection pool.
+	conn.DB().SetMaxIdleConns(10)
+
+	// sets the maximum number of open connections to the database.
+	conn.DB().SetMaxOpenConns(100)
+
+	// sets the maximum amount of time a connection may be reused.
+	conn.DB().SetConnMaxLifetime(time.Hour)
+
+	// the number of seconds the server waits for activity on a noninteractive connection before closing it.
+	conn.Exec("SET wait_timeout=300")
+
+	return conn
 }
