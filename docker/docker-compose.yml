@@ -44,6 +44,22 @@ services:
         container_name: nte-redis
         hostname: nte-redis
         image: nsysu/nte-redis
+    front:
+        user: root
+        build:
+            context: ./front
+            dockerfile: Dockerfile
+        restart: always
+        tty: true
+        stdin_open: true
+        volumes:
+            - "../front:/usr/share/nginx/html/front/"
+        networks:
+            net:
+                ipv4_address: 172.18.0.5
+        container_name: nte-front
+        hostname: nte-front
+        image: nsysu/nte-front
 
 networks:
     net:
