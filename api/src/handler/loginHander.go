@@ -12,11 +12,13 @@ func LoginHandler(ctx iris.Context) {
 	type rule struct {
 		Account  string `valid:"required"`
 		Password string `valid:"required"`
+		Role     string `valid:"required, in(student|admin)"`
 	}
 
 	params := &rule{
 		Account:  ctx.FormValue("Account"),
 		Password: ctx.FormValue("Password"),
+		Role:     ctx.FormValue("Role"),
 	}
 
 	if _, err := govalidator.ValidateStruct(params); err != nil {
@@ -24,7 +26,7 @@ func LoginHandler(ctx iris.Context) {
 		return
 	}
 
-	result, err := service.Login(params.Account, params.Password)
+	result, err := service.Login(params.Account, params.Password, params.Role)
 
 	if err != (*error.Error)(nil) {
 		failed(ctx, err)

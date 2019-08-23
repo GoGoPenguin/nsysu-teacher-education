@@ -17,10 +17,16 @@ type User struct {
 	Role     string `gorm:"column:role; default:'student'"`
 }
 
-type userDao struct{}
+type userDao struct {
+	TypeStudent string
+	TypeAdmin   string
+}
 
 // UserDao user data acces object
-var UserDao userDao
+var UserDao = userDao{
+	TypeStudent: "student",
+	TypeAdmin:   "admin",
+}
 
 // New a record
 func (*userDao) New(tx *gorm.DB, user *User) {
@@ -50,10 +56,11 @@ func (*userDao) GetByID(tx *gorm.DB, id uint) *User {
 }
 
 // GetByAccount get a record by id
-func (*userDao) GetByAccount(tx *gorm.DB, acount string) *User {
+func (*userDao) GetByAccountAndRole(tx *gorm.DB, acount, role string) *User {
 	result := User{}
 	err := tx.Table(table).
 		Where("account = ?", acount).
+		Where("role = ?", role).
 		Where("deleted_at IS NULL").
 		Scan(&result).Error
 

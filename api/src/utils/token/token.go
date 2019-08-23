@@ -6,10 +6,11 @@ import (
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
+	jwtmiddleware "github.com/iris-contrib/middleware/jwt"
+	"github.com/kataras/iris"
 	"github.com/nsysu/teacher-education/src/persistence/redis"
 	"github.com/nsysu/teacher-education/src/utils/config"
 	"github.com/nsysu/teacher-education/src/utils/hash"
-	uuid "github.com/satori/go.uuid"
 )
 
 type claims struct {
@@ -19,7 +20,6 @@ type claims struct {
 
 // AccessToken set claims from parameters and config file and returns access token built
 func AccessToken(params map[string]string) (string, error) {
-	jti := uuid.NewV4().String()
 	now := time.Now().Unix()
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims{
 		Account: params["account"],
@@ -28,7 +28,7 @@ func AccessToken(params map[string]string) (string, error) {
 			IssuedAt:  now,
 			NotBefore: now,
 			ExpiresAt: now + int64(config.Get("jwt.access_token_exp").(int)),
-			Id:        jti,
+			Id:        params["jti"],
 		},
 	})
 
@@ -48,8 +48,8 @@ func RefreshToken(account string) (string, error) {
 	return result, nil
 }
 
-// Parse validates token gotten from request and returns claims if it's legal
-func Parse(tokenString string) (map[string]interface{}, error) {
+// Validate token gotten from request and returns claims if it's legal
+func Validate(tokenString string) error {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
@@ -60,18 +60,25 @@ func Parse(tokenString string) (map[string]interface{}, error) {
 	})
 
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	claims, err := validate(token)
-
-	if err != nil {
-		return nil, err
+	if err := checkClaims(token); err != nil {
+		return err
 	}
-	return claims, err
+	return nil
 }
 
-func validate(token *jwt.Token) (map[string]interface{}, error) {
+// Claims get claims from token in header
+func Claims(ctx iris.Context) map[string]interface{} {
+	tokenString, _ := jwtmiddleware.FromAuthHeader(ctx)
+	token, _ := jwt.Parse(tokenString, nil)
+	claims, _ := token.Claims.(jwt.MapClaims)
+
+	return claims
+}
+
+func checkClaims(token *jwt.Token) error {
 	conn := redis.Redis()
 	defer conn.Close()
 
@@ -79,18 +86,16 @@ func validate(token *jwt.Token) (map[string]interface{}, error) {
 
 	if ok {
 		if claims["iss"] != config.Get("jwt.issuer") {
-			return nil, errors.New("token issuer mismatch")
+			return errors.New("token issuer mismatch")
 		}
 
 		user := redis.UserDao.Get(conn, claims["account"].(string))
 		if user.JTI != claims["jti"].(string) {
-			return nil, errors.New("token id mismatch")
+			return errors.New("token id mismatch")
 		}
 	} else {
-		return nil, errors.New("get token claims failed")
+		return errors.New("get token claims failed")
 	}
 
-	return map[string]interface{}{
-		"account": claims["account"],
-	}, nil
+	return nil
 }

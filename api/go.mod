@@ -23,6 +23,7 @@ require (
 	github.com/iris-contrib/formBinder v5.0.0+incompatible // indirect
 	github.com/iris-contrib/go.uuid v2.0.0+incompatible // indirect
 	github.com/iris-contrib/httpexpect v0.0.0-20180314041918-ebe99fcebbce // indirect
+	github.com/iris-contrib/middleware v0.0.0-20190816193017-7838277651e8
 	github.com/jinzhu/gorm v1.9.10
 	github.com/json-iterator/go v1.1.7 // indirect
 	github.com/kataras/golog v0.0.0-20190624001437-99c81de45f40 // indirect

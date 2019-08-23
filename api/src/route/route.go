@@ -22,9 +22,14 @@ func Run() {
 
 	app.Get("/", hero.Handler(handler.HelloHandler))
 
-	v1 := app.Party("/v1")
+	v1 := app.Party("/v1", hero.Handler(middleware.AuthMiddleware))
 	{
 		v1.Post("/login", hero.Handler(handler.LoginHandler)) // 登入
+
+		users := v1.Party("/users")
+		{
+			users.Post("/", hero.Handler(handler.CreateStudentsHandler))
+		}
 	}
 
 	app.Run(iris.Addr(addr))

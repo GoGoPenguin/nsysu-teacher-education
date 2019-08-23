@@ -13,10 +13,10 @@ func success(ctx iris.Context, data interface{}) {
 	})
 }
 
-func failed(ctx iris.Context, err *error.Error) {
+func failed(ctx iris.Context, err interface{}) {
 	ctx.JSON(iris.Map{
-		"code":    err.Code(),
-		"message": err.Error(),
+		"code":    err.(*error.Error).Code(),
+		"message": err.(*error.Error).Error(),
 		"data":    []string{},
 	})
 }
