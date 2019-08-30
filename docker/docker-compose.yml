@@ -38,8 +38,8 @@ services:
         volumes:
             - "./redis/data:/data"
         restart: always
-        networks: 
-            net: 
+        networks:
+            net:
                 ipv4_address: 172.18.0.4
         container_name: nte-redis
         hostname: nte-redis
@@ -60,6 +60,22 @@ services:
         container_name: nte-front
         hostname: nte-front
         image: nsysu/nte-front
+    back:
+        user: root
+        build:
+            context: ./back
+            dockerfile: Dockerfile
+        restart: always
+        tty: true
+        stdin_open: true
+        volumes:
+            - "../back:/usr/share/nginx/html/back/"
+        networks:
+            net:
+                ipv4_address: 172.18.0.6
+        container_name: nte-back
+        hostname: nte-back
+        image: nsysu/nte-back
 
 networks:
     net:
