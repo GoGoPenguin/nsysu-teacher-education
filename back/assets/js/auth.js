@@ -9,8 +9,8 @@ $(document).ready(function () {
 })
 
 $('button#login').click(function () {
-    let account = $('input.input100.account').val()
-    let password = $('input.input100.password').val()
+    let account = $('input#account').val()
+    let password = $('input#password').val()
 
     $.ajax({
         url: config.server + '/v1/login',
@@ -18,7 +18,7 @@ $('button#login').click(function () {
         data: {
             'Account': account,
             'Password': password,
-            'Role': 'student',
+            'Role': 'admin',
         },
         error: function (xhr) {
             console.error(xhr);
@@ -40,4 +40,3 @@ $('button#login').click(function () {
         }
     });
 })
-
