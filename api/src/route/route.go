@@ -22,12 +22,13 @@ func Run() {
 
 	app.Get("/", hero.Handler(handler.HelloHandler))
 
-	v1 := app.Party("/v1", hero.Handler(middleware.AuthMiddleware))
+	v1 := app.Party("/v1")
 	{
 		v1.Post("/login", hero.Handler(handler.LoginHandler)) // 登入
 
 		users := v1.Party("/users")
 		{
+			users.Get("/", hero.Handler(handler.GetStudentsHandler))
 			users.Post("/", hero.Handler(handler.CreateStudentsHandler))
 		}
 	}

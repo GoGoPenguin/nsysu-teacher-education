@@ -18,14 +18,14 @@ type User struct {
 }
 
 type userDao struct {
-	TypeStudent string
-	TypeAdmin   string
+	Roletudent string
+	RoleAdmin  string
 }
 
 // UserDao user data acces object
 var UserDao = userDao{
-	TypeStudent: "student",
-	TypeAdmin:   "admin",
+	Roletudent: "student",
+	RoleAdmin:  "admin",
 }
 
 // New a record
