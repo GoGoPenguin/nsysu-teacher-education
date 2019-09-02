@@ -5,7 +5,6 @@ import (
 	"github.com/kataras/iris"
 	"github.com/nsysu/teacher-education/src/error"
 	"github.com/nsysu/teacher-education/src/service"
-	"github.com/nsysu/teacher-education/src/utils/logger"
 )
 
 // GetStudentsHandler get student list
@@ -26,7 +25,6 @@ func GetStudentsHandler(ctx iris.Context) {
 	}
 
 	result, err := service.GetStudents(params.Index, params.Count)
-	logger.Debug(result)
 
 	if err != (*error.Error)(nil) {
 		failed(ctx, err)
