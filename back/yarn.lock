@@ -45,7 +45,7 @@ color-name@^1.0.0:
   resolved "https://registry.yarnpkg.com/color-name/-/color-name-1.1.4.tgz#c2a09a87acbde69543de6f63fa3995c826c536a2"
   integrity sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==
 
-datatables.net-bs4@1.10.19:
+datatables.net-bs4@1.10.19, datatables.net-bs4@^1.10.15, datatables.net-bs4@^1.10.19:
   version "1.10.19"
   resolved "https://registry.yarnpkg.com/datatables.net-bs4/-/datatables.net-bs4-1.10.19.tgz#0608dff22008cf3c7b8a68b1bc702ed255b404fb"
   integrity sha512-pgeP17w4aPR7HIxIwuJghfqXULjdg1K6xMUUKDyCERJRSNNK4MRToFfELtIsluLNN555YBK4Kx8nihX5/ZT1Fw==
@@ -53,7 +53,24 @@ datatables.net-bs4@1.10.19:
     datatables.net "1.10.19"
     jquery ">=1.7"
 
-datatables.net@1.10.19:
+datatables.net-scroller-bs4@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/datatables.net-scroller-bs4/-/datatables.net-scroller-bs4-2.0.0.tgz#f3abdf546988ec8a20b0bd1e05c380db78b84eb4"
+  integrity sha512-NmRWJQkd5k0USAT3EfUXkECTy/ECr0U2Yzol0hkbtex0nhSEtJHIfo48H+jngtR/Pu0w5ZggCeyKx/zv4Q3Q0g==
+  dependencies:
+    datatables.net-bs4 "^1.10.15"
+    datatables.net-scroller "2.0.0"
+    jquery ">=1.7"
+
+datatables.net-scroller@2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/datatables.net-scroller/-/datatables.net-scroller-2.0.0.tgz#46284861952bde50bc7138a99e47419f300379d2"
+  integrity sha512-Xe116srtpE0RS/f9xxUYf7dK4tSFDZmQ7H95AUT9diB7dcvwGJMIPUIVeTlNDEhLvwAFpGZlizkOlBUwy7GsTg==
+  dependencies:
+    datatables.net "^1.10.15"
+    jquery ">=1.7"
+
+datatables.net@1.10.19, datatables.net@^1.10.15:
   version "1.10.19"
   resolved "https://registry.yarnpkg.com/datatables.net/-/datatables.net-1.10.19.tgz#97a1ed41c85e62d61040603481b59790a172dd1f"
   integrity sha512-+ljXcI6Pj3PTGy5pesp3E5Dr3x3AV45EZe0o1r0gKENN2gafBKXodVnk2ypKwl2tTmivjxbkiqoWnipTefyBTA==
