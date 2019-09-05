@@ -10,6 +10,7 @@ import (
 	"github.com/nsysu/teacher-education/src/specification"
 	"github.com/nsysu/teacher-education/src/utils/hash"
 	"github.com/nsysu/teacher-education/src/utils/logger"
+	"github.com/nsysu/teacher-education/src/utils/typecast"
 )
 
 // CreateStudents create students by csv file
@@ -43,7 +44,7 @@ func CreateStudents(file multipart.File) (result interface{}, e *error.Error) {
 }
 
 // GetStudents get user list
-func GetStudents(index, count string) (result interface{}, e *error.Error) {
+func GetStudents(start, length string) (result map[string]interface{}, e *error.Error) {
 	tx := gorm.DB()
 
 	defer func() {
@@ -56,15 +57,20 @@ func GetStudents(index, count string) (result interface{}, e *error.Error) {
 	// result = []map[string]interface{}{}
 	users := gorm.UserDao.Query(
 		tx,
-		specification.PaginationSpecification(index, specification.OrderDirectionASC),
+		specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
 		specification.RoleSpecification(gorm.UserDao.Roletudent),
 		specification.IsNullSpecification("deleted_at"),
-		specification.LimitSpecification(count),
+	)
+	total := gorm.UserDao.Count(
+		tx,
+		specification.RoleSpecification(gorm.UserDao.Roletudent),
+		specification.IsNullSpecification("deleted_at"),
 	)
 
 	result = map[string]interface{}{
-		"List":   assembler.UsersDTO(users),
-		"LastID": (*users)[len(*users)-1].ID,
+		"list":            assembler.UsersDTO(users),
+		"recordsTotal":    total,
+		"recordsFiltered": total,
 	}
 
 	return result, nil

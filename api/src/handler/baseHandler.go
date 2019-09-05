@@ -20,3 +20,7 @@ func failed(ctx iris.Context, err interface{}) {
 		"data":    []string{},
 	})
 }
+
+func json(ctx iris.Context, data map[string]interface{}) {
+	ctx.JSON(data)
+}

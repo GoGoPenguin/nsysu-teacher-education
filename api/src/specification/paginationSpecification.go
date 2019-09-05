@@ -5,11 +5,8 @@ import (
 )
 
 // PaginationSpecification generate pagination query
-func PaginationSpecification(idIndex, orderDirection string) func(db *gorm.DB) *gorm.DB {
+func PaginationSpecification(start, length int) func(db *gorm.DB) *gorm.DB {
 	return func(tx *gorm.DB) *gorm.DB {
-		if orderDirection == OrderDirectionASC {
-			return tx.Where(""+IDColumn+" > ?", idIndex).Order(IDColumn + " " + orderDirection)
-		}
-		return tx.Where(""+IDColumn+" < ?", idIndex).Order(IDColumn + " " + orderDirection)
+		return tx.Offset(start * length).Limit(length).Order(IDColumn)
 	}
 }

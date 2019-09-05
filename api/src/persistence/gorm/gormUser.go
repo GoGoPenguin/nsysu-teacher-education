@@ -73,6 +73,15 @@ func (*userDao) GetByAccountAndRole(tx *gorm.DB, acount, role string) *User {
 	return &result
 }
 
+func (*userDao) Count(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) int {
+	var count int
+	tx.Table(table).
+		Scopes(funcs...).
+		Count(&count)
+
+	return count
+}
+
 // Query custom query
 func (*userDao) Query(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) *[]User {
 	var result []User
