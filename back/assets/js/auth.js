@@ -40,3 +40,34 @@ $('button#login').click(function () {
         }
     });
 })
+
+$('button#logout').click(function () {
+    $('#logoutModal').show()
+})
+
+$('#logoutModal button.btn.btn-primary').click(function () {
+    $.ajax({
+        url: config.server + '/v1/logout',
+        type: 'POST',
+        error: function (xhr) {
+            console.error(xhr);
+        },
+        beforeSend: function (xhr) {
+            let token = $.cookie('token')
+            xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+        },
+        success: function (response) {
+            if (response.code != 0) {
+                console.error(response.message)
+            } else {
+                let date = new Date()
+                date.setTime(date.getTime() + (response.data.Expire * 1000));
+
+                $.removeCookie('token')
+                $.removeCookie('refresh-token')
+
+                location.href = '/login.html'
+            }
+        }
+    });
+})

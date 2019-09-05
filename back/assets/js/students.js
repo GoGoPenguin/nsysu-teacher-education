@@ -1,20 +1,13 @@
 $(document).ready(function () {
-    var index = 0
-
     $('table#students').DataTable({
         processing: true,
         serverSide: true,
+        ordering: false,
+        searching: false,
         ajax: {
             url: config.server + '/v1/users',
             type: 'GET',
-            data: function (d) {
-                d.Index = index
-                d.Count = 2
-            },
-            dataSrc: function (response) {
-                index = response.data.LastID
-                return response.data.List;
-            },
+            dataSrc: 'list',
             beforeSend: function (xhr) {
                 let token = $.cookie('token')
                 xhr.setRequestHeader('Authorization', 'Bearer ' + token);
@@ -25,5 +18,8 @@ $(document).ready(function () {
             { data: "Account" },
             { data: "CreatedAt" },
         ],
+        language: {
+            url: 'assets/languages/chinese.json'
+        },
     });
 })
