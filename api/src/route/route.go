@@ -24,8 +24,9 @@ func Run() {
 
 	v1 := app.Party("/v1", hero.Handler(middleware.AuthMiddleware))
 	{
-		v1.Post("/login", hero.Handler(handler.LoginHandler))   // 登入
-		v1.Post("/logout", hero.Handler(handler.LogoutHandler)) // 登出
+		v1.Post("/login", hero.Handler(handler.LoginHandler))            // 登入
+		v1.Post("/logout", hero.Handler(handler.LogoutHandler))          // 登出
+		v1.Post("/renew-token", hero.Handler(handler.RenewTokenHandler)) //  取得新的 access token
 
 		users := v1.Party("/users")
 		{

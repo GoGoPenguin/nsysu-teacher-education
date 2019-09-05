@@ -23,3 +23,11 @@ func ValidateError(msg string) *Error {
 		message: "Validate Error: " + msg,
 	}
 }
+
+// RevokeTokenError return a new RevokeTokenError instance
+func RevokeTokenError() *Error {
+	return &Error{
+		code:    3,
+		message: "Revoking token",
+	}
+}

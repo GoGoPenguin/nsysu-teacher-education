@@ -31,10 +31,7 @@ func (*userDao) Get(conn *Conn, account string) *User {
 		if tag, ok := f.Tag.Lookup("redis"); ok && tag != "-" {
 			key := fmt.Sprintf("%s-%s", user.Account, tag)
 
-			value, err := conn.get(key)
-			if err != nil {
-				panic(err)
-			}
+			value, _ := conn.get(key)
 			v.Field(i).SetString(value)
 		}
 	}
