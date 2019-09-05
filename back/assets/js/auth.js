@@ -21,7 +21,7 @@ $('button#login').click(function () {
             'Role': 'admin',
         },
         error: function (xhr) {
-            error('Unexcepted Error')
+            alert('Unexcepted Error')
             console.error(xhr);
         },
         success: function (response) {
@@ -70,8 +70,10 @@ $('#logoutModal button.btn.btn-primary').click(function () {
                 let date = new Date()
                 date.setTime(date.getTime() + (response.data.Expire * 1000));
 
-                $.removeCookie('token')
-                $.removeCookie('refresh-token')
+                let cookies = $.cookie()
+                for (var cookie in cookies) {
+                    $.removeCookie(cookie)
+                }
 
                 location.href = '/login.html'
             }
@@ -93,19 +95,18 @@ function renewToken() {
             RefreshToken: refreshToken,
         },
         error: function (xhr) {
-            let cookies = $.cookie();
+            let cookies = $.cookie()
             for (var cookie in cookies) {
-                $.removeCookie(cookie);
+                $.removeCookie(cookie)
             }
 
             location.href = '/login.html'
-            console.error(xhr);
         },
         success: function (response) {
             if (response.code != 0) {
                 let cookies = $.cookie();
                 for (var cookie in cookies) {
-                    $.removeCookie(cookie);
+                    $.removeCookie(cookie)
                 }
 
                 location.href = '/login.html'
