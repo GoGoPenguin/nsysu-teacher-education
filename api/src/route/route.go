@@ -24,12 +24,13 @@ func Run() {
 
 	v1 := app.Party("/v1", hero.Handler(middleware.AuthMiddleware))
 	{
-		v1.Post("/login", hero.Handler(handler.LoginHandler)) // 登入
+		v1.Post("/login", hero.Handler(handler.LoginHandler))   // 登入
+		v1.Post("/logout", hero.Handler(handler.LogoutHandler)) // 登出
 
 		users := v1.Party("/users")
 		{
-			users.Get("/", hero.Handler(handler.GetStudentsHandler))
-			users.Post("/", hero.Handler(handler.CreateStudentsHandler))
+			users.Get("/", hero.Handler(handler.GetStudentsHandler))     // 取得學生列表
+			users.Post("/", hero.Handler(handler.CreateStudentsHandler)) // 創建學生帳號
 		}
 	}
 

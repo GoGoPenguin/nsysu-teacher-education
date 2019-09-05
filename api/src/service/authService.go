@@ -63,3 +63,20 @@ func Login(account, password, role string) (result interface{}, e *error.Error) 
 	}
 	return result, nil
 }
+
+// Logout user logout
+func Logout(account string) (result string, e *error.Error) {
+	defer func() {
+		if r := recover(); r != nil {
+			logger.Error(r)
+			e = error.UnexpectedError()
+		}
+	}()
+
+	conn := redis.Redis()
+	defer conn.Close()
+
+	redis.UserDao.Delete(conn, account)
+
+	return "success", nil
+}
