@@ -10,6 +10,11 @@ $(document).ready(function () {
             dataSrc: 'list',
             beforeSend: function (xhr) {
                 let token = $.cookie('token')
+                if (token == undefined) {
+                    renewToken()
+                    token = $.cookie('token')
+                }
+
                 xhr.setRequestHeader('Authorization', 'Bearer ' + token);
             }
         },

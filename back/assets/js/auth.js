@@ -1,9 +1,9 @@
 $(document).ready(function () {
-    let token = $.cookie('token')
+    let refreshToken = $.cookie('refresh-token')
 
-    if (token == undefined && window.location.pathname != '/login.html') {
+    if (refreshToken == undefined && window.location.pathname != '/login.html') {
         location.href = '/login.html'
-    } else if (token != undefined && window.location.pathname == '/login.html') {
+    } else if (refreshToken != undefined && window.location.pathname == '/login.html') {
         location.href = '/'
     }
 })
@@ -21,11 +21,12 @@ $('button#login').click(function () {
             'Role': 'admin',
         },
         error: function (xhr) {
+            error('Unexcepted Error')
             console.error(xhr);
         },
         success: function (response) {
             if (response.code != 0) {
-                console.error(response.message)
+                error(response.message)
             } else {
                 let date = new Date()
                 date.setTime(date.getTime() + (response.data.Expire * 1000));
@@ -33,6 +34,7 @@ $('button#login').click(function () {
                 $.cookie('token', response.data.Token, {
                     expires: date,
                 });
+                $.cookie('account', account);
                 $.cookie('refresh-token', response.data.RefreshToken)
 
                 location.href = '/'
@@ -54,6 +56,11 @@ $('#logoutModal button.btn.btn-primary').click(function () {
         },
         beforeSend: function (xhr) {
             let token = $.cookie('token')
+            if (token == undefined) {
+                renewToken()
+                token = $.cookie('token')
+            }
+
             xhr.setRequestHeader('Authorization', 'Bearer ' + token);
         },
         success: function (response) {
@@ -71,3 +78,45 @@ $('#logoutModal button.btn.btn-primary').click(function () {
         }
     });
 })
+
+function renewToken() {
+    let account = $.cookie('account')
+    let refreshToken = $.cookie('refresh-token')
+
+    $.ajax({
+        url: config.server + '/v1/renew-token',
+        type: 'POST',
+        async: false,
+        cache: false,
+        data: {
+            Account: account,
+            RefreshToken: refreshToken,
+        },
+        error: function (xhr) {
+            let cookies = $.cookie();
+            for (var cookie in cookies) {
+                $.removeCookie(cookie);
+            }
+
+            location.href = '/login.html'
+            console.error(xhr);
+        },
+        success: function (response) {
+            if (response.code != 0) {
+                let cookies = $.cookie();
+                for (var cookie in cookies) {
+                    $.removeCookie(cookie);
+                }
+
+                location.href = '/login.html'
+            } else {
+                let date = new Date()
+                date.setTime(date.getTime() + (response.data.Expire * 1000));
+
+                $.cookie('token', response.data.Token, {
+                    expires: date,
+                });
+            }
+        }
+    });
+}
