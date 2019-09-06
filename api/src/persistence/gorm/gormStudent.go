@@ -11,7 +11,7 @@ type Student struct {
 	Account  string `gorm:"column:account; unique_index"`
 	Password string `gorm:"column:password;"`
 	Major    string `gorm:"column:major;"`
-	Number   string `gorm:"column:numberl"`
+	Number   string `gorm:"column:number"`
 }
 
 type studentDao struct {

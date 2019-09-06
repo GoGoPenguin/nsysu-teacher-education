@@ -46,7 +46,7 @@ func CreateStudents(file multipart.File) (result interface{}, e *error.Error) {
 
 // GetStudents get user list
 func GetStudents(start, length string) (result map[string]interface{}, e *error.Error) {
-	tx := gorm.DB()
+	tx := gorm.DB().Debug()
 
 	defer func() {
 		if r := recover(); r != nil {
@@ -55,12 +55,13 @@ func GetStudents(start, length string) (result map[string]interface{}, e *error.
 		}
 	}()
 
-	// result = []map[string]interface{}{}
 	students := gorm.StudentDao.Query(
 		tx,
 		specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
+		specification.OrderSpecification(specification.IDColumn, specification.OrderDirectionDESC),
 		specification.IsNullSpecification("deleted_at"),
 	)
+
 	total := gorm.StudentDao.Count(
 		tx,
 		specification.IsNullSpecification("deleted_at"),
