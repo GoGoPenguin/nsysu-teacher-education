@@ -4,33 +4,30 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-const (
-	table = "user"
-)
-
-// User model
-type User struct {
+// Student model
+type Student struct {
 	gorm.Model
 	Name     string `gorm:"column:name;"`
 	Account  string `gorm:"column:account; unique_index"`
 	Password string `gorm:"column:password;"`
-	Role     string `gorm:"column:role; default:'student'"`
+	Major    string `gorm:"column:major;"`
+	Number   string `gorm:"column:numberl"`
 }
 
-type userDao struct {
-	Roletudent string
-	RoleAdmin  string
+type studentDao struct {
+	table string
+	Role  string
 }
 
-// UserDao user data acces object
-var UserDao = userDao{
-	Roletudent: "student",
-	RoleAdmin:  "admin",
+// StudentDao user data acces object
+var StudentDao = studentDao{
+	table: "student",
+	Role:  "student",
 }
 
 // New a record
-func (*userDao) New(tx *gorm.DB, user *User) {
-	err := tx.Table(table).
+func (dao *studentDao) New(tx *gorm.DB, user *Student) {
+	err := tx.Table(dao.table).
 		Create(user).Error
 
 	if err != nil {
@@ -39,9 +36,9 @@ func (*userDao) New(tx *gorm.DB, user *User) {
 }
 
 // GetByID get a record by id
-func (*userDao) GetByID(tx *gorm.DB, id uint) *User {
-	result := User{}
-	err := tx.Table(table).
+func (dao *studentDao) GetByID(tx *gorm.DB, id uint) *Student {
+	result := Student{}
+	err := tx.Table(dao.table).
 		Where("id = ?", id).
 		Where("deleted_at IS NULL").
 		Scan(&result).Error
@@ -56,11 +53,10 @@ func (*userDao) GetByID(tx *gorm.DB, id uint) *User {
 }
 
 // GetByAccount get a record by id
-func (*userDao) GetByAccountAndRole(tx *gorm.DB, acount, role string) *User {
-	result := User{}
-	err := tx.Table(table).
+func (dao *studentDao) GetByAccount(tx *gorm.DB, acount string) *Student {
+	result := Student{}
+	err := tx.Table(dao.table).
 		Where("account = ?", acount).
-		Where("role = ?", role).
 		Where("deleted_at IS NULL").
 		Scan(&result).Error
 
@@ -73,9 +69,9 @@ func (*userDao) GetByAccountAndRole(tx *gorm.DB, acount, role string) *User {
 	return &result
 }
 
-func (*userDao) Count(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) int {
+func (dao *studentDao) Count(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) int {
 	var count int
-	tx.Table(table).
+	tx.Table(dao.table).
 		Scopes(funcs...).
 		Count(&count)
 
@@ -83,9 +79,9 @@ func (*userDao) Count(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) int {
 }
 
 // Query custom query
-func (*userDao) Query(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) *[]User {
-	var result []User
-	err := tx.Table(table).
+func (dao *studentDao) Query(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) *[]Student {
+	var result []Student
+	err := tx.Table(dao.table).
 		Scopes(funcs...).
 		Scan(&result).Error
 

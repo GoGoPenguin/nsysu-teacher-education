@@ -30,14 +30,15 @@ func CreateStudents(file multipart.File) (result interface{}, e *error.Error) {
 	}
 
 	for _, line := range lines {
-		user := &gorm.User{
+		student := &gorm.Student{
 			Name:     line[0],
 			Account:  line[1],
 			Password: hash.New(line[2]),
-			Role:     gorm.UserDao.Roletudent,
+			Major:    line[3],
+			Number:   line[4],
 		}
 
-		gorm.UserDao.New(tx, user)
+		gorm.StudentDao.New(tx, student)
 	}
 
 	return "success", nil
@@ -55,20 +56,18 @@ func GetStudents(start, length string) (result map[string]interface{}, e *error.
 	}()
 
 	// result = []map[string]interface{}{}
-	users := gorm.UserDao.Query(
+	students := gorm.StudentDao.Query(
 		tx,
 		specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
-		specification.RoleSpecification(gorm.UserDao.Roletudent),
 		specification.IsNullSpecification("deleted_at"),
 	)
-	total := gorm.UserDao.Count(
+	total := gorm.StudentDao.Count(
 		tx,
-		specification.RoleSpecification(gorm.UserDao.Roletudent),
 		specification.IsNullSpecification("deleted_at"),
 	)
 
 	result = map[string]interface{}{
-		"list":            assembler.UsersDTO(users),
+		"list":            assembler.StudentsDTO(students),
 		"recordsTotal":    total,
 		"recordsFiltered": total,
 	}

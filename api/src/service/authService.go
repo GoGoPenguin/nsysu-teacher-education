@@ -22,26 +22,43 @@ func Login(account, password, role string) (result interface{}, e *error.Error) 
 		}
 	}()
 
-	user := gorm.UserDao.GetByAccountAndRole(tx, account, role)
+	var (
+		userAccount  string
+		userPassword string
+	)
 
-	if user == nil {
-		return nil, error.LoginError()
+	if role == gorm.AdminDao.Role {
+		admin := gorm.AdminDao.GetByAccount(tx, account)
+		if admin == nil {
+			return nil, error.LoginError()
+		}
+
+		userAccount = admin.Account
+		userPassword = admin.Password
+	} else {
+		student := gorm.StudentDao.GetByAccount(tx, account)
+		if student == nil {
+			return nil, error.LoginError()
+		}
+
+		userAccount = student.Account
+		userPassword = student.Password
 	}
 
-	if ok := hash.Verify(password, user.Password); !ok {
+	if ok := hash.Verify(password, userPassword); !ok {
 		return nil, error.LoginError()
 	}
 
 	jti := uuid.NewV4().String()
 	accessToken, err := token.AccessToken(map[string]string{
-		"account": user.Account,
+		"account": userAccount,
 		"jti":     jti,
 	})
 	if err != nil {
 		panic(err)
 	}
 
-	refreshToken, err := token.RefreshToken(user.Account)
+	refreshToken, err := token.RefreshToken(userAccount)
 	if err != nil {
 		panic(err)
 	}
@@ -50,7 +67,7 @@ func Login(account, password, role string) (result interface{}, e *error.Error) 
 	defer conn.Close()
 
 	redisUser := &redis.User{
-		Account:      user.Account,
+		Account:      userAccount,
 		JTI:          jti,
 		RefreshToken: refreshToken,
 	}
