@@ -8,7 +8,9 @@ $(document).ready(function () {
     }
 })
 
-$('button#login').click(function () {
+$('#loginform').on('submit', function (e) {
+    e.preventDefault();
+
     let account = $('input#account').val()
     let password = $('input#password').val()
 
@@ -26,7 +28,7 @@ $('button#login').click(function () {
         },
         success: function (response) {
             if (response.code != 0) {
-                error(response.message)
+                alert(response.message)
             } else {
                 let date = new Date()
                 date.setTime(date.getTime() + (response.data.Expire * 1000));
@@ -41,7 +43,7 @@ $('button#login').click(function () {
             }
         }
     });
-})
+});
 
 $('button#logout').click(function () {
     $('#logoutModal').show()
