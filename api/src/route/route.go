@@ -33,6 +33,11 @@ func Run() {
 			users.Get("/", hero.Handler(handler.GetStudentsHandler))     // 取得學生列表
 			users.Post("/", hero.Handler(handler.CreateStudentsHandler)) // 創建學生帳號
 		}
+
+		course := v1.Party("/course")
+		{
+			course.Post("/", hero.Handler(handler.CreateCourseHandler))
+		}
 	}
 
 	app.Run(iris.Addr(addr))

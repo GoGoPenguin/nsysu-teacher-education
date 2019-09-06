@@ -46,7 +46,7 @@ func CreateStudents(file multipart.File) (result interface{}, e *error.Error) {
 
 // GetStudents get user list
 func GetStudents(start, length string) (result map[string]interface{}, e *error.Error) {
-	tx := gorm.DB().Debug()
+	tx := gorm.DB()
 
 	defer func() {
 		if r := recover(); r != nil {

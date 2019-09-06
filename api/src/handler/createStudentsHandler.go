@@ -6,7 +6,7 @@ import (
 	"github.com/nsysu/teacher-education/src/service"
 )
 
-// CreateStudentsHandler user login
+// CreateStudentsHandler create students
 func CreateStudentsHandler(ctx iris.Context) {
 	file, _, err := ctx.FormFile("CSV")
 	defer file.Close()
