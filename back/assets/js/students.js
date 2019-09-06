@@ -33,6 +33,8 @@ $(document).ready(function () {
         columns: [
             { data: "Name" },
             { data: "Account" },
+            { data: "Major" },
+            { data: "Number" },
             { data: "CreatedAt" },
         ],
         language: {
