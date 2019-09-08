@@ -52,7 +52,7 @@ func (dao *studentDao) GetByID(tx *gorm.DB, id uint) *Student {
 	return &result
 }
 
-// GetByAccount get a record by id
+// GetByAccount get a record by account
 func (dao *studentDao) GetByAccount(tx *gorm.DB, acount string) *Student {
 	result := Student{}
 	err := tx.Table(dao.table).
@@ -69,6 +69,7 @@ func (dao *studentDao) GetByAccount(tx *gorm.DB, acount string) *Student {
 	return &result
 }
 
+// Count get total count
 func (dao *studentDao) Count(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) int {
 	var count int
 	tx.Table(dao.table).

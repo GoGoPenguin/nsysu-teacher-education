@@ -9,12 +9,12 @@ import (
 // CreateStudentsHandler create students
 func CreateStudentsHandler(ctx iris.Context) {
 	file, _, err := ctx.FormFile("CSV")
-	defer file.Close()
 
 	if err != nil {
-		failed(ctx, error.ValidateError(" CSV: non zero value required"))
+		failed(ctx, error.ValidateError("CSV: non zero value required"))
 		return
 	}
+	defer file.Close()
 
 	result, err := service.CreateStudents(file)
 

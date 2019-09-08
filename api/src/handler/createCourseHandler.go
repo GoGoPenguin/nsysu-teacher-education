@@ -10,15 +10,22 @@ import (
 	t "github.com/nsysu/teacher-education/src/utils/time"
 )
 
-// CreateCourseHandler user login
+// CreateCourseHandler create a course
 func CreateCourseHandler(ctx iris.Context) {
 	type rule struct {
-		Topic       string    `valid:"required"`
-		Information string    `valid:"required"`
-		Type        string    `valid:"required, in(A|B|C)"`
-		Start       time.Time `valid:"required"`
-		End         time.Time `valid:"required"`
+		Topic string    `valid:"required"`
+		Type  string    `valid:"required, in(A|B|C)"`
+		Start time.Time `valid:"required"`
+		End   time.Time `valid:"required"`
 	}
+
+	file, header, err := ctx.FormFile("Information")
+
+	if err != nil {
+		failed(ctx, error.ValidateError("Information: non zero value required"))
+		return
+	}
+	defer file.Close()
 
 	startTime, err := time.Parse(t.DateTime, ctx.FormValue("Start"))
 	if err != nil {
@@ -36,11 +43,10 @@ func CreateCourseHandler(ctx iris.Context) {
 	}
 
 	params := &rule{
-		Topic:       ctx.FormValue("Topic"),
-		Information: ctx.FormValue("Information"),
-		Type:        ctx.FormValue("Type"),
-		Start:       startTime,
-		End:         endTime,
+		Topic: ctx.FormValue("Topic"),
+		Type:  ctx.FormValue("Type"),
+		Start: startTime,
+		End:   endTime,
 	}
 
 	if _, err := govalidator.ValidateStruct(params); err != nil {
@@ -50,8 +56,9 @@ func CreateCourseHandler(ctx iris.Context) {
 
 	result, err := service.CreateCourse(
 		params.Topic,
-		params.Information,
 		params.Type,
+		file,
+		header,
 		params.Start,
 		params.End,
 	)

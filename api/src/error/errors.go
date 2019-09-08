@@ -31,3 +31,11 @@ func RevokeTokenError() *Error {
 		message: "Revoking token",
 	}
 }
+
+// NotFoundError return a new NotFoundError instance
+func NotFoundError(msg string) *Error {
+	return &Error{
+		code:    4,
+		message: "Not Found: " + msg,
+	}
+}

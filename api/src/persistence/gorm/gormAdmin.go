@@ -49,7 +49,7 @@ func (dao *adminDao) GetByID(tx *gorm.DB, id uint) *Admin {
 	return &result
 }
 
-// GetByAccount get a record by id
+// GetByAccount get a record by account
 func (dao *adminDao) GetByAccount(tx *gorm.DB, acount string) *Admin {
 	result := Admin{}
 	err := tx.Table(dao.table).

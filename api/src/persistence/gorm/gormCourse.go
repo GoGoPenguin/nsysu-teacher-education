@@ -58,11 +58,11 @@ func (dao *courseDao) GetByID(tx *gorm.DB, id uint) *Course {
 	return &result
 }
 
-// GetByAccount get a record by id
-func (dao *courseDao) GetByTopic(tx *gorm.DB, acount string) *Course {
+// GetByTopic get a record by topic
+func (dao *courseDao) GetByTopic(tx *gorm.DB, topic string) *Course {
 	result := Course{}
 	err := tx.Table(dao.table).
-		Where("topic = ?", acount).
+		Where("topic = ?", topic).
 		Where("deleted_at IS NULL").
 		Scan(&result).Error
 
@@ -73,6 +73,33 @@ func (dao *courseDao) GetByTopic(tx *gorm.DB, acount string) *Course {
 		panic(err)
 	}
 	return &result
+}
+
+// GetByInformation get a record by information
+func (dao *courseDao) GetByInformation(tx *gorm.DB, information string) *Course {
+	result := Course{}
+	err := tx.Table(dao.table).
+		Where("information = ?", information).
+		Where("deleted_at IS NULL").
+		Scan(&result).Error
+
+	if gorm.IsRecordNotFoundError(err) {
+		return nil
+	}
+	if err != nil {
+		panic(err)
+	}
+	return &result
+}
+
+// Count get total count
+func (dao *courseDao) Count(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) int {
+	var count int
+	tx.Table(dao.table).
+		Scopes(funcs...).
+		Count(&count)
+
+	return count
 }
 
 // Query custom query
