@@ -91,46 +91,34 @@
                     <li class="breadcrumb-item">
                         <a href="/">儀表板</a>
                     </li>
-                    <li class="breadcrumb-item active">學生管理</li>
+                    <li class="breadcrumb-item active">講座管理</li>
                 </ol>
 
                 <!-- Alert -->
                 <div role="alert" id="alert" style="display: none;"></div>
 
-                <!-- Create Students -->
-                <div class="card mb-3">
-                    <div class="card-header">
-                        <i class="fas fa-user-plus"></i>
-                        新增學生</div>
-                    <div class="card-body">
-                        <input id="upload" type="file" name="CSV">
-                    </div>
-                </div>
-
-                <!-- Student list -->
+                <!-- Course list -->
                 <div class="card mb-3">
                     <div class="card-header">
                         <i class="fas fa-table"></i>
-                        學生列表</div>
+                        講座列表</div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-bordered" id="students" width="100%" cellspacing="0">
+                            <table class="table table-bordered" id="course" width="100%" cellspacing="0">
                                 <thead>
                                     <tr>
-                                        <th>姓名</th>
-                                        <th>學號</th>
-                                        <th>系所</th>
-                                        <th>學程編號</th>
-                                        <th>創建日期</th>
+                                        <th>研習主題</th>
+                                        <th>研習時段</th>
+                                        <th>研習資訊</th>
+                                        <th>研習類別</th>
                                     </tr>
                                 </thead>
                                 <tfoot>
                                     <tr>
-                                        <th>姓名</th>
-                                        <th>學號</th>
-                                        <th>系所</th>
-                                        <th>學程編號</th>
-                                        <th>創建日期</th>
+                                        <th>研習主題</th>
+                                        <th>研習時段</th>
+                                        <th>研習資訊</th>
+                                        <th>研習類別</th>
                                     </tr>
                                 </tfoot>
                                 <tbody>
@@ -205,7 +193,7 @@
     <script src="/assets/js/config.js"></script>
     <script src="/assets/js/alert.js"></script>
     <script src="/assets/js/auth.js"></script>
-    <script src="/assets/js/students.js"></script>
+    <script src="/assets/js/course.js"></script>
 
 </body>
 

@@ -7,7 +7,12 @@ $(document).ready(function () {
         ajax: {
             url: config.server + '/v1/users',
             type: 'GET',
-            dataSrc: 'list',
+            dataSrc: function (d) {
+                d.list.forEach(function (element, index, array) {
+                    array[index].CreatedAt = element.CreatedAt.substring(0, 19)
+                })
+                return d.list
+            },
             beforeSend: function (xhr) {
                 let token = $.cookie('token')
                 if (token == undefined) {
