@@ -13,8 +13,8 @@ func CoursesDTO(courses *[]gorm.Course) []map[string]interface{} {
 			"Topic":       course.Topic,
 			"Information": course.Information,
 			"Type":        course.Type,
-			"Start":       course.Start,
-			"End":         course.End,
+			"Start":       course.Start.String(),
+			"End":         course.End.String(),
 		})
 	}
 	return result

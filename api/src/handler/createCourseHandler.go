@@ -27,12 +27,13 @@ func CreateCourseHandler(ctx iris.Context) {
 	}
 	defer file.Close()
 
-	startTime, err := time.Parse(t.DateTime, ctx.FormValue("Start"))
+	loc, _ := time.LoadLocation("Asia/Taipei")
+	startTime, err := time.ParseInLocation(t.DateTime, ctx.FormValue("Start"), loc)
 	if err != nil {
 		failed(ctx, error.ValidateError("Start: "+ctx.FormValue("Start")+" does not validate as timestamp"))
 		return
 	}
-	endTime, err := time.Parse(t.DateTime, ctx.FormValue("End"))
+	endTime, err := time.ParseInLocation(t.DateTime, ctx.FormValue("End"), loc)
 	if err != nil {
 		failed(ctx, error.ValidateError("End: "+ctx.FormValue("Start")+" does not validate as timestamp"))
 		return
