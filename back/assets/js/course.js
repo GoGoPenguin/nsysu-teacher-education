@@ -57,6 +57,9 @@ $(document).ready(function () {
             url: '/assets/languages/chinese.json'
         },
     });
+
+    // $.datetimepicker.setLocale('en');
+    $('#datetimepicker1').datetimepicker();
 })
 
 $('table#course').on('click', 'td.info', function () {
