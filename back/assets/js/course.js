@@ -50,8 +50,46 @@ $(document).ready(function () {
             { data: "Information" },
             { data: "Type" },
         ],
+        columnDefs: [
+            { className: "info", targets: [2] },
+        ],
         language: {
             url: '/assets/languages/chinese.json'
         },
+    });
+})
+
+$('table#course').on('click', 'td.info', function () {
+    let filename = $(this).text()
+
+    $.ajax({
+        url: config.server + '/v1/course/' + filename,
+        type: 'GET',
+        xhrFields: {
+            responseType: "blob"
+        },
+        error: function (xhr) {
+            alert('Unexcepted Error')
+            console.error(xhr);
+        },
+        beforeSend: function (xhr) {
+            let token = $.cookie('token')
+            if (token == undefined) {
+                renewToken()
+                token = $.cookie('token')
+            }
+
+            xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+        },
+        success: function (response) {
+            let a = document.createElement('a');
+            let url = window.URL.createObjectURL(response);
+            a.href = url;
+            a.download = filename;
+            document.body.append(a);
+            a.click();
+            a.remove();
+            window.URL.revokeObjectURL(url);
+        }
     });
 })
