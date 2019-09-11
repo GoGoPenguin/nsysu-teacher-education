@@ -106,42 +106,53 @@
                         新增講座
                     </div>
                     <div class="card-body">
-                        <div class="form-group">
-                            <label for="topic">研習主題</label>
-                            <input type="text" class="form-control" id="topic">
-                        </div>
-                        <div class="form-group">
-                            <label for="type">研習類別</label>
-                            <select class="form-control" id="type">
-                                <option selected disabled>請選擇</option>
-                                <option>A</option>
-                                <option>B</option>
-                                <option>C</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>開始時間</label>
-                            <div class="input-group date" id="start" data-target-input="nearest">
-                                <input type="text" class="form-control datetimepicker-input" data-target="#start" />
-                                <div class="input-group-append" data-target="#start" data-toggle="datetimepicker">
-                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                        <form id="course-form">
+                            <div class="form-group">
+                                <label for="topic">研習主題</label>
+                                <input type="text" class="form-control" id="topic"
+                                    oninvalid="this.setCustomValidity('請輸入研習主題')" oninput="this.setCustomValidity('')"
+                                    required>
+                            </div>
+                            <div class="form-group">
+                                <label for="type">研習類別</label>
+                                <select required class="form-control" id="type"
+                                    oninvalid="this.setCustomValidity('請輸入研習類別')" oninput="this.setCustomValidity('')">
+                                    <option value="" selected disabled>請選擇</option>
+                                    <option>A</option>
+                                    <option>B</option>
+                                    <option>C</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>開始時間</label>
+                                <div class="input-group date" id="start" data-target-input="nearest">
+                                    <input type="text" class="form-control datetimepicker-input" data-target="#start"
+                                        oninvalid="this.setCustomValidity('請輸入開始時間')"
+                                        oninput="this.setCustomValidity('')" required />
+                                    <div class="input-group-append" data-target="#start" data-toggle="datetimepicker">
+                                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label>結束時間</label>
-                            <div class="input-group date" id="end" data-target-input="nearest">
-                                <input type="text" class="form-control datetimepicker-input" data-target="#end" />
-                                <div class="input-group-append" data-target="#end" data-toggle="datetimepicker">
-                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                            <div class="form-group">
+                                <label>結束時間</label>
+                                <div class="input-group date" id="end" data-target-input="nearest">
+                                    <input type="text" class="form-control datetimepicker-input" data-target="#end"
+                                        oninvalid="this.setCustomValidity('請輸入結束時間')"
+                                        oninput="this.setCustomValidity('')" required />
+                                    <div class="input-group-append" data-target="#end" data-toggle="datetimepicker">
+                                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="info">講座資訊</label>
-                            <input id="info" type="file" name="Information" data-show-preview="false">
-                        </div>
-                        <button type="button" class="btn btn-primary" id="submit">送出</button>
+                            <div class="form-group">
+                                <label for="info">講座資訊</label>
+                                <input id="info" type="file" name="Information" data-show-preview="false"
+                                    oninvalid="this.setCustomValidity('請輸入講座資訊')" oninput="this.setCustomValidity('')"
+                                    required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">送出</button>
+                        </form>
                     </div>
                 </div>
 

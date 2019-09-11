@@ -139,9 +139,11 @@ $("#info").fileinput({
         }
     }
 }).on('fileuploaderror', function (event, data, msg) {
+    alert(msg)
     $('div.kv-upload-progress.kv-hidden').css({ 'display': 'none' })
 })
 
-$('#submit').click(function (e) {
+$('#course-form').on('submit', function (e) {
+    e.preventDefault();
     $("#info").fileinput('upload')
 })
