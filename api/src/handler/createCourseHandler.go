@@ -22,7 +22,9 @@ func CreateCourseHandler(ctx iris.Context) {
 	file, header, err := ctx.FormFile("Information")
 
 	if err != nil {
-		failed(ctx, error.ValidateError("Information: non zero value required"))
+		json(ctx, map[string]interface{}{
+			"error": "Information: non zero value required",
+		})
 		return
 	}
 	defer file.Close()
@@ -30,16 +32,22 @@ func CreateCourseHandler(ctx iris.Context) {
 	loc, _ := time.LoadLocation("Asia/Taipei")
 	startTime, err := time.ParseInLocation(t.DateTime, ctx.FormValue("Start"), loc)
 	if err != nil {
-		failed(ctx, error.ValidateError("Start: "+ctx.FormValue("Start")+" does not validate as timestamp"))
+		json(ctx, map[string]interface{}{
+			"error": "Start: " + ctx.FormValue("Start") + " does not validate as timestamp",
+		})
 		return
 	}
 	endTime, err := time.ParseInLocation(t.DateTime, ctx.FormValue("End"), loc)
 	if err != nil {
-		failed(ctx, error.ValidateError("End: "+ctx.FormValue("Start")+" does not validate as timestamp"))
+		json(ctx, map[string]interface{}{
+			"error": "End: " + ctx.FormValue("Start") + " does not validate as timestamp",
+		})
 		return
 	}
 	if !startTime.Before(endTime) {
-		failed(ctx, error.ValidateError("Start: "+ctx.FormValue("Start")+" does not after "+ctx.FormValue("End")))
+		json(ctx, map[string]interface{}{
+			"error": "Start: " + ctx.FormValue("Start") + " does not before " + ctx.FormValue("End"),
+		})
 		return
 	}
 
@@ -51,11 +59,13 @@ func CreateCourseHandler(ctx iris.Context) {
 	}
 
 	if _, err := govalidator.ValidateStruct(params); err != nil {
-		failed(ctx, error.ValidateError(err.Error()))
+		json(ctx, map[string]interface{}{
+			"error": err.Error(),
+		})
 		return
 	}
 
-	result, err := service.CreateCourse(
+	_, err = service.CreateCourse(
 		params.Topic,
 		params.Type,
 		file,
@@ -69,6 +79,6 @@ func CreateCourseHandler(ctx iris.Context) {
 		return
 	}
 
-	success(ctx, result)
+	json(ctx, map[string]interface{}{})
 	return
 }

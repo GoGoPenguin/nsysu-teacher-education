@@ -11,18 +11,22 @@ func CreateStudentsHandler(ctx iris.Context) {
 	file, _, err := ctx.FormFile("CSV")
 
 	if err != nil {
-		failed(ctx, error.ValidateError("CSV: non zero value required"))
+		json(ctx, map[string]interface{}{
+			"error": "CSV: non zero value required",
+		})
 		return
 	}
 	defer file.Close()
 
-	result, err := service.CreateStudents(file)
+	_, err = service.CreateStudents(file)
 
 	if err != (*error.Error)(nil) {
-		failed(ctx, err)
+		json(ctx, map[string]interface{}{
+			"error": err.Error(),
+		})
 		return
 	}
 
-	success(ctx, result)
+	json(ctx, map[string]interface{}{})
 	return
 }
