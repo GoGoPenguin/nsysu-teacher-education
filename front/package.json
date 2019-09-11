@@ -20,5 +20,8 @@
     "perfect-scrollbar": "^1.4.0",
     "select2": "^4.0.8",
     "startbootstrap-scrolling-nav": "^4.2.1"
+  },
+  "devDependencies": {
+    "@fortawesome/fontawesome-free": "^5.10.2"
   }
 }
