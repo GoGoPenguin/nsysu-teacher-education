@@ -52,11 +52,11 @@ func (dao *studentDao) GetByID(tx *gorm.DB, id uint) *Student {
 	return &result
 }
 
-// GetByAccount get a record by account
-func (dao *studentDao) GetByAccount(tx *gorm.DB, acount string) *Student {
+// GetByName get a record by account
+func (dao *studentDao) GetByName(tx *gorm.DB, name string) *Student {
 	result := Student{}
 	err := tx.Table(dao.table).
-		Where("account = ?", acount).
+		Where("name = ?", name).
 		Where("deleted_at IS NULL").
 		Scan(&result).Error
 
