@@ -24,7 +24,7 @@
     <link href="/node_modules/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
     <link href="/node_modules/bootstrap-fileinput/css/fileinput.css" rel="stylesheet">
     <link href="/node_modules/bootstrap-fileinput/css/fileinput-rtl.css" rel="stylesheet">
-    <link href="/node_modules/bootstrap-datetimepicker-npm/build/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <link href="/node_modules/tempusdominus-bootstrap-4/build/css/tempusdominus-bootstrap-4.css" rel="stylesheet">
 
     <!-- Custom styles for this template-->
     <link href="/node_modules/startbootstrap-sb-admin/css/sb-admin.css" rel="stylesheet">
@@ -102,7 +102,8 @@
                 <!-- Create Course -->
                 <div class="card mb-3">
                     <div class="card-header">
-                        <i class="fas fa-plus"></i>新增講座
+                        <i class="fas fa-plus"></i>
+                        新增講座
                     </div>
                     <div class="card-body">
                         <div class="form-group">
@@ -112,20 +113,35 @@
                         <div class="form-group">
                             <label for="type">研習類別</label>
                             <select class="form-control" id="type">
+                                <option selected disabled>請選擇</option>
                                 <option>A</option>
                                 <option>B</option>
                                 <option>C</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <div class='input-group date' id='datetimepicker1'>
-                                <input type='text' class="form-control" />
-                                <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-calendar"></span>
-                                </span>
+                            <label>開始時間</label>
+                            <div class="input-group date" id="start" data-target-input="nearest">
+                                <input type="text" class="form-control datetimepicker-input" data-target="#start" />
+                                <div class="input-group-append" data-target="#start" data-toggle="datetimepicker">
+                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                </div>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <div class="form-group">
+                            <label>結束時間</label>
+                            <div class="input-group date" id="end" data-target-input="nearest">
+                                <input type="text" class="form-control datetimepicker-input" data-target="#end" />
+                                <div class="input-group-append" data-target="#end" data-toggle="datetimepicker">
+                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="info">講座資訊</label>
+                            <input id="info" type="file" name="Information" data-show-preview="false">
+                        </div>
+                        <button type="button" class="btn btn-primary" id="submit">送出</button>
                     </div>
                 </div>
 
@@ -133,7 +149,8 @@
                 <div class="card mb-3">
                     <div class="card-header">
                         <i class="fas fa-table"></i>
-                        講座列表</div>
+                        講座列表
+                    </div>
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-bordered" id="course" width="100%" cellspacing="0">
@@ -206,11 +223,12 @@
     <!-- Bootstrap core JavaScript-->
     <script src="/node_modules/jquery/dist/jquery.min.js"></script>
     <script src="/node_modules/moment/moment.js"></script>
+    <script src="/node_modules/moment/locale/zh-tw.js"></script>
     <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/node_modules/bootstrap-fileinput/js/fileinput.js"></script>
     <script src="/node_modules/bootstrap-fileinput/themes/fas/theme.js"></script>
     <script src="/node_modules/bootstrap-fileinput/js/locales/zh-TW.js"></script>
-    <script src="/node_modules/bootstrap-datetimepicker-npm/build/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="/node_modules/tempusdominus-bootstrap-4/build/js/tempusdominus-bootstrap-4.js"></script>
 
     <!-- Core plugin JavaScript-->
     <script src="/node_modules/jquery.easing/jquery.easing.min.js"></script>

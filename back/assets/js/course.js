@@ -58,8 +58,31 @@ $(document).ready(function () {
         },
     });
 
-    // $.datetimepicker.setLocale('en');
-    $('#datetimepicker1').datetimepicker();
+    $('#start').datetimepicker({
+        format: 'YYYY-MM-DD HH:mm:00',
+        locale: 'zh-tw',
+        initialDate: new Date(),
+        autoclose: true,
+        icons: {
+            time: "fas fa-clock",
+            date: "fa fa-calendar",
+            up: "fas fa-angle-up",
+            down: "fas fa-angle-down",
+        }
+    })
+
+    $('#end').datetimepicker({
+        format: 'YYYY-MM-DD HH:mm:00',
+        locale: 'zh-tw',
+        initialDate: new Date(),
+        autoclose: true,
+        icons: {
+            time: "fas fa-clock",
+            date: "fa fa-calendar",
+            up: "fas fa-angle-up",
+            down: "fas fa-angle-down",
+        }
+    })
 })
 
 $('table#course').on('click', 'td.info', function () {
@@ -95,4 +118,30 @@ $('table#course').on('click', 'td.info', function () {
             window.URL.revokeObjectURL(url);
         }
     });
+})
+
+$("#info").fileinput({
+    language: 'zh-TW',
+    theme: "fas",
+    showUpload: false,
+    uploadUrl: config.server + '/v1/course',
+    ajaxSettings: {
+        headers: {
+            'Authorization': 'Bearer ' + $.cookie('token'),
+        }
+    },
+    uploadExtraData: function (previewId, index) {
+        return {
+            'Topic': $('#topic').val(),
+            'Type': $('#type').val(),
+            'Start': $('#start input').val(),
+            'End': $('#end input').val(),
+        }
+    }
+}).on('fileuploaderror', function (event, data, msg) {
+    $('div.kv-upload-progress.kv-hidden').css({ 'display': 'none' })
+})
+
+$('#submit').click(function (e) {
+    $("#info").fileinput('upload')
 })

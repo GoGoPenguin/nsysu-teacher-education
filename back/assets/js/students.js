@@ -55,24 +55,9 @@ $('input#upload').fileinput({
     uploadUrl: config.server + '/v1/users',
     ajaxSettings: {
         headers: {
-            'Authorization': 'Bearer ' + $.cookie('token')
+            'Authorization': 'Bearer ' + $.cookie('token'),
         }
     },
-}).on('fileuploaded', function (e, params) {
-    if (params.response.code != 0) {
-        $('div.kv-fileinput-error.file-error-message').html('\
-            <button type="button" class="close kv-error-close" aria-label="Close">\
-                <span aria-hidden="true">×</span>\
-            </button>\
-            <ul>\
-                <li data-thumb-id="thumb-upload-20_students.csv" data-file-id="20_students.csv">\
-                    <pre>'+ params.response.message + '</pre>\
-                </li>\
-            </ul>\
-        ').show('fast')
-    }
-});
-
-$('body').on('click', 'button.close.kv-error-close', function () {
-    $('div.kv-fileinput-error.file-error-message').hide('slow')
+}).on('fileuploaderror', function (event, data, msg) {
+    $('div.kv-upload-progress.kv-hidden').css({ 'display': 'none' })
 })

@@ -8,12 +8,12 @@
   "license": "MIT",
   "dependencies": {
     "bootstrap": "^4.3.1",
-    "bootstrap-datetimepicker-npm": "^4.17.37-npm",
     "bootstrap-fileinput": "^5.0.5",
     "datatables.net-bs4": "^1.10.19",
     "datatables.net-scroller-bs4": "^2.0.0",
     "jquery": "^3.4.1",
     "jquery.cookie": "^1.4.1",
-    "startbootstrap-sb-admin": "^5.1.1"
+    "startbootstrap-sb-admin": "^5.1.1",
+    "tempusdominus-bootstrap-4": "^5.1.2"
   }
 }
