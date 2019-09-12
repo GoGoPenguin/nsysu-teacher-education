@@ -45,7 +45,7 @@ func CreateCourse(topic, courseType string, file multipart.File, header *multipa
 }
 
 // GetCourse get course list
-func GetCourse(start, length string) (result map[string]interface{}, e *error.Error) {
+func GetCourse(account, start, length string) (result map[string]interface{}, e *error.Error) {
 	tx := gorm.DB()
 
 	defer func() {
@@ -55,12 +55,23 @@ func GetCourse(start, length string) (result map[string]interface{}, e *error.Er
 		}
 	}()
 
-	courses := gorm.CourseDao.Query(
-		tx,
-		specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
-		specification.OrderSpecification(specification.IDColumn, specification.OrderDirectionDESC),
-		specification.IsNullSpecification("deleted_at"),
-	)
+	var courses *[]gorm.Course
+	if operator := gorm.AdminDao.GetByAccount(tx, account); operator != nil {
+		courses = gorm.CourseDao.Query(
+			tx,
+			specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
+			specification.OrderSpecification("start", specification.OrderDirectionDESC),
+			specification.IsNullSpecification("deleted_at"),
+		)
+	} else {
+		courses = gorm.CourseDao.Query(
+			tx,
+			specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
+			specification.BiggerSpecification("start", time.Now().String()),
+			specification.OrderSpecification("start", specification.OrderDirectionASC),
+			specification.IsNullSpecification("deleted_at"),
+		)
+	}
 
 	total := gorm.CourseDao.Count(
 		tx,

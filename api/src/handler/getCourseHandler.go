@@ -5,6 +5,7 @@ import (
 	"github.com/kataras/iris"
 	"github.com/nsysu/teacher-education/src/error"
 	"github.com/nsysu/teacher-education/src/service"
+	"github.com/nsysu/teacher-education/src/utils/auth"
 )
 
 // GetCourseHandler get list of course
@@ -12,7 +13,7 @@ func GetCourseHandler(ctx iris.Context) {
 	type rule struct {
 		Start  string `valid:"required"`
 		Length string `valid:"required"`
-		Draw   string `valid:"required"`
+		Draw   string `valid:"-"`
 	}
 
 	params := &rule{
@@ -26,7 +27,8 @@ func GetCourseHandler(ctx iris.Context) {
 		return
 	}
 
-	result, err := service.GetCourse(params.Start, params.Length)
+	account := auth.Account(ctx)
+	result, err := service.GetCourse(account, params.Start, params.Length)
 
 	if err != (*error.Error)(nil) {
 		json(ctx, map[string]interface{}{
