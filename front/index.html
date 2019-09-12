@@ -20,6 +20,7 @@
 
     <!-- Custom styles for this template -->
     <link href="/node_modules/startbootstrap-scrolling-nav/css/scrolling-nav.css" rel="stylesheet">
+    <link href="/assets/css/index.css" rel="stylesheet">
 
 </head>
 
@@ -53,6 +54,9 @@
                             <i class="fas fa-user-circle fa-fw"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                            <a class="dropdown-item" href="#">我的演講</a>
+                            <a class="dropdown-item" href="#">我的服務學習</a>
+                            <div class="dropdown-divider"></div>
                             <button class="dropdown-item" id="logout" data-toggle="modal"
                                 data-target="#logoutModal">登出</button>
                         </div>
@@ -72,7 +76,7 @@
     <section id="education" class="bg-white">
         <div class="container">
             <div class="row">
-                <div class="col-lg-8 mx-auto">
+                <div class="col-lg-12 mx-auto">
                     <h2>教育學分</h2>
                     <p class="lead">Coming Soon</p>
                 </div>
@@ -83,7 +87,7 @@
     <section id="subject" class="bg-light">
         <div class="container">
             <div class="row">
-                <div class="col-lg-8 mx-auto">
+                <div class="col-lg-12 mx-auto">
                     <h2>專門科目</h2>
                     <p class="lead">Coming Soon</p>
                 </div>
@@ -94,36 +98,20 @@
     <section id="course" class="bg-white">
         <div class="container">
             <div class="row">
-                <div class="col-lg-8 mx-auto">
+                <div class="col-lg-12 mx-auto">
                     <h2>演講</h2>
                     <table class="table table-borderless table-hover">
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
-                                <th scope="col">First</th>
-                                <th scope="col">Last</th>
-                                <th scope="col">Handle</th>
+                                <th scope="col">研習主題</th>
+                                <th scope="col">研習時段</th>
+                                <th scope="col">研習資訊</th>
+                                <th scope="col">研習類別</th>
+                                <th scope="col"></th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>@mdo</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">3</th>
-                                <td colspan="2">Larry the Bird</td>
-                                <td>@twitter</td>
-                            </tr>
-                        </tbody>
+                        <tbody></tbody>
                     </table>
                 </div>
             </div>
@@ -133,7 +121,7 @@
     <section id="service" class="bg-light">
         <div class="container">
             <div class="row">
-                <div class="col-lg-8 mx-auto">
+                <div class="col-lg-12 mx-auto">
                     <h2>服務學習</h2>
                     <p class="lead">Coming Soon</p>
                 </div>
@@ -183,6 +171,7 @@
 
     <script src="/assets/js/config.js"></script>
     <script src="/assets/js/auth.js"></script>
+    <script src="/assets/js/index.js"></script>
 
 </body>
 
