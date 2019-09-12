@@ -36,7 +36,7 @@ func Login(account, password, role string) (result interface{}, e *error.Error) 
 		userAccount = admin.Account
 		userPassword = admin.Password
 	} else {
-		student := gorm.StudentDao.GetByName(tx, account)
+		student := gorm.StudentDao.GetByAccount(tx, account)
 		if student == nil {
 			return nil, error.LoginError()
 		}
