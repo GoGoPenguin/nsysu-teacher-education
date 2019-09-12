@@ -1,9 +1,15 @@
 $(document).ready(function () {
+    let token = $.cookie('token')
     let refreshToken = $.cookie('refresh-token')
 
-    if (refreshToken == undefined && window.location.pathname != '/login.html') {
-        location.href = '/login.html'
-    } else if (refreshToken != undefined && window.location.pathname == '/login.html') {
+    if (token == undefined) {
+        if (refreshToken != undefined) {
+            renewToken()
+            token = $.cookie('token')
+        } else if (window.location.pathname != '/login.html') {
+            location.href = '/login.html'
+        }
+    } else if (window.location.pathname == '/login.html') {
         location.href = '/'
     }
 })
