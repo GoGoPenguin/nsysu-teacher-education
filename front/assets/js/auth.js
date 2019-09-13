@@ -69,10 +69,12 @@ $('button#login').click(function () {
         },
         error: function (xhr) {
             console.error(xhr);
+            $('div.flex-sb-m div.alert-danger').show('fast')
         },
         success: function (response) {
             if (response.code != 0) {
                 console.error(response.message)
+                $('div.flex-sb-m div.alert-danger').show('fast')
             } else {
                 let date = new Date()
                 date.setTime(date.getTime() + (response.data.Expire * 1000));
@@ -87,6 +89,10 @@ $('button#login').click(function () {
             }
         }
     });
+})
+
+$('div.flex-sb-m button.close').click(function () {
+    $('div.flex-sb-m div.alert-danger').hide('slow')
 })
 
 $('#logoutModal button.btn.btn-primary').click(function () {

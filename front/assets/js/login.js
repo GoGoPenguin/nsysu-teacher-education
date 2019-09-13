@@ -1,7 +1,4 @@
-
-(function ($) {
-    "use strict";
-
+$(document).ready(function () {
     var showPass = 0;
     $('.btn-show-pass').on('click', function () {
         if (showPass == 0) {
@@ -18,6 +15,4 @@
         }
 
     });
-
-
-})(jQuery);
+})
