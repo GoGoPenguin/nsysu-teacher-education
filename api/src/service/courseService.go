@@ -108,3 +108,37 @@ func GetInformation(filename string) (result string, e *error.Error) {
 
 	return "./assets/course/" + filename, nil
 }
+
+// SingUpCourse sudent sign up course
+func SingUpCourse(account, courseID, meal string) (result interface{}, e *error.Error) {
+	tx := gorm.DB()
+
+	defer func() {
+		if r := recover(); r != nil {
+			logger.Error(r)
+			e = error.UnexpectedError()
+		}
+	}()
+
+	student := gorm.StudentDao.GetByAccount(tx, account)
+	course := gorm.CourseDao.Query(
+		tx,
+		specification.IDSpecification(courseID),
+		specification.IsNullSpecification("deleted_at"),
+		specification.BiggerSpecification("start", time.Now().String()),
+	)
+
+	if len(*course) == 0 {
+		return nil, error.NotFoundError("course ID " + courseID)
+	}
+
+	srudentCourse := &gorm.StudentCourse{
+		StudentID: student.ID,
+		CourseID:  typecast.StringToUint(courseID),
+		Meal:      meal,
+	}
+
+	gorm.StudentCourseDao.New(tx, srudentCourse)
+
+	return "success", nil
+}

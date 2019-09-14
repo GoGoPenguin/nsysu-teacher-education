@@ -39,6 +39,7 @@ func Run() {
 			course.Post("/", hero.Handler(handler.CreateCourseHandler))                  // 新增講座
 			course.Get("/", hero.Handler(handler.GetCourseHandler))                      // 取得講座列表
 			course.Get("/{filename}", hero.Handler(handler.GetCourseInformationHandler)) // 取得講座資訊
+			course.Post("/sign-up", hero.Handler(handler.SingUpCourseHandler))           // 取得講座資訊
 		}
 	}
 
