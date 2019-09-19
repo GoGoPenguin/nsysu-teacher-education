@@ -15,6 +15,7 @@ CREATE TABLE `student_course` (
     INDEX (`deleted_at`),
     INDEX (`student_id`),
     INDEX (`course_id`),
+    UNIQUE INDEX (`student_id`, `course_id`),
     FOREIGN KEY (`student_id`) REFERENCES `student`(`id`) ON DELETE CASCADE,
     FOREIGN KEY (`course_id`) REFERENCES `course`(`id`) ON DELETE CASCADE,
     PRIMARY KEY(`id`)
