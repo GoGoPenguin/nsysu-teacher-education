@@ -15,7 +15,6 @@ $(document).ready(function () {
             xhr.setRequestHeader('Authorization', 'Bearer ' + token);
         },
         success: function (response) {
-            console.log(response.list.length)
             if (response.list.length == 0) {
                 $('#course tbody').append('\
                         <tr>\
@@ -43,7 +42,7 @@ $(document).ready(function () {
                             <td>'+ time + '</td>\
                             <td class="info">'+ element.Information + '</td>\
                             <td>'+ element.Type + '</td>\
-                            <td><button class="btn btn-primary">報名</button></td>\
+                            <td><button class="btn btn-primary" onclick="signUp(' + element.ID + ')">報名</button></td>\
                         </tr>\
                     ')
                 })
@@ -85,4 +84,44 @@ $('#course tbody').on('click', 'td.info', function () {
             window.URL.revokeObjectURL(url);
         }
     });
+})
+
+function signUp(id) {
+    $('input.course-id').val(id)
+    $('#signUpModal').modal('show')
+}
+
+$('#signUpModal form').on('submit', function (e) {
+    e.preventDefault();
+
+    $.ajax({
+        url: config.server + '/v1/course/sign-up',
+        type: 'POST',
+        data: {
+            'Account': $.cookie('account'),
+            'CourseID': $('input.course-id').val(),
+            'Meal': $('#meal').val(),
+        },
+        error: function (xhr) {
+            alert('Unexcepted Error')
+            console.error(xhr);
+        },
+        beforeSend: function (xhr) {
+            let token = $.cookie('token')
+            if (token == undefined) {
+                renewToken()
+                token = $.cookie('token')
+            }
+
+            xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+        },
+        success: function (response) {
+            $('#signUpModal').modal('hide')
+            $('section#course div.alert').show('fast')
+        }
+    });
+})
+
+$('section#course span').click(function () {
+    $('section#course div.alert').hide('slow')
 })

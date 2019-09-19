@@ -14,6 +14,11 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicon-16x16.png">
     <link rel="manifest" href="/assets/img/site.webmanifest">
 
+    <!-- Core plugin JavaScript-->
+    <script src="/node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="/node_modules/jquery.cookie/jquery.cookie.js"></script>
+    <script src="/assets/js/bootstrap.js"></script>
+
     <!-- Bootstrap core CSS -->
     <link href="/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="/node_modules/@fortawesome/fontawesome-free/css/all.css" rel="stylesheet">
@@ -100,6 +105,12 @@
             <div class="row">
                 <div class="col-lg-12 mx-auto">
                     <h2>演講</h2>
+                    <div class="alert alert-success" role="alert" style="display: none;">
+                        <strong>報名成功！</strong>
+                        <button type="button" class="close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
                     <table class="table table-borderless table-hover">
                         <thead>
                             <tr>
@@ -153,6 +164,40 @@
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">取消</button>
                     <button class="btn btn-primary">登出</button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SignUp Modal-->
+    <div class="modal fade" id="signUpModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">報名演講</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <form>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="meal">便當</label>
+                            <select required class="form-control" id="meal" oninvalid="this.setCustomValidity('請選擇便當')"
+                                oninput="this.setCustomValidity('')">
+                                <option value="" selected disabled>請選擇</option>
+                                <option value="meat">葷</option>
+                                <option value="vegetable">素</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="course-id" hidden></input>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">取消</button>
+                        <button class="btn btn-primary" type="submit">報名</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
