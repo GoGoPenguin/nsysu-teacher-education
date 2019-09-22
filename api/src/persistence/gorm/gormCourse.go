@@ -92,16 +92,6 @@ func (dao *courseDao) GetByInformation(tx *gorm.DB, information string) *Course 
 	return &result
 }
 
-// Count get total count
-func (dao *courseDao) Count(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) int {
-	var count int
-	tx.Table(dao.table).
-		Scopes(funcs...).
-		Count(&count)
-
-	return count
-}
-
 // Query custom query
 func (dao *courseDao) Query(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) *[]Course {
 	var result []Course

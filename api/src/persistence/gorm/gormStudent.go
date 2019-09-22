@@ -69,16 +69,6 @@ func (dao *studentDao) GetByAccount(tx *gorm.DB, account string) *Student {
 	return &result
 }
 
-// Count get total count
-func (dao *studentDao) Count(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) int {
-	var count int
-	tx.Table(dao.table).
-		Scopes(funcs...).
-		Count(&count)
-
-	return count
-}
-
 // Query custom query
 func (dao *studentDao) Query(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) *[]Student {
 	var result []Student

@@ -4,7 +4,7 @@ import (
 	"github.com/nsysu/teacher-education/src/persistence/gorm"
 )
 
-// StudentsDTO users data transfer object
+// StudentsDTO studnet data transfer object
 func StudentsDTO(students *[]gorm.Student) []map[string]interface{} {
 	result := []map[string]interface{}{}
 

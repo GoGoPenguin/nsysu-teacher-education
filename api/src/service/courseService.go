@@ -73,15 +73,11 @@ func GetCourse(account, start, length string) (result map[string]interface{}, e 
 		)
 	}
 
-	total := gorm.CourseDao.Count(
-		tx,
-		specification.IsNullSpecification("deleted_at"),
-	)
-
+	list := assembler.CoursesDTO(courses)
 	result = map[string]interface{}{
-		"list":            assembler.CoursesDTO(courses),
-		"recordsTotal":    total,
-		"recordsFiltered": total,
+		"list":            list,
+		"recordsTotal":    len(list),
+		"recordsFiltered": len(list),
 	}
 
 	return result, nil
@@ -141,4 +137,44 @@ func SingUpCourse(account, courseID, meal string) (result interface{}, e *error.
 	gorm.StudentCourseDao.New(tx, srudentCourse)
 
 	return "success", nil
+}
+
+// GetSutdentCourseList get the list of student course
+func GetSutdentCourseList(account, start, length string) (result map[string]interface{}, e *error.Error) {
+	tx := gorm.DB().Debug()
+
+	defer func() {
+		if r := recover(); r != nil {
+			logger.Error(r)
+			e = error.UnexpectedError()
+		}
+	}()
+
+	var studentCourses *[]gorm.StudentCourse
+	if operator := gorm.AdminDao.GetByAccount(tx, account); operator != nil {
+		studentCourses = gorm.StudentCourseDao.Query(
+			tx,
+			specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
+			specification.OrderSpecification("`student_course`."+specification.IDColumn, specification.OrderDirectionDESC),
+			specification.IsNullSpecification("`student_course`.deleted_at"),
+		)
+	} else {
+		student := gorm.StudentDao.GetByAccount(tx, account)
+		studentCourses = gorm.StudentCourseDao.Query(
+			tx,
+			specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
+			specification.OrderSpecification("`student_course`."+specification.IDColumn, specification.OrderDirectionDESC),
+			specification.IsNullSpecification("deleted_at"),
+			specification.StudentSpecification(student.ID),
+		)
+	}
+
+	list := assembler.StudentCoursesDTO(studentCourses)
+	result = map[string]interface{}{
+		"list":            list,
+		"recordsTotal":    len(list),
+		"recordsFiltered": len(list),
+	}
+
+	return
 }

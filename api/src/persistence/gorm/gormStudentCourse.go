@@ -7,12 +7,14 @@ import (
 // StudentCourse model
 type StudentCourse struct {
 	gorm.Model
-	StudentID uint   `gorm:"column:student_id;"`
-	CourseID  uint   `gorm:"column:course_id;"`
-	Meal      string `gorm:"column:meal;"`
-	Status    string `gorm:"column:status"`
-	Review    string `gorm:"column:review"`
-	Comment   string `gorm:"column:comment"`
+	StudentID uint    `gorm:"column:student_id;"`
+	Student   Student `gorm:"foreignkey:StudentID;"`
+	CourseID  uint    `gorm:"column:course_id;"`
+	Course    Course  `gorm:"foreignkey:CourseID;"`
+	Meal      string  `gorm:"column:meal;"`
+	Status    string  `gorm:"column:status"`
+	Review    string  `gorm:"column:review"`
+	Comment   string  `gorm:"column:comment"`
 }
 
 type studentCourseDao struct {
@@ -59,22 +61,15 @@ func (dao *studentCourseDao) GetByID(tx *gorm.DB, id uint) *StudentCourse {
 	return &result
 }
 
-// Count get total count
-func (dao *studentCourseDao) Count(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) int {
-	var count int
-	tx.Table(dao.table).
-		Scopes(funcs...).
-		Count(&count)
-
-	return count
-}
-
 // Query custom query
-func (dao *studentCourseDao) Query(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) *[]Course {
-	var result []Course
-	err := tx.Table(dao.table).
+func (dao *studentCourseDao) Query(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) *[]StudentCourse {
+	var result []StudentCourse
+	err := tx.Preload("Student").
+		Preload("Course").
+		Table(dao.table).
+		Select("*").
 		Scopes(funcs...).
-		Scan(&result).Error
+		Find(&result).Error
 
 	if gorm.IsRecordNotFoundError(err) {
 		return nil
