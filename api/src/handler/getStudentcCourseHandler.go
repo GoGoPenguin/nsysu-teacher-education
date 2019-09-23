@@ -13,7 +13,7 @@ func GetStudentCourseHandler(ctx iris.Context) {
 	type rule struct {
 		Start  string `valid:"required"`
 		Length string `valid:"required"`
-		Draw   string `valid:"required"`
+		Draw   string `valid:"-"`
 	}
 
 	params := &rule{
