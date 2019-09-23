@@ -12,7 +12,7 @@ func StudentCoursesDTO(studentCourses *[]gorm.StudentCourse) []map[string]interf
 		result = append(result, map[string]interface{}{
 			"Student": map[string]interface{}{
 				"Name":    studentCourse.Student.Name,
-				"ACcount": studentCourse.Student.Account,
+				"Account": studentCourse.Student.Account,
 				"Major":   studentCourse.Student.Major,
 				"Number":  studentCourse.Student.Number,
 			},
