@@ -20,3 +20,5 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 - create course
 - course list
 - get course information
+- sign up course
+- get sign up course

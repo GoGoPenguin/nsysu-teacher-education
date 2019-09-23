@@ -10,8 +10,18 @@ func StudentCoursesDTO(studentCourses *[]gorm.StudentCourse) []map[string]interf
 
 	for _, studentCourse := range *studentCourses {
 		result = append(result, map[string]interface{}{
-			"Student": studentCourse.Student.Name,
-			"Course":  studentCourse.Course.Topic,
+			"Student": map[string]interface{}{
+				"Name":    studentCourse.Student.Name,
+				"ACcount": studentCourse.Student.Account,
+				"Major":   studentCourse.Student.Major,
+				"Number":  studentCourse.Student.Number,
+			},
+			"Course": map[string]interface{}{
+				"Topic": studentCourse.Course.Topic,
+				"Type":  studentCourse.Course.Type,
+				"Start": studentCourse.Course.Start.String(),
+				"End":   studentCourse.Course.End.String(),
+			},
 			"Meal":    studentCourse.Meal,
 			"Status":  studentCourse.Status,
 			"Review":  studentCourse.Review,
