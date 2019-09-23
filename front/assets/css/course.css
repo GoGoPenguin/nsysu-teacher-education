@@ -1,0 +1,12 @@
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-flow: column;
+}
+
+section#student-course {
+    flex-grow: 1;
+}
