@@ -61,6 +61,26 @@ func (dao *studentCourseDao) GetByID(tx *gorm.DB, id uint) *StudentCourse {
 	return &result
 }
 
+// Update record
+func (dao *studentCourseDao) Update(tx *gorm.DB, studentCourse *StudentCourse) {
+	err := tx.Model(&studentCourse).
+		Updates(map[string]interface{}{
+			"StudentID": studentCourse.StudentID,
+			"CourseID":  studentCourse.CourseID,
+			"Meal":      studentCourse.Meal,
+			"Status":    studentCourse.Status,
+			"Review":    studentCourse.Review,
+			"Comment":   studentCourse.Comment,
+		}).Error
+
+	if gorm.IsRecordNotFoundError(err) {
+		return
+	}
+	if err != nil {
+		panic(err)
+	}
+}
+
 // Query custom query
 func (dao *studentCourseDao) Query(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) *[]StudentCourse {
 	var result []StudentCourse

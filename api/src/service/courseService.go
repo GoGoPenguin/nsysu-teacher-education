@@ -141,7 +141,7 @@ func SingUpCourse(account, courseID, meal string) (result interface{}, e *error.
 
 // GetSutdentCourseList get the list of student course
 func GetSutdentCourseList(account, start, length string) (result map[string]interface{}, e *error.Error) {
-	tx := gorm.DB().Debug()
+	tx := gorm.DB()
 
 	defer func() {
 		if r := recover(); r != nil {
@@ -175,6 +175,24 @@ func GetSutdentCourseList(account, start, length string) (result map[string]inte
 		"recordsTotal":    len(list),
 		"recordsFiltered": len(list),
 	}
+
+	return
+}
+
+// UpdateCourseReview update student-course review
+func UpdateCourseReview(id, review string) (result interface{}, e *error.Error) {
+	tx := gorm.DB().Debug()
+
+	defer func() {
+		if r := recover(); r != nil {
+			logger.Error(r)
+			e = error.UnexpectedError()
+		}
+	}()
+
+	studentCourse := gorm.StudentCourseDao.GetByID(tx, typecast.StringToUint(id))
+	studentCourse.Review = review
+	gorm.StudentCourseDao.Update(tx, studentCourse)
 
 	return
 }
