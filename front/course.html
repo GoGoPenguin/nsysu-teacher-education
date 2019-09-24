@@ -62,6 +62,9 @@
 
     <section id="student-course" class="bg-white">
         <div class="container">
+            <!-- Alert -->
+            <div role="alert" id="alert" style="display: none;"></div>
+
             <div class="row">
                 <div class="col-lg-12 mx-auto">
                     <h2>我的研習</h2>
@@ -74,6 +77,7 @@
                                 <th scope="col">研習類別</th>
                                 <th scope="col">審核情況</th>
                                 <th scope="col">審核結果說明</th>
+                                <th scope="col">心得</th>
                                 <th scope="col"></th>
                             </tr>
                         </thead>
@@ -112,34 +116,29 @@
         </div>
     </div>
 
-    <!-- SignUp Modal-->
-    <div class="modal fade" id="signUpModal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+    <!-- Update Review Modal -->
+    <div class="modal fade" id="updateReviewModal" tabindex="-1" role="dialog" aria-labelledby="updateReviewLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">報名演講</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
                 <form>
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="updateReviewLabel">心得上傳</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="meal">便當</label>
-                            <select required class="form-control" id="meal" oninvalid="this.setCustomValidity('請選擇便當')"
-                                oninput="this.setCustomValidity('')">
-                                <option value="" selected disabled>請選擇</option>
-                                <option value="meat">葷</option>
-                                <option value="vegetable">素</option>
-                            </select>
+                            <textarea class="form-control"></textarea>
                         </div>
                         <div class="form-group">
-                            <input type="text" class="course-id" hidden></input>
+                            <input type="hidden"></input>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-secondary" type="button" data-dismiss="modal">取消</button>
-                        <button class="btn btn-primary" type="submit">報名</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                        <button type="submit" class="btn btn-primary">上傳</button>
                     </div>
                 </form>
             </div>
