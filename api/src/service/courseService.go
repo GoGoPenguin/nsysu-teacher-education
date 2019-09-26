@@ -73,11 +73,15 @@ func GetCourse(account, start, length string) (result map[string]interface{}, e 
 		)
 	}
 
-	list := assembler.CoursesDTO(courses)
+	total := gorm.CourseDao.Count(
+		tx,
+		specification.IsNullSpecification("deleted_at"),
+	)
+
 	result = map[string]interface{}{
-		"list":            list,
-		"recordsTotal":    len(list),
-		"recordsFiltered": len(list),
+		"list":            assembler.CoursesDTO(courses),
+		"recordsTotal":    total,
+		"recordsFiltered": total,
 	}
 
 	return result, nil
@@ -169,11 +173,15 @@ func GetSutdentCourseList(account, start, length string) (result map[string]inte
 		)
 	}
 
-	list := assembler.StudentCoursesDTO(studentCourses)
+	total := gorm.StudentCourseDao.Count(
+		tx,
+		specification.IsNullSpecification("deleted_at"),
+	)
+
 	result = map[string]interface{}{
-		"list":            list,
-		"recordsTotal":    len(list),
-		"recordsFiltered": len(list),
+		"list":            assembler.StudentCoursesDTO(studentCourses),
+		"recordsTotal":    total,
+		"recordsFiltered": total,
 	}
 
 	return

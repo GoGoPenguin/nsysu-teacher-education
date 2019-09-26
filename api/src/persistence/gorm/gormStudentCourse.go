@@ -81,6 +81,16 @@ func (dao *studentCourseDao) Update(tx *gorm.DB, studentCourse *StudentCourse) {
 	}
 }
 
+// Count get total count
+func (dao *studentCourseDao) Count(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) int {
+	var count int
+	tx.Table(dao.table).
+		Scopes(funcs...).
+		Count(&count)
+
+	return count
+}
+
 // Query custom query
 func (dao *studentCourseDao) Query(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) *[]StudentCourse {
 	var result []StudentCourse
