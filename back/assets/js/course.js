@@ -4,7 +4,9 @@ const STATUS = {
     'failed': '未通過',
 }
 
-$(document).ready(function () {
+let studentCourses = []
+
+$(document).ready(() => {
     $('table#course').DataTable({
         processing: true,
         serverSide: true,
@@ -13,8 +15,8 @@ $(document).ready(function () {
         ajax: {
             url: config.server + '/v1/course',
             type: 'GET',
-            dataSrc: function (d) {
-                d.list.forEach(function (element, index, array) {
+            dataSrc: (d) => {
+                d.list.forEach((element, index, array) => {
                     let startDate = array[index].Start.substring(0, 10)
                     let startTime = array[index].Start.substring(11, 19)
                     let endDate = array[index].End.substring(0, 10)
@@ -28,7 +30,7 @@ $(document).ready(function () {
                 })
                 return d.list
             },
-            beforeSend: function (xhr) {
+            beforeSend: (xhr) => {
                 let token = $.cookie('token')
                 if (token == undefined) {
                     renewToken()
@@ -37,7 +39,7 @@ $(document).ready(function () {
 
                 xhr.setRequestHeader('Authorization', 'Bearer ' + token);
             },
-            error: function (xhr, error, thrown) {
+            error: (xhr, error, thrown) => {
                 if (xhr.status == 401) {
                     let cookies = $.cookie()
                     for (var cookie in cookies) {
@@ -73,8 +75,8 @@ $(document).ready(function () {
         ajax: {
             url: config.server + '/v1/course/sign-up',
             type: 'GET',
-            dataSrc: function (d) {
-                d.list.forEach(function (element, index, array) {
+            dataSrc: (d) => {
+                d.list.forEach((element, index, array) => {
                     let startDate = array[index].Course.Start.substring(0, 10)
                     let startTime = array[index].Course.Start.substring(11, 19)
                     let endDate = array[index].Course.End.substring(0, 10)
@@ -87,10 +89,14 @@ $(document).ready(function () {
                     }
 
                     array[index].Status = STATUS[array[index].Status]
+                    array[index].Button = '<button class="btn btn-primary" onclick="check(' + index + ')">審核</button>'
+
+                    studentCourses.push(element)
                 })
+
                 return d.list
             },
-            beforeSend: function (xhr) {
+            beforeSend: (xhr) => {
                 let token = $.cookie('token')
                 if (token == undefined) {
                     renewToken()
@@ -99,7 +105,7 @@ $(document).ready(function () {
 
                 xhr.setRequestHeader('Authorization', 'Bearer ' + token);
             },
-            error: function (xhr, error, thrown) {
+            error: (xhr, error, thrown) => {
                 if (xhr.status == 401) {
                     let cookies = $.cookie()
                     for (var cookie in cookies) {
@@ -122,6 +128,7 @@ $(document).ready(function () {
             { data: "Course.Topic" },
             { data: "Course.Type" },
             { data: "Time" },
+            { data: "Button" },
         ],
         language: {
             url: '/assets/languages/chinese.json'
@@ -155,7 +162,7 @@ $(document).ready(function () {
     })
 })
 
-$('table#course').on('click', 'td.info', function () {
+$('table#course').on('click', 'td.info', () => {
     let filename = $(this).text()
 
     $.ajax({
@@ -164,11 +171,11 @@ $('table#course').on('click', 'td.info', function () {
         xhrFields: {
             responseType: "blob"
         },
-        error: function (xhr) {
+        error: (xhr) => {
             alert('Unexcepted Error')
             console.error(xhr);
         },
-        beforeSend: function (xhr) {
+        beforeSend: (xhr) => {
             let token = $.cookie('token')
             if (token == undefined) {
                 renewToken()
@@ -177,7 +184,7 @@ $('table#course').on('click', 'td.info', function () {
 
             xhr.setRequestHeader('Authorization', 'Bearer ' + token);
         },
-        success: function (response) {
+        success: (response) => {
             let a = document.createElement('a');
             let url = window.URL.createObjectURL(response);
             a.href = url;
@@ -200,7 +207,7 @@ $("#info").fileinput({
             'Authorization': 'Bearer ' + $.cookie('token'),
         }
     },
-    uploadExtraData: function (previewId, index) {
+    uploadExtraData: (previewId, index) => {
         return {
             'Topic': $('#topic').val(),
             'Type': $('#type').val(),
@@ -208,12 +215,32 @@ $("#info").fileinput({
             'End': $('#end input').val(),
         }
     }
-}).on('fileuploaderror', function (event, data, msg) {
+}).on('fileuploaderror', (event, data, msg) => {
     alert(msg)
     $('div.kv-upload-progress.kv-hidden').css({ 'display': 'none' })
 })
 
-$('#course-form').on('submit', function (e) {
+$('#course-form').on('submit', (e) => {
     e.preventDefault();
     $("#info").fileinput('upload')
+})
+
+const check = (index) => {
+    $('#checkModal .status p').html(studentCourses[index].Status)
+    $('#checkModal .name input').val(studentCourses[index].Student.Name)
+    $('#checkModal .major input').val(studentCourses[index].Student.Major)
+    $('#checkModal .account input').val(studentCourses[index].Student.Account)
+    $('#checkModal .number input').val(studentCourses[index].Student.Number)
+    $('#checkModal .course-topic input').val(studentCourses[index].Course.Topic)
+    $('#checkModal .course-type input').val(studentCourses[index].Course.Type)
+    $('#checkModal .course-review').val(studentCourses[index].Review)
+    $('#checkModal').modal('show')
+}
+
+$('#checkModal .btn-primary').click(() => {
+
+})
+
+$('#checkModal .btn-danger').click(() => {
+
 })
