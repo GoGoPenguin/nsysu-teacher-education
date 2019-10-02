@@ -5,6 +5,7 @@ const STATUS = {
 }
 
 let studentCourses = []
+let studentCoursesIndex = -1
 
 $(document).ready(() => {
     $('table#course').DataTable({
@@ -226,6 +227,8 @@ $('#course-form').on('submit', (e) => {
 })
 
 const check = (index) => {
+    studentCoursesIndex = index
+
     $('#checkModal .status p').html(studentCourses[index].Status)
     $('#checkModal .name input').val(studentCourses[index].Student.Name)
     $('#checkModal .major input').val(studentCourses[index].Student.Major)
@@ -238,9 +241,91 @@ const check = (index) => {
 }
 
 $('#checkModal .btn-primary').click(() => {
+    $.ajax({
+        url: config.server + '/v1/course/status',
+        type: 'PATCH',
+        data: {
+            StudentCourseID: studentCourses[studentCoursesIndex].ID,
+            Status: 'pass',
+        },
+        error: (xhr) => {
+            console.error(xhr);
+            $('#checkModal').modal('hide')
+            swal({
+                title: '',
+                text: '修改失敗',
+                icon: "error",
+                timer: 1000,
+                buttons: false,
+            })
+        },
+        beforeSend: (xhr) => {
+            let token = $.cookie('token')
+            if (token == undefined) {
+                renewToken()
+                token = $.cookie('token')
+            }
 
+            xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+        },
+        success: (response) => {
+            $('#checkModal').modal('hide')
+            swal({
+                title: '',
+                text: '修改成功',
+                icon: "success",
+                timer: 1000,
+                buttons: false,
+            })
+
+            let row = $('table#student-course tbody').children('tr').eq(0);
+            let col = row.children('td').eq(0)
+            col.html(STATUS['pass'])
+        }
+    });
 })
 
 $('#checkModal .btn-danger').click(() => {
+    $.ajax({
+        url: config.server + '/v1/course/status',
+        type: 'PATCH',
+        data: {
+            StudentCourseID: studentCourses[studentCoursesIndex].ID,
+            Status: 'failed',
+        },
+        error: (xhr) => {
+            console.error(xhr);
+            $('#checkModal').modal('hide')
+            swal({
+                title: '',
+                text: '修改失敗',
+                icon: "error",
+                timer: 1000,
+                buttons: false,
+            })
+        },
+        beforeSend: (xhr) => {
+            let token = $.cookie('token')
+            if (token == undefined) {
+                renewToken()
+                token = $.cookie('token')
+            }
 
+            xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+        },
+        success: (response) => {
+            $('#checkModal').modal('hide')
+            swal({
+                title: '',
+                text: '修改成功',
+                icon: "success",
+                timer: 1000,
+                buttons: false,
+            })
+
+            let row = $('table#student-course tbody').children('tr').eq(0);
+            let col = row.children('td').eq(0)
+            col.html(STATUS['failed'])
+        }
+    });
 })
