@@ -189,7 +189,7 @@ func GetSutdentCourseList(account, start, length string) (result map[string]inte
 
 // UpdateCourseReview update student-course review
 func UpdateCourseReview(id, review string) (result interface{}, e *error.Error) {
-	tx := gorm.DB().Debug()
+	tx := gorm.DB()
 
 	defer func() {
 		if r := recover(); r != nil {
@@ -200,6 +200,24 @@ func UpdateCourseReview(id, review string) (result interface{}, e *error.Error) 
 
 	studentCourse := gorm.StudentCourseDao.GetByID(tx, typecast.StringToUint(id))
 	studentCourse.Review = review
+	gorm.StudentCourseDao.Update(tx, studentCourse)
+
+	return
+}
+
+// UpdateCourseStatus update student-course status
+func UpdateCourseStatus(id, status string) (result interface{}, e *error.Error) {
+	tx := gorm.DB()
+
+	defer func() {
+		if r := recover(); r != nil {
+			logger.Error(r)
+			e = error.UnexpectedError()
+		}
+	}()
+
+	studentCourse := gorm.StudentCourseDao.GetByID(tx, typecast.StringToUint(id))
+	studentCourse.Status = status
 	gorm.StudentCourseDao.Update(tx, studentCourse)
 
 	return
