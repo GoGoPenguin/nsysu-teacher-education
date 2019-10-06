@@ -44,6 +44,11 @@ func Run() {
 			course.Patch("/review", hero.Handler(handler.UpdateCourseReviewHandler))     // 上傳心得
 			course.Patch("/status", hero.Handler(handler.UpdateCourseStatusHandler))     // 審核
 		}
+
+		serviceLearning := v1.Party("/servier-learning")
+		{
+			serviceLearning.Post("/", hero.Handler(handler.CreateServiceLearningHandler))
+		}
 	}
 
 	app.Run(iris.Addr(addr))
