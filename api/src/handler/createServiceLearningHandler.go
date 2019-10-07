@@ -14,23 +14,21 @@ import (
 // CreateServiceLearningHandler create service-learning
 func CreateServiceLearningHandler(ctx iris.Context) {
 	type rule struct {
-		Type    string    `valid:"required, in(internship|volunteer|both)"`
-		Content string    `valid:"required, length(0|50)"`
-		Session string    `valid:"required, length(0|12)"`
-		Hours   uint      `valid:"required, int"`
-		Start   time.Time `valid:"required"`
-		End     time.Time `valid:"required"`
+		Type    string `valid:"required, in(internship|volunteer|both)"`
+		Content string `valid:"required, length(0|150)"`
+		Session string `valid:"required, length(0|36)"`
+		Hours   uint   `valid:"required, int"`
 	}
 
 	loc, _ := time.LoadLocation("Asia/Taipei")
-	startTime, err := time.ParseInLocation(t.DateTime, ctx.FormValue("Start"), loc)
+	startTime, err := time.ParseInLocation(t.Date, ctx.FormValue("Start"), loc)
 	if err != nil {
 		json(ctx, map[string]interface{}{
 			"error": "Start: " + ctx.FormValue("Start") + " does not validate as timestamp",
 		})
 		return
 	}
-	endTime, err := time.ParseInLocation(t.DateTime, ctx.FormValue("End"), loc)
+	endTime, err := time.ParseInLocation(t.Date, ctx.FormValue("End"), loc)
 	if err != nil {
 		json(ctx, map[string]interface{}{
 			"error": "End: " + ctx.FormValue("Start") + " does not validate as timestamp",
@@ -56,7 +54,7 @@ func CreateServiceLearningHandler(ctx iris.Context) {
 		return
 	}
 
-	result, err := service.CreateServieLearning(params.Type, params.Content, params.Session, params.Hours, params.Start, params.End)
+	result, err := service.CreateServieLearning(params.Type, params.Content, params.Session, params.Hours, startTime, endTime)
 
 	if err != (*error.Error)(nil) {
 		failed(ctx, err)

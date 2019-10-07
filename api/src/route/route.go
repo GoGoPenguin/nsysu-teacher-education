@@ -45,9 +45,10 @@ func Run() {
 			course.Patch("/status", hero.Handler(handler.UpdateCourseStatusHandler))     // 審核
 		}
 
-		serviceLearning := v1.Party("/servier-learning")
+		serviceLearning := v1.Party("/service-learning")
 		{
-			serviceLearning.Post("/", hero.Handler(handler.CreateServiceLearningHandler))
+			serviceLearning.Post("/", hero.Handler(handler.CreateServiceLearningHandler)) // 新增服務學習
+			serviceLearning.Get("/", hero.Handler(handler.GetServiceLearningHandler))     // 取得服務學習列表
 		}
 	}
 
