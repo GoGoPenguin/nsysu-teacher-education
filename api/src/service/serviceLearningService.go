@@ -111,3 +111,47 @@ func SingUpServiceLearning(account, serviceLearningID string) (result interface{
 
 	return "success", nil
 }
+
+// GetSutdentServiceLearningList get the list of student service-learning
+func GetSutdentServiceLearningList(account, start, length string) (result map[string]interface{}, e *error.Error) {
+	tx := gorm.DB()
+
+	defer func() {
+		if r := recover(); r != nil {
+			logger.Error(r)
+			e = error.UnexpectedError()
+		}
+	}()
+
+	var studentServiceLearnings *[]gorm.StudentServiceLearning
+	if operator := gorm.AdminDao.GetByAccount(tx, account); operator != nil {
+		studentServiceLearnings = gorm.StudentServiceLearningDao.Query(
+			tx,
+			specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
+			specification.OrderSpecification("`student_service_learning`."+specification.IDColumn, specification.OrderDirectionDESC),
+			specification.IsNullSpecification("`student_service_learning`.deleted_at"),
+		)
+	} else {
+		student := gorm.StudentDao.GetByAccount(tx, account)
+		studentServiceLearnings = gorm.StudentServiceLearningDao.Query(
+			tx,
+			specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
+			specification.OrderSpecification("`student_service_learning`."+specification.IDColumn, specification.OrderDirectionDESC),
+			specification.IsNullSpecification("deleted_at"),
+			specification.StudentSpecification(student.ID),
+		)
+	}
+
+	total := gorm.StudentCourseDao.Count(
+		tx,
+		specification.IsNullSpecification("deleted_at"),
+	)
+
+	result = map[string]interface{}{
+		"list":            assembler.StudentServiceLearningsDTO(studentServiceLearnings),
+		"recordsTotal":    total,
+		"recordsFiltered": total,
+	}
+
+	return
+}
