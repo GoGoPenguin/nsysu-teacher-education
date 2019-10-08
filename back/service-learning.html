@@ -35,7 +35,6 @@
 
     <!-- Custom styles for this template-->
     <link href="/node_modules/startbootstrap-sb-admin/css/sb-admin.css" rel="stylesheet">
-    <link href="/assets/css/course.css" rel="stylesheet">
 
 </head>
 
@@ -106,89 +105,126 @@
                     <li class="breadcrumb-item">
                         <a href="/">儀表板</a>
                     </li>
-                    <li class="breadcrumb-item active">講座管理</li>
+                    <li class="breadcrumb-item active">服務學習管理</li>
                 </ol>
 
-                <!-- Create Course -->
+                <!-- Create Service Learning -->
                 <div class="card mb-3">
                     <div class="card-header">
                         <i class="fas fa-plus"></i>
-                        新增講座
+                        新增服務學習
                     </div>
                     <div class="card-body">
-                        <form id="course-form">
+                        <form id="service-learning-form">
                             <div class="form-group">
-                                <label for="topic">研習主題</label>
-                                <input type="text" class="form-control" id="topic"
-                                    oninvalid="this.setCustomValidity('請輸入研習主題')" oninput="this.setCustomValidity('')"
-                                    required>
-                            </div>
-                            <div class="form-group">
-                                <label for="type">研習類別</label>
+                                <label for="type">類別</label>
                                 <select required class="form-control" id="type"
-                                    oninvalid="this.setCustomValidity('請輸入研習類別')" oninput="this.setCustomValidity('')">
+                                    oninvalid="this.setCustomValidity('請輸入服務學習類別')"
+                                    oninput="this.setCustomValidity('')">
                                     <option value="" selected disabled>請選擇</option>
-                                    <option>A</option>
-                                    <option>B</option>
-                                    <option>C</option>
+                                    <option value="internship">實習服務</option>
+                                    <option value="volunteer">志工服務</option>
+                                    <option value="both">同時認列教育實習服務暨志工服務</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label>開始時間</label>
-                                <div class="input-group date" id="start" data-target-input="nearest">
-                                    <input type="text" class="form-control datetimepicker-input" data-target="#start"
-                                        oninvalid="this.setCustomValidity('請輸入開始時間')"
-                                        oninput="this.setCustomValidity('')" required />
-                                    <div class="input-group-append" data-target="#start" data-toggle="datetimepicker">
-                                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                <label for="topic">服務內容說明</label>
+                                <textarea class="form-control" id="content"
+                                    oninvalid="this.setCustomValidity('請輸入服務內容說明')" oninput="this.setCustomValidity('')"
+                                    required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col">
+                                        <label>開始日期</label>
+                                        <div class="input-group date" id="start-date" data-target-input="nearest">
+                                            <input type="text" class="form-control datetimepicker-input"
+                                                data-target="#start-date" oninvalid="this.setCustomValidity('請輸入開始日期')"
+                                                oninput="this.setCustomValidity('')" required />
+                                            <div class="input-group-append" data-target="#start-date"
+                                                data-toggle="datetimepicker">
+                                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <label>結束日期</label>
+                                        <div class="input-group date" id="end-date" data-target-input="nearest">
+                                            <input type="text" class="form-control datetimepicker-input"
+                                                data-target="#end-date" oninvalid="this.setCustomValidity('請輸入結束日期')"
+                                                oninput="this.setCustomValidity('')" required />
+                                            <div class="input-group-append" data-target="#end-date"
+                                                data-toggle="datetimepicker">
+                                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label>結束時間</label>
-                                <div class="input-group date" id="end" data-target-input="nearest">
-                                    <input type="text" class="form-control datetimepicker-input" data-target="#end"
-                                        oninvalid="this.setCustomValidity('請輸入結束時間')"
-                                        oninput="this.setCustomValidity('')" required />
-                                    <div class="input-group-append" data-target="#end" data-toggle="datetimepicker">
-                                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                <div class="row">
+                                    <div class="col">
+                                        <label>開始時間</label>
+                                        <div class="input-group date" id="start-time" data-target-input="nearest">
+                                            <input type="text" class="form-control datetimepicker-input"
+                                                data-target="#start-time" oninvalid="this.setCustomValidity('請輸入開始時間')"
+                                                oninput="this.setCustomValidity('')" required />
+                                            <div class="input-group-append" data-target="#start-time"
+                                                data-toggle="datetimepicker">
+                                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <label>結束時間</label>
+                                        <div class="input-group date" id="end-time" data-target-input="nearest">
+                                            <input type="text" class="form-control datetimepicker-input"
+                                                data-target="#end-time" oninvalid="this.setCustomValidity('請輸入結束時間')"
+                                                oninput="this.setCustomValidity('')" required />
+                                            <div class="input-group-append" data-target="#end-time"
+                                                data-toggle="datetimepicker">
+                                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="info">講座資訊</label>
-                                <input id="info" type="file" name="Information" data-show-preview="false"
-                                    oninvalid="this.setCustomValidity('請輸入講座資訊')" oninput="this.setCustomValidity('')"
-                                    required>
+                                <label for="topic">時數</label>
+                                <input type="number" class="form-control" id="hours"
+                                    oninvalid="this.setCustomValidity('請輸入時數')" oninput="this.setCustomValidity('')"
+                                    required></input>
                             </div>
                             <button type="submit" class="btn btn-primary">送出</button>
                         </form>
                     </div>
                 </div>
 
-                <!-- Course list -->
+                <!-- Service Learning list -->
                 <div class="card mb-3">
                     <div class="card-header">
                         <i class="fas fa-table"></i>
-                        講座列表
+                        服務學習列表
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-bordered" id="course" width="100%" cellspacing="0">
+                            <table class="table table-bordered" id="service-learning" width="100%" cellspacing="0">
                                 <thead>
                                     <tr>
-                                        <th>研習主題</th>
-                                        <th>研習時段</th>
-                                        <th>研習資訊</th>
-                                        <th>研習類別</th>
+                                        <th>類別</th>
+                                        <th>服務內容說明</th>
+                                        <th>日期</th>
+                                        <th>時段</th>
+                                        <th>時數</th>
                                     </tr>
                                 </thead>
                                 <tfoot>
                                     <tr>
-                                        <th>研習主題</th>
-                                        <th>研習時段</th>
-                                        <th>研習資訊</th>
-                                        <th>研習類別</th>
+                                        <th>類別</th>
+                                        <th>服務內容說明</th>
+                                        <th>日期</th>
+                                        <th>時段</th>
+                                        <th>時數</th>
                                     </tr>
                                 </tfoot>
                                 <tbody>
@@ -198,7 +234,7 @@
                     </div>
                 </div>
 
-                <!-- Student Course list -->
+                <!-- Student Service Learning list -->
                 <div class="card mb-3">
                     <div class="card-header">
                         <i class="fas fa-stream"></i>
@@ -206,7 +242,8 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-bordered" id="student-course" width="100%" cellspacing="0">
+                            <table class="table table-bordered" id="student-service-learning" width="100%"
+                                cellspacing="0">
                                 <thead>
                                     <tr>
                                         <th>審核情況</th>
@@ -365,7 +402,7 @@
     <script src="/node_modules/startbootstrap-sb-admin/js/sb-admin.min.js"></script>
 
     <script src="/assets/js/auth.js"></script>
-    <script src="/assets/js/course.js"></script>
+    <script src="/assets/js/service-learning.js"></script>
 
 </body>
 

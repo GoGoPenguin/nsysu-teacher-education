@@ -242,6 +242,7 @@ $("#info").fileinput({
         buttons: false,
     })
     courseTable.ajax.reload();
+    $('course-form')[0].reset()
 }).on('fileuploaderror', (event, data, msg) => {
     swal({
         title: '',
