@@ -7,18 +7,16 @@ import (
 	"github.com/nsysu/teacher-education/src/service"
 )
 
-// SignUpCourseHandler sign up course
-func SignUpCourseHandler(ctx iris.Context) {
+// SignUpServiceLearningHandler sign up service learning
+func SignUpServiceLearningHandler(ctx iris.Context) {
 	type rule struct {
-		Account  string `valid:"required"`
-		CourseID string `valid:"required"`
-		Meal     string `valid:"required, in(meat|vegetable)"`
+		Account           string `valid:"required"`
+		ServiceLearningID string `valid:"required"`
 	}
 
 	params := &rule{
-		Account:  ctx.FormValue("Account"),
-		CourseID: ctx.FormValue("CourseID"),
-		Meal:     ctx.FormValue("Meal"),
+		Account:           ctx.FormValue("Account"),
+		ServiceLearningID: ctx.FormValue("ServiceLearningID"),
 	}
 
 	if _, err := govalidator.ValidateStruct(params); err != nil {
@@ -26,7 +24,7 @@ func SignUpCourseHandler(ctx iris.Context) {
 		return
 	}
 
-	result, err := service.SingUpCourse(params.Account, params.CourseID, params.Meal)
+	result, err := service.SingUpServiceLearning(params.Account, params.ServiceLearningID)
 
 	if err != (*error.Error)(nil) {
 		failed(ctx, err)

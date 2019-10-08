@@ -23,9 +23,9 @@ var AdminDao = &adminDao{
 }
 
 // New a record
-func (dao *adminDao) New(tx *gorm.DB, user *Admin) {
+func (dao *adminDao) New(tx *gorm.DB, admin *Admin) {
 	err := tx.Table(dao.table).
-		Create(user).Error
+		Create(admin).Error
 
 	if err != nil {
 		panic(err)

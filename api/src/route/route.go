@@ -40,15 +40,16 @@ func Run() {
 			course.Get("/", hero.Handler(handler.GetCourseHandler))                      // 取得講座列表
 			course.Get("/{filename}", hero.Handler(handler.GetCourseInformationHandler)) // 取得講座資訊
 			course.Get("/sign-up", hero.Handler(handler.GetStudentCourseHandler))        // 取得報名講座列表
-			course.Post("/sign-up", hero.Handler(handler.SingUpCourseHandler))           // 報名講座
+			course.Post("/sign-up", hero.Handler(handler.SignUpCourseHandler))           // 報名講座
 			course.Patch("/review", hero.Handler(handler.UpdateCourseReviewHandler))     // 上傳心得
 			course.Patch("/status", hero.Handler(handler.UpdateCourseStatusHandler))     // 審核
 		}
 
 		serviceLearning := v1.Party("/service-learning")
 		{
-			serviceLearning.Post("/", hero.Handler(handler.CreateServiceLearningHandler)) // 新增服務學習
-			serviceLearning.Get("/", hero.Handler(handler.GetServiceLearningHandler))     // 取得服務學習列表
+			serviceLearning.Post("/", hero.Handler(handler.CreateServiceLearningHandler))        // 新增服務學習
+			serviceLearning.Get("/", hero.Handler(handler.GetServiceLearningHandler))            // 取得服務學習列表
+			serviceLearning.Post("/sign-up", hero.Handler(handler.SignUpServiceLearningHandler)) // 報名服務學習
 		}
 	}
 

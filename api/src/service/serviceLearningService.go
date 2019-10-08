@@ -78,3 +78,36 @@ func GetServiceLearningList(account, start, length string) (result map[string]in
 
 	return
 }
+
+// SingUpServiceLearning sudent sign up service-learning
+func SingUpServiceLearning(account, serviceLearningID string) (result interface{}, e *error.Error) {
+	tx := gorm.DB()
+
+	defer func() {
+		if r := recover(); r != nil {
+			logger.Error(r)
+			e = error.UnexpectedError()
+		}
+	}()
+
+	student := gorm.StudentDao.GetByAccount(tx, account)
+	serviceLearning := gorm.ServiceLearningDao.Query(
+		tx,
+		specification.IDSpecification(serviceLearningID),
+		specification.IsNullSpecification("deleted_at"),
+		specification.BiggerSpecification("End", time.Now().String()),
+	)
+
+	if len(*serviceLearning) == 0 {
+		return nil, error.NotFoundError("service-learning ID " + serviceLearningID)
+	}
+
+	studentServiceLearning := &gorm.StudentServiceLearning{
+		StudentID:         student.ID,
+		ServiceLearningID: typecast.StringToUint(serviceLearningID),
+	}
+
+	gorm.StudentServiceLearningDao.New(tx, studentServiceLearning)
+
+	return "success", nil
+}

@@ -26,9 +26,9 @@ var StudentDao = studentDao{
 }
 
 // New a record
-func (dao *studentDao) New(tx *gorm.DB, user *Student) {
+func (dao *studentDao) New(tx *gorm.DB, student *Student) {
 	err := tx.Table(dao.table).
-		Create(user).Error
+		Create(student).Error
 
 	if err != nil {
 		panic(err)

@@ -35,9 +35,9 @@ var StudentCourseDao = &studentCourseDao{
 }
 
 // New a record
-func (dao *studentCourseDao) New(tx *gorm.DB, user *StudentCourse) {
+func (dao *studentCourseDao) New(tx *gorm.DB, studentCourse *StudentCourse) {
 	err := tx.Table(dao.table).
-		Create(user).Error
+		Create(studentCourse).Error
 
 	if err != nil {
 		panic(err)
