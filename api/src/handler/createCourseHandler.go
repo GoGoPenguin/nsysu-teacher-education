@@ -75,7 +75,9 @@ func CreateCourseHandler(ctx iris.Context) {
 	)
 
 	if err != (*error.Error)(nil) {
-		failed(ctx, err)
+		json(ctx, map[string]interface{}{
+			"error": err.Error(),
+		})
 		return
 	}
 
