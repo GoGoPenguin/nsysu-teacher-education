@@ -7,135 +7,146 @@ const STATUS = {
 let studentCourses = []
 let studentCoursesIndex = -1
 
+const courseTable = $('table#course').DataTable({
+    processing: true,
+    serverSide: true,
+    ordering: false,
+    searching: false,
+    ajax: {
+        url: config.server + '/v1/course',
+        type: 'GET',
+        dataSrc: (d) => {
+            d.list.forEach((element, index, array) => {
+                let startDate = array[index].Start.substring(0, 10)
+                let startTime = array[index].Start.substring(11, 19)
+                let endDate = array[index].End.substring(0, 10)
+                let endTime = array[index].End.substring(11, 19)
+
+                if (startDate == endDate) {
+                    array[index].Time = startDate + ' ' + startTime + ' ~ ' + endTime
+                } else {
+                    array[index].Time = startDate + ' ' + startTime + ' ~ ' + endDate + ' ' + endTime
+                }
+            })
+            return d.list
+        },
+        beforeSend: (xhr) => {
+            let token = $.cookie('token')
+            if (token == undefined) {
+                renewToken()
+                token = $.cookie('token')
+            }
+
+            xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+        },
+        error: (xhr, error, thrown) => {
+            if (xhr.status == 401) {
+                let cookies = $.cookie()
+                for (var cookie in cookies) {
+                    $.removeCookie(cookie)
+                }
+
+                location.href = '/login.html'
+            } else {
+                swal({
+                    title: '',
+                    text: xhr.responseText,
+                    icon: "error",
+                    timer: 1000,
+                    buttons: false,
+                })
+            }
+        }
+    },
+    columns: [
+        { data: "Topic" },
+        { data: "Time" },
+        { data: "Information" },
+        { data: "Type" },
+    ],
+    columnDefs: [
+        { className: "info", targets: [2] },
+    ],
+    language: {
+        url: '/assets/languages/chinese.json'
+    },
+});
+
+const studentCourseTable = $('table#student-course').DataTable({
+    processing: true,
+    serverSide: true,
+    ordering: false,
+    searching: false,
+    ajax: {
+        url: config.server + '/v1/course/sign-up',
+        type: 'GET',
+        dataSrc: (d) => {
+            d.list.forEach((element, index, array) => {
+                let startDate = array[index].Course.Start.substring(0, 10)
+                let startTime = array[index].Course.Start.substring(11, 19)
+                let endDate = array[index].Course.End.substring(0, 10)
+                let endTime = array[index].Course.End.substring(11, 19)
+
+                if (startDate == endDate) {
+                    array[index].Time = startDate + ' ' + startTime + ' ~ ' + endTime
+                } else {
+                    array[index].Time = startDate + ' ' + startTime + ' ~ ' + endDate + ' ' + endTime
+                }
+
+                array[index].Status = STATUS[array[index].Status]
+                array[index].Button = '<button class="btn btn-primary" onclick="check(' + index + ')">審核</button>'
+
+                studentCourses.push(element)
+            })
+
+            return d.list
+        },
+        beforeSend: (xhr) => {
+            let token = $.cookie('token')
+            if (token == undefined) {
+                renewToken()
+                token = $.cookie('token')
+            }
+
+            xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+        },
+        error: (xhr, error, thrown) => {
+            if (xhr.status == 401) {
+                let cookies = $.cookie()
+                for (var cookie in cookies) {
+                    $.removeCookie(cookie)
+                }
+
+                location.href = '/login.html'
+            } else {
+                swal({
+                    title: '',
+                    text: xhr.responseText,
+                    icon: "error",
+                    timer: 1000,
+                    buttons: false,
+                })
+            }
+        }
+    },
+    columns: [
+        { data: "Status" },
+        { data: "Student.Account" },
+        { data: "Student.Number" },
+        { data: "Student.Major" },
+        { data: "Student.Name" },
+        { data: "Meal" },
+        { data: "Course.Topic" },
+        { data: "Course.Type" },
+        { data: "Time" },
+        { data: "Button" },
+    ],
+    language: {
+        url: '/assets/languages/chinese.json'
+    },
+});
+
 $(document).ready(() => {
-    $('table#course').DataTable({
-        processing: true,
-        serverSide: true,
-        ordering: false,
-        searching: false,
-        ajax: {
-            url: config.server + '/v1/course',
-            type: 'GET',
-            dataSrc: (d) => {
-                d.list.forEach((element, index, array) => {
-                    let startDate = array[index].Start.substring(0, 10)
-                    let startTime = array[index].Start.substring(11, 19)
-                    let endDate = array[index].End.substring(0, 10)
-                    let endTime = array[index].End.substring(11, 19)
-
-                    if (startDate == endDate) {
-                        array[index].Time = startDate + ' ' + startTime + ' ~ ' + endTime
-                    } else {
-                        array[index].Time = startDate + ' ' + startTime + ' ~ ' + endDate + ' ' + endTime
-                    }
-                })
-                return d.list
-            },
-            beforeSend: (xhr) => {
-                let token = $.cookie('token')
-                if (token == undefined) {
-                    renewToken()
-                    token = $.cookie('token')
-                }
-
-                xhr.setRequestHeader('Authorization', 'Bearer ' + token);
-            },
-            error: (xhr, error, thrown) => {
-                if (xhr.status == 401) {
-                    let cookies = $.cookie()
-                    for (var cookie in cookies) {
-                        $.removeCookie(cookie)
-                    }
-
-                    location.href = '/login.html'
-                } else {
-                    alert(xhr.responseText)
-                }
-            }
-        },
-        columns: [
-            { data: "Topic" },
-            { data: "Time" },
-            { data: "Information" },
-            { data: "Type" },
-        ],
-        columnDefs: [
-            { className: "info", targets: [2] },
-        ],
-        language: {
-            url: '/assets/languages/chinese.json'
-        },
-    });
-
-
-    $('table#student-course').DataTable({
-        processing: true,
-        serverSide: true,
-        ordering: false,
-        searching: false,
-        ajax: {
-            url: config.server + '/v1/course/sign-up',
-            type: 'GET',
-            dataSrc: (d) => {
-                d.list.forEach((element, index, array) => {
-                    let startDate = array[index].Course.Start.substring(0, 10)
-                    let startTime = array[index].Course.Start.substring(11, 19)
-                    let endDate = array[index].Course.End.substring(0, 10)
-                    let endTime = array[index].Course.End.substring(11, 19)
-
-                    if (startDate == endDate) {
-                        array[index].Time = startDate + ' ' + startTime + ' ~ ' + endTime
-                    } else {
-                        array[index].Time = startDate + ' ' + startTime + ' ~ ' + endDate + ' ' + endTime
-                    }
-
-                    array[index].Status = STATUS[array[index].Status]
-                    array[index].Button = '<button class="btn btn-primary" onclick="check(' + index + ')">審核</button>'
-
-                    studentCourses.push(element)
-                })
-
-                return d.list
-            },
-            beforeSend: (xhr) => {
-                let token = $.cookie('token')
-                if (token == undefined) {
-                    renewToken()
-                    token = $.cookie('token')
-                }
-
-                xhr.setRequestHeader('Authorization', 'Bearer ' + token);
-            },
-            error: (xhr, error, thrown) => {
-                if (xhr.status == 401) {
-                    let cookies = $.cookie()
-                    for (var cookie in cookies) {
-                        $.removeCookie(cookie)
-                    }
-
-                    location.href = '/login.html'
-                } else {
-                    alert(xhr.responseText)
-                }
-            }
-        },
-        columns: [
-            { data: "Status" },
-            { data: "Student.Account" },
-            { data: "Student.Number" },
-            { data: "Student.Major" },
-            { data: "Student.Name" },
-            { data: "Meal" },
-            { data: "Course.Topic" },
-            { data: "Course.Type" },
-            { data: "Time" },
-            { data: "Button" },
-        ],
-        language: {
-            url: '/assets/languages/chinese.json'
-        },
-    });
-
     $('#start').datetimepicker({
         format: 'YYYY-MM-DD HH:mm:00',
         locale: 'zh-tw',
@@ -163,7 +174,7 @@ $(document).ready(() => {
     })
 })
 
-$('table#course').on('click', 'td.info', () => {
+$('table#course').on('click', 'td.info', function () {
     let filename = $(this).text()
 
     $.ajax({
@@ -173,7 +184,13 @@ $('table#course').on('click', 'td.info', () => {
             responseType: "blob"
         },
         error: (xhr) => {
-            alert('Unexcepted Error')
+            swal({
+                title: '',
+                text: '修改失敗',
+                icon: "error",
+                timer: 1000,
+                buttons: false,
+            })
             console.error(xhr);
         },
         beforeSend: (xhr) => {
@@ -216,8 +233,23 @@ $("#info").fileinput({
             'End': $('#end input').val(),
         }
     }
+}).on('fileuploaded', (event, previewId, index, fileId) => {
+    swal({
+        title: '',
+        text: '成功',
+        icon: "success",
+        timer: 1000,
+        buttons: false,
+    })
+    courseTable.ajax.reload();
 }).on('fileuploaderror', (event, data, msg) => {
-    alert(msg)
+    swal({
+        title: '',
+        text: '新增失敗',
+        icon: "error",
+        timer: 1000,
+        buttons: false,
+    })
     $('div.kv-upload-progress.kv-hidden').css({ 'display': 'none' })
 })
 
@@ -255,7 +287,7 @@ $('#checkModal .btn-primary').click(() => {
                 title: '',
                 text: '修改失敗',
                 icon: "error",
-                timer: 1000,
+                timer: 1500,
                 buttons: false,
             })
         },
@@ -274,7 +306,7 @@ $('#checkModal .btn-primary').click(() => {
                 title: '',
                 text: '修改成功',
                 icon: "success",
-                timer: 1000,
+                timer: 1500,
                 buttons: false,
             })
 
@@ -300,7 +332,7 @@ $('#checkModal .btn-danger').click(() => {
                 title: '',
                 text: '修改失敗',
                 icon: "error",
-                timer: 1000,
+                timer: 1500,
                 buttons: false,
             })
         },
@@ -319,7 +351,7 @@ $('#checkModal .btn-danger').click(() => {
                 title: '',
                 text: '修改成功',
                 icon: "success",
-                timer: 1000,
+                timer: 1500,
                 buttons: false,
             })
 
