@@ -15,8 +15,8 @@ func ServiceLearningDTO(serviceLearnings *[]gorm.ServiceLearning) []map[string]i
 			"Content": serviceLearning.Content,
 			"Seesion": serviceLearning.Session,
 			"Hours":   serviceLearning.Hours,
-			"Start":   serviceLearning.Start,
-			"End":     serviceLearning.End,
+			"Start":   serviceLearning.Start.String(),
+			"End":     serviceLearning.End.String(),
 		})
 	}
 	return result
