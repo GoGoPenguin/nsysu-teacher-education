@@ -48,7 +48,7 @@ const getCourses = () => {
                         <td>${time}</td>
                         <td class="info">${element.Information}</td>
                         <td>${element.Type}</td>
-                        <td><button class="btn btn-primary" onclick="signUp(${element.ID})">報名</button></td>
+                        <td><button class="btn btn-primary" onclick="signUpCourse(${element.ID})">報名</button></td>
                     </tr>
                 `)
                 })
@@ -93,7 +93,7 @@ const getServiceLearning = () => {
                         <td>${startDate} ~ ${endDate}</td>
                         <td>${element.Session}</td>
                         <td>${element.Hours}</td>
-                        <td><button class="btn btn-primary" onclick="signUp(${element.ID})">報名</button></td>
+                        <td><button class="btn btn-primary" onclick="signUpServiceLearning(${element.ID})">報名</button></td>
                     </tr>
                 `)
                 })
@@ -160,12 +160,12 @@ $('#course tbody').on('click', 'td.info', function () {
     });
 })
 
-const signUp = (id) => {
+const signUpCourse = (id) => {
     $('input.course-id').val(id)
-    $('#signUpModal').modal('show')
+    $('#courseModal').modal('show')
 }
 
-$('#signUpModal form').on('submit', (e) => {
+$('#courseModal form').on('submit', (e) => {
     e.preventDefault();
 
     $.ajax({
@@ -219,3 +219,55 @@ $('#signUpModal form').on('submit', (e) => {
         }
     });
 })
+
+const signUpServiceLearning = (id) => {
+    $.ajax({
+        url: `${config.server}/v1/service-learning/sign-up`,
+        type: 'POST',
+        data: {
+            'Account': $.cookie('account'),
+            'ServiceLearningID': id,
+        },
+        error: (xhr) => {
+            console.error(xhr);
+
+            swal({
+                title: '',
+                text: '報名失敗',
+                icon: "error",
+                timer: 1500,
+                buttons: false,
+            })
+        },
+        beforeSend: (xhr) => {
+            let token = $.cookie('token')
+            if (token == undefined) {
+                renewToken()
+                token = $.cookie('token')
+            }
+
+            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+        },
+        success: (response) => {
+            $('#signUpModal').modal('hide')
+
+            if (response.code === 0) {
+                swal({
+                    title: '',
+                    text: '報名成功',
+                    icon: "success",
+                    timer: 1500,
+                    buttons: false,
+                })
+            } else {
+                swal({
+                    title: '',
+                    text: '報名失敗',
+                    icon: "error",
+                    timer: 1500,
+                    buttons: false,
+                })
+            }
+        }
+    });
+}
