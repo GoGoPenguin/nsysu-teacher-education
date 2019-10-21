@@ -1,20 +1,20 @@
-$('button#login').click(function () {
+$('button#login').click(() => {
     let account = $('input.input100.account').val()
     let password = $('input.input100.password').val()
 
     $.ajax({
-        url: config.server + '/v1/login',
+        url: `${config.server}/v1/login`,
         type: 'POST',
         data: {
             'Account': account,
             'Password': password,
             'Role': 'student',
         },
-        error: function (xhr) {
+        error: (xhr) => {
             console.error(xhr);
             $('div.flex-sb-m div.alert-danger').show('fast')
         },
-        success: function (response) {
+        success: (response) => {
             if (response.code != 0) {
                 console.error(response.message)
                 $('div.flex-sb-m div.alert-danger').show('fast')
@@ -34,27 +34,27 @@ $('button#login').click(function () {
     });
 })
 
-$('div.flex-sb-m button.close').click(function () {
+$('div.flex-sb-m button.close').click(() => {
     $('div.flex-sb-m div.alert-danger').hide('slow')
 })
 
-$('#logoutModal button.btn.btn-primary').click(function () {
+$('#logoutModal button.btn.btn-primary').click(() => {
     $.ajax({
-        url: config.server + '/v1/logout',
+        url: `${config.server}/v1/logout`,
         type: 'POST',
-        error: function (xhr) {
+        error: (xhr) => {
             console.error(xhr);
         },
-        beforeSend: function (xhr) {
+        beforeSend: (xhr) => {
             let token = $.cookie('token')
             if (token == undefined) {
                 renewToken()
                 token = $.cookie('token')
             }
 
-            xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
         },
-        success: function (response) {
+        success: (response) => {
             if (response.code != 0) {
                 console.error(response.message)
             } else {

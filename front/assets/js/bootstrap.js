@@ -1,23 +1,12 @@
 let token = $.cookie('token')
 let refreshToken = $.cookie('refresh-token')
 
-if (token == undefined) {
-    if (refreshToken != undefined) {
-        renewToken()
-        token = $.cookie('token')
-    } else if (window.location.pathname != '/login.html') {
-        location.href = '/login.html'
-    }
-} else if (window.location.pathname == '/login.html') {
-    location.href = '/'
-}
-
-function renewToken() {
+const renewToken = () => {
     let account = $.cookie('account')
     let refreshToken = $.cookie('refresh-token')
 
     $.ajax({
-        url: config.server + '/v1/renew-token',
+        url: `${config.server}/v1/renew-token`,
         type: 'POST',
         async: false,
         cache: false,
@@ -25,7 +14,7 @@ function renewToken() {
             Account: account,
             RefreshToken: refreshToken,
         },
-        error: function (xhr) {
+        error: (xhr) => {
             let cookies = $.cookie()
             for (var cookie in cookies) {
                 $.removeCookie(cookie)
@@ -33,7 +22,7 @@ function renewToken() {
 
             location.href = '/login.html'
         },
-        success: function (response) {
+        success: (response) => {
             if (response.code != 0) {
                 let cookies = $.cookie();
                 for (var cookie in cookies) {
@@ -51,4 +40,15 @@ function renewToken() {
             }
         }
     });
+}
+
+if (token == undefined) {
+    if (refreshToken != undefined) {
+        renewToken()
+        token = $.cookie('token')
+    } else if (window.location.pathname != '/login.html') {
+        location.href = '/login.html'
+    }
+} else if (window.location.pathname == '/login.html') {
+    location.href = '/'
 }

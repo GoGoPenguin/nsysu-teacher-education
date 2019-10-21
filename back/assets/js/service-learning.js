@@ -56,7 +56,7 @@ const serviceLearningTable = $('table#service-learning').DataTable({
         { data: "Type" },
         { data: "Content" },
         { data: "Date" },
-        { data: "Seesion" },
+        { data: "Session" },
         { data: "Hours" },
     ],
     language: {

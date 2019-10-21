@@ -22,7 +22,7 @@ $(document).ready(() => {
         },
         success: (response) => {
             if (response.list.length == 0) {
-                $('#student-course tbody').append(`
+                $('#course tbody').append(`
                         <tr>
                             <td scope="row" colspan="8" style="text-align: center">尚無資料</td>
                         </tr>
@@ -57,61 +57,4 @@ $(document).ready(() => {
             }
         }
     });
-})
-
-$('#student-course').on('click', '.edit', () => {
-    let id = $(this).children().get(0).id
-    let review = $(this).prev().html()
-
-    $('#updateReviewModal textarea').val(review)
-    $('#updateReviewModal input').val(id)
-    $('#updateReviewModal').modal('show')
-})
-
-$('#updateReviewModal form').on('submit', (e) => {
-    e.preventDefault()
-
-    let studentCourseID = $('#updateReviewModal input').val()
-    let review = $('#updateReviewModal textarea').val()
-
-    $.ajax({
-        url: `${config.server}/v1/course/review`,
-        type: 'PATCH',
-        error: (xhr) => {
-            console.error(xhr);
-
-            swal({
-                title: '',
-                text: '錯誤',
-                icon: "error",
-                timer: 1500,
-                buttons: false,
-            })
-        },
-        data: {
-            'StudentCourseID': studentCourseID,
-            'Review': review,
-        },
-        beforeSend: (xhr) => {
-            let token = $.cookie('token')
-            if (token == undefined) {
-                renewToken()
-                token = $.cookie('token')
-            }
-
-            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
-        },
-        success: (response) => {
-            $('#updateReviewModal').modal('hide')
-            $('button#' + studentCourseID).parent().prev().html(review)
-
-            swal({
-                title: '',
-                text: '成功',
-                icon: "success",
-                timer: 1500,
-                buttons: false,
-            })
-        }
-    })
 })
