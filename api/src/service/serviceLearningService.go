@@ -51,17 +51,16 @@ func GetServiceLearningList(account, start, length string) (result map[string]in
 		serviceLearnings = gorm.ServiceLearningDao.Query(
 			tx,
 			specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
-			specification.OrderSpecification("`service_learning`."+specification.IDColumn, specification.OrderDirectionDESC),
-			specification.IsNullSpecification("`service_learning`.deleted_at"),
+			specification.OrderSpecification("start", specification.OrderDirectionDESC),
+			specification.IsNullSpecification("deleted_at"),
 		)
 	} else {
-		student := gorm.StudentDao.GetByAccount(tx, account)
 		serviceLearnings = gorm.ServiceLearningDao.Query(
 			tx,
 			specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
-			specification.OrderSpecification("`service_learning`."+specification.IDColumn, specification.OrderDirectionDESC),
+			specification.BiggerSpecification("start", time.Now().String()),
+			specification.OrderSpecification("start", specification.OrderDirectionASC),
 			specification.IsNullSpecification("deleted_at"),
-			specification.StudentSpecification(student.ID),
 		)
 	}
 
