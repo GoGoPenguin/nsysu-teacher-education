@@ -10,6 +10,7 @@
     "animate.css": "^3.7.2",
     "animsition": "^4.0.2",
     "bootstrap": "^4.3.1",
+    "bootstrap-fileinput": "^5.0.6",
     "countdowntime": "^0.0.3",
     "daterangepicker": "^3.0.5",
     "font-awesome": "^4.7.0",

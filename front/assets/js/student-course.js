@@ -44,7 +44,7 @@ $(document).ready(() => {
                     $('#student-course tbody').append(`
                         <tr>
                             <th scope="row">${index}</th>\
-                            <td>${element.Course.Topic} + '</td>\
+                            <td>${element.Course.Topic}</td>\
                             <td>${time}</td>\
                             <td>${element.Course.Type}</td>\
                             <td>${STATUS[element.Status]}</td>\

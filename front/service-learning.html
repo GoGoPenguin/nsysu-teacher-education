@@ -23,10 +23,12 @@
     <!-- Bootstrap core CSS -->
     <link href="/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="/node_modules/@fortawesome/fontawesome-free/css/all.css" rel="stylesheet">
+    <link href="/node_modules/bootstrap-fileinput/css/fileinput.css" rel="stylesheet">
+    <link href="/node_modules/bootstrap-fileinput/css/fileinput-rtl.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <link href="/node_modules/startbootstrap-scrolling-nav/css/scrolling-nav.css" rel="stylesheet">
-    <link href="/assets/css/course.css" rel="stylesheet">
+    <link href="/assets/css/service-learning.css" rel="stylesheet">
 
 </head>
 
@@ -60,21 +62,21 @@
         </div>
     </nav>
 
-    <section id="student-course" class="bg-white">
+    <section id="student-service-learning" class="bg-white">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 mx-auto">
-                    <h2>我的研習</h2>
+                    <h2>我的服務學習</h2>
                     <table class="table table-borderless table-hover">
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
-                                <th scope="col">研習主題</th>
-                                <th scope="col">研習時段</th>
-                                <th scope="col">研習類別</th>
                                 <th scope="col">審核情況</th>
-                                <th scope="col">審核結果說明</th>
-                                <th scope="col">心得</th>
+                                <th scope="col">類別</th>
+                                <th scope="col">服務內容說明</th>
+                                <th scope="col">日期</th>
+                                <th scope="col">時段</th>
+                                <th scope="col">時數</th>
                                 <th scope="col"></th>
                             </tr>
                         </thead>
@@ -114,28 +116,26 @@
     </div>
 
     <!-- Update Review Modal -->
-    <div class="modal fade" id="updateReviewModal" tabindex="-1" role="dialog" aria-labelledby="updateReviewLabel"
+    <div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="updateReviewLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <form>
                     <div class="modal-header">
-                        <h5 class="modal-title" id="updateReviewLabel">心得上傳</h5>
+                        <h5 class="modal-title" id="updateReviewLabel">資料上傳</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <textarea class="form-control"></textarea>
+                            <label for="reference">佐證資料</label>
+                            <input id="reference" type="file">
                         </div>
                         <div class="form-group">
-                            <input type="hidden"></input>
+                            <label for="review">心得</label>
+                            <input id="review" type="file">
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
-                        <button type="submit" class="btn btn-primary">上傳</button>
                     </div>
                 </form>
             </div>
@@ -145,6 +145,9 @@
     <!-- Bootstrap core JavaScript -->
     <script src="/node_modules/jquery/dist/jquery.min.js"></script>
     <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/node_modules/bootstrap-fileinput/js/fileinput.js"></script>
+    <script src="/node_modules/bootstrap-fileinput/themes/fas/theme.js"></script>
+    <script src="/node_modules/bootstrap-fileinput/js/locales/zh-TW.js"></script>
 
     <!-- Plugin JavaScript -->
     <script src="/node_modules/jquery.easing/jquery.easing.min.js"></script>
@@ -156,7 +159,7 @@
     <script src="/node_modules/startbootstrap-scrolling-nav/js/scrolling-nav.js"></script>
 
     <script src="/assets/js/auth.js"></script>
-    <script src="/assets/js/student-course.js"></script>
+    <script src="/assets/js/student-service-learning.js"></script>
 
 </body>
 

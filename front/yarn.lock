@@ -17,7 +17,16 @@ animsition@^4.0.2:
   resolved "https://registry.yarnpkg.com/animsition/-/animsition-4.0.2.tgz#d8c6e60b0a5635e3281b962402ca2a5b16b6714e"
   integrity sha1-2MbmCwpWNeMoG5YkAsoqWxa2cU4=
 
-bootstrap@4.3.1, bootstrap@^4.3.1:
+bootstrap-fileinput@^5.0.6:
+  version "5.0.6"
+  resolved "https://registry.yarnpkg.com/bootstrap-fileinput/-/bootstrap-fileinput-5.0.6.tgz#bfc35322808a0c4e3a100e455c907bd412ef0297"
+  integrity sha512-IPqB6lIkM58X+AFEcCKXlbVVIxwJ110pAyAMX0Dcw4XkBYZVbrRt5Yssh5eFE+kFmi31kickAQhO+5TA7+FQjg==
+  dependencies:
+    bootstrap ">= 3.4.1"
+    jquery ">= 1.9.0"
+    opencollective-postinstall "^2.0.2"
+
+bootstrap@4.3.1, "bootstrap@>= 3.4.1", bootstrap@^4.3.1:
   version "4.3.1"
   resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-4.3.1.tgz#280ca8f610504d99d7b6b4bfc4b68cec601704ac"
   integrity sha512-rXqOmH1VilAt2DyPzluTi2blhk17bO7ef+zLLPlWvG494pDxcM234pJ8wTc/6R40UWizAIIMgxjvxZg5kmsbag==
@@ -65,7 +74,7 @@ jquery.easing@^1.4.1:
   resolved "https://registry.yarnpkg.com/jquery.easing/-/jquery.easing-1.4.1.tgz#47982c5836bd758fd48494923c4a101ef6e93e3b"
   integrity sha1-R5gsWDa9dY/UhJSSPEoQHvbpPjs=
 
-jquery@3.4.1, jquery@>=1.10, jquery@^3.4.1:
+jquery@3.4.1, "jquery@>= 1.9.0", jquery@>=1.10, jquery@^3.4.1:
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.4.1.tgz#714f1f8d9dde4bdfa55764ba37ef214630d80ef2"
   integrity sha512-36+AdBzCL+y6qjw5Tx7HgzeGCzC81MDDgaUP8ld2zhx58HdqXGoBd+tHdrBMiyjGQs0Hxs/MLZTu/eHNJJuWPw==
@@ -74,6 +83,11 @@ moment@^2.9.0:
   version "2.24.0"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
   integrity sha512-bV7f+6l2QigeBBZSM/6yTNq4P2fNpSWj/0e7jQcy87A8e7o2nAfP/34/2ky5Vw4B9S446EtIhodAzkFCcR4dQg==
+
+opencollective-postinstall@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/opencollective-postinstall/-/opencollective-postinstall-2.0.2.tgz#5657f1bede69b6e33a45939b061eb53d3c6c3a89"
+  integrity sha512-pVOEP16TrAO2/fjej1IdOyupJY8KDUM1CvsaScRbw6oddvpQoOfGk4ywha0HKKVAD6RkW4x6Q+tNBwhf3Bgpuw==
 
 perfect-scrollbar@^1.4.0:
   version "1.4.0"
