@@ -2,7 +2,7 @@ package handler
 
 import (
 	"github.com/kataras/iris"
-	"github.com/nsysu/teacher-education/src/error"
+	"github.com/nsysu/teacher-education/src/errors"
 	"github.com/nsysu/teacher-education/src/service"
 )
 
@@ -20,7 +20,7 @@ func CreateStudentsHandler(ctx iris.Context) {
 
 	_, err = service.CreateStudents(file)
 
-	if err != (*error.Error)(nil) {
+	if err != (*errors.Error)(nil) {
 		json(ctx, map[string]interface{}{
 			"error": err.Error(),
 		})

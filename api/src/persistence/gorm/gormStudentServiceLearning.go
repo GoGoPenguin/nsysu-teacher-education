@@ -65,7 +65,7 @@ func (dao *studentServiceLearningDao) Update(tx *gorm.DB, studentServiceLearning
 			"ServiceLearningID": studentServiceLearning.ServiceLearningID,
 			"Status":            studentServiceLearning.Status,
 			"Review":            studentServiceLearning.Review,
-			"Meal":              studentServiceLearning.Reference,
+			"Reference":         studentServiceLearning.Reference,
 			"Comment":           studentServiceLearning.Comment,
 		}).Error
 

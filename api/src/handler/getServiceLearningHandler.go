@@ -3,7 +3,7 @@ package handler
 import (
 	"github.com/asaskevich/govalidator"
 	"github.com/kataras/iris"
-	"github.com/nsysu/teacher-education/src/error"
+	"github.com/nsysu/teacher-education/src/errors"
 	"github.com/nsysu/teacher-education/src/service"
 	"github.com/nsysu/teacher-education/src/utils/auth"
 )
@@ -23,14 +23,14 @@ func GetServiceLearningHandler(ctx iris.Context) {
 	}
 
 	if _, err := govalidator.ValidateStruct(params); err != nil {
-		failed(ctx, error.ValidateError(err.Error()))
+		failed(ctx, errors.ValidateError(err.Error()))
 		return
 	}
 
 	account := auth.Account(ctx)
 	result, err := service.GetServiceLearningList(account, params.Start, params.Length)
 
-	if err != (*error.Error)(nil) {
+	if err != (*errors.Error)(nil) {
 		json(ctx, map[string]interface{}{
 			"error": err.Error(),
 		})

@@ -1,10 +1,14 @@
 package service
 
 import (
+	"fmt"
+	"io"
+	"mime/multipart"
+	"os"
 	"time"
 
 	"github.com/nsysu/teacher-education/src/assembler"
-	"github.com/nsysu/teacher-education/src/error"
+	"github.com/nsysu/teacher-education/src/errors"
 	"github.com/nsysu/teacher-education/src/persistence/gorm"
 	"github.com/nsysu/teacher-education/src/specification"
 	"github.com/nsysu/teacher-education/src/utils/logger"
@@ -12,13 +16,13 @@ import (
 )
 
 // CreateServieLearning create service-learning
-func CreateServieLearning(serviceType, content, session string, hours uint, start, end time.Time) (result interface{}, e *error.Error) {
+func CreateServieLearning(serviceType, content, session string, hours uint, start, end time.Time) (result interface{}, e *errors.Error) {
 	tx := gorm.DB()
 
 	defer func() {
 		if r := recover(); r != nil {
 			logger.Error(r)
-			e = error.UnexpectedError()
+			e = errors.UnexpectedError()
 		}
 	}()
 
@@ -36,13 +40,13 @@ func CreateServieLearning(serviceType, content, session string, hours uint, star
 }
 
 // GetServiceLearningList get service-learning list
-func GetServiceLearningList(account, start, length string) (result map[string]interface{}, e *error.Error) {
+func GetServiceLearningList(account, start, length string) (result map[string]interface{}, e *errors.Error) {
 	tx := gorm.DB()
 
 	defer func() {
 		if r := recover(); r != nil {
 			logger.Error(r)
-			e = error.UnexpectedError()
+			e = errors.UnexpectedError()
 		}
 	}()
 
@@ -79,13 +83,13 @@ func GetServiceLearningList(account, start, length string) (result map[string]in
 }
 
 // SingUpServiceLearning sudent sign up service-learning
-func SingUpServiceLearning(account, serviceLearningID string) (result interface{}, e *error.Error) {
+func SingUpServiceLearning(account, serviceLearningID string) (result interface{}, e *errors.Error) {
 	tx := gorm.DB()
 
 	defer func() {
 		if r := recover(); r != nil {
 			logger.Error(r)
-			e = error.UnexpectedError()
+			e = errors.UnexpectedError()
 		}
 	}()
 
@@ -98,7 +102,7 @@ func SingUpServiceLearning(account, serviceLearningID string) (result interface{
 	)
 
 	if len(*serviceLearning) == 0 {
-		return nil, error.NotFoundError("service-learning ID " + serviceLearningID)
+		return nil, errors.NotFoundError("service-learning ID " + serviceLearningID)
 	}
 
 	studentServiceLearning := &gorm.StudentServiceLearning{
@@ -112,13 +116,13 @@ func SingUpServiceLearning(account, serviceLearningID string) (result interface{
 }
 
 // GetSutdentServiceLearningList get the list of student service-learning
-func GetSutdentServiceLearningList(account, start, length string) (result map[string]interface{}, e *error.Error) {
+func GetSutdentServiceLearningList(account, start, length string) (result map[string]interface{}, e *errors.Error) {
 	tx := gorm.DB()
 
 	defer func() {
 		if r := recover(); r != nil {
 			logger.Error(r)
-			e = error.UnexpectedError()
+			e = errors.UnexpectedError()
 		}
 	}()
 
@@ -153,4 +157,52 @@ func GetSutdentServiceLearningList(account, start, length string) (result map[st
 	}
 
 	return
+}
+
+// UpdateServiceLearning update service-learning
+func UpdateServiceLearning(reference, review multipart.File, operator, StudentServiceLearningID, referenceFileName, reviewFileName string) (result string, e *errors.Error) {
+	tx := gorm.DB()
+
+	defer func() {
+		if r := recover(); r != nil {
+			logger.Error(r)
+			e = errors.UnexpectedError()
+		}
+	}()
+
+	StudentServiceLearning := gorm.StudentServiceLearningDao.GetByID(tx, typecast.StringToUint(StudentServiceLearningID))
+
+	if reference != nil {
+		file, err := os.OpenFile(
+			fmt.Sprintf("./assets/service-learning/%s-%s", operator, referenceFileName),
+			os.O_WRONLY|os.O_CREATE,
+			0666,
+		)
+		if err != nil {
+			panic(err)
+		}
+		io.Copy(file, reference)
+		defer file.Close()
+
+		StudentServiceLearning.Reference = referenceFileName
+		gorm.StudentServiceLearningDao.Update(tx, StudentServiceLearning)
+	}
+
+	if review != nil {
+		file, err := os.OpenFile(
+			fmt.Sprintf("./assets/service-learning/%s-%s", operator, reviewFileName),
+			os.O_WRONLY|os.O_CREATE,
+			0666,
+		)
+		if err != nil {
+			panic(err)
+		}
+		io.Copy(file, review)
+		defer file.Close()
+
+		StudentServiceLearning.Review = reviewFileName
+		gorm.StudentServiceLearningDao.Update(tx, StudentServiceLearning)
+	}
+
+	return "success", nil
 }

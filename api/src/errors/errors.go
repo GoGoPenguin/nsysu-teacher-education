@@ -1,4 +1,4 @@
-package error
+package errors
 
 // UnexpectedError return a new UnexpectedError instance
 func UnexpectedError() *Error {

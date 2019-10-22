@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/nsysu/teacher-education/src/assembler"
-	"github.com/nsysu/teacher-education/src/error"
+	"github.com/nsysu/teacher-education/src/errors"
 	"github.com/nsysu/teacher-education/src/persistence/gorm"
 	"github.com/nsysu/teacher-education/src/specification"
 	"github.com/nsysu/teacher-education/src/utils/logger"
@@ -15,13 +15,13 @@ import (
 )
 
 // CreateCourse create a course
-func CreateCourse(topic, courseType string, file multipart.File, header *multipart.FileHeader, start, end time.Time) (result interface{}, e *error.Error) {
+func CreateCourse(topic, courseType string, file multipart.File, header *multipart.FileHeader, start, end time.Time) (result interface{}, e *errors.Error) {
 	tx := gorm.DB()
 
 	defer func() {
 		if r := recover(); r != nil {
 			logger.Error(r)
-			e = error.UnexpectedError()
+			e = errors.UnexpectedError()
 		}
 	}()
 
@@ -45,13 +45,13 @@ func CreateCourse(topic, courseType string, file multipart.File, header *multipa
 }
 
 // GetCourse get course list
-func GetCourse(account, start, length string) (result map[string]interface{}, e *error.Error) {
+func GetCourse(account, start, length string) (result map[string]interface{}, e *errors.Error) {
 	tx := gorm.DB()
 
 	defer func() {
 		if r := recover(); r != nil {
 			logger.Error(r)
-			e = error.UnexpectedError()
+			e = errors.UnexpectedError()
 		}
 	}()
 
@@ -88,35 +88,35 @@ func GetCourse(account, start, length string) (result map[string]interface{}, e 
 }
 
 // GetInformation get the information of course
-func GetInformation(filename string) (result string, e *error.Error) {
+func GetInformation(filename string) (result string, e *errors.Error) {
 	tx := gorm.DB()
 
 	defer func() {
 		if r := recover(); r != nil {
 			logger.Error(r)
-			e = error.UnexpectedError()
+			e = errors.UnexpectedError()
 		}
 	}()
 
 	course := gorm.CourseDao.GetByInformation(tx, filename)
 	if course == nil {
-		return "", error.NotFoundError(filename)
+		return "", errors.NotFoundError(filename)
 	}
 	if _, err := os.Stat("./assets/course/" + filename); os.IsNotExist(err) {
-		return "", error.NotFoundError(filename)
+		return "", errors.NotFoundError(filename)
 	}
 
 	return "./assets/course/" + filename, nil
 }
 
 // SingUpCourse sudent sign up course
-func SingUpCourse(account, courseID, meal string) (result interface{}, e *error.Error) {
+func SingUpCourse(account, courseID, meal string) (result interface{}, e *errors.Error) {
 	tx := gorm.DB()
 
 	defer func() {
 		if r := recover(); r != nil {
 			logger.Error(r)
-			e = error.UnexpectedError()
+			e = errors.UnexpectedError()
 		}
 	}()
 
@@ -129,7 +129,7 @@ func SingUpCourse(account, courseID, meal string) (result interface{}, e *error.
 	)
 
 	if len(*course) == 0 {
-		return nil, error.NotFoundError("course ID " + courseID)
+		return nil, errors.NotFoundError("course ID " + courseID)
 	}
 
 	srudentCourse := &gorm.StudentCourse{
@@ -144,13 +144,13 @@ func SingUpCourse(account, courseID, meal string) (result interface{}, e *error.
 }
 
 // GetSutdentCourseList get the list of student course
-func GetSutdentCourseList(account, start, length string) (result map[string]interface{}, e *error.Error) {
+func GetSutdentCourseList(account, start, length string) (result map[string]interface{}, e *errors.Error) {
 	tx := gorm.DB()
 
 	defer func() {
 		if r := recover(); r != nil {
 			logger.Error(r)
-			e = error.UnexpectedError()
+			e = errors.UnexpectedError()
 		}
 	}()
 
@@ -188,13 +188,13 @@ func GetSutdentCourseList(account, start, length string) (result map[string]inte
 }
 
 // UpdateCourseReview update student-course review
-func UpdateCourseReview(id, review string) (result interface{}, e *error.Error) {
+func UpdateCourseReview(id, review string) (result interface{}, e *errors.Error) {
 	tx := gorm.DB()
 
 	defer func() {
 		if r := recover(); r != nil {
 			logger.Error(r)
-			e = error.UnexpectedError()
+			e = errors.UnexpectedError()
 		}
 	}()
 
@@ -206,13 +206,13 @@ func UpdateCourseReview(id, review string) (result interface{}, e *error.Error) 
 }
 
 // UpdateCourseStatus update student-course status
-func UpdateCourseStatus(id, status string) (result interface{}, e *error.Error) {
+func UpdateCourseStatus(id, status string) (result interface{}, e *errors.Error) {
 	tx := gorm.DB()
 
 	defer func() {
 		if r := recover(); r != nil {
 			logger.Error(r)
-			e = error.UnexpectedError()
+			e = errors.UnexpectedError()
 		}
 	}()
 

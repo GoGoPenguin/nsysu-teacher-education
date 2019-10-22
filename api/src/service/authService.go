@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/nsysu/teacher-education/src/error"
+	"github.com/nsysu/teacher-education/src/errors"
 	"github.com/nsysu/teacher-education/src/persistence/gorm"
 	"github.com/nsysu/teacher-education/src/persistence/redis"
 	"github.com/nsysu/teacher-education/src/utils/config"
@@ -12,13 +12,13 @@ import (
 )
 
 // Login user login
-func Login(account, password, role string) (result interface{}, e *error.Error) {
+func Login(account, password, role string) (result interface{}, e *errors.Error) {
 	tx := gorm.DB()
 
 	defer func() {
 		if r := recover(); r != nil {
 			logger.Error(r)
-			e = error.UnexpectedError()
+			e = errors.UnexpectedError()
 		}
 	}()
 
@@ -30,7 +30,7 @@ func Login(account, password, role string) (result interface{}, e *error.Error) 
 	if role == gorm.AdminDao.Role {
 		admin := gorm.AdminDao.GetByAccount(tx, account)
 		if admin == nil {
-			return nil, error.LoginError()
+			return nil, errors.LoginError()
 		}
 
 		userAccount = admin.Account
@@ -38,7 +38,7 @@ func Login(account, password, role string) (result interface{}, e *error.Error) 
 	} else {
 		student := gorm.StudentDao.GetByAccount(tx, account)
 		if student == nil {
-			return nil, error.LoginError()
+			return nil, errors.LoginError()
 		}
 
 		userAccount = student.Account
@@ -46,7 +46,7 @@ func Login(account, password, role string) (result interface{}, e *error.Error) 
 	}
 
 	if ok := hash.Verify(password, userPassword); !ok {
-		return nil, error.LoginError()
+		return nil, errors.LoginError()
 	}
 
 	jti := uuid.NewV4().String()
@@ -82,11 +82,11 @@ func Login(account, password, role string) (result interface{}, e *error.Error) 
 }
 
 // Logout user logout
-func Logout(account string) (result string, e *error.Error) {
+func Logout(account string) (result string, e *errors.Error) {
 	defer func() {
 		if r := recover(); r != nil {
 			logger.Error(r)
-			e = error.UnexpectedError()
+			e = errors.UnexpectedError()
 		}
 	}()
 
@@ -99,11 +99,11 @@ func Logout(account string) (result string, e *error.Error) {
 }
 
 // RenewToken get new access token
-func RenewToken(account, refreshToken string) (result map[string]interface{}, e *error.Error) {
+func RenewToken(account, refreshToken string) (result map[string]interface{}, e *errors.Error) {
 	defer func() {
 		if r := recover(); r != nil {
 			logger.Error(r)
-			e = error.UnexpectedError()
+			e = errors.UnexpectedError()
 		}
 	}()
 
@@ -114,13 +114,13 @@ func RenewToken(account, refreshToken string) (result map[string]interface{}, e 
 
 	// validate refresh token
 	if redisUser.RefreshToken != refreshToken {
-		return nil, error.ValidateError("Invalid refresh token")
+		return nil, errors.ValidateError("Invalid refresh token")
 	}
 
 	// if user renew token before token expired, it means token is stolen.
 	if redisUser.JTI != "" {
 		redis.UserDao.Delete(conn, account)
-		return nil, error.RevokeTokenError()
+		return nil, errors.RevokeTokenError()
 	}
 
 	// create a new access token

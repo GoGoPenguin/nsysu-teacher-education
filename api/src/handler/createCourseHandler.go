@@ -5,7 +5,7 @@ import (
 
 	"github.com/asaskevich/govalidator"
 	"github.com/kataras/iris"
-	"github.com/nsysu/teacher-education/src/error"
+	"github.com/nsysu/teacher-education/src/errors"
 	"github.com/nsysu/teacher-education/src/service"
 	t "github.com/nsysu/teacher-education/src/utils/time"
 )
@@ -74,7 +74,7 @@ func CreateCourseHandler(ctx iris.Context) {
 		params.End,
 	)
 
-	if err != (*error.Error)(nil) {
+	if err != (*errors.Error)(nil) {
 		json(ctx, map[string]interface{}{
 			"error": err.Error(),
 		})

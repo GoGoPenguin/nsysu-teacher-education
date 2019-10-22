@@ -5,7 +5,7 @@ import (
 
 	"github.com/asaskevich/govalidator"
 	"github.com/kataras/iris"
-	"github.com/nsysu/teacher-education/src/error"
+	"github.com/nsysu/teacher-education/src/errors"
 	"github.com/nsysu/teacher-education/src/service"
 	t "github.com/nsysu/teacher-education/src/utils/time"
 	"github.com/nsysu/teacher-education/src/utils/typecast"
@@ -50,13 +50,13 @@ func CreateServiceLearningHandler(ctx iris.Context) {
 	}
 
 	if _, err := govalidator.ValidateStruct(params); err != nil {
-		failed(ctx, error.ValidateError(err.Error()))
+		failed(ctx, errors.ValidateError(err.Error()))
 		return
 	}
 
 	result, err := service.CreateServieLearning(params.Type, params.Content, params.Session, params.Hours, startTime, endTime)
 
-	if err != (*error.Error)(nil) {
+	if err != (*errors.Error)(nil) {
 		failed(ctx, err)
 		return
 	}

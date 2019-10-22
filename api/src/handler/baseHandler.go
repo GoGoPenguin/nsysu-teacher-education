@@ -2,7 +2,7 @@ package handler
 
 import (
 	"github.com/kataras/iris"
-	"github.com/nsysu/teacher-education/src/error"
+	"github.com/nsysu/teacher-education/src/errors"
 )
 
 func success(ctx iris.Context, data interface{}) {
@@ -15,8 +15,8 @@ func success(ctx iris.Context, data interface{}) {
 
 func failed(ctx iris.Context, err interface{}) {
 	ctx.JSON(iris.Map{
-		"code":    err.(*error.Error).Code(),
-		"message": err.(*error.Error).Error(),
+		"code":    err.(*errors.Error).Code(),
+		"message": err.(*errors.Error).Error(),
 		"data":    []string{},
 	})
 }

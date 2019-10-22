@@ -1,4 +1,4 @@
-package error
+package errors
 
 // Error the basic error type
 type Error struct {
