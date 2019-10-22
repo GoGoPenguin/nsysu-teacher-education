@@ -51,7 +51,7 @@ func Run() {
 			serviceLearning.Get("/", hero.Handler(handler.GetServiceLearningHandler))                // 取得服務學習列表
 			serviceLearning.Get("/sign-up", hero.Handler(handler.GetStudentcServiceLearningHandler)) // 報名服務學習列表
 			serviceLearning.Post("/sign-up", hero.Handler(handler.SignUpServiceLearningHandler))     // 報名服務學習
-			serviceLearning.Patch("/sign-up", hero.Handler(handler.UpdateServiceLearningHandler))    // 上傳資料
+			serviceLearning.Patch("/", hero.Handler(handler.UpdateServiceLearningHandler))           // 上傳資料
 		}
 	}
 
