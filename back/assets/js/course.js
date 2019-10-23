@@ -257,6 +257,28 @@ $("#info").fileinput({
         buttons: false,
     })
     $('div.kv-upload-progress.kv-hidden').css({ 'display': 'none' })
+}).on('filepreupload', function (event, data, previewId, index) {
+    let filename = data.files[0].name
+    let length = (new TextEncoder().encode(filename)).length
+
+    if (length > 36) {
+        swal({
+            title: '',
+            text: '檔名太長',
+            icon: "error",
+            timer: 1500,
+            buttons: false,
+        })
+
+        // this doesn't work at all
+        // https://plugins.krajee.com/file-input/plugin-events#event-manipulation
+        return {
+            message: '檔名太長',
+        }
+    }
+}).on('filecustomerror', function (event, params) {
+    $("#info").fileinput('enable')
+    $("#info").fileinput('reset')
 })
 
 $('#course-form').on('submit', (e) => {

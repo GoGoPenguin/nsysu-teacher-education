@@ -71,6 +71,7 @@ $('input#upload').fileinput({
         buttons: false,
     })
     studentTable.ajax.reload()
+    $('input#upload').fileinput('clear')
 }).on('fileuploaderror', (event, data, msg) => {
     swal({
         title: '',
