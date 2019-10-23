@@ -228,3 +228,42 @@ func UpdateStudentServiceLearningStatus(StudentServiceLearningID, Status string)
 
 	return "success", nil
 }
+
+// GetStudentServiceLearningFile get student-service-learning refernce or review file
+func GetStudentServiceLearningFile(operator, StudentServiceLearningID, file string) (result map[string]string, e *errors.Error) {
+	tx := gorm.DB()
+
+	defer func() {
+		if r := recover(); r != nil {
+			logger.Error(r)
+			e = errors.UnexpectedError()
+		}
+	}()
+
+	StudentServiceLearning := gorm.StudentServiceLearningDao.GetByID(tx, typecast.StringToUint(StudentServiceLearningID))
+	if StudentServiceLearning == nil {
+		return nil, errors.NotFoundError(file)
+	}
+
+	var (
+		filePath string
+		fileName string
+	)
+
+	if file == "reference" {
+		fileName = StudentServiceLearning.Reference
+		filePath = fmt.Sprintf("./assets/service-learning/%s-%s", operator, StudentServiceLearning.Reference)
+	} else {
+		fileName = StudentServiceLearning.Review
+		filePath = fmt.Sprintf("./assets/service-learning/%s-%s", operator, StudentServiceLearning.Review)
+	}
+
+	if _, err := os.Stat(filePath); os.IsNotExist(err) {
+		return nil, errors.NotFoundError(fileName)
+	}
+
+	return map[string]string{
+		"Path": filePath,
+		"Name": fileName,
+	}, nil
+}
