@@ -15,7 +15,10 @@ const getStudentServiceLearning = () => {
         url: `${config.server}/v1/service-learning/sign-up`,
         type: 'GET',
         error: (xhr) => {
-            console.error(xhr);
+            if (xhr.status === 401) {
+                removeCookie()
+            } else {
+            }
         },
         beforeSend: (xhr) => {
             let token = $.cookie('token')
@@ -36,19 +39,24 @@ const getStudentServiceLearning = () => {
             } else {
                 response.list.forEach((element, index) => {
                     let date = element.ServiceLearning.Start.substring(0, 10) + ' ~ ' + element.ServiceLearning.End.substring(0, 10)
-
-                    $('#student-service-learning tbody').append(`
+                    let result = `
                         <tr>
-                            <th scope="row">${index}</th>\
-                            <td>${STATUS[element.Status]}</td>\
-                            <td>${TYPE[element.ServiceLearning.Type]}</td>\
-                            <td>${element.ServiceLearning.Content}</td>\
-                            <td>${date}</td>\
-                            <td>${element.ServiceLearning.Session}</td>\
-                            <td>${element.ServiceLearning.Hours}</td>\
-                            <td><button class="btn btn-primary" onclick="edit(${element.ID})">編輯</button></td>\
-                        </tr>\
-                    `)
+                            <th scope="row">${index}</th>
+                            <td>${STATUS[element.Status]}</td>
+                            <td>${TYPE[element.ServiceLearning.Type]}</td>
+                            <td>${element.ServiceLearning.Content}</td>
+                            <td>${date}</td>
+                            <td>${element.ServiceLearning.Session}</td>
+                            <td>${element.ServiceLearning.Hours}</td>
+                    `
+
+                    if (element.Status !== 'pass') {
+                        result = `${result}<td><button class="btn btn-primary" onclick="edit(${element.ID})">編輯</button></td></tr>`
+                    } else {
+                        result = `${result}<td></td></tr>`
+                    }
+
+                    $('#student-service-learning tbody').append(result)
                 })
             }
         }

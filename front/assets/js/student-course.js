@@ -41,7 +41,7 @@ $(document).ready(() => {
                         time = `${startDate} ${startTime} ~ ${endDate} ${endTime}`
                     }
 
-                    $('#student-course tbody').append(`
+                    let result = `
                         <tr>
                             <th scope="row">${index}</th>\
                             <td>${element.Course.Topic}</td>\
@@ -50,9 +50,15 @@ $(document).ready(() => {
                             <td>${STATUS[element.Status]}</td>\
                             <td>${element.Comment}</td>\
                             <td>${element.Review}</td>\
-                            <td><button class="btn btn-primary" onclick="edit('${element.ID}')">編輯</button></td>\
-                        </tr>\
-                    `)
+                    `
+
+                    if (element.Status !== 'pass') {
+                        result = `${result}<td><button class="btn btn-primary" onclick="edit('${element.ID}')">編輯</button></td></tr>`
+                    } else {
+                        result = `${result}<td></td></tr>`
+                    }
+
+                    $('#student-course tbody').append(result)
                 })
             }
         }
@@ -77,15 +83,17 @@ $('#updateReviewModal form').on('submit', (e) => {
         url: `${config.server}/v1/course/review`,
         type: 'PATCH',
         error: (xhr) => {
-            console.error(xhr);
-
-            swal({
-                title: '',
-                text: '錯誤',
-                icon: "error",
-                timer: 1500,
-                buttons: false,
-            })
+            if (xhr.status === 401) {
+                removeCookie()
+            } else {
+                swal({
+                    title: '',
+                    text: '錯誤',
+                    icon: "error",
+                    timer: 1500,
+                    buttons: false,
+                })
+            }
         },
         data: {
             'StudentCourseID': studentCourseID,

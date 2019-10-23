@@ -1,6 +1,15 @@
 let token = $.cookie('token')
 let refreshToken = $.cookie('refresh-token')
 
+const removeCookie = () => {
+    let cookies = $.cookie()
+    for (var cookie in cookies) {
+        $.removeCookie(cookie)
+    }
+
+    location.href = '/login.html'
+}
+
 const renewToken = () => {
     let account = $.cookie('account')
     let refreshToken = $.cookie('refresh-token')
@@ -15,21 +24,11 @@ const renewToken = () => {
             RefreshToken: refreshToken,
         },
         error: (xhr) => {
-            let cookies = $.cookie()
-            for (var cookie in cookies) {
-                $.removeCookie(cookie)
-            }
-
-            location.href = '/login.html'
+            removeCookie()
         },
         success: (response) => {
             if (response.code != 0) {
-                let cookies = $.cookie();
-                for (var cookie in cookies) {
-                    $.removeCookie(cookie)
-                }
-
-                location.href = '/login.html'
+                removeCookie()
             } else {
                 let date = new Date()
                 date.setTime(date.getTime() + (response.data.Expire * 1000));

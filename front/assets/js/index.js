@@ -9,7 +9,10 @@ const getCourses = () => {
         url: `${config.server}/v1/course`,
         type: 'GET',
         error: (xhr) => {
-            console.error(xhr);
+            if (xhr.status === 401) {
+                removeCookie()
+            } else {
+            }
         },
         beforeSend: (xhr) => {
             let token = $.cookie('token')
@@ -62,7 +65,11 @@ const getServiceLearning = () => {
         url: `${config.server}/v1/service-learning`,
         type: 'GET',
         error: (xhr) => {
-            console.error(xhr);
+            if (xhr.status === 401) {
+                removeCookie()
+            } else {
+
+            }
         },
         beforeSend: (xhr) => {
             let token = $.cookie('token')
@@ -118,15 +125,17 @@ $('#course tbody').on('click', 'td.info', function () {
             responseType: "blob"
         },
         error: (xhr) => {
-            console.error(xhr);
-
-            swal({
-                title: '',
-                text: '失敗',
-                icon: "error",
-                timer: 1500,
-                buttons: false,
-            })
+            if (xhr.status === 401) {
+                removeCookie()
+            } else {
+                swal({
+                    title: '',
+                    text: '失敗',
+                    icon: "error",
+                    timer: 1500,
+                    buttons: false,
+                })
+            }
         },
         beforeSend: (xhr) => {
             let token = $.cookie('token')
@@ -177,15 +186,17 @@ $('#courseModal form').on('submit', (e) => {
             'Meal': $('#meal').val(),
         },
         error: (xhr) => {
-            console.error(xhr);
-
-            swal({
-                title: '',
-                text: '報名失敗',
-                icon: "error",
-                timer: 1500,
-                buttons: false,
-            })
+            if (xhr.status === 401) {
+                removeCookie()
+            } else {
+                swal({
+                    title: '',
+                    text: '報名失敗',
+                    icon: "error",
+                    timer: 1500,
+                    buttons: false,
+                })
+            }
         },
         beforeSend: (xhr) => {
             let token = $.cookie('token')
@@ -229,15 +240,17 @@ const signUpServiceLearning = (id) => {
             'ServiceLearningID': id,
         },
         error: (xhr) => {
-            console.error(xhr);
-
-            swal({
-                title: '',
-                text: '報名失敗',
-                icon: "error",
-                timer: 1500,
-                buttons: false,
-            })
+            if (xhr.status === 401) {
+                removeCookie()
+            } else {
+                swal({
+                    title: '',
+                    text: '報名失敗',
+                    icon: "error",
+                    timer: 1500,
+                    buttons: false,
+                })
+            }
         },
         beforeSend: (xhr) => {
             let token = $.cookie('token')

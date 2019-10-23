@@ -43,7 +43,7 @@ $('#logoutModal button.btn.btn-primary').click(() => {
         url: `${config.server}/v1/logout`,
         type: 'POST',
         error: (xhr) => {
-            console.error(xhr);
+            removeCookie()
         },
         beforeSend: (xhr) => {
             let token = $.cookie('token')
