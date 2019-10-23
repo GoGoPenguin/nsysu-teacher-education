@@ -50,7 +50,7 @@ $(document).ready(() => {
                             <td>${STATUS[element.Status]}</td>\
                             <td>${element.Comment}</td>\
                             <td>${element.Review}</td>\
-                            <td class="edit"><button class="btn btn-primary" id="${element.ID}">編輯</button></td>\
+                            <td><button class="btn btn-primary" onclick="edit('${element.ID}')">編輯</button></td>\
                         </tr>\
                     `)
                 })
@@ -59,14 +59,13 @@ $(document).ready(() => {
     });
 })
 
-$('#student-course').on('click', '.edit', () => {
-    let id = $(this).children().get(0).id
+const edit = (id) => {
     let review = $(this).prev().html()
 
     $('#updateReviewModal textarea').val(review)
     $('#updateReviewModal input').val(id)
     $('#updateReviewModal').modal('show')
-})
+}
 
 $('#updateReviewModal form').on('submit', (e) => {
     e.preventDefault()
