@@ -161,7 +161,7 @@ func GetSutdentServiceLearningList(account, start, length string) (result map[st
 
 // UpdateServiceLearning update service-learning
 func UpdateServiceLearning(reference, review multipart.File, operator, StudentServiceLearningID, referenceFileName, reviewFileName string) (result string, e *errors.Error) {
-	tx := gorm.DB()
+	tx := gorm.DB().Begin()
 
 	defer func() {
 		if r := recover(); r != nil {
@@ -203,6 +203,28 @@ func UpdateServiceLearning(reference, review multipart.File, operator, StudentSe
 		StudentServiceLearning.Review = reviewFileName
 		gorm.StudentServiceLearningDao.Update(tx, StudentServiceLearning)
 	}
+
+	if err := tx.Commit(); err != nil {
+		panic(err)
+	}
+
+	return "success", nil
+}
+
+// UpdateStudentServiceLearningStatus update student-service-learning status
+func UpdateStudentServiceLearningStatus(StudentServiceLearningID, Status string) (result string, e *errors.Error) {
+	tx := gorm.DB()
+
+	defer func() {
+		if r := recover(); r != nil {
+			logger.Error(r)
+			e = errors.UnexpectedError()
+		}
+	}()
+
+	StudentServiceLearning := gorm.StudentServiceLearningDao.GetByID(tx, typecast.StringToUint(StudentServiceLearningID))
+	StudentServiceLearning.Status = Status
+	gorm.StudentServiceLearningDao.Update(tx, StudentServiceLearning)
 
 	return "success", nil
 }

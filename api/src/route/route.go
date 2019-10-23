@@ -47,11 +47,13 @@ func Run() {
 
 		serviceLearning := v1.Party("/service-learning")
 		{
-			serviceLearning.Post("/", hero.Handler(handler.CreateServiceLearningHandler))            // 新增服務學習
-			serviceLearning.Get("/", hero.Handler(handler.GetServiceLearningHandler))                // 取得服務學習列表
-			serviceLearning.Get("/sign-up", hero.Handler(handler.GetStudentcServiceLearningHandler)) // 報名服務學習列表
-			serviceLearning.Post("/sign-up", hero.Handler(handler.SignUpServiceLearningHandler))     // 報名服務學習
-			serviceLearning.Patch("/", hero.Handler(handler.UpdateServiceLearningHandler))           // 上傳資料
+			serviceLearning.Post("/", hero.Handler(handler.CreateServiceLearningHandler))              // 新增服務學習
+			serviceLearning.Get("/", hero.Handler(handler.GetServiceLearningHandler))                  // 取得服務學習列表
+			serviceLearning.Get("/sign-up", hero.Handler(handler.GetStudentcServiceLearningHandler))   // 報名服務學習列表
+			serviceLearning.Post("/sign-up", hero.Handler(handler.SignUpServiceLearningHandler))       // 報名服務學習
+			serviceLearning.Patch("/", hero.Handler(handler.UpdateServiceLearningHandler))             // 上傳資料
+			serviceLearning.Patch("/status", hero.Handler(handler.UpdateServiceLearningStatusHandler)) // 審核
+			serviceLearning.Get("/{file}", hero.Handler(handler.GetServiceLearningFileHandler))        // 取得佐證資料或心得
 		}
 	}
 
