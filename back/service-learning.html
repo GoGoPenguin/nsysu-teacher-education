@@ -35,6 +35,7 @@
 
     <!-- Custom styles for this template-->
     <link href="/node_modules/startbootstrap-sb-admin/css/sb-admin.css" rel="stylesheet">
+    <link href="/assets/css/service-learning.css" rel="stylesheet">
 
 </head>
 
@@ -362,24 +363,30 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm col-form-label "><strong>研習主題</strong></label>
-                        <div class="col course-topic">
-                            <input type="text" readonly class="form-control-plaintext">
-                        </div>
-                        <label class="col-sm col-form-label"><strong>研習類別</strong></label>
-                        <div class="col course-type">
+                        <label class="col-sm col-form-label "><strong>類別</strong></label>
+                        <div class="col type">
                             <input type="text" readonly class="form-control-plaintext">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label><strong>心得</strong></label>
-                        <input type="text" readonly class="form-control-plaintext course-review">
+                        <label><strong>服務內容說明</strong></label>
+                        <input type="text" readonly class="form-control-plaintext content">
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm col-form-label"><strong>佐證資料</strong></label>
+                        <div class="col reference">
+                            <input type="text" readonly class="form-control-plaintext" onclick="getFile('reference')">
+                        </div>
+                        <label class="col-sm col-form-label"><strong>心得</strong></label>
+                        <div class="col review">
+                            <input type="text" readonly class="form-control-plaintext" onclick="getFile('review')">
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">取消</button>
-                    <button class="btn btn-danger">未通過</button>
-                    <button class="btn btn-primary">通過</button>
+                    <button class="btn btn-danger" onclick="updateStatus('failed')">未通過</button>
+                    <button class="btn btn-primary" onclick="updateStatus('pass')">通過</button>
                 </div>
             </div>
         </div>

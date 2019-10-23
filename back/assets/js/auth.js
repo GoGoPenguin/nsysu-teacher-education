@@ -53,7 +53,7 @@ $('#logoutModal button.btn.btn-primary').click(function () {
                 token = $.cookie('token')
             }
 
-            xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
         },
         success: function (response) {
             if (response.code != 0) {

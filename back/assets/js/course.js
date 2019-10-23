@@ -37,7 +37,7 @@ const courseTable = $('table#course').DataTable({
                 token = $.cookie('token')
             }
 
-            xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
         },
         error: (xhr, error, thrown) => {
             if (xhr.status == 401) {
@@ -108,7 +108,7 @@ const studentCourseTable = $('table#student-course').DataTable({
                 token = $.cookie('token')
             }
 
-            xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
         },
         error: (xhr, error, thrown) => {
             if (xhr.status == 401) {
@@ -178,7 +178,7 @@ $('table#course').on('click', 'td.info', function () {
     let filename = $(this).text()
 
     $.ajax({
-        url: config.server + '/v1/course/' + filename,
+        url: `${config.server}/v1/course/${filename}`,
         type: 'GET',
         xhrFields: {
             responseType: "blob"
@@ -200,7 +200,7 @@ $('table#course').on('click', 'td.info', function () {
                 token = $.cookie('token')
             }
 
-            xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
         },
         success: (response) => {
             let a = document.createElement('a');
@@ -242,7 +242,7 @@ $("#info").fileinput({
         buttons: false,
     })
     courseTable.ajax.reload();
-    $('course-form')[0].reset()
+    $('#course-form')[0].reset()
 }).on('fileuploaderror', (event, data, msg) => {
     swal({
         title: '',
@@ -299,7 +299,7 @@ $('#checkModal .btn-primary').click(() => {
                 token = $.cookie('token')
             }
 
-            xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
         },
         success: (response) => {
             $('#checkModal').modal('hide')
@@ -344,7 +344,7 @@ $('#checkModal .btn-danger').click(() => {
                 token = $.cookie('token')
             }
 
-            xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
         },
         success: (response) => {
             $('#checkModal').modal('hide')

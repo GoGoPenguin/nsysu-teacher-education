@@ -19,7 +19,7 @@ const studentTable = $('table#students').DataTable({
                 token = $.cookie('token')
             }
 
-            xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
         },
         error: function (xhr, error, thrown) {
             if (xhr.status == 401) {

@@ -8,6 +8,8 @@ const STATUS = {
     'pass': '通過',
     'failed': '未通過',
 }
+let studentServiceLearningIndex = undefined
+let studentServiceLearnings = []
 
 const serviceLearningTable = $('table#service-learning').DataTable({
     processing: true,
@@ -31,7 +33,7 @@ const serviceLearningTable = $('table#service-learning').DataTable({
                 token = $.cookie('token')
             }
 
-            xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
         },
         error: (xhr, error, thrown) => {
             if (xhr.status == 401) {
@@ -78,6 +80,8 @@ const studentServiceLearningTable = $('table#student-service-learning').DataTabl
                 array[index].Status = STATUS[array[index].Status]
                 array[index].Date = element.ServiceLearning.Start.substring(0, 10) + ' ~ ' + element.ServiceLearning.End.substring(0, 10)
                 array[index].Button = '<button class="btn btn-primary" onclick="check(' + index + ')">審核</button>'
+
+                studentServiceLearnings.push(element)
             })
             return d.list
         },
@@ -88,7 +92,7 @@ const studentServiceLearningTable = $('table#student-service-learning').DataTabl
                 token = $.cookie('token')
             }
 
-            xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
         },
         error: (xhr, error, thrown) => {
             if (xhr.status == 401) {
@@ -180,7 +184,7 @@ $('#service-learning-form').on('submit', (e) => {
     e.preventDefault();
 
     $.ajax({
-        url: config.server + '/v1/service-learning',
+        url: `${config.server}/v1/service-learning`,
         type: 'POST',
         data: {
             'Type': $('#type').val(),
@@ -197,10 +201,16 @@ $('#service-learning-form').on('submit', (e) => {
                 token = $.cookie('token')
             }
 
-            xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
         },
         error: function (xhr) {
-            alert('Unexcepted Error')
+            swal({
+                title: '',
+                text: '失敗',
+                icon: "error",
+                timer: 1000,
+                buttons: false,
+            })
             console.error(xhr);
         },
         success: function (response) {
@@ -216,3 +226,104 @@ $('#service-learning-form').on('submit', (e) => {
         }
     });
 })
+
+const check = (index) => {
+    studentServiceLearningIndex = index
+
+    $('#checkModal .status p').html(studentServiceLearnings[index].Status)
+    $('#checkModal .name input').val(studentServiceLearnings[index].Student.Name)
+    $('#checkModal .major input').val(studentServiceLearnings[index].Student.Major)
+    $('#checkModal .account input').val(studentServiceLearnings[index].Student.Account)
+    $('#checkModal .number input').val(studentServiceLearnings[index].Student.Number)
+    $('#checkModal .type input').val(studentServiceLearnings[index].ServiceLearning.Type)
+    $('#checkModal .content').val(studentServiceLearnings[index].ServiceLearning.Content)
+    $('#checkModal .reference input').val(studentServiceLearnings[index].Reference)
+    $('#checkModal .review input').val(studentServiceLearnings[index].Review)
+    $('#checkModal').modal('show')
+}
+
+const getFile = (file) => {
+    let ID = studentServiceLearnings[studentServiceLearningIndex].ID
+    let filename = $(`#checkModal .${file} input`).val()
+
+    $.ajax({
+        url: `${config.server}/v1/service-learning/${file}`,
+        type: 'GET',
+        xhrFields: {
+            responseType: "blob"
+        },
+        data: {
+            'StudentServiceLearningID': ID,
+        },
+        error: (xhr) => {
+            swal({
+                title: '',
+                text: '失敗',
+                icon: "error",
+                timer: 1000,
+                buttons: false,
+            })
+            console.error(xhr);
+        },
+        beforeSend: (xhr) => {
+            let token = $.cookie('token')
+            if (token == undefined) {
+                renewToken()
+                token = $.cookie('token')
+            }
+
+            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+        },
+        success: (response) => {
+            let a = document.createElement('a');
+            let url = window.URL.createObjectURL(response);
+            a.href = url;
+            a.download = filename;
+            document.body.append(a);
+            a.click();
+            a.remove();
+            window.URL.revokeObjectURL(url);
+        }
+    });
+}
+
+const updateStatus = (status) => {
+    let ID = studentServiceLearnings[studentServiceLearningIndex].ID
+
+    $.ajax({
+        url: `${config.server}/v1/service-learning/status`,
+        type: 'PATCH',
+        data: {
+            'StudentServiceLearningID': ID,
+            'Status': status,
+        },
+        beforeSend: (xhr) => {
+            let token = $.cookie('token')
+            if (token == undefined) {
+                renewToken()
+                token = $.cookie('token')
+            }
+
+            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+        },
+        error: function (xhr) {
+            swal({
+                title: '',
+                text: '失敗',
+                icon: "error",
+                timer: 1000,
+                buttons: false,
+            })
+            console.error(xhr);
+        },
+        success: function (response) {
+            swal({
+                title: '',
+                text: '成功',
+                icon: "success",
+                timer: 1000,
+                buttons: false,
+            })
+        }
+    });
+}
