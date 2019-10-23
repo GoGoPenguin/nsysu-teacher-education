@@ -13,7 +13,7 @@ const courseTable = $('table#course').DataTable({
     ordering: false,
     searching: false,
     ajax: {
-        url: config.server + '/v1/course',
+        url: `${config.server}/v1/course`,
         type: 'GET',
         dataSrc: (d) => {
             d.list.forEach((element, index, array) => {
@@ -23,9 +23,9 @@ const courseTable = $('table#course').DataTable({
                 let endTime = array[index].End.substring(11, 19)
 
                 if (startDate == endDate) {
-                    array[index].Time = startDate + ' ' + startTime + ' ~ ' + endTime
+                    array[index].Time = `${startDate} ${startTime} ~ ${endTime}`
                 } else {
-                    array[index].Time = startDate + ' ' + startTime + ' ~ ' + endDate + ' ' + endTime
+                    array[index].Time = `${startDate} ${startTime} ~ ${endDate} ${endTime}`
                 }
             })
             return d.list
@@ -78,7 +78,7 @@ const studentCourseTable = $('table#student-course').DataTable({
     ordering: false,
     searching: false,
     ajax: {
-        url: config.server + '/v1/course/sign-up',
+        url: `${config.server}/v1/course/sign-up`,
         type: 'GET',
         dataSrc: (d) => {
             d.list.forEach((element, index, array) => {
@@ -88,13 +88,18 @@ const studentCourseTable = $('table#student-course').DataTable({
                 let endTime = array[index].Course.End.substring(11, 19)
 
                 if (startDate == endDate) {
-                    array[index].Time = startDate + ' ' + startTime + ' ~ ' + endTime
+                    array[index].Time = `${startDate} ${startTime} ~ ${endTime}`
                 } else {
-                    array[index].Time = startDate + ' ' + startTime + ' ~ ' + endDate + ' ' + endTime
+                    array[index].Time = `${startDate} ${startTime} ~ ${endDate} ${endTime}`
+                }
+
+                if (element.Status !== 'pass') {
+                    array[index].Button = `<button class="btn btn-primary" onclick="check(${index})">審核</button>`
+                } else {
+                    array[index].Button = ''
                 }
 
                 array[index].Status = STATUS[array[index].Status]
-                array[index].Button = '<button class="btn btn-primary" onclick="check(' + index + ')">審核</button>'
 
                 studentCourses.push(element)
             })
@@ -219,7 +224,7 @@ $("#info").fileinput({
     language: 'zh-TW',
     theme: "fas",
     showUpload: false,
-    uploadUrl: config.server + '/v1/course',
+    uploadUrl: `${config.server}/v1/course`,
     ajaxSettings: {
         headers: {
             'Authorization': 'Bearer ' + $.cookie('token'),
@@ -275,7 +280,7 @@ const check = (index) => {
 
 $('#checkModal .btn-primary').click(() => {
     $.ajax({
-        url: config.server + '/v1/course/status',
+        url: `${config.server}/v1/course/status`,
         type: 'PATCH',
         data: {
             StudentCourseID: studentCourses[studentCoursesIndex].ID,
@@ -311,16 +316,14 @@ $('#checkModal .btn-primary').click(() => {
                 buttons: false,
             })
 
-            let row = $('table#student-course tbody').children('tr').eq(0);
-            let col = row.children('td').eq(0)
-            col.html(STATUS['pass'])
+            studentCourseTable.ajax.reload()
         }
     });
 })
 
 $('#checkModal .btn-danger').click(() => {
     $.ajax({
-        url: config.server + '/v1/course/status',
+        url: `${config.server}/v1/course/status`,
         type: 'PATCH',
         data: {
             StudentCourseID: studentCourses[studentCoursesIndex].ID,

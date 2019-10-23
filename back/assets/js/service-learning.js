@@ -79,7 +79,12 @@ const studentServiceLearningTable = $('table#student-service-learning').DataTabl
                 array[index].ServiceLearning.Type = TYPE[element.ServiceLearning.Type];
                 array[index].Status = STATUS[array[index].Status]
                 array[index].Date = element.ServiceLearning.Start.substring(0, 10) + ' ~ ' + element.ServiceLearning.End.substring(0, 10)
-                array[index].Button = '<button class="btn btn-primary" onclick="check(' + index + ')">審核</button>'
+
+                if (array[index].Status !== 'pass') {
+                    array[index].Button = '<button class="btn btn-primary" onclick="check(' + index + ')">審核</button>'
+                } else {
+                    array[index].Button = ''
+                }
 
                 studentServiceLearnings.push(element)
             })
@@ -324,6 +329,7 @@ const updateStatus = (status) => {
                 timer: 1000,
                 buttons: false,
             })
+            studentServiceLearningTable.ajax.reload()
         }
     });
 }

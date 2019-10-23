@@ -4,7 +4,7 @@ const studentTable = $('table#students').DataTable({
     ordering: false,
     searching: false,
     ajax: {
-        url: config.server + '/v1/users',
+        url: `${config.server}/v1/users`,
         type: 'GET',
         dataSrc: function (d) {
             d.list.forEach(function (element, index, array) {
@@ -56,10 +56,10 @@ $('input#upload').fileinput({
     language: 'zh-TW',
     theme: "fas",
     allowedFileExtensions: ['csv'],
-    uploadUrl: config.server + '/v1/users',
+    uploadUrl: `${config.server}/v1/users`,
     ajaxSettings: {
         headers: {
-            'Authorization': 'Bearer ' + $.cookie('token'),
+            'Authorization': `Bearer ${$.cookie('token')}`,
         }
     },
 }).on('fileuploaded', (event, previewId, index, fileId) => {

@@ -5,7 +5,7 @@ $('#loginform').on('submit', function (e) {
     let password = $('input#password').val()
 
     $.ajax({
-        url: config.server + '/v1/login',
+        url: `${config.server}/v1/login`,
         type: 'POST',
         data: {
             'Account': account,
@@ -41,7 +41,7 @@ $('button#logout').click(function () {
 
 $('#logoutModal button.btn.btn-primary').click(function () {
     $.ajax({
-        url: config.server + '/v1/logout',
+        url: `${config.server}/v1/logout`,
         type: 'POST',
         error: function (xhr) {
             console.error(xhr);
