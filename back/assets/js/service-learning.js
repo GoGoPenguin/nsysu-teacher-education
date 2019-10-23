@@ -208,7 +208,7 @@ $('#service-learning-form').on('submit', (e) => {
 
             xhr.setRequestHeader('Authorization', `Bearer ${token}`);
         },
-        error: function (xhr) {
+        error: (xhr) => {
             swal({
                 title: '',
                 text: '失敗',
@@ -218,7 +218,7 @@ $('#service-learning-form').on('submit', (e) => {
             })
             console.error(xhr);
         },
-        success: function (response) {
+        success: (response) => {
             swal({
                 title: '',
                 text: '成功',
@@ -311,7 +311,7 @@ const updateStatus = (status) => {
 
             xhr.setRequestHeader('Authorization', `Bearer ${token}`);
         },
-        error: function (xhr) {
+        error: (xhr) => {
             swal({
                 title: '',
                 text: '失敗',
@@ -321,7 +321,7 @@ const updateStatus = (status) => {
             })
             console.error(xhr);
         },
-        success: function (response) {
+        success: (response) => {
             swal({
                 title: '',
                 text: '成功',

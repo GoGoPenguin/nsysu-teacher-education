@@ -1,4 +1,4 @@
-$('#loginform').on('submit', function (e) {
+$('#loginform').on('submit', (e) => {
     e.preventDefault();
 
     let account = $('input#account').val()
@@ -12,11 +12,11 @@ $('#loginform').on('submit', function (e) {
             'Password': password,
             'Role': 'admin',
         },
-        error: function (xhr) {
+        error: (xhr) => {
             alert('Unexcepted Error')
             console.error(xhr);
         },
-        success: function (response) {
+        success: (response) => {
             if (response.code != 0) {
                 alert(response.message)
             } else {
@@ -35,18 +35,18 @@ $('#loginform').on('submit', function (e) {
     });
 });
 
-$('button#logout').click(function () {
+$('button#logout').click(() => {
     $('#logoutModal').show()
 })
 
-$('#logoutModal button.btn.btn-primary').click(function () {
+$('#logoutModal button.btn.btn-primary').click(() => {
     $.ajax({
         url: `${config.server}/v1/logout`,
         type: 'POST',
-        error: function (xhr) {
+        error: (xhr) => {
             console.error(xhr);
         },
-        beforeSend: function (xhr) {
+        beforeSend: (xhr) => {
             let token = $.cookie('token')
             if (token == undefined) {
                 renewToken()
@@ -55,7 +55,7 @@ $('#logoutModal button.btn.btn-primary').click(function () {
 
             xhr.setRequestHeader('Authorization', `Bearer ${token}`);
         },
-        success: function (response) {
+        success: (response) => {
             if (response.code != 0) {
                 console.error(response.message)
             } else {

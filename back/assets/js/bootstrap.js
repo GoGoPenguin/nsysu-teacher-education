@@ -12,7 +12,7 @@ if (token == undefined) {
     location.href = '/'
 }
 
-function renewToken() {
+const renewToken = () => {
     let account = $.cookie('account')
     let refreshToken = $.cookie('refresh-token')
 
@@ -25,7 +25,7 @@ function renewToken() {
             Account: account,
             RefreshToken: refreshToken,
         },
-        error: function (xhr) {
+        error: (xhr) => {
             let cookies = $.cookie()
             for (var cookie in cookies) {
                 $.removeCookie(cookie)
@@ -33,7 +33,7 @@ function renewToken() {
 
             location.href = '/login.html'
         },
-        success: function (response) {
+        success: (response) => {
             if (response.code != 0) {
                 let cookies = $.cookie();
                 for (var cookie in cookies) {
