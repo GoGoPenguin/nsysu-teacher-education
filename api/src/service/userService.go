@@ -15,7 +15,7 @@ import (
 
 // CreateStudents create students by csv file
 func CreateStudents(file multipart.File) (result interface{}, e *errors.Error) {
-	tx := gorm.DB()
+	tx := gorm.DB().Begin()
 
 	defer func() {
 		if r := recover(); r != nil {
@@ -39,6 +39,10 @@ func CreateStudents(file multipart.File) (result interface{}, e *errors.Error) {
 		}
 
 		gorm.StudentDao.New(tx, student)
+	}
+
+	if err := tx.Commit().Error; err != nil {
+		panic(err)
 	}
 
 	return "success", nil
