@@ -42,7 +42,7 @@ pipeline {
                     bat "cd api & ${GOLANG} build -o main.exe main.go"
 
                     nodejs(nodeJSInstallationName: "${NODEJS}") {
-                        bat "cdfront & yarn install"
+                        bat "cd front & yarn install"
                         bat "cd back & yarn install"
                     }
                 }
