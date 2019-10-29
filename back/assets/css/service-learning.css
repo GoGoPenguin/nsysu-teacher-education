@@ -1,0 +1,11 @@
+.reference input, .review input {
+    color: #007bff;
+    text-decoration: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.reference input:hover, .review input {
+    color: #0056b3;
+    text-decoration: underline;
+}

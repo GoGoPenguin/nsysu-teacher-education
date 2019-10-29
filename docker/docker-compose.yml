@@ -1,0 +1,87 @@
+version: '3.0'
+services:
+    api:
+        user: root
+        build:
+            context: ./api
+            dockerfile: Dockerfile
+        restart: always
+        tty: true
+        stdin_open: true
+        volumes:
+            - "../api:/var/www/html/api/"
+        networks:
+            net:
+                ipv4_address: 172.18.0.2
+        container_name: nte-api
+        hostname: nte-api
+        image: nsysu/nte-api
+    db:
+        user: root
+        build:
+            context: ./db
+            dockerfile: Dockerfile
+        volumes:
+            - "./db/data:/var/lib/mysql"
+        restart: always
+        networks:
+            net:
+                ipv4_address: 172.18.0.3
+        container_name: nte-db
+        hostname: nte-db
+        image: nsysu/nte-db
+    redis:
+        user: root
+        build:
+            context: ./redis
+            dockerfile: Dockerfile
+        volumes:
+            - "./redis/data:/data"
+        restart: always
+        networks:
+            net:
+                ipv4_address: 172.18.0.4
+        container_name: nte-redis
+        hostname: nte-redis
+        image: nsysu/nte-redis
+    front:
+        user: root
+        build:
+            context: ./front
+            dockerfile: Dockerfile
+        restart: always
+        tty: true
+        stdin_open: true
+        volumes:
+            - "../front:/usr/share/nginx/html/front/"
+        networks:
+            net:
+                ipv4_address: 172.18.0.5
+        container_name: nte-front
+        hostname: nte-front
+        image: nsysu/nte-front
+    back:
+        user: root
+        build:
+            context: ./back
+            dockerfile: Dockerfile
+        restart: always
+        tty: true
+        stdin_open: true
+        volumes:
+            - "../back:/usr/share/nginx/html/back/"
+        networks:
+            net:
+                ipv4_address: 172.18.0.6
+        container_name: nte-back
+        hostname: nte-back
+        image: nsysu/nte-back
+
+networks:
+    net:
+        driver: bridge
+        ipam:
+            driver: default
+            config:
+            -
+              subnet: 172.18.0.0/24

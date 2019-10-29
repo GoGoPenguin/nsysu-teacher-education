@@ -1,0 +1,29 @@
+{
+  "name": "nsysu-teacher-education",
+  "version": "0.0.1",
+  "description": "Nsysu Teacher Education System",
+  "main": "index.html",
+  "repository": "https://github.com/SuperEdge/nsysu-teacher-education.git",
+  "author": "Paul",
+  "license": "MIT",
+  "dependencies": {
+    "animate.css": "^3.7.2",
+    "animsition": "^4.0.2",
+    "bootstrap": "^4.3.1",
+    "bootstrap-fileinput": "^5.0.6",
+    "countdowntime": "^0.0.3",
+    "daterangepicker": "^3.0.5",
+    "font-awesome": "^4.7.0",
+    "fonts-raleway": "^0.0.4",
+    "hamburgers": "^1.1.3",
+    "jquery": "^3.4.1",
+    "jquery.cookie": "^1.4.1",
+    "perfect-scrollbar": "^1.4.0",
+    "select2": "^4.0.8",
+    "startbootstrap-scrolling-nav": "^4.2.1",
+    "sweetalert": "^2.1.2"
+  },
+  "devDependencies": {
+    "@fortawesome/fontawesome-free": "^5.10.2"
+  }
+}

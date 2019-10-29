@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>中山師培 - 後台系統</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicon-16x16.png">
+    <link rel="manifest" href="/assets/img/site.webmanifest">
+
+    <!-- Core plugin JavaScript-->
+    <script src="/node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="/node_modules/jquery.easing/jquery.easing.min.js"></script>
+    <script src="/node_modules/jquery.cookie/jquery.cookie.js"></script>
+    <script src="/assets/js/config.js"></script>
+    <script src="/assets/js/bootstrap.js"></script>
+
+    <!-- Custom fonts for this template-->
+    <link href="/node_modules/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+
+    <!-- Custom styles for this template-->
+    <link href="/node_modules/startbootstrap-sb-admin/css/sb-admin.css" rel="stylesheet">
+
+</head>
+
+<body class="bg-dark">
+
+    <!-- Alert -->
+    <div role="alert" id="alert" style="display: none;"></div>
+
+    <div class="container">
+        <div class="card card-login mx-auto mt-5">
+            <div class="card-header">登入</div>
+            <div class="card-body">
+                <form id="loginform" role="form" data-toggle="validator">
+                    <div class="form-group">
+                        <div class="form-label-group">
+                            <input type="text" id="account" class="form-control"
+                                oninvalid="this.setCustomValidity('請輸入帳號')" oninput="this.setCustomValidity('')"
+                                required>
+                            <label for="account">帳號</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-label-group">
+                            <input type="password" id="password" class="form-control"
+                                oninvalid="this.setCustomValidity('請輸入密碼')" oninput="this.setCustomValidity('')"
+                                required>
+                            <label for="password">密碼</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">送出</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="/assets/js/alert.js"></script>
+    <script src="/assets/js/auth.js"></script>
+
+</body>
+
+</html>
