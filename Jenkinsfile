@@ -4,7 +4,6 @@ pipeline {
 
     environment {
         REPO = "https://github.com/SuperEdge/nsysu-teacher-education.git"
-        DIRECTORY = "TeacherEducation"
         NODEJS = "NodeJS 10.16.3"
         GOLANG = "C:\\Go\\bin\\go.exe"
         SQL_MIGRATE = "C:\\Users\\Administrator\\go\\bin\\sql-migrate.exe"
@@ -27,12 +26,9 @@ pipeline {
                     }
                 }
 
-
-                dir("${DIRECTORY}") {
-                    checkout([$class: 'GitSCM', branches: [[name: "${DEPLOY_BRANCH}"]],
-                        userRemoteConfigs: [[url: "${REPO}"]],
-                        extensions: [[$class: 'CloneOption', shallow: true]]])
-                }
+                checkout([$class: 'GitSCM', branches: [[name: "${DEPLOY_BRANCH}"]],
+                    userRemoteConfigs: [[url: "${REPO}"]],
+                    extensions: [[$class: 'CloneOption', shallow: true]]])
             }
         }
 
@@ -41,13 +37,13 @@ pipeline {
                 echo 'Build'
 
                 script {
-                    bat "cd ${DIRECTORY}/api/db & ${SQL_MIGRATE} up -env=production"
+                    bat "cd api/db & ${SQL_MIGRATE} up -env=production"
 
-                    bat "cd ${DIRECTORY}/api & ${GOLANG} build -o main.exe main.go"
+                    bat "cd api & ${GOLANG} build -o main.exe main.go"
 
                     nodejs(nodeJSInstallationName: "${NODEJS}") {
-                        bat "cd ${DIRECTORY}/front & yarn install"
-                        bat "cd ${DIRECTORY}/back & yarn install"
+                        bat "cd front & yarn install"
+                        bat "cd back & yarn install"
                     }
                 }
             }
