@@ -6,7 +6,7 @@ const renewToken = () => {
     let refreshToken = $.cookie('refresh-token')
 
     $.ajax({
-        url: config.server + '/v1/renew-token',
+        url: `${config.server}/v1/renew-token`,
         type: 'POST',
         async: false,
         cache: false,

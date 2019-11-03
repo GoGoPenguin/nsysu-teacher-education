@@ -3,6 +3,10 @@ const STATUS = {
     'pass': '通過',
     'failed': '未通過',
 }
+const MEAL = {
+    'vegetable': '素',
+    'meat': '葷',
+}
 
 let studentCourses = []
 let studentCoursesIndex = -1
@@ -11,7 +15,6 @@ const courseTable = $('table#course').DataTable({
     processing: true,
     serverSide: true,
     ordering: false,
-    searching: false,
     ajax: {
         url: `${config.server}/v1/course`,
         type: 'GET',
@@ -94,12 +97,13 @@ const studentCourseTable = $('table#student-course').DataTable({
                 }
 
                 if (element.Status !== 'pass') {
-                    array[index].Button = `<button class="btn btn-primary" onclick="check(${index})">審核</button>`
+                    array[index].Button = `<button class="btn btn-primary" onclick="check(${index}, false)">審核</button>`
                 } else {
-                    array[index].Button = ''
+                    array[index].Button = `<button class="btn btn-secondary" onclick="check(${index}, true)">查看</button>`
                 }
 
                 array[index].Status = STATUS[array[index].Status]
+                array[index].Meal = MEAL[array[index].Meal]
 
                 studentCourses.push(element)
             })
@@ -191,7 +195,7 @@ $('table#course').on('click', 'td.info', function () {
         error: (xhr) => {
             swal({
                 title: '',
-                text: '修改失敗',
+                text: '失敗',
                 icon: "error",
                 timer: 1000,
                 buttons: false,
@@ -227,7 +231,7 @@ $("#info").fileinput({
     uploadUrl: `${config.server}/v1/course`,
     ajaxSettings: {
         headers: {
-            'Authorization': 'Bearer ' + $.cookie('token'),
+            'Authorization': `Bearer ${$.cookie('token')}`,
         }
     },
     uploadExtraData: (previewId, index) => {
@@ -286,8 +290,20 @@ $('#course-form').on('submit', (e) => {
     $("#info").fileinput('upload')
 })
 
-const check = (index) => {
+const check = (index, readonly) => {
     studentCoursesIndex = index
+
+    if (readonly) {
+        $('#checkModal .modal-footer').hide()
+        $('#comment').attr('readonly', true)
+        $('#comment').addClass('form-control-plaintext')
+        $('#comment').removeClass('form-control')
+    } else {
+        $('#checkModal .modal-footer').show()
+        $('#comment').attr('readonly', false)
+        $('#comment').removeClass('form-control-plaintext')
+        $('#comment').addClass('form-control')
+    }
 
     $('#checkModal .status p').html(studentCourses[index].Status)
     $('#checkModal .name input').val(studentCourses[index].Student.Name)
@@ -297,6 +313,7 @@ const check = (index) => {
     $('#checkModal .course-topic input').val(studentCourses[index].Course.Topic)
     $('#checkModal .course-type input').val(studentCourses[index].Course.Type)
     $('#checkModal .course-review').val(studentCourses[index].Review)
+    $('#comment').val(studentCourses[index].Comment)
     $('#checkModal').modal('show')
 }
 
@@ -307,10 +324,10 @@ $('#checkModal .btn-primary').click(() => {
         data: {
             StudentCourseID: studentCourses[studentCoursesIndex].ID,
             Status: 'pass',
+            Comment: $('#comment').val(),
         },
         error: (xhr) => {
             console.error(xhr);
-            $('#checkModal').modal('hide')
             swal({
                 title: '',
                 text: '修改失敗',
@@ -329,16 +346,27 @@ $('#checkModal .btn-primary').click(() => {
             xhr.setRequestHeader('Authorization', `Bearer ${token}`);
         },
         success: (response) => {
+            if (response.code === 0) {
+                swal({
+                    title: '',
+                    text: '修改成功',
+                    icon: "success",
+                    timer: 1500,
+                    buttons: false,
+                })
+                studentCourseTable.ajax.reload()
+            } else {
+                swal({
+                    title: '',
+                    text: '修改失敗',
+                    icon: "error",
+                    timer: 1500,
+                    buttons: false,
+                })
+            }
+        },
+        complete: (data) => {
             $('#checkModal').modal('hide')
-            swal({
-                title: '',
-                text: '修改成功',
-                icon: "success",
-                timer: 1500,
-                buttons: false,
-            })
-
-            studentCourseTable.ajax.reload()
         }
     });
 })
@@ -350,10 +378,10 @@ $('#checkModal .btn-danger').click(() => {
         data: {
             StudentCourseID: studentCourses[studentCoursesIndex].ID,
             Status: 'failed',
+            Comment: $('#comment').val(),
         },
         error: (xhr) => {
             console.error(xhr);
-            $('#checkModal').modal('hide')
             swal({
                 title: '',
                 text: '修改失敗',
@@ -372,18 +400,27 @@ $('#checkModal .btn-danger').click(() => {
             xhr.setRequestHeader('Authorization', `Bearer ${token}`);
         },
         success: (response) => {
+            if (response.code === 0) {
+                swal({
+                    title: '',
+                    text: '修改成功',
+                    icon: "success",
+                    timer: 1500,
+                    buttons: false,
+                })
+                studentCourseTable.ajax.reload()
+            } else {
+                swal({
+                    title: '',
+                    text: '修改失敗',
+                    icon: "error",
+                    timer: 1500,
+                    buttons: false,
+                })
+            }
+        },
+        complete: (data) => {
             $('#checkModal').modal('hide')
-            swal({
-                title: '',
-                text: '修改成功',
-                icon: "success",
-                timer: 1500,
-                buttons: false,
-            })
-
-            let row = $('table#student-course tbody').children('tr').eq(0);
-            let col = row.children('td').eq(0)
-            col.html(STATUS['failed'])
         }
     });
 })
