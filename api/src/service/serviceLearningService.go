@@ -40,7 +40,7 @@ func CreateServieLearning(serviceType, content, session string, hours uint, star
 }
 
 // GetServiceLearningList get service-learning list
-func GetServiceLearningList(account, start, length string) (result map[string]interface{}, e *errors.Error) {
+func GetServiceLearningList(account, start, length, search string) (result map[string]interface{}, e *errors.Error) {
 	tx := gorm.DB()
 
 	defer func() {
@@ -50,12 +50,21 @@ func GetServiceLearningList(account, start, length string) (result map[string]in
 		}
 	}()
 
+	if search == "同時認列教育實習服務暨志工服務" {
+		search = "both"
+	} else if search == "實習服務" {
+		search = "internship"
+	} else if search == "志工服務" {
+		search = "volunteer"
+	}
+
 	var serviceLearnings *[]gorm.ServiceLearning
 	if operator := gorm.AdminDao.GetByAccount(tx, account); operator != nil {
 		serviceLearnings = gorm.ServiceLearningDao.Query(
 			tx,
 			specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
 			specification.OrderSpecification("start", specification.OrderDirectionDESC),
+			specification.LikeSpecification([]string{"type", "content", "start", "end", "hours"}, search),
 			specification.IsNullSpecification("deleted_at"),
 		)
 	} else {
@@ -160,7 +169,7 @@ func GetSutdentServiceLearningList(account, start, length string) (result map[st
 }
 
 // UpdateServiceLearning update service-learning
-func UpdateServiceLearning(reference, review multipart.File, operator, StudentServiceLearningID, referenceFileName, reviewFileName string) (result string, e *errors.Error) {
+func UpdateServiceLearning(reference, review multipart.File, operator, studentServiceLearningID, referenceFileName, reviewFileName string) (result string, e *errors.Error) {
 	tx := gorm.DB().Begin()
 
 	defer func() {
@@ -170,7 +179,7 @@ func UpdateServiceLearning(reference, review multipart.File, operator, StudentSe
 		}
 	}()
 
-	StudentServiceLearning := gorm.StudentServiceLearningDao.GetByID(tx, typecast.StringToUint(StudentServiceLearningID))
+	studentServiceLearning := gorm.StudentServiceLearningDao.GetByID(tx, typecast.StringToUint(studentServiceLearningID))
 
 	if reference != nil {
 		file, err := os.OpenFile(
@@ -184,8 +193,8 @@ func UpdateServiceLearning(reference, review multipart.File, operator, StudentSe
 		io.Copy(file, reference)
 		defer file.Close()
 
-		StudentServiceLearning.Reference = referenceFileName
-		gorm.StudentServiceLearningDao.Update(tx, StudentServiceLearning)
+		studentServiceLearning.Reference = referenceFileName
+		gorm.StudentServiceLearningDao.Update(tx, studentServiceLearning)
 	}
 
 	if review != nil {
@@ -200,8 +209,8 @@ func UpdateServiceLearning(reference, review multipart.File, operator, StudentSe
 		io.Copy(file, review)
 		defer file.Close()
 
-		StudentServiceLearning.Review = reviewFileName
-		gorm.StudentServiceLearningDao.Update(tx, StudentServiceLearning)
+		studentServiceLearning.Review = reviewFileName
+		gorm.StudentServiceLearningDao.Update(tx, studentServiceLearning)
 	}
 
 	if err := tx.Commit(); err != nil {
@@ -212,7 +221,7 @@ func UpdateServiceLearning(reference, review multipart.File, operator, StudentSe
 }
 
 // UpdateStudentServiceLearningStatus update student-service-learning status
-func UpdateStudentServiceLearningStatus(StudentServiceLearningID, Status string) (result string, e *errors.Error) {
+func UpdateStudentServiceLearningStatus(studentServiceLearningID, status, comment string) (result string, e *errors.Error) {
 	tx := gorm.DB()
 
 	defer func() {
@@ -222,15 +231,16 @@ func UpdateStudentServiceLearningStatus(StudentServiceLearningID, Status string)
 		}
 	}()
 
-	StudentServiceLearning := gorm.StudentServiceLearningDao.GetByID(tx, typecast.StringToUint(StudentServiceLearningID))
-	StudentServiceLearning.Status = Status
-	gorm.StudentServiceLearningDao.Update(tx, StudentServiceLearning)
+	studentServiceLearning := gorm.StudentServiceLearningDao.GetByID(tx, typecast.StringToUint(studentServiceLearningID))
+	studentServiceLearning.Status = status
+	studentServiceLearning.Comment = comment
+	gorm.StudentServiceLearningDao.Update(tx, studentServiceLearning)
 
 	return "success", nil
 }
 
 // GetStudentServiceLearningFile get student-service-learning refernce or review file
-func GetStudentServiceLearningFile(operator, StudentServiceLearningID, file string) (result map[string]string, e *errors.Error) {
+func GetStudentServiceLearningFile(operator, studentServiceLearningID, file string) (result map[string]string, e *errors.Error) {
 	tx := gorm.DB()
 
 	defer func() {
@@ -240,8 +250,8 @@ func GetStudentServiceLearningFile(operator, StudentServiceLearningID, file stri
 		}
 	}()
 
-	StudentServiceLearning := gorm.StudentServiceLearningDao.GetByID(tx, typecast.StringToUint(StudentServiceLearningID))
-	if StudentServiceLearning == nil {
+	studentServiceLearning := gorm.StudentServiceLearningDao.GetByID(tx, typecast.StringToUint(studentServiceLearningID))
+	if studentServiceLearning == nil {
 		return nil, errors.NotFoundError(file)
 	}
 
@@ -251,11 +261,11 @@ func GetStudentServiceLearningFile(operator, StudentServiceLearningID, file stri
 	)
 
 	if file == "reference" {
-		fileName = StudentServiceLearning.Reference
-		filePath = fmt.Sprintf("./assets/service-learning/%s-%s", operator, StudentServiceLearning.Reference)
+		fileName = studentServiceLearning.Reference
+		filePath = fmt.Sprintf("./assets/service-learning/%s-%s", operator, studentServiceLearning.Reference)
 	} else {
-		fileName = StudentServiceLearning.Review
-		filePath = fmt.Sprintf("./assets/service-learning/%s-%s", operator, StudentServiceLearning.Review)
+		fileName = studentServiceLearning.Review
+		filePath = fmt.Sprintf("./assets/service-learning/%s-%s", operator, studentServiceLearning.Review)
 	}
 
 	if _, err := os.Stat(filePath); os.IsNotExist(err) {

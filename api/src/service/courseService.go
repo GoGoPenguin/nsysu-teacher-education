@@ -45,7 +45,7 @@ func CreateCourse(topic, courseType string, file multipart.File, header *multipa
 }
 
 // GetCourse get course list
-func GetCourse(account, start, length string) (result map[string]interface{}, e *errors.Error) {
+func GetCourse(account, start, length, search string) (result map[string]interface{}, e *errors.Error) {
 	tx := gorm.DB()
 
 	defer func() {
@@ -61,6 +61,7 @@ func GetCourse(account, start, length string) (result map[string]interface{}, e 
 			tx,
 			specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
 			specification.OrderSpecification("start", specification.OrderDirectionDESC),
+			specification.LikeSpecification([]string{"topic", "information", "type", "start", "end"}, search),
 			specification.IsNullSpecification("deleted_at"),
 		)
 	} else {
@@ -206,7 +207,7 @@ func UpdateCourseReview(id, review string) (result interface{}, e *errors.Error)
 }
 
 // UpdateCourseStatus update student-course status
-func UpdateCourseStatus(id, status string) (result interface{}, e *errors.Error) {
+func UpdateCourseStatus(id, status, comment string) (result interface{}, e *errors.Error) {
 	tx := gorm.DB()
 
 	defer func() {
@@ -218,6 +219,7 @@ func UpdateCourseStatus(id, status string) (result interface{}, e *errors.Error)
 
 	studentCourse := gorm.StudentCourseDao.GetByID(tx, typecast.StringToUint(id))
 	studentCourse.Status = status
+	studentCourse.Comment = comment
 	gorm.StudentCourseDao.Update(tx, studentCourse)
 
 	return
