@@ -38,11 +38,18 @@ const getStudentServiceLearning = () => {
                     `)
             } else {
                 response.list.forEach((element, index) => {
-                    let date = element.ServiceLearning.Start.substring(0, 10) + ' ~ ' + element.ServiceLearning.End.substring(0, 10)
+                    let color = 'class="text-dark"'
+                    if (element.Status === 'pass') {
+                        color = 'class="text-success"'
+                    } else if (element.Status === 'failed') {
+                        color = 'class="text-danger"'
+                    }
+
+                    let date = `${element.ServiceLearning.Start.substring(0, 10)} ~ ${element.ServiceLearning.End.substring(0, 10)}`
                     let result = `
                         <tr>
                             <th scope="row">${index}</th>
-                            <td>${STATUS[element.Status]}</td>
+                            <td ${color}>${STATUS[element.Status]}</td>
                             <td>${TYPE[element.ServiceLearning.Type]}</td>
                             <td>${element.ServiceLearning.Content}</td>
                             <td>${date}</td>

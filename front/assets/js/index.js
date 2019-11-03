@@ -208,7 +208,7 @@ $('#courseModal form').on('submit', (e) => {
             xhr.setRequestHeader('Authorization', `Bearer ${token}`);
         },
         success: (response) => {
-            $('#signUpModal').modal('hide')
+            $('#courseModal').modal('hide')
 
             if (response.code === 0) {
                 swal({
