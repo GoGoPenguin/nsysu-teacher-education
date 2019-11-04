@@ -277,3 +277,19 @@ func GetStudentServiceLearningFile(operator, studentServiceLearningID, file stri
 		"Name": fileName,
 	}, nil
 }
+
+// DeleteServiceLearning delete service-learning
+func DeleteServiceLearning(serviceLearnginID string) (result string, e *errors.Error) {
+	tx := gorm.DB()
+
+	defer func() {
+		if r := recover(); r != nil {
+			logger.Error(r)
+			e = errors.UnexpectedError()
+		}
+	}()
+
+	gorm.ServiceLearningDao.Delete(tx, typecast.StringToUint(serviceLearnginID))
+
+	return "success", nil
+}

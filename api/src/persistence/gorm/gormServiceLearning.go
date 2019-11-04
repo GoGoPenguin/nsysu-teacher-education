@@ -84,3 +84,17 @@ func (dao *serviceLearningDao) Query(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.
 	}
 	return &result
 }
+
+// Delete a service-learning
+func (dao *serviceLearningDao) Delete(tx *gorm.DB, id uint) {
+	attrs := map[string]interface{}{
+		"deleted_at": time.Now(),
+	}
+	err := tx.Table(dao.table).
+		Where("id = ?", id).
+		Updates(attrs).Error
+
+	if err != nil {
+		panic(err)
+	}
+}

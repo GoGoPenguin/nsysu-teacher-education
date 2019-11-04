@@ -43,17 +43,19 @@ func Run() {
 			course.Post("/sign-up", hero.Handler(handler.SignUpCourseHandler))           // 報名講座
 			course.Patch("/review", hero.Handler(handler.UpdateCourseReviewHandler))     // 上傳心得
 			course.Patch("/status", hero.Handler(handler.UpdateCourseStatusHandler))     // 審核
+			course.Delete("/{courseID}", hero.Handler(handler.DeleteCourseHandler))      // 刪除講座
 		}
 
 		serviceLearning := v1.Party("/service-learning")
 		{
-			serviceLearning.Post("/", hero.Handler(handler.CreateServiceLearningHandler))              // 新增服務學習
-			serviceLearning.Get("/", hero.Handler(handler.GetServiceLearningHandler))                  // 取得服務學習列表
-			serviceLearning.Get("/sign-up", hero.Handler(handler.GetStudentcServiceLearningHandler))   // 報名服務學習列表
-			serviceLearning.Post("/sign-up", hero.Handler(handler.SignUpServiceLearningHandler))       // 報名服務學習
-			serviceLearning.Patch("/", hero.Handler(handler.UpdateServiceLearningHandler))             // 上傳資料
-			serviceLearning.Patch("/status", hero.Handler(handler.UpdateServiceLearningStatusHandler)) // 審核
-			serviceLearning.Get("/{file}", hero.Handler(handler.GetServiceLearningFileHandler))        // 取得佐證資料或心得
+			serviceLearning.Post("/", hero.Handler(handler.CreateServiceLearningHandler))                      // 新增服務學習
+			serviceLearning.Get("/", hero.Handler(handler.GetServiceLearningHandler))                          // 取得服務學習列表
+			serviceLearning.Get("/sign-up", hero.Handler(handler.GetStudentcServiceLearningHandler))           // 報名服務學習列表
+			serviceLearning.Post("/sign-up", hero.Handler(handler.SignUpServiceLearningHandler))               // 報名服務學習
+			serviceLearning.Patch("/", hero.Handler(handler.UpdateServiceLearningHandler))                     // 上傳資料
+			serviceLearning.Patch("/status", hero.Handler(handler.UpdateServiceLearningStatusHandler))         // 審核
+			serviceLearning.Get("/{file}", hero.Handler(handler.GetServiceLearningFileHandler))                // 取得佐證資料或心得
+			serviceLearning.Delete("/{serviceLearnginID}", hero.Handler(handler.DeleteServiceLearningHandler)) // 刪除服務學習
 		}
 	}
 

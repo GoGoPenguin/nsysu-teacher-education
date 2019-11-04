@@ -224,3 +224,19 @@ func UpdateCourseStatus(id, status, comment string) (result interface{}, e *erro
 
 	return
 }
+
+// DeleteCourse delete course
+func DeleteCourse(courseID string) (result string, e *errors.Error) {
+	tx := gorm.DB()
+
+	defer func() {
+		if r := recover(); r != nil {
+			logger.Error(r)
+			e = errors.UnexpectedError()
+		}
+	}()
+
+	gorm.CourseDao.Delete(tx, typecast.StringToUint(courseID))
+
+	return "success", nil
+}
