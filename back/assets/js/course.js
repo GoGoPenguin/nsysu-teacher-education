@@ -8,8 +8,9 @@ const MEAL = {
     'meat': '葷',
 }
 
+let courseID = null
 let studentCourses = []
-let studentCoursesIndex = -1
+let studentCoursesIndex = null
 
 const courseTable = $('table#course').DataTable({
     processing: true,
@@ -30,6 +31,11 @@ const courseTable = $('table#course').DataTable({
                 } else {
                     array[index].Time = `${startDate} ${startTime} ~ ${endDate} ${endTime}`
                 }
+
+                array[index].Button = `
+                    <button class="btn btn-primary mr-1">編輯</button>
+                    <button class="btn btn-danger" onclick="$('#deleteModal').modal('show'); courseID=${element.ID}">刪除</button>
+                `
             })
             return d.list
         },
@@ -66,6 +72,7 @@ const courseTable = $('table#course').DataTable({
         { data: "Time" },
         { data: "Information" },
         { data: "Type" },
+        { data: "Button" },
     ],
     columnDefs: [
         { className: "info", targets: [2] },
@@ -424,3 +431,56 @@ $('#checkModal .btn-danger').click(() => {
         }
     });
 })
+
+const editCourse = () => {
+
+}
+
+const deleteCourse = () => {
+    $.ajax({
+        url: `${config.server}/v1/course/${courseID}`,
+        type: 'DELETE',
+        beforeSend: (xhr) => {
+            let token = $.cookie('token')
+            if (token == undefined) {
+                renewToken()
+                token = $.cookie('token')
+            }
+
+            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+        },
+        error: (xhr) => {
+            swal({
+                title: '',
+                text: '失敗',
+                icon: "error",
+                timer: 1000,
+                buttons: false,
+            })
+            console.error(xhr);
+        },
+        success: (response) => {
+            if (response.code === 0) {
+                swal({
+                    title: '',
+                    text: '成功',
+                    icon: "success",
+                    timer: 1000,
+                    buttons: false,
+                })
+                courseTable.ajax.reload()
+            } else {
+                swal({
+                    title: '',
+                    text: '失敗',
+                    icon: "error",
+                    timer: 1000,
+                    buttons: false,
+                })
+            }
+        },
+        complete: (data) => {
+            $('#deleteModal').modal('hide')
+        }
+    });
+}

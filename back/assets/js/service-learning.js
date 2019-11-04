@@ -22,6 +22,10 @@ const serviceLearningTable = $('table#service-learning').DataTable({
             d.list.forEach((element, index, array) => {
                 array[index].Type = TYPE[element.Type];
                 array[index].Date = `${element.Start.substring(0, 10)} ~ ${element.End.substring(0, 10)}`
+                array[index].Button = `
+                    <button class="btn btn-primary mr-1">編輯</button>
+                    <button class="btn btn-danger">刪除</button>
+                `
             })
             return d.list
         },
@@ -59,6 +63,7 @@ const serviceLearningTable = $('table#service-learning').DataTable({
         { data: "Date" },
         { data: "Session" },
         { data: "Hours" },
+        { data: "Button" },
     ],
     language: {
         url: '/assets/languages/chinese.json'
@@ -311,6 +316,64 @@ const getFile = (file) => {
 const updateStatus = (status) => {
     let ID = studentServiceLearnings[studentServiceLearningIndex].ID
 
+    $.ajax({
+        url: `${config.server}/v1/service-learning/status`,
+        type: 'PATCH',
+        data: {
+            'StudentServiceLearningID': ID,
+            'Status': status,
+            'Comment': $('#comment').val(),
+        },
+        beforeSend: (xhr) => {
+            let token = $.cookie('token')
+            if (token == undefined) {
+                renewToken()
+                token = $.cookie('token')
+            }
+
+            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+        },
+        error: (xhr) => {
+            swal({
+                title: '',
+                text: '失敗',
+                icon: "error",
+                timer: 1000,
+                buttons: false,
+            })
+            console.error(xhr);
+        },
+        success: (response) => {
+            if (response.code === 0) {
+                swal({
+                    title: '',
+                    text: '成功',
+                    icon: "success",
+                    timer: 1000,
+                    buttons: false,
+                })
+                studentServiceLearningTable.ajax.reload()
+            } else {
+                swal({
+                    title: '',
+                    text: '失敗',
+                    icon: "error",
+                    timer: 1000,
+                    buttons: false,
+                })
+            }
+        },
+        complete: (data) => {
+            $('#checkModal').modal('hide')
+        }
+    });
+}
+
+const editServiceLearning = (id) => {
+
+}
+
+const deleteServiceLearning = (id) => {
     $.ajax({
         url: `${config.server}/v1/service-learning/status`,
         type: 'PATCH',

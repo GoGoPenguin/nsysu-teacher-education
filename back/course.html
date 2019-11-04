@@ -181,6 +181,7 @@
                                         <th>研習時段</th>
                                         <th>研習資訊</th>
                                         <th>研習類別</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tfoot>
@@ -189,6 +190,7 @@
                                         <th>研習時段</th>
                                         <th>研習資訊</th>
                                         <th>研習類別</th>
+                                        <th></th>
                                     </tr>
                                 </tfoot>
                                 <tbody>
@@ -345,6 +347,27 @@
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">取消</button>
                     <button class="btn btn-danger">未通過</button>
                     <button class="btn btn-primary">通過</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"></h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <h5>確定要刪除？</h5>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">取消</button>
+                    <button class="btn btn-danger" onclick="deleteCourse()">刪除</button>
                 </div>
             </div>
         </div>
