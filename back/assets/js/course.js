@@ -36,6 +36,8 @@ const courseTable = $('table#course').DataTable({
                     <button class="btn btn-primary mr-1">編輯</button>
                     <button class="btn btn-danger" onclick="$('#deleteModal').modal('show'); courseID=${element.ID}">刪除</button>
                 `
+
+                array[index].Information = `<div onclick="getInformation(${element.ID}, '${element.Information}')">${element.Information}</div>`
             })
             return d.list
         },
@@ -190,11 +192,9 @@ $(document).ready(() => {
     })
 })
 
-$('table#course').on('click', 'td.info', function () {
-    let filename = $(this).text()
-
+const getInformation = (id, filename) => {
     $.ajax({
-        url: `${config.server}/v1/course/${filename}`,
+        url: `${config.server}/v1/course/${id}`,
         type: 'GET',
         xhrFields: {
             responseType: "blob"
@@ -229,7 +229,7 @@ $('table#course').on('click', 'td.info', function () {
             window.URL.revokeObjectURL(url);
         }
     });
-})
+}
 
 $("#info").fileinput({
     language: 'zh-TW',
