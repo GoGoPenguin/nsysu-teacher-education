@@ -90,7 +90,7 @@ const studentCourseTable = $('table#student-course').DataTable({
     ordering: false,
     searching: false,
     ajax: {
-        url: `${config.server}/v1/course/sign-up`,
+        url: `${config.server}/v1/course/student`,
         type: 'GET',
         dataSrc: (d) => {
             d.list.forEach((element, index, array) => {
@@ -326,7 +326,7 @@ const check = (index, readonly) => {
 
 $('#checkModal .btn-primary').click(() => {
     $.ajax({
-        url: `${config.server}/v1/course/status`,
+        url: `${config.server}/v1/course/student/status`,
         type: 'PATCH',
         data: {
             StudentCourseID: studentCourses[studentCoursesIndex].ID,
@@ -380,7 +380,7 @@ $('#checkModal .btn-primary').click(() => {
 
 $('#checkModal .btn-danger').click(() => {
     $.ajax({
-        url: `${config.server}/v1/course/status`,
+        url: `${config.server}/v1/course/student/status`,
         type: 'PATCH',
         data: {
             StudentCourseID: studentCourses[studentCoursesIndex].ID,

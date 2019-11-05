@@ -82,7 +82,7 @@ const studentServiceLearningTable = $('table#student-service-learning').DataTabl
     ordering: false,
     searching: false,
     ajax: {
-        url: `${config.server}/v1/service-learning/sign-up`,
+        url: `${config.server}/v1/service-learning/student`,
         type: 'GET',
         dataSrc: (d) => {
             d.list.forEach((element, index, array) => {
@@ -326,7 +326,7 @@ const getFile = (file) => {
     }
 
     $.ajax({
-        url: `${config.server}/v1/service-learning/${file}`,
+        url: `${config.server}/v1/service-learning/student/${file}`,
         type: 'GET',
         xhrFields: {
             responseType: "blob"
@@ -370,7 +370,7 @@ const updateStatus = (status) => {
     let ID = studentServiceLearnings[studentServiceLearningIndex].ID
 
     $.ajax({
-        url: `${config.server}/v1/service-learning/status`,
+        url: `${config.server}/v1/service-learning/student/status`,
         type: 'PATCH',
         data: {
             'StudentServiceLearningID': ID,
