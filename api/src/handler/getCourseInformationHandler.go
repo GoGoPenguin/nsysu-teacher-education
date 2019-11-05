@@ -10,11 +10,11 @@ import (
 // GetCourseInformationHandler get list of course
 func GetCourseInformationHandler(ctx iris.Context) {
 	type rule struct {
-		FileName string `valid:"required"`
+		CourseID string `valid:"required"`
 	}
 
 	params := &rule{
-		FileName: ctx.Params().Get("filename"),
+		CourseID: ctx.Params().Get("courseID"),
 	}
 
 	if _, err := govalidator.ValidateStruct(params); err != nil {
@@ -22,13 +22,13 @@ func GetCourseInformationHandler(ctx iris.Context) {
 		return
 	}
 
-	result, err := service.GetInformation(params.FileName)
+	result, err := service.GetInformation(params.CourseID)
 
 	if err != (*errors.Error)(nil) {
 		failed(ctx, errors.ValidateError(err.Error()))
 		return
 	}
 
-	file(ctx, result, params.FileName)
+	file(ctx, result["Path"], result["FileName"])
 	return
 }

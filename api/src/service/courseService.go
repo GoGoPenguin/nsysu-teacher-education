@@ -25,13 +25,6 @@ func CreateCourse(topic, courseType string, file multipart.File, header *multipa
 		}
 	}()
 
-	f, err := os.OpenFile("./assets/course/"+header.Filename, os.O_WRONLY|os.O_CREATE, 0666)
-	if err != nil {
-		panic(err)
-	}
-	defer f.Close()
-
-	io.Copy(f, file)
 	course := &gorm.Course{
 		Topic:       topic,
 		Information: header.Filename,
@@ -40,6 +33,14 @@ func CreateCourse(topic, courseType string, file multipart.File, header *multipa
 		End:         end,
 	}
 	gorm.CourseDao.New(tx, course)
+
+	f, err := os.OpenFile("./assets/course/"+typecast.ToString(course.ID), os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0666)
+	if err != nil {
+		panic(err)
+	}
+	defer f.Close()
+
+	io.Copy(f, file)
 
 	return "success", nil
 }
@@ -89,7 +90,7 @@ func GetCourse(account, start, length, search string) (result map[string]interfa
 }
 
 // GetInformation get the information of course
-func GetInformation(filename string) (result string, e *errors.Error) {
+func GetInformation(courseID string) (result map[string]string, e *errors.Error) {
 	tx := gorm.DB()
 
 	defer func() {
@@ -99,15 +100,18 @@ func GetInformation(filename string) (result string, e *errors.Error) {
 		}
 	}()
 
-	course := gorm.CourseDao.GetByInformation(tx, filename)
+	course := gorm.CourseDao.GetByID(tx, typecast.StringToUint(courseID))
 	if course == nil {
-		return "", errors.NotFoundError(filename)
+		return nil, errors.NotFoundError(courseID)
 	}
-	if _, err := os.Stat("./assets/course/" + filename); os.IsNotExist(err) {
-		return "", errors.NotFoundError(filename)
+	if _, err := os.Stat("./assets/course/" + courseID); os.IsNotExist(err) {
+		return nil, errors.NotFoundError(courseID)
 	}
 
-	return "./assets/course/" + filename, nil
+	return map[string]string{
+		"Path":     "./assets/course/" + courseID,
+		"FileName": course.Information,
+	}, nil
 }
 
 // SingUpCourse sudent sign up course
