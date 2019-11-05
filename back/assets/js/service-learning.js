@@ -8,6 +8,8 @@ const STATUS = {
     'pass': '通過',
     'failed': '未通過',
 }
+
+let serviceLearningID = null
 let studentServiceLearningIndex = undefined
 let studentServiceLearnings = []
 
@@ -24,7 +26,7 @@ const serviceLearningTable = $('table#service-learning').DataTable({
                 array[index].Date = `${element.Start.substring(0, 10)} ~ ${element.End.substring(0, 10)}`
                 array[index].Button = `
                     <button class="btn btn-primary mr-1">編輯</button>
-                    <button class="btn btn-danger">刪除</button>
+                    <button class="btn btn-danger" onclick="$('#deleteModal').modal('show'); serviceLearningID=${element.ID}">刪除</button>
                 `
             })
             return d.list
@@ -373,15 +375,10 @@ const editServiceLearning = (id) => {
 
 }
 
-const deleteServiceLearning = (id) => {
+const deleteServiceLearning = () => {
     $.ajax({
-        url: `${config.server}/v1/service-learning/status`,
-        type: 'PATCH',
-        data: {
-            'StudentServiceLearningID': ID,
-            'Status': status,
-            'Comment': $('#comment').val(),
-        },
+        url: `${config.server}/v1/service-learning/${serviceLearningID}`,
+        type: 'DELETE',
         beforeSend: (xhr) => {
             let token = $.cookie('token')
             if (token == undefined) {
@@ -410,7 +407,7 @@ const deleteServiceLearning = (id) => {
                     timer: 1000,
                     buttons: false,
                 })
-                studentServiceLearningTable.ajax.reload()
+                serviceLearningTable.ajax.reload()
             } else {
                 swal({
                     title: '',
@@ -422,7 +419,7 @@ const deleteServiceLearning = (id) => {
             }
         },
         complete: (data) => {
-            $('#checkModal').modal('hide')
+            $('#deleteModal').modal('hide')
         }
     });
 }
