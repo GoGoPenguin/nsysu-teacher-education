@@ -12,7 +12,7 @@ let StudentServiceLearningID = undefined
 
 const getStudentServiceLearning = () => {
     $.ajax({
-        url: `${config.server}/v1/service-learning/sign-up`,
+        url: `${config.server}/v1/service-learning/student`,
         type: 'GET',
         error: (xhr) => {
             if (xhr.status === 401) {
@@ -77,7 +77,7 @@ $(document).ready(() => {
     $("#reference").fileinput({
         language: 'zh-TW',
         theme: "fas",
-        uploadUrl: `${config.server}/v1/service-learning`,
+        uploadUrl: `${config.server}/v1/service-learning/student`,
         ajaxSettings: {
             headers: {
                 'Authorization': `Bearer ${$.cookie('token')}`,
@@ -110,7 +110,7 @@ $(document).ready(() => {
     $("#review").fileinput({
         language: 'zh-TW',
         theme: "fas",
-        uploadUrl: `${config.server}/v1/service-learning`,
+        uploadUrl: `${config.server}/v1/service-learning/student`,
         ajaxSettings: {
             headers: {
                 'Authorization': `Bearer ${$.cookie('token')}`,

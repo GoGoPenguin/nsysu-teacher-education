@@ -10,7 +10,7 @@ const MEAL = {
 
 $(document).ready(() => {
     $.ajax({
-        url: `${config.server}/v1/course/sign-up`,
+        url: `${config.server}/v1/course/student`,
         type: 'GET',
         error: (xhr) => {
             console.error(xhr);
@@ -92,7 +92,7 @@ $('#updateReviewModal form').on('submit', (e) => {
     let review = $('#updateReviewModal textarea').val()
 
     $.ajax({
-        url: `${config.server}/v1/course/review`,
+        url: `${config.server}/v1/course/student/review`,
         type: 'PATCH',
         error: (xhr) => {
             if (xhr.status === 401) {
