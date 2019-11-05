@@ -7,18 +7,16 @@ import (
 	"github.com/nsysu/teacher-education/src/service"
 )
 
-// UpdateCourseStatusHandler update student course status
-func UpdateCourseStatusHandler(ctx iris.Context) {
+// UpdateStudentCourseReviewHandler update course review
+func UpdateStudentCourseReviewHandler(ctx iris.Context) {
 	type rule struct {
 		StudentCourseID string `valid:"required"`
-		Status          string `valid:"required, in(pass|failed)"`
-		Comment         string `valid:"required, length(0|150)"`
+		Review          string `valid:"required, length(0|150)"`
 	}
 
 	params := &rule{
 		StudentCourseID: ctx.FormValue("StudentCourseID"),
-		Status:          ctx.FormValue("Status"),
-		Comment:         ctx.FormValue("Comment"),
+		Review:          ctx.FormValue("Review"),
 	}
 
 	if _, err := govalidator.ValidateStruct(params); err != nil {
@@ -26,7 +24,7 @@ func UpdateCourseStatusHandler(ctx iris.Context) {
 		return
 	}
 
-	result, err := service.UpdateCourseStatus(params.StudentCourseID, params.Status, params.Comment)
+	result, err := service.UpdateCourseReview(params.StudentCourseID, params.Review)
 
 	if err != (*errors.Error)(nil) {
 		failed(ctx, err)

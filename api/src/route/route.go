@@ -36,26 +36,34 @@ func Run() {
 
 		course := v1.Party("/course")
 		{
-			course.Post("/", hero.Handler(handler.CreateCourseHandler))                  // 新增講座
 			course.Get("/", hero.Handler(handler.GetCourseHandler))                      // 取得講座列表
 			course.Get("/{courseID}", hero.Handler(handler.GetCourseInformationHandler)) // 取得講座資訊
-			course.Get("/sign-up", hero.Handler(handler.GetStudentCourseHandler))        // 取得報名講座列表
+			course.Post("/", hero.Handler(handler.CreateCourseHandler))                  // 新增講座
 			course.Post("/sign-up", hero.Handler(handler.SignUpCourseHandler))           // 報名講座
-			course.Patch("/review", hero.Handler(handler.UpdateCourseReviewHandler))     // 上傳心得
-			course.Patch("/status", hero.Handler(handler.UpdateCourseStatusHandler))     // 審核
 			course.Delete("/{courseID}", hero.Handler(handler.DeleteCourseHandler))      // 刪除講座
+
+			student := course.Party("/student")
+			{
+				student.Get("/", hero.Handler(handler.GetStudentCourseHandler))                  // 取得報名講座列表
+				student.Patch("/review", hero.Handler(handler.UpdateStudentCourseReviewHandler)) // 上傳心得
+				student.Patch("/status", hero.Handler(handler.UpdateStudentCourseStatusHandler)) // 審核
+			}
 		}
 
 		serviceLearning := v1.Party("/service-learning")
 		{
-			serviceLearning.Post("/", hero.Handler(handler.CreateServiceLearningHandler))                      // 新增服務學習
 			serviceLearning.Get("/", hero.Handler(handler.GetServiceLearningHandler))                          // 取得服務學習列表
-			serviceLearning.Get("/sign-up", hero.Handler(handler.GetStudentcServiceLearningHandler))           // 報名服務學習列表
+			serviceLearning.Post("/", hero.Handler(handler.CreateServiceLearningHandler))                      // 新增服務學習
 			serviceLearning.Post("/sign-up", hero.Handler(handler.SignUpServiceLearningHandler))               // 報名服務學習
-			serviceLearning.Patch("/", hero.Handler(handler.UpdateServiceLearningHandler))                     // 上傳資料
-			serviceLearning.Patch("/status", hero.Handler(handler.UpdateServiceLearningStatusHandler))         // 審核
-			serviceLearning.Get("/{file}", hero.Handler(handler.GetServiceLearningFileHandler))                // 取得佐證資料或心得
 			serviceLearning.Delete("/{serviceLearnginID}", hero.Handler(handler.DeleteServiceLearningHandler)) // 刪除服務學習
+
+			student := serviceLearning.Party("/student")
+			{
+				student.Get("/", hero.Handler(handler.GetStudentsServiceLearningHandler))                 // 報名服務學習列表
+				student.Get("/{file}", hero.Handler(handler.GetServiceLearningFileHandler))               // 取得佐證資料或心得
+				student.Patch("/", hero.Handler(handler.UpdateStudentServiceLearningHandler))             // 上傳資料
+				student.Patch("/status", hero.Handler(handler.UpdateStudentServiceLearningStatusHandler)) // 審核
+			}
 		}
 	}
 

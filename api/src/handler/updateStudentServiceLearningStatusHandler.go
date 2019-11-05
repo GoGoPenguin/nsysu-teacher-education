@@ -7,8 +7,8 @@ import (
 	"github.com/nsysu/teacher-education/src/service"
 )
 
-// UpdateServiceLearningStatusHandler update student-service-learning status
-func UpdateServiceLearningStatusHandler(ctx iris.Context) {
+// UpdateStudentServiceLearningStatusHandler update student-service-learning status
+func UpdateStudentServiceLearningStatusHandler(ctx iris.Context) {
 	type rule struct {
 		StudentServiceLearningID string `valid:"required"`
 		Status                   string `valid:"required, in(pass|failed)"`

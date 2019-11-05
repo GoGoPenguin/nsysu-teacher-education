@@ -8,8 +8,8 @@ import (
 	"github.com/nsysu/teacher-education/src/utils/auth"
 )
 
-// UpdateServiceLearningHandler update course review
-func UpdateServiceLearningHandler(ctx iris.Context) {
+// UpdateStudentServiceLearningHandler update student-service-learning review and reference
+func UpdateStudentServiceLearningHandler(ctx iris.Context) {
 
 	type rule struct {
 		StudentServiceLearningID string `valid:"required"`

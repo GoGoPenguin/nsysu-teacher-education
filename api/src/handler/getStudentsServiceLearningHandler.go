@@ -8,8 +8,8 @@ import (
 	"github.com/nsysu/teacher-education/src/utils/auth"
 )
 
-// GetStudentcServiceLearningHandler get student-course list
-func GetStudentcServiceLearningHandler(ctx iris.Context) {
+// GetStudentsServiceLearningHandler get student-course list
+func GetStudentsServiceLearningHandler(ctx iris.Context) {
 	type rule struct {
 		Start  string `valid:"required"`
 		Length string `valid:"required"`
