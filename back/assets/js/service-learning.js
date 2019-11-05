@@ -10,6 +10,8 @@ const STATUS = {
 }
 
 let serviceLearningID = null
+let serviceLearnings = []
+
 let studentServiceLearningIndex = undefined
 let studentServiceLearnings = []
 
@@ -22,10 +24,12 @@ const serviceLearningTable = $('table#service-learning').DataTable({
         type: 'GET',
         dataSrc: (d) => {
             d.list.forEach((element, index, array) => {
+                serviceLearnings.push(Object.assign({}, element))
+
                 array[index].Type = TYPE[element.Type];
                 array[index].Date = `${element.Start.substring(0, 10)} ~ ${element.End.substring(0, 10)}`
                 array[index].Button = `
-                    <button class="btn btn-primary mr-1">編輯</button>
+                    <button class="btn btn-primary mr-1" onclick="update(${index})">編輯</button>
                     <button class="btn btn-danger" onclick="$('#deleteModal').modal('show'); serviceLearningID=${element.ID}">刪除</button>
                 `
             })
@@ -179,6 +183,53 @@ $(document).ready(() => {
     })
 
     $('#end-time').datetimepicker({
+        format: 'LT',
+        locale: 'zh-tw',
+        autoclose: true,
+        icons: {
+            time: "fas fa-clock",
+            date: "fa fa-calendar",
+            up: "fas fa-angle-up",
+            down: "fas fa-angle-down",
+        }
+    })
+
+    $('#update-start-date').datetimepicker({
+        format: 'YYYY-MM-DD',
+        locale: 'zh-tw',
+        autoclose: true,
+        icons: {
+            time: "fas fa-clock",
+            date: "fa fa-calendar",
+            up: "fas fa-angle-up",
+            down: "fas fa-angle-down",
+        }
+    })
+
+    $('#update-end-date').datetimepicker({
+        format: 'YYYY-MM-DD',
+        locale: 'zh-tw',
+        autoclose: true,
+        icons: {
+            time: "fas fa-clock",
+            date: "fa fa-calendar",
+            up: "fas fa-angle-up",
+            down: "fas fa-angle-down",
+        }
+    })
+    $('#update-start-time').datetimepicker({
+        format: 'LT',
+        locale: 'zh-tw',
+        autoclose: true,
+        icons: {
+            time: "fas fa-clock",
+            date: "fa fa-calendar",
+            up: "fas fa-angle-up",
+            down: "fas fa-angle-down",
+        }
+    })
+
+    $('#update-end-time').datetimepicker({
         format: 'LT',
         locale: 'zh-tw',
         autoclose: true,
@@ -369,6 +420,22 @@ const updateStatus = (status) => {
             $('#checkModal').modal('hide')
         }
     });
+}
+
+const update = (index) => {
+    let serviceLearning = serviceLearnings[index]
+    let startTime, endTime
+    [startTime, endTime] = serviceLearning.Session.split(" ~ ")
+
+    $('#update-type').val(serviceLearning.Type)
+    $('#update-content').val(serviceLearning.Content)
+    $('#update-start-date input').val(serviceLearning.Start.substring(0, 10))
+    $('#update-end-date input').val(serviceLearning.End.substring(0, 10))
+    $('#update-start-time input').val(startTime)
+    $('#update-end-time input').val(endTime)
+    $('#update-hours').val(serviceLearning.Hours)
+
+    $('#updateModal').modal('show')
 }
 
 const editServiceLearning = (id) => {

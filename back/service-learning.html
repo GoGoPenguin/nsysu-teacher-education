@@ -129,7 +129,7 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="topic">服務內容說明</label>
+                                <label for="content">服務內容說明</label>
                                 <textarea class="form-control" id="content"
                                     oninvalid="this.setCustomValidity('請輸入服務內容說明')" oninput="this.setCustomValidity('')"
                                     required></textarea>
@@ -191,7 +191,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="topic">時數</label>
+                                <label for="hours">時數</label>
                                 <input type="number" class="form-control" id="hours"
                                     oninvalid="this.setCustomValidity('請輸入時數')" oninput="this.setCustomValidity('')"
                                     required></input>
@@ -418,6 +418,108 @@
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">取消</button>
                     <button class="btn btn-danger" onclick="deleteServiceLearning()">刪除</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Modal -->
+    <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">編輯</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="update-form">
+                        <div class="form-group">
+                            <label for="update-type">類別</label>
+                            <select required class="form-control" id="update-type"
+                                oninvalid="this.setCustomValidity('請輸入服務學習類別')" oninput="this.setCustomValidity('')">
+                                <option value="" selected disabled>請選擇</option>
+                                <option value="internship">實習服務</option>
+                                <option value="volunteer">志工服務</option>
+                                <option value="both">同時認列教育實習服務暨志工服務</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="update-content">服務內容說明</label>
+                            <textarea class="form-control" id="update-content"
+                                oninvalid="this.setCustomValidity('請輸入服務內容說明')" oninput="this.setCustomValidity('')"
+                                required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col">
+                                    <label>開始日期</label>
+                                    <div class="input-group date" id="update-start-date" data-target-input="nearest">
+                                        <input type="text" class="form-control datetimepicker-input"
+                                            data-target="#update-start-date"
+                                            oninvalid="this.setCustomValidity('請輸入開始日期')"
+                                            oninput="this.setCustomValidity('')" required />
+                                        <div class="input-group-append" data-target="#update-start-date"
+                                            data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <label>結束日期</label>
+                                    <div class="input-group date" id="update-end-date" data-target-input="nearest">
+                                        <input type="text" class="form-control datetimepicker-input"
+                                            data-target="#update-end-date" oninvalid="this.setCustomValidity('請輸入結束日期')"
+                                            oninput="this.setCustomValidity('')" required />
+                                        <div class="input-group-append" data-target="#update-end-date"
+                                            data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col">
+                                    <label>開始時間</label>
+                                    <div class="input-group date" id="update-start-time" data-target-input="nearest">
+                                        <input type="text" class="form-control datetimepicker-input"
+                                            data-target="#update-start-time"
+                                            oninvalid="this.setCustomValidity('請輸入開始時間')"
+                                            oninput="this.setCustomValidity('')" required />
+                                        <div class="input-group-append" data-target="#update-start-time"
+                                            data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <label>結束時間</label>
+                                    <div class="input-group date" id="update-end-time" data-target-input="nearest">
+                                        <input type="text" class="form-control datetimepicker-input"
+                                            data-target="#update-end-time" oninvalid="this.setCustomValidity('請輸入結束時間')"
+                                            oninput="this.setCustomValidity('')" required />
+                                        <div class="input-group-append" data-target="#update-end-time"
+                                            data-toggle="datetimepicker">
+                                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="update-hours">時數</label>
+                            <input type="number" class="form-control" id="update-hours"
+                                oninvalid="this.setCustomValidity('請輸入時數')" oninput="this.setCustomValidity('')"
+                                required></input>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">取消</button>
+                    <button type="submit" class="btn btn-primary">送出</button>
                 </div>
             </div>
         </div>
