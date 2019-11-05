@@ -29,6 +29,6 @@ func GetCourseInformationHandler(ctx iris.Context) {
 		return
 	}
 
-	file(ctx, result["Path"], result["FileName"])
+	file(ctx, result["Path"], result["Name"])
 	return
 }

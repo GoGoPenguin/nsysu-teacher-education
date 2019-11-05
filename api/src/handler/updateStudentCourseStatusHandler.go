@@ -12,7 +12,7 @@ func UpdateStudentCourseStatusHandler(ctx iris.Context) {
 	type rule struct {
 		StudentCourseID string `valid:"required"`
 		Status          string `valid:"required, in(pass|failed)"`
-		Comment         string `valid:"required, length(0|150)"`
+		Comment         string `valid:"length(0|150)"`
 	}
 
 	params := &rule{

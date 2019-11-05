@@ -109,8 +109,8 @@ func GetInformation(courseID string) (result map[string]string, e *errors.Error)
 	}
 
 	return map[string]string{
-		"Path":     "./assets/course/" + courseID,
-		"FileName": course.Information,
+		"Path": "./assets/course/" + courseID,
+		"Name": course.Information,
 	}, nil
 }
 

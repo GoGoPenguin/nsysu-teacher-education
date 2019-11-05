@@ -169,7 +169,7 @@ func GetSutdentServiceLearningList(account, start, length string) (result map[st
 }
 
 // UpdateServiceLearning update service-learning
-func UpdateServiceLearning(reference, review multipart.File, operator, studentServiceLearningID, referenceFileName, reviewFileName string) (result string, e *errors.Error) {
+func UpdateServiceLearning(reference, review multipart.File, studentServiceLearningID, referenceFileName, reviewFileName string) (result string, e *errors.Error) {
 	tx := gorm.DB().Begin()
 
 	defer func() {
@@ -182,8 +182,16 @@ func UpdateServiceLearning(reference, review multipart.File, operator, studentSe
 	studentServiceLearning := gorm.StudentServiceLearningDao.GetByID(tx, typecast.StringToUint(studentServiceLearningID))
 
 	if reference != nil {
+		fileName := fmt.Sprintf("./assets/service-learning/%s-Reference", studentServiceLearningID)
+
+		if _, err := os.Stat(fileName); !os.IsNotExist(err) {
+			if err := os.Remove(fileName); err != nil {
+				panic(err)
+			}
+		}
+
 		file, err := os.OpenFile(
-			fmt.Sprintf("./assets/service-learning/%s-%s", operator, referenceFileName),
+			fileName,
 			os.O_WRONLY|os.O_CREATE,
 			0666,
 		)
@@ -198,9 +206,17 @@ func UpdateServiceLearning(reference, review multipart.File, operator, studentSe
 	}
 
 	if review != nil {
+		fileName := fmt.Sprintf("./assets/service-learning/%s-Review", studentServiceLearningID)
+
+		if _, err := os.Stat(fileName); !os.IsNotExist(err) {
+			if err := os.Remove(fileName); err != nil {
+				panic(err)
+			}
+		}
+
 		file, err := os.OpenFile(
-			fmt.Sprintf("./assets/service-learning/%s-%s", operator, reviewFileName),
-			os.O_WRONLY|os.O_CREATE,
+			fileName,
+			os.O_WRONLY|os.O_CREATE|os.O_TRUNC,
 			0666,
 		)
 		if err != nil {
@@ -240,7 +256,7 @@ func UpdateStudentServiceLearningStatus(studentServiceLearningID, status, commen
 }
 
 // GetStudentServiceLearningFile get student-service-learning refernce or review file
-func GetStudentServiceLearningFile(operator, studentServiceLearningID, file string) (result map[string]string, e *errors.Error) {
+func GetStudentServiceLearningFile(studentServiceLearningID, file string) (result map[string]string, e *errors.Error) {
 	tx := gorm.DB()
 
 	defer func() {
@@ -262,10 +278,10 @@ func GetStudentServiceLearningFile(operator, studentServiceLearningID, file stri
 
 	if file == "reference" {
 		fileName = studentServiceLearning.Reference
-		filePath = fmt.Sprintf("./assets/service-learning/%s-%s", operator, studentServiceLearning.Reference)
+		filePath = fmt.Sprintf("./assets/service-learning/%s-Reference", studentServiceLearningID)
 	} else {
 		fileName = studentServiceLearning.Review
-		filePath = fmt.Sprintf("./assets/service-learning/%s-%s", operator, studentServiceLearning.Review)
+		filePath = fmt.Sprintf("./assets/service-learning/%s-Review", studentServiceLearningID)
 	}
 
 	if _, err := os.Stat(filePath); os.IsNotExist(err) {

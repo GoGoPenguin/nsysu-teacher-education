@@ -60,7 +60,7 @@ func Run() {
 			student := serviceLearning.Party("/student")
 			{
 				student.Get("/", hero.Handler(handler.GetStudentsServiceLearningHandler))                 // 報名服務學習列表
-				student.Get("/{file}", hero.Handler(handler.GetServiceLearningFileHandler))               // 取得佐證資料或心得
+				student.Get("/{file}", hero.Handler(handler.GetStudentServiceLearningFileHandler))        // 取得佐證資料或心得
 				student.Patch("/", hero.Handler(handler.UpdateStudentServiceLearningHandler))             // 上傳資料
 				student.Patch("/status", hero.Handler(handler.UpdateStudentServiceLearningStatusHandler)) // 審核
 			}

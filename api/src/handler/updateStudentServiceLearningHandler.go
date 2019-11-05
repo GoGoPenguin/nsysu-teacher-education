@@ -5,7 +5,6 @@ import (
 	"github.com/kataras/iris"
 	"github.com/nsysu/teacher-education/src/errors"
 	"github.com/nsysu/teacher-education/src/service"
-	"github.com/nsysu/teacher-education/src/utils/auth"
 )
 
 // UpdateStudentServiceLearningHandler update student-service-learning review and reference
@@ -43,11 +42,9 @@ func UpdateStudentServiceLearningHandler(ctx iris.Context) {
 		return
 	}
 
-	operator := auth.Account(ctx)
 	result, err := service.UpdateServiceLearning(
 		reference,
 		review,
-		operator,
 		params.StudentServiceLearningID,
 		referenceFileName,
 		reviewFileName,

@@ -5,11 +5,10 @@ import (
 	"github.com/kataras/iris"
 	"github.com/nsysu/teacher-education/src/errors"
 	"github.com/nsysu/teacher-education/src/service"
-	"github.com/nsysu/teacher-education/src/utils/auth"
 )
 
-// GetServiceLearningFileHandler get student-service-learning file
-func GetServiceLearningFileHandler(ctx iris.Context) {
+// GetStudentServiceLearningFileHandler get student-service-learning file
+func GetStudentServiceLearningFileHandler(ctx iris.Context) {
 	type rule struct {
 		StudentServiceLearningID string `valid:"required"`
 		File                     string `valid:"required, in(reference|review)"`
@@ -25,8 +24,7 @@ func GetServiceLearningFileHandler(ctx iris.Context) {
 		return
 	}
 
-	operator := auth.Account(ctx)
-	result, err := service.GetStudentServiceLearningFile(operator, params.StudentServiceLearningID, params.File)
+	result, err := service.GetStudentServiceLearningFile(params.StudentServiceLearningID, params.File)
 
 	if err != (*errors.Error)(nil) {
 		failed(ctx, err)
