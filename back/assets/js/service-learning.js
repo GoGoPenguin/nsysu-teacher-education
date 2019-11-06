@@ -23,6 +23,8 @@ const serviceLearningTable = $('table#service-learning').DataTable({
         url: `${config.server}/v1/service-learning`,
         type: 'GET',
         dataSrc: (d) => {
+            serviceLearnings = []
+
             d.list.forEach((element, index, array) => {
                 serviceLearnings.push(Object.assign({}, element))
 
@@ -426,6 +428,7 @@ const update = (index) => {
     let serviceLearning = serviceLearnings[index]
     let startTime, endTime
     [startTime, endTime] = serviceLearning.Session.split(" ~ ")
+    serviceLearningID = serviceLearning.ID
 
     $('#update-type').val(serviceLearning.Type)
     $('#update-content').val(serviceLearning.Content)
@@ -438,9 +441,69 @@ const update = (index) => {
     $('#updateModal').modal('show')
 }
 
-const editServiceLearning = (id) => {
-
+const editServiceLearning = () => {
+    $('#update-submit').click()
 }
+
+$('#update-form').on('submit', (e) => {
+    e.preventDefault()
+
+    $.ajax({
+        url: `${config.server}/v1/service-learning`,
+        type: 'PATCH',
+        data: {
+            'ServiceLearningID': serviceLearningID,
+            'Type': $('#update-type').val(),
+            'Content': $('#update-content').val(),
+            'Session': `${$('#update-start-time input').val()} ~ ${$('#update-end-time input').val()}`,
+            'Hours': $('#update-hours').val(),
+            'Start': $('#update-start-date input').val(),
+            'End': $('#update-end-date input').val(),
+        },
+        beforeSend: (xhr) => {
+            let token = $.cookie('token')
+            if (token == undefined) {
+                renewToken()
+                token = $.cookie('token')
+            }
+
+            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+        },
+        error: (xhr) => {
+            swal({
+                title: '',
+                text: '失敗',
+                icon: "error",
+                timer: 1000,
+                buttons: false,
+            })
+            console.error(xhr);
+        },
+        success: (response) => {
+            if (response.code === 0) {
+                swal({
+                    title: '',
+                    text: '成功',
+                    icon: "success",
+                    timer: 1000,
+                    buttons: false,
+                })
+                serviceLearningTable.ajax.reload()
+            } else {
+                swal({
+                    title: '',
+                    text: '失敗',
+                    icon: "error",
+                    timer: 1000,
+                    buttons: false,
+                })
+            }
+        },
+        complete: (data) => {
+            $('#updateModal').modal('hide')
+        }
+    });
+})
 
 const deleteServiceLearning = () => {
     $.ajax({

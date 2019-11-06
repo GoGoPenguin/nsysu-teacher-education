@@ -373,6 +373,73 @@
         </div>
     </div>
 
+    <!-- Update Modal -->
+    <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">編輯</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="update-form">
+                        <div class="form-group">
+                            <label for="update-topic">研習主題</label>
+                            <input type="text" class="form-control" id="update-topic"
+                                oninvalid="this.setCustomValidity('請輸入研習主題')" oninput="this.setCustomValidity('')"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label for="update-type">研習類別</label>
+                            <select required class="form-control" id="update-type"
+                                oninvalid="this.setCustomValidity('請輸入研習類別')" oninput="this.setCustomValidity('')">
+                                <option value="" selected disabled>請選擇</option>
+                                <option>A</option>
+                                <option>B</option>
+                                <option>C</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>開始時間</label>
+                            <div class="input-group date" id="update-start" data-target-input="nearest">
+                                <input type="text" class="form-control datetimepicker-input" data-target="#update-start"
+                                    oninvalid="this.setCustomValidity('請輸入開始時間')" oninput="this.setCustomValidity('')"
+                                    required />
+                                <div class="input-group-append" data-target="#update-start"
+                                    data-toggle="datetimepicker">
+                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>結束時間</label>
+                            <div class="input-group date" id="update-end" data-target-input="nearest">
+                                <input type="text" class="form-control datetimepicker-input" data-target="#update-end"
+                                    oninvalid="this.setCustomValidity('請輸入結束時間')" oninput="this.setCustomValidity('')"
+                                    required />
+                                <div class="input-group-append" data-target="#update-end" data-toggle="datetimepicker">
+                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="info">講座資訊</label>
+                            <input id="update-info" type="file" name="Information" data-show-preview="false">
+                        </div>
+                        <button type="submit" class="btn btn-primary" id="update-submit"
+                            style="display: none;"></button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">取消</button>
+                    <button class="btn btn-primary" type="button" onclick="editCourse()">送出</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Bootstrap core JavaScript-->
     <script src="/node_modules/moment/moment.js"></script>
     <script src="/node_modules/moment/locale/zh-tw.js"></script>

@@ -9,6 +9,8 @@ const MEAL = {
 }
 
 let courseID = null
+let courses = []
+
 let studentCourses = []
 let studentCoursesIndex = null
 
@@ -20,7 +22,11 @@ const courseTable = $('table#course').DataTable({
         url: `${config.server}/v1/course`,
         type: 'GET',
         dataSrc: (d) => {
+            courses = []
+
             d.list.forEach((element, index, array) => {
+                courses.push(Object.assign({}, element))
+
                 let startDate = array[index].Start.substring(0, 10)
                 let startTime = array[index].Start.substring(11, 19)
                 let endDate = array[index].End.substring(0, 10)
@@ -33,7 +39,7 @@ const courseTable = $('table#course').DataTable({
                 }
 
                 array[index].Button = `
-                    <button class="btn btn-primary mr-1">編輯</button>
+                    <button class="btn btn-primary mr-1" onclick="update(${index})">編輯</button>
                     <button class="btn btn-danger" onclick="$('#deleteModal').modal('show'); courseID=${element.ID}">刪除</button>
                 `
 
@@ -190,6 +196,32 @@ $(document).ready(() => {
             down: "fas fa-angle-down",
         }
     })
+
+    $('#update-start').datetimepicker({
+        format: 'YYYY-MM-DD HH:mm:00',
+        locale: 'zh-tw',
+        initialDate: new Date(),
+        autoclose: true,
+        icons: {
+            time: "fas fa-clock",
+            date: "fa fa-calendar",
+            up: "fas fa-angle-up",
+            down: "fas fa-angle-down",
+        }
+    })
+
+    $('#update-end').datetimepicker({
+        format: 'YYYY-MM-DD HH:mm:00',
+        locale: 'zh-tw',
+        initialDate: new Date(),
+        autoclose: true,
+        icons: {
+            time: "fas fa-clock",
+            date: "fa fa-calendar",
+            up: "fas fa-angle-up",
+            down: "fas fa-angle-down",
+        }
+    })
 })
 
 const getInformation = (id, filename) => {
@@ -232,6 +264,72 @@ const getInformation = (id, filename) => {
 }
 
 $("#info").fileinput({
+    language: 'zh-TW',
+    theme: "fas",
+    showUpload: false,
+    uploadUrl: `${config.server}/v1/course`,
+    ajaxSettings: {
+        headers: {
+            'Authorization': `Bearer ${$.cookie('token')}`,
+        }
+    },
+    uploadExtraData: (previewId, index) => {
+        return {
+            'Topic': $('#topic').val(),
+            'Type': $('#type').val(),
+            'Start': $('#start input').val(),
+            'End': $('#end input').val(),
+        }
+    }
+}).on('fileuploaded', (event, previewId, index, fileId) => {
+    swal({
+        title: '',
+        text: '成功',
+        icon: "success",
+        timer: 1000,
+        buttons: false,
+    })
+    courseTable.ajax.reload();
+    $('#course-form')[0].reset()
+}).on('fileuploaderror', (event, data, msg) => {
+    swal({
+        title: '',
+        text: '新增失敗',
+        icon: "error",
+        timer: 1000,
+        buttons: false,
+    })
+    $('div.kv-upload-progress.kv-hidden').css({ 'display': 'none' })
+}).on('filepreupload', function (event, data, previewId, index) {
+    let filename = data.files[0].name
+    let length = (new TextEncoder().encode(filename)).length
+
+    if (length > 36) {
+        swal({
+            title: '',
+            text: '檔名太長',
+            icon: "error",
+            timer: 1500,
+            buttons: false,
+        })
+
+        // this doesn't work at all
+        // https://plugins.krajee.com/file-input/plugin-events#event-manipulation
+        return {
+            message: '檔名太長',
+        }
+    }
+}).on('filecustomerror', function (event, params) {
+    $("#info").fileinput('enable')
+    $("#info").fileinput('reset')
+})
+
+$('#course-form').on('submit', (e) => {
+    e.preventDefault();
+    $("#info").fileinput('upload')
+})
+
+$("#update-info").fileinput({
     language: 'zh-TW',
     theme: "fas",
     showUpload: false,
@@ -432,9 +530,95 @@ $('#checkModal .btn-danger').click(() => {
     });
 })
 
-const editCourse = () => {
+const update = (index) => {
+    let course = courses[index]
+    courseID = course.ID
 
+    $('#update-topic').val(course.Topic)
+    $('#update-type').val(course.Type)
+    $('#update-start input').val(course.Start.substring(0, 19))
+    $('#update-end input').val(course.End.substring(0, 19))
+
+    $('#updateModal').modal('show')
 }
+
+const editCourse = () => {
+    $('#update-submit').click()
+}
+
+$('#update-form').on('submit', (e) => {
+    e.preventDefault()
+
+    let filestack = $('#update-info').fileinput('getFileStack')
+    let fstack = []
+    $.each(filestack, (fileID, fileObj) => {
+        if (fileObj !== undefined) {
+            fstack.push(fileObj)
+        }
+    })
+
+    let form = new FormData()
+    form.append("CourseID", courseID)
+    form.append("Topic", $('#update-topic').val())
+    form.append("Type", $('#update-type').val())
+    form.append("Start", $('#update-start input').val())
+    form.append("End", $('#update-end input').val())
+
+    if (fstack.length > 0) {
+        form.append("Information", fstack[0].file)
+    }
+
+    $.ajax({
+        url: `${config.server}/v1/course`,
+        type: 'PATCH',
+        data: form,
+        contentType: false,
+        processData: false,
+        beforeSend: (xhr) => {
+            let token = $.cookie('token')
+            if (token == undefined) {
+                renewToken()
+                token = $.cookie('token')
+            }
+
+            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+        },
+        error: (xhr) => {
+            swal({
+                title: '',
+                text: '失敗',
+                icon: "error",
+                timer: 1000,
+                buttons: false,
+            })
+            console.error(xhr);
+        },
+        success: (response) => {
+            if (response.code === 0) {
+                swal({
+                    title: '',
+                    text: '成功',
+                    icon: "success",
+                    timer: 1000,
+                    buttons: false,
+                })
+                courseTable.ajax.reload()
+            } else {
+                swal({
+                    title: '',
+                    text: '失敗',
+                    icon: "error",
+                    timer: 1000,
+                    buttons: false,
+                })
+            }
+            $('#update-form')[0].reset()
+        },
+        complete: (data) => {
+            $('#updateModal').modal('hide')
+        }
+    });
+})
 
 const deleteCourse = () => {
     $.ajax({
