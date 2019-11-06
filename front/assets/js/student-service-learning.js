@@ -77,6 +77,7 @@ $(document).ready(() => {
     $("#reference").fileinput({
         language: 'zh-TW',
         theme: "fas",
+        showPreview: false,
         uploadUrl: `${config.server}/v1/service-learning/student`,
         ajaxSettings: {
             headers: {
@@ -97,6 +98,9 @@ $(document).ready(() => {
             timer: 1000,
             buttons: false,
         })
+        setTimeout(() => {
+            $('#reference').fileinput('clear')
+        }, 1000)
     }).on('fileuploaderror', (event, data, msg) => {
         swal({
             title: '',
@@ -110,7 +114,8 @@ $(document).ready(() => {
     $("#review").fileinput({
         language: 'zh-TW',
         theme: "fas",
-        uploadUrl: `${config.server}/v1/service-learning/student`,
+        showPreview: false,
+        uploadUrl: `${config.server}/v1/service-learning/student/`,
         ajaxSettings: {
             headers: {
                 'Authorization': `Bearer ${$.cookie('token')}`,
@@ -130,6 +135,9 @@ $(document).ready(() => {
             timer: 1000,
             buttons: false,
         })
+        setTimeout(() => {
+            $('#review').fileinput('clear')
+        }, 1000)
     }).on('fileuploaderror', (event, data, msg) => {
         swal({
             title: '',
