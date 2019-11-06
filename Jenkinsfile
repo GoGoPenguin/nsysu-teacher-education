@@ -39,6 +39,8 @@ pipeline {
                 script {
                     bat "cd api/db & ${SQL_MIGRATE} up -env=production"
 
+                    bat "cd api/db/seeder & ${GOLANG} run ."
+
                     bat "cd api & ${GOLANG} build -o main.exe main.go"
 
                     nodejs(nodeJSInstallationName: "${NODEJS}") {
