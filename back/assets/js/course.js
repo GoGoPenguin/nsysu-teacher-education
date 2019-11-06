@@ -99,6 +99,8 @@ const studentCourseTable = $('table#student-course').DataTable({
         url: `${config.server}/v1/course/student`,
         type: 'GET',
         dataSrc: (d) => {
+            studentCourses = []
+
             d.list.forEach((element, index, array) => {
                 let startDate = array[index].Course.Start.substring(0, 10)
                 let startTime = array[index].Course.Start.substring(11, 19)

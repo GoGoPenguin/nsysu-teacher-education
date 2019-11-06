@@ -87,6 +87,8 @@ const studentServiceLearningTable = $('table#student-service-learning').DataTabl
         url: `${config.server}/v1/service-learning/student`,
         type: 'GET',
         dataSrc: (d) => {
+            studentServiceLearnings = []
+
             d.list.forEach((element, index, array) => {
                 if (array[index].Status !== 'pass') {
                     array[index].Button = `<button class="btn btn-primary" onclick="check(${index}, false)">審核</button>`
