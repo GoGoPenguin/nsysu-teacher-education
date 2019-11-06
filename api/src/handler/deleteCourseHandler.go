@@ -7,8 +7,8 @@ import (
 	"github.com/nsysu/teacher-education/src/service"
 )
 
-// GetCourseInformationHandler get list of course
-func GetCourseInformationHandler(ctx iris.Context) {
+// DeleteCourseHandler delete course
+func DeleteCourseHandler(ctx iris.Context) {
 	type rule struct {
 		CourseID string `valid:"required"`
 	}
@@ -22,13 +22,13 @@ func GetCourseInformationHandler(ctx iris.Context) {
 		return
 	}
 
-	result, err := service.GetInformation(params.CourseID)
+	result, err := service.DeleteCourse(params.CourseID)
 
 	if err != (*errors.Error)(nil) {
-		failed(ctx, errors.ValidateError(err.Error()))
+		failed(ctx, err)
 		return
 	}
 
-	file(ctx, result["Path"], result["Name"])
+	success(ctx, result)
 	return
 }

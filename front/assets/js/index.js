@@ -49,7 +49,7 @@ const getCourses = () => {
                         <th scope="row">${index}</th>
                         <td>${element.Topic}</td>
                         <td>${time}</td>
-                        <td class="info">${element.Information}</td>
+                        <td class="info" onclick="getInformation(${element.ID}, '${element.Information}')">${element.Information}</td>
                         <td>${element.Type}</td>
                         <td><button class="btn btn-primary" onclick="signUpCourse(${element.ID})">報名</button></td>
                     </tr>
@@ -115,11 +115,9 @@ $(document).ready(() => {
     getServiceLearning()
 })
 
-$('#course tbody').on('click', 'td.info', function () {
-    let filename = $(this).text()
-
+const getInformation = (id, filename) => {
     $.ajax({
-        url: `${config.server}/v1/course/${filename}`,
+        url: `${config.server}/v1/course/${id}`,
         type: 'GET',
         xhrFields: {
             responseType: "blob"
@@ -147,27 +145,17 @@ $('#course tbody').on('click', 'td.info', function () {
             xhr.setRequestHeader('Authorization', `Bearer ${token}`);
         },
         success: (response) => {
-            if (response.code === 0) {
-                let a = document.createElement('a');
-                let url = window.URL.createObjectURL(response);
-                a.href = url;
-                a.download = filename;
-                document.body.append(a);
-                a.click();
-                a.remove();
-                window.URL.revokeObjectURL(url);
-            } else {
-                swal({
-                    title: '',
-                    text: '失敗',
-                    icon: "error",
-                    timer: 1500,
-                    buttons: false,
-                })
-            }
+            let a = document.createElement('a');
+            let url = window.URL.createObjectURL(response);
+            a.href = url;
+            a.download = filename;
+            document.body.append(a);
+            a.click();
+            a.remove();
+            window.URL.revokeObjectURL(url);
         }
     });
-})
+}
 
 const signUpCourse = (id) => {
     $('input.course-id').val(id)
@@ -208,7 +196,7 @@ $('#courseModal form').on('submit', (e) => {
             xhr.setRequestHeader('Authorization', `Bearer ${token}`);
         },
         success: (response) => {
-            $('#signUpModal').modal('hide')
+            $('#courseModal').modal('hide')
 
             if (response.code === 0) {
                 swal({

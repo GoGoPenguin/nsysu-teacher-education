@@ -3,10 +3,14 @@ const STATUS = {
     'pass': '通過',
     'failed': '未通過',
 }
+const MEAL = {
+    'vegetable': '素',
+    'meat': '葷',
+}
 
 $(document).ready(() => {
     $.ajax({
-        url: `${config.server}/v1/course/sign-up`,
+        url: `${config.server}/v1/course/student`,
         type: 'GET',
         error: (xhr) => {
             console.error(xhr);
@@ -41,13 +45,21 @@ $(document).ready(() => {
                         time = `${startDate} ${startTime} ~ ${endDate} ${endTime}`
                     }
 
+                    let color = 'class="text-dark"'
+                    if (element.Status === 'pass') {
+                        color = 'class="text-success"'
+                    } else if (element.Status === 'failed') {
+                        color = 'class="text-danger"'
+                    }
+
                     let result = `
                         <tr>
                             <th scope="row">${index}</th>\
                             <td>${element.Course.Topic}</td>\
                             <td>${time}</td>\
                             <td>${element.Course.Type}</td>\
-                            <td>${STATUS[element.Status]}</td>\
+                            <td>${MEAL[element.Meal]}</td>\
+                            <td ${color}>${STATUS[element.Status]}</td>\
                             <td>${element.Comment}</td>\
                             <td>${element.Review}</td>\
                     `
@@ -80,7 +92,7 @@ $('#updateReviewModal form').on('submit', (e) => {
     let review = $('#updateReviewModal textarea').val()
 
     $.ajax({
-        url: `${config.server}/v1/course/review`,
+        url: `${config.server}/v1/course/student/review`,
         type: 'PATCH',
         error: (xhr) => {
             if (xhr.status === 401) {
@@ -110,7 +122,7 @@ $('#updateReviewModal form').on('submit', (e) => {
         },
         success: (response) => {
             $('#updateReviewModal').modal('hide')
-            $('button#' + studentCourseID).parent().prev().html(review)
+            $(`button#${studentCourseID}`).parent().prev().html(review)
 
             swal({
                 title: '',

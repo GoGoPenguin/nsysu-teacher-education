@@ -84,3 +84,36 @@ func (dao *serviceLearningDao) Query(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.
 	}
 	return &result
 }
+
+// Delete a service-learning
+func (dao *serviceLearningDao) Delete(tx *gorm.DB, id uint) {
+	attrs := map[string]interface{}{
+		"deleted_at": time.Now(),
+	}
+	err := tx.Table(dao.table).
+		Where("id = ?", id).
+		Updates(attrs).Error
+
+	if err != nil {
+		panic(err)
+	}
+}
+
+// Modify a record
+func (dao *serviceLearningDao) Update(tx *gorm.DB, serviceLearning *ServiceLearning) {
+	attrs := map[string]interface{}{
+		"Type":    serviceLearning.Type,
+		"Content": serviceLearning.Content,
+		"Session": serviceLearning.Session,
+		"Hours":   serviceLearning.Hours,
+		"Start":   serviceLearning.Start,
+		"End":     serviceLearning.End,
+	}
+	err := tx.Model(serviceLearning).
+		Where("id = ?", serviceLearning.ID).
+		Updates(attrs).Error
+
+	if err != nil {
+		panic(err)
+	}
+}

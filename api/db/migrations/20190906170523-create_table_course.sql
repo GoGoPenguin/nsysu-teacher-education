@@ -10,7 +10,6 @@ CREATE TABLE `course` (
     `created_at` DATETIME NOT NULL DEFAULT NOW() COMMENT '創建日期',
     `updated_at` DATETIME ON UPDATE CURRENT_TIMESTAMP COMMENT '更新日期',
     `deleted_at` DATETIME COMMENT '刪除日期',
-    UNIQUE INDEX (`information`),
     INDEX (`topic`),
     INDEX (`type`),
     INDEX (`start`),

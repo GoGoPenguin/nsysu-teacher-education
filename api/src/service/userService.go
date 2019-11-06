@@ -49,7 +49,7 @@ func CreateStudents(file multipart.File) (result interface{}, e *errors.Error) {
 }
 
 // GetStudents get user list
-func GetStudents(start, length string) (result map[string]interface{}, e *errors.Error) {
+func GetStudents(start, length, search string) (result map[string]interface{}, e *errors.Error) {
 	tx := gorm.DB()
 
 	defer func() {
@@ -63,6 +63,7 @@ func GetStudents(start, length string) (result map[string]interface{}, e *errors
 		tx,
 		specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
 		specification.OrderSpecification(specification.IDColumn, specification.OrderDirectionDESC),
+		specification.LikeSpecification([]string{"name", "account", "major", "number", "created_at"}, search),
 		specification.IsNullSpecification("deleted_at"),
 	)
 
@@ -71,10 +72,16 @@ func GetStudents(start, length string) (result map[string]interface{}, e *errors
 		specification.IsNullSpecification("deleted_at"),
 	)
 
+	filtered := gorm.StudentDao.Count(
+		tx,
+		specification.LikeSpecification([]string{"name", "account", "major", "number", "created_at"}, search),
+		specification.IsNullSpecification("deleted_at"),
+	)
+
 	result = map[string]interface{}{
 		"list":            assembler.StudentsDTO(students),
 		"recordsTotal":    total,
-		"recordsFiltered": total,
+		"recordsFiltered": filtered,
 	}
 
 	return result, nil

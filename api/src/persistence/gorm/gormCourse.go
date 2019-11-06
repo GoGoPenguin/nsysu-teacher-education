@@ -117,3 +117,35 @@ func (dao *courseDao) Query(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) *[]Co
 	}
 	return &result
 }
+
+// Delete a course
+func (dao *courseDao) Delete(tx *gorm.DB, id uint) {
+	attrs := map[string]interface{}{
+		"deleted_at": time.Now(),
+	}
+	err := tx.Table(dao.table).
+		Where("id = ?", id).
+		Updates(attrs).Error
+
+	if err != nil {
+		panic(err)
+	}
+}
+
+// Modify a record
+func (dao *courseDao) Update(tx *gorm.DB, course *Course) {
+	attrs := map[string]interface{}{
+		"Topic":       course.Topic,
+		"Information": course.Information,
+		"Type":        course.Type,
+		"Start":       course.Start,
+		"End":         course.End,
+	}
+	err := tx.Model(course).
+		Where("id = ?", course.ID).
+		Updates(attrs).Error
+
+	if err != nil {
+		panic(err)
+	}
+}
