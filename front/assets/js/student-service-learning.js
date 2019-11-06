@@ -115,7 +115,7 @@ $(document).ready(() => {
         language: 'zh-TW',
         theme: "fas",
         showPreview: false,
-        uploadUrl: `${config.server}/v1/service-learning/student/`,
+        uploadUrl: `${config.server}/v1/service-learning/student`,
         ajaxSettings: {
             headers: {
                 'Authorization': `Bearer ${$.cookie('token')}`,
