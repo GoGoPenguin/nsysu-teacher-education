@@ -4,7 +4,7 @@ All notable changes are documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [0.1.1]
+## [0.1.1] - 2019.11.06
 
 ### Added
 
@@ -24,7 +24,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 - 改變講座以及服務學習檔案的儲存規則
 - Update Router
 
-## [0.1.0]
+## [0.1.0] - 2019.10.29
 
 ### Added
 
