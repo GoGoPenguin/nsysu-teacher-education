@@ -40,6 +40,7 @@ func Run() {
 			course.Get("/{courseID}", hero.Handler(handler.GetCourseInformationHandler)) // 取得講座資訊
 			course.Post("/", hero.Handler(handler.CreateCourseHandler))                  // 新增講座
 			course.Post("/sign-up", hero.Handler(handler.SignUpCourseHandler))           // 報名講座
+			course.Patch("/", hero.Handler(handler.UpdateCourseHandler))                 // 修改講座
 			course.Delete("/{courseID}", hero.Handler(handler.DeleteCourseHandler))      // 刪除講座
 
 			student := course.Party("/student")
@@ -55,6 +56,7 @@ func Run() {
 			serviceLearning.Get("/", hero.Handler(handler.GetServiceLearningHandler))                          // 取得服務學習列表
 			serviceLearning.Post("/", hero.Handler(handler.CreateServiceLearningHandler))                      // 新增服務學習
 			serviceLearning.Post("/sign-up", hero.Handler(handler.SignUpServiceLearningHandler))               // 報名服務學習
+			serviceLearning.Patch("/", hero.Handler(handler.UpdateServiceLearningHandler))                     // 修改服務學習
 			serviceLearning.Delete("/{serviceLearnginID}", hero.Handler(handler.DeleteServiceLearningHandler)) // 刪除服務學習
 
 			student := serviceLearning.Party("/student")

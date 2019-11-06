@@ -24,7 +24,7 @@ func UpdateStudentCourseReviewHandler(ctx iris.Context) {
 		return
 	}
 
-	result, err := service.UpdateCourseReview(params.StudentCourseID, params.Review)
+	result, err := service.UpdateStudentCourseReview(params.StudentCourseID, params.Review)
 
 	if err != (*errors.Error)(nil) {
 		failed(ctx, err)

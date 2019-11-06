@@ -131,3 +131,21 @@ func (dao *courseDao) Delete(tx *gorm.DB, id uint) {
 		panic(err)
 	}
 }
+
+// Modify a record
+func (dao *courseDao) Update(tx *gorm.DB, course *Course) {
+	attrs := map[string]interface{}{
+		"Topic":       course.Topic,
+		"Information": course.Information,
+		"Type":        course.Type,
+		"Start":       course.Start,
+		"End":         course.End,
+	}
+	err := tx.Model(course).
+		Where("id = ?", course.ID).
+		Updates(attrs).Error
+
+	if err != nil {
+		panic(err)
+	}
+}

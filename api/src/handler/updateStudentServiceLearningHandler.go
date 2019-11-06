@@ -42,7 +42,7 @@ func UpdateStudentServiceLearningHandler(ctx iris.Context) {
 		return
 	}
 
-	result, err := service.UpdateServiceLearning(
+	result, err := service.UpdateStudentServiceLearning(
 		reference,
 		review,
 		params.StudentServiceLearningID,

@@ -56,12 +56,22 @@ func GetCourse(account, start, length, search string) (result map[string]interfa
 		}
 	}()
 
-	var courses *[]gorm.Course
+	var (
+		courses  *[]gorm.Course
+		filtered int
+	)
+
 	if operator := gorm.AdminDao.GetByAccount(tx, account); operator != nil {
 		courses = gorm.CourseDao.Query(
 			tx,
 			specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
 			specification.OrderSpecification("start", specification.OrderDirectionDESC),
+			specification.LikeSpecification([]string{"topic", "information", "type", "start", "end"}, search),
+			specification.IsNullSpecification("deleted_at"),
+		)
+
+		filtered = gorm.CourseDao.Count(
+			tx,
 			specification.LikeSpecification([]string{"topic", "information", "type", "start", "end"}, search),
 			specification.IsNullSpecification("deleted_at"),
 		)
@@ -83,7 +93,7 @@ func GetCourse(account, start, length, search string) (result map[string]interfa
 	result = map[string]interface{}{
 		"list":            assembler.CoursesDTO(courses),
 		"recordsTotal":    total,
-		"recordsFiltered": total,
+		"recordsFiltered": filtered,
 	}
 
 	return result, nil
@@ -159,12 +169,21 @@ func GetSutdentCourseList(account, start, length string) (result map[string]inte
 		}
 	}()
 
-	var studentCourses *[]gorm.StudentCourse
+	var (
+		studentCourses *[]gorm.StudentCourse
+		filtered       int
+	)
+
 	if operator := gorm.AdminDao.GetByAccount(tx, account); operator != nil {
 		studentCourses = gorm.StudentCourseDao.Query(
 			tx,
 			specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
 			specification.OrderSpecification("`student_course`."+specification.IDColumn, specification.OrderDirectionDESC),
+			specification.IsNullSpecification("`student_course`.deleted_at"),
+		)
+
+		filtered = gorm.StudentCourseDao.Count(
+			tx,
 			specification.IsNullSpecification("`student_course`.deleted_at"),
 		)
 	} else {
@@ -186,14 +205,14 @@ func GetSutdentCourseList(account, start, length string) (result map[string]inte
 	result = map[string]interface{}{
 		"list":            assembler.StudentCoursesDTO(studentCourses),
 		"recordsTotal":    total,
-		"recordsFiltered": total,
+		"recordsFiltered": filtered,
 	}
 
 	return
 }
 
-// UpdateCourseReview update student-course review
-func UpdateCourseReview(id, review string) (result interface{}, e *errors.Error) {
+// UpdateStudentCourseReview update student-course review
+func UpdateStudentCourseReview(id, review string) (result interface{}, e *errors.Error) {
 	tx := gorm.DB()
 
 	defer func() {
@@ -210,8 +229,8 @@ func UpdateCourseReview(id, review string) (result interface{}, e *errors.Error)
 	return
 }
 
-// UpdateCourseStatus update student-course status
-func UpdateCourseStatus(id, status, comment string) (result interface{}, e *errors.Error) {
+// UpdateStudentCourseStatus update student-course status
+func UpdateStudentCourseStatus(id, status, comment string) (result interface{}, e *errors.Error) {
 	tx := gorm.DB()
 
 	defer func() {
@@ -241,6 +260,48 @@ func DeleteCourse(courseID string) (result string, e *errors.Error) {
 	}()
 
 	gorm.CourseDao.Delete(tx, typecast.StringToUint(courseID))
+
+	return "success", nil
+}
+
+// UpdateCourse update course
+func UpdateCourse(courseID, topic, courseType string, file multipart.File, header *multipart.FileHeader, start, end time.Time) (result interface{}, e *errors.Error) {
+	tx := gorm.DB()
+
+	defer func() {
+		if r := recover(); r != nil {
+			logger.Error(r)
+			e = errors.UnexpectedError()
+		}
+	}()
+
+	course := gorm.CourseDao.GetByID(tx, typecast.StringToUint(courseID))
+	course.Topic = topic
+	course.Type = courseType
+	course.Start = start
+	course.End = end
+
+	if file != nil {
+		course.Information = header.Filename
+
+		var fileName = "./assets/course/" + typecast.ToString(course.ID)
+		if _, err := os.Stat(fileName); !os.IsNotExist(err) {
+			if err := os.Remove(fileName); err != nil {
+				panic(err)
+			}
+		}
+
+		f, err := os.OpenFile(fileName, os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0666)
+		if err != nil {
+			panic(err)
+		}
+		defer f.Close()
+
+		io.Copy(f, file)
+	}
+	logger.Debug(course)
+
+	gorm.CourseDao.Update(tx, course)
 
 	return "success", nil
 }

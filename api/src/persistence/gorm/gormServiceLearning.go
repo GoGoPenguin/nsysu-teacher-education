@@ -98,3 +98,22 @@ func (dao *serviceLearningDao) Delete(tx *gorm.DB, id uint) {
 		panic(err)
 	}
 }
+
+// Modify a record
+func (dao *serviceLearningDao) Update(tx *gorm.DB, serviceLearning *ServiceLearning) {
+	attrs := map[string]interface{}{
+		"Type":    serviceLearning.Type,
+		"Content": serviceLearning.Content,
+		"Session": serviceLearning.Session,
+		"Hours":   serviceLearning.Hours,
+		"Start":   serviceLearning.Start,
+		"End":     serviceLearning.End,
+	}
+	err := tx.Model(serviceLearning).
+		Where("id = ?", serviceLearning.ID).
+		Updates(attrs).Error
+
+	if err != nil {
+		panic(err)
+	}
+}

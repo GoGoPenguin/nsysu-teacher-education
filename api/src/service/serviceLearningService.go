@@ -82,10 +82,11 @@ func GetServiceLearningList(account, start, length, search string) (result map[s
 		specification.IsNullSpecification("deleted_at"),
 	)
 
+	list := assembler.ServiceLearningDTO(serviceLearnings)
 	result = map[string]interface{}{
-		"list":            assembler.ServiceLearningDTO(serviceLearnings),
+		"list":            list,
 		"recordsTotal":    total,
-		"recordsFiltered": total,
+		"recordsFiltered": len(list),
 	}
 
 	return
@@ -135,12 +136,21 @@ func GetSutdentServiceLearningList(account, start, length string) (result map[st
 		}
 	}()
 
-	var studentServiceLearnings *[]gorm.StudentServiceLearning
+	var (
+		studentServiceLearnings *[]gorm.StudentServiceLearning
+		filtered                int
+	)
+
 	if operator := gorm.AdminDao.GetByAccount(tx, account); operator != nil {
 		studentServiceLearnings = gorm.StudentServiceLearningDao.Query(
 			tx,
 			specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
 			specification.OrderSpecification("`student_service_learning`."+specification.IDColumn, specification.OrderDirectionDESC),
+			specification.IsNullSpecification("`student_service_learning`.deleted_at"),
+		)
+
+		filtered = gorm.StudentCourseDao.Count(
+			tx,
 			specification.IsNullSpecification("`student_service_learning`.deleted_at"),
 		)
 	} else {
@@ -162,14 +172,14 @@ func GetSutdentServiceLearningList(account, start, length string) (result map[st
 	result = map[string]interface{}{
 		"list":            assembler.StudentServiceLearningsDTO(studentServiceLearnings),
 		"recordsTotal":    total,
-		"recordsFiltered": total,
+		"recordsFiltered": filtered,
 	}
 
 	return
 }
 
-// UpdateServiceLearning update service-learning
-func UpdateServiceLearning(reference, review multipart.File, studentServiceLearningID, referenceFileName, reviewFileName string) (result string, e *errors.Error) {
+// UpdateStudentServiceLearning upload student service-learning review or reference file
+func UpdateStudentServiceLearning(reference, review multipart.File, studentServiceLearningID, referenceFileName, reviewFileName string) (result string, e *errors.Error) {
 	tx := gorm.DB().Begin()
 
 	defer func() {
@@ -306,6 +316,30 @@ func DeleteServiceLearning(serviceLearnginID string) (result string, e *errors.E
 	}()
 
 	gorm.ServiceLearningDao.Delete(tx, typecast.StringToUint(serviceLearnginID))
+
+	return "success", nil
+}
+
+// UpdateServieLearning update service-learning
+func UpdateServieLearning(serviceLearningID, serviceType, content, session string, hours uint, start, end time.Time) (result interface{}, e *errors.Error) {
+	tx := gorm.DB()
+
+	defer func() {
+		if r := recover(); r != nil {
+			logger.Error(r)
+			e = errors.UnexpectedError()
+		}
+	}()
+
+	serviceLearning := gorm.ServiceLearningDao.GetByID(tx, typecast.StringToUint(serviceLearningID))
+	serviceLearning.Type = serviceType
+	serviceLearning.Content = content
+	serviceLearning.Session = session
+	serviceLearning.Hours = hours
+	serviceLearning.Start = start
+	serviceLearning.End = end
+
+	gorm.ServiceLearningDao.Update(tx, serviceLearning)
 
 	return "success", nil
 }
