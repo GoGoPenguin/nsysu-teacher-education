@@ -14,4 +14,7 @@ func main() {
 
 	fmt.Println("Seeding Student")
 	studentSeeder()
+
+	fmt.Println("Seeding Leture")
+	letureSeeder()
 }
