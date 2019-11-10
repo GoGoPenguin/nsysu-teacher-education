@@ -12,31 +12,10 @@ const studentTable = $('table#students').DataTable({
             return d.list
         },
         beforeSend: (xhr) => {
-            let token = $.cookie('token')
-            if (token == undefined) {
-                renewToken()
-                token = $.cookie('token')
-            }
-
-            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+            setHeader(xhr)
         },
         error: (xhr, error, thrown) => {
-            if (xhr.status == 401) {
-                let cookies = $.cookie()
-                for (var cookie in cookies) {
-                    $.removeCookie(cookie)
-                }
-
-                location.href = '/login.html'
-            } else {
-                swal({
-                    title: '',
-                    text: xhr.responseText,
-                    icon: "error",
-                    timer: 1500,
-                    buttons: false,
-                })
-            }
+            error(xhr, xhr.responseText)
         }
     },
     columns: [

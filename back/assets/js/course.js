@@ -48,31 +48,10 @@ const courseTable = $('table#course').DataTable({
             return d.list
         },
         beforeSend: (xhr) => {
-            let token = $.cookie('token')
-            if (token == undefined) {
-                renewToken()
-                token = $.cookie('token')
-            }
-
-            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+            setHeader(xhr)
         },
         error: (xhr, error, thrown) => {
-            if (xhr.status == 401) {
-                let cookies = $.cookie()
-                for (var cookie in cookies) {
-                    $.removeCookie(cookie)
-                }
-
-                location.href = '/login.html'
-            } else {
-                swal({
-                    title: '',
-                    text: xhr.responseText,
-                    icon: "error",
-                    timer: 1000,
-                    buttons: false,
-                })
-            }
+            error(xhr, xhr.responseText)
         }
     },
     columns: [
@@ -128,31 +107,10 @@ const studentCourseTable = $('table#student-course').DataTable({
             return d.list
         },
         beforeSend: (xhr) => {
-            let token = $.cookie('token')
-            if (token == undefined) {
-                renewToken()
-                token = $.cookie('token')
-            }
-
-            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+            setHeader(xhr)
         },
         error: (xhr, error, thrown) => {
-            if (xhr.status == 401) {
-                let cookies = $.cookie()
-                for (var cookie in cookies) {
-                    $.removeCookie(cookie)
-                }
-
-                location.href = '/login.html'
-            } else {
-                swal({
-                    title: '',
-                    text: xhr.responseText,
-                    icon: "error",
-                    timer: 1000,
-                    buttons: false,
-                })
-            }
+            error(xhr, xhr.responseText)
         }
     },
     columns: [
@@ -234,23 +192,10 @@ const getInformation = (id, filename) => {
             responseType: "blob"
         },
         error: (xhr) => {
-            swal({
-                title: '',
-                text: '失敗',
-                icon: "error",
-                timer: 1000,
-                buttons: false,
-            })
-            console.error(xhr);
+            error(xhr, '失敗')
         },
         beforeSend: (xhr) => {
-            let token = $.cookie('token')
-            if (token == undefined) {
-                renewToken()
-                token = $.cookie('token')
-            }
-
-            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+            setHeader(xhr)
         },
         success: (response) => {
             let a = document.createElement('a');
@@ -293,7 +238,7 @@ $("#info").fileinput({
     })
     courseTable.ajax.reload();
     $('#course-form')[0].reset()
-}).on('fileuploaderror', (event, data, msg) => {
+}).on('fileuploaderror', function (event, data, msg) {
     swal({
         title: '',
         text: '新增失敗',
@@ -434,23 +379,10 @@ $('#checkModal .btn-primary').click(() => {
             Comment: $('#comment').val(),
         },
         error: (xhr) => {
-            console.error(xhr);
-            swal({
-                title: '',
-                text: '修改失敗',
-                icon: "error",
-                timer: 1500,
-                buttons: false,
-            })
+            error(xhr, '修改失敗')
         },
         beforeSend: (xhr) => {
-            let token = $.cookie('token')
-            if (token == undefined) {
-                renewToken()
-                token = $.cookie('token')
-            }
-
-            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+            setHeader(xhr)
         },
         success: (response) => {
             if (response.code === 0) {
@@ -488,23 +420,10 @@ $('#checkModal .btn-danger').click(() => {
             Comment: $('#comment').val(),
         },
         error: (xhr) => {
-            console.error(xhr);
-            swal({
-                title: '',
-                text: '修改失敗',
-                icon: "error",
-                timer: 1500,
-                buttons: false,
-            })
+            error(xhr, '修改失敗')
         },
         beforeSend: (xhr) => {
-            let token = $.cookie('token')
-            if (token == undefined) {
-                renewToken()
-                token = $.cookie('token')
-            }
-
-            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+            setHeader(xhr)
         },
         success: (response) => {
             if (response.code === 0) {
@@ -577,23 +496,10 @@ $('#update-form').on('submit', (e) => {
         contentType: false,
         processData: false,
         beforeSend: (xhr) => {
-            let token = $.cookie('token')
-            if (token == undefined) {
-                renewToken()
-                token = $.cookie('token')
-            }
-
-            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+            setHeader(xhr)
         },
         error: (xhr) => {
-            swal({
-                title: '',
-                text: '失敗',
-                icon: "error",
-                timer: 1000,
-                buttons: false,
-            })
-            console.error(xhr);
+            error(xhr, '修改失敗')
         },
         success: (response) => {
             if (response.code === 0) {
@@ -627,23 +533,10 @@ const deleteCourse = () => {
         url: `${config.server}/v1/course/${courseID}`,
         type: 'DELETE',
         beforeSend: (xhr) => {
-            let token = $.cookie('token')
-            if (token == undefined) {
-                renewToken()
-                token = $.cookie('token')
-            }
-
-            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+            setHeader(xhr)
         },
         error: (xhr) => {
-            swal({
-                title: '',
-                text: '失敗',
-                icon: "error",
-                timer: 1000,
-                buttons: false,
-            })
-            console.error(xhr);
+            error(xhr, '修改失敗')
         },
         success: (response) => {
             if (response.code === 0) {

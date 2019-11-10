@@ -72,3 +72,43 @@ $('#logoutModal button.btn.btn-primary').click(() => {
         }
     });
 })
+
+const error = (xhr, msg) => {
+    if (xhr.status == 401) {
+        setTimeout(() => {
+            let cookies = $.cookie()
+            for (var cookie in cookies) {
+                $.removeCookie(cookie)
+            }
+
+            location.href = '/login.html'
+        }, 2000);
+
+
+        swal({
+            title: '',
+            text: '登入逾時，或是已從其他裝置登入，即將跳回登入頁面。',
+            icon: 'warning',
+            timer: 2000,
+            buttons: false,
+        })
+    } else {
+        swal({
+            title: '',
+            text: msg,
+            icon: "error",
+            timer: 1000,
+            buttons: false,
+        })
+    }
+}
+
+const setHeader = (xhr) => {
+    let token = $.cookie('token')
+    if (token == undefined) {
+        renewToken()
+        token = $.cookie('token')
+    }
+
+    xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+}

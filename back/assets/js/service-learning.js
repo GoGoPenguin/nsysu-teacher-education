@@ -38,31 +38,10 @@ const serviceLearningTable = $('table#service-learning').DataTable({
             return d.list
         },
         beforeSend: (xhr) => {
-            let token = $.cookie('token')
-            if (token == undefined) {
-                renewToken()
-                token = $.cookie('token')
-            }
-
-            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+            setHeader(xhr)
         },
         error: (xhr, error, thrown) => {
-            if (xhr.status == 401) {
-                let cookies = $.cookie()
-                for (var cookie in cookies) {
-                    $.removeCookie(cookie)
-                }
-
-                location.href = '/login.html'
-            } else {
-                swal({
-                    title: '',
-                    text: xhr.responseText,
-                    icon: "error",
-                    timer: 1000,
-                    buttons: false,
-                })
-            }
+            error(xhr, xhr.responseText)
         }
     },
     columns: [
@@ -105,31 +84,10 @@ const studentServiceLearningTable = $('table#student-service-learning').DataTabl
             return d.list
         },
         beforeSend: (xhr) => {
-            let token = $.cookie('token')
-            if (token == undefined) {
-                renewToken()
-                token = $.cookie('token')
-            }
-
-            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+            setHeader(xhr)
         },
         error: (xhr, error, thrown) => {
-            if (xhr.status == 401) {
-                let cookies = $.cookie()
-                for (var cookie in cookies) {
-                    $.removeCookie(cookie)
-                }
-
-                location.href = '/login.html'
-            } else {
-                swal({
-                    title: '',
-                    text: xhr.responseText,
-                    icon: "error",
-                    timer: 1000,
-                    buttons: false,
-                })
-            }
+            error(xhr, xhr.responseText)
         }
     },
     columns: [
@@ -261,23 +219,10 @@ $('#service-learning-form').on('submit', (e) => {
             'End': $('#end-date input').val(),
         },
         beforeSend: (xhr) => {
-            let token = $.cookie('token')
-            if (token == undefined) {
-                renewToken()
-                token = $.cookie('token')
-            }
-
-            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+            setHeader(xhr)
         },
         error: (xhr) => {
-            swal({
-                title: '',
-                text: '失敗',
-                icon: "error",
-                timer: 1000,
-                buttons: false,
-            })
-            console.error(xhr);
+            error(xhr, '失敗')
         },
         success: (response) => {
             swal({
@@ -339,23 +284,10 @@ const getFile = (file) => {
             'StudentServiceLearningID': ID,
         },
         error: (xhr) => {
-            swal({
-                title: '',
-                text: '失敗',
-                icon: "error",
-                timer: 1000,
-                buttons: false,
-            })
-            console.error(xhr);
+            error(xhr, '失敗')
         },
         beforeSend: (xhr) => {
-            let token = $.cookie('token')
-            if (token == undefined) {
-                renewToken()
-                token = $.cookie('token')
-            }
-
-            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+            setHeader(xhr)
         },
         success: (response) => {
             let a = document.createElement('a');
@@ -382,23 +314,10 @@ const updateStatus = (status) => {
             'Comment': $('#comment').val(),
         },
         beforeSend: (xhr) => {
-            let token = $.cookie('token')
-            if (token == undefined) {
-                renewToken()
-                token = $.cookie('token')
-            }
-
-            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+            setHeader(xhr)
         },
         error: (xhr) => {
-            swal({
-                title: '',
-                text: '失敗',
-                icon: "error",
-                timer: 1000,
-                buttons: false,
-            })
-            console.error(xhr);
+            error(xhr, '失敗')
         },
         success: (response) => {
             if (response.code === 0) {
@@ -463,23 +382,10 @@ $('#update-form').on('submit', (e) => {
             'End': $('#update-end-date input').val(),
         },
         beforeSend: (xhr) => {
-            let token = $.cookie('token')
-            if (token == undefined) {
-                renewToken()
-                token = $.cookie('token')
-            }
-
-            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+            setHeader(xhr)
         },
         error: (xhr) => {
-            swal({
-                title: '',
-                text: '失敗',
-                icon: "error",
-                timer: 1000,
-                buttons: false,
-            })
-            console.error(xhr);
+            error(xhr, '失敗')
         },
         success: (response) => {
             if (response.code === 0) {
@@ -512,23 +418,10 @@ const deleteServiceLearning = () => {
         url: `${config.server}/v1/service-learning/${serviceLearningID}`,
         type: 'DELETE',
         beforeSend: (xhr) => {
-            let token = $.cookie('token')
-            if (token == undefined) {
-                renewToken()
-                token = $.cookie('token')
-            }
-
-            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+            setHeader(xhr)
         },
         error: (xhr) => {
-            swal({
-                title: '',
-                text: '失敗',
-                icon: "error",
-                timer: 1000,
-                buttons: false,
-            })
-            console.error(xhr);
+            error(xhr, '失敗')
         },
         success: (response) => {
             if (response.code === 0) {

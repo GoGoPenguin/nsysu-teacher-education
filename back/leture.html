@@ -116,57 +116,35 @@
                     <li class="breadcrumb-item">
                         <a href="/">儀表板</a>
                     </li>
-                    <li class="breadcrumb-item active">學生管理</li>
+                    <li class="breadcrumb-item active">專門科目</li>
                 </ol>
 
-                <!-- Create Students -->
                 <div class="card mb-3">
                     <div class="card-header">
                         <i class="fas fa-user-plus"></i>
-                        新增學生
+                        科目列表
                     </div>
-                    <div class="card-body">
-                        <div class="alert alert-info" role="alert">
-                            <h4 class="alert-heading">提示</h4>
-                            <hr>
-                            <p class="mb-0">檔案格式： csv</p>
-                            <p class="mb-0">欄位順序： 姓名, 學號, 密碼, 科系, 學程編號</p>
-                            <p class="mb-0"><strong>第一列不需要打 "姓名, 學號, 密碼, 科系, 學程編號"</strong></p>
-                        </div>
-                        <input id="upload" type="file" name="CSV">
-                    </div>
-                </div>
-
-                <!-- Student list -->
-                <div class="card mb-3">
-                    <div class="card-header">
-                        <i class="fas fa-table"></i>
-                        學生列表</div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-bordered" id="students" width="100%" cellspacing="0">
-                                <thead>
-                                    <tr>
-                                        <th>姓名</th>
-                                        <th>學號</th>
-                                        <th>系所</th>
-                                        <th>學程編號</th>
-                                        <th>創建日期</th>
-                                    </tr>
-                                </thead>
-                                <tfoot>
-                                    <tr>
-                                        <th>姓名</th>
-                                        <th>學號</th>
-                                        <th>系所</th>
-                                        <th>學程編號</th>
-                                        <th>創建日期</th>
-                                    </tr>
-                                </tfoot>
-                                <tbody>
-                                </tbody>
-                            </table>
-                        </div>
+                    <div class="card-body" id="front">
+                        <table class="table table-bordered" id="leture" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>科目名稱</th>
+                                    <th>最低學分</th>
+                                    <th>備註</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>科目名稱</th>
+                                    <th>最低學分</th>
+                                    <th>備註</th>
+                                    <th></th>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
@@ -213,6 +191,49 @@
         </div>
     </div>
 
+    <!-- Detail Modal-->
+    <div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col border border-dark"><strong>領域專長名稱</strong></div>
+                            <div class="col border border-dark" id="name"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col border border-dark"><strong>要求最低應修畢總學分數</strong></div>
+                            <div class="col border border-dark" id="min_credit"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col border border-dark"><strong>備註</strong></div>
+                            <div class="col border border-dark" id="comment"></div>
+                        </div>
+                        <div class="row">
+                            <div class="col border border-dark"><strong>課程類別</strong></div>
+                            <div class="col border border-dark"><strong>科目名稱</strong></div>
+                            <div class="col-2 border border-dark"><strong>學分數</strong></div>
+                            <div class="col border border-dark"><strong>備註</strong></div>
+                        </div>
+                        <div class="row">
+                            <div class="col" id="categories"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" type="button" data-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Bootstrap core JavaScript-->
     <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/node_modules/bootstrap-fileinput/js/fileinput.js"></script>
@@ -224,12 +245,13 @@
     <script src="/node_modules/datatables.net-bs4/js/dataTables.bootstrap4.js"></script>
     <script src="/node_modules/datatables.net-scroller-bs4/js/scroller.bootstrap4.js"></script>
     <script src="/node_modules/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="/node_modules/showdown/dist/showdown.min.js"></script>
 
     <!-- Custom scripts for all pages-->
     <script src="/node_modules/startbootstrap-sb-admin/js/sb-admin.min.js"></script>
 
     <script src="/assets/js/auth.js"></script>
-    <script src="/assets/js/students.js"></script>
+    <script src="/assets/js/leutre.js"></script>
 
 </body>
 
