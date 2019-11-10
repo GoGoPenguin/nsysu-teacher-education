@@ -11,6 +11,7 @@ type Subject struct {
 	Name           string `gorm:"column:name;"`
 	Credit         uint   `gorm:"column:credit;"`
 	Compulsory     bool   `grom:"column:compulsory;"`
+	Status         string `gorm:"column:status;"`
 }
 
 type subjectDao struct {

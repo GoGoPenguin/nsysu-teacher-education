@@ -10,16 +10,21 @@ type Leture struct {
 	Name       string           `gorm:"column:name;"`
 	MinCredit  uint             `gorm:"column:min_credit;"`
 	Comment    string           `gorm:"column:comment;"`
+	Status     string           `gorm:"column:status;"`
 	Categories []LetureCategory `gorm:"foreignkey:LetureID"`
 }
 
 type letureDao struct {
-	table string
+	table   string
+	Enable  string
+	Disable string
 }
 
 // LetureDao leture data acces object
 var LetureDao = &letureDao{
-	table: "leture",
+	table:   "leture",
+	Enable:  "enable",
+	Disable: "disable",
 }
 
 // New a record
@@ -40,7 +45,6 @@ func (dao *letureDao) GetByID(tx *gorm.DB, id uint) *Leture {
 		},
 	}
 	err := tx.Table(dao.table).
-		Where("deleted_at IS NULL").
 		Find(&result).Error
 
 	if gorm.IsRecordNotFoundError(err) {
@@ -67,6 +71,16 @@ func (dao *letureDao) GetByName(tx *gorm.DB, name string) *Leture {
 		panic(err)
 	}
 	return &result
+}
+
+// Count get total count
+func (dao *letureDao) Count(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) int {
+	var count int
+	tx.Table(dao.table).
+		Scopes(funcs...).
+		Count(&count)
+
+	return count
 }
 
 // Query custom query

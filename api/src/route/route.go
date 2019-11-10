@@ -67,6 +67,12 @@ func Run() {
 				student.Patch("/status", hero.Handler(handler.UpdateStudentServiceLearningStatusHandler)) // 審核
 			}
 		}
+
+		leture := v1.Party("/leture")
+		{
+			leture.Get("/", hero.Handler(handler.GetLeturesHandler))
+			leture.Get("/{letureID}", hero.Handler(handler.GetLeturDetailHandler))
+		}
 	}
 
 	app.Run(iris.Addr(addr))

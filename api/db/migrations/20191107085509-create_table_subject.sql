@@ -6,6 +6,7 @@ CREATE TABLE `subject` (
     `name` VARCHAR(150) NOT NULL COMMENT '名稱',
     `credit` INT NOT NULL COMMENT '學分數',
     `compulsory` BOOLEAN NOT NULL COMMENT '必修',
+    `status` ENUM('enable', 'disable') NOT NULL DEFAULT 'enable' COMMENT '狀態',
     `created_at` DATETIME NOT NULL DEFAULT NOW() COMMENT '創建日期',
     `updated_at` DATETIME ON UPDATE CURRENT_TIMESTAMP COMMENT '更新日期',
     `deleted_at` DATETIME COMMENT '刪除日期',
