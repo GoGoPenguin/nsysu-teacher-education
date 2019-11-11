@@ -77,6 +77,11 @@ const detail = (index) => {
                     }
 
                     for (let type of category.Types) {
+
+                        if (type.MinCredit > 1) {
+                            comment += `${type.Name}至少修習${type.MinCredit}學分<br>`
+                        }
+
                         for (let group of type.Groups) {
                             subjects += group.Subjects.length
 
