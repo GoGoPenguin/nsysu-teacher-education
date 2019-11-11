@@ -10,7 +10,7 @@ CREATE TABLE `subject` (
     `created_at` DATETIME NOT NULL DEFAULT NOW() COMMENT '創建日期',
     `updated_at` DATETIME ON UPDATE CURRENT_TIMESTAMP COMMENT '更新日期',
     `deleted_at` DATETIME COMMENT '刪除日期',
-    UNIQUE INDEX (`name`),
+    UNIQUE INDEX (`name`, `subject_group_id`),
     INDEX (`deleted_at`),
     FOREIGN KEY (`subject_group_id`) REFERENCES `subject_group`(`id`) ON DELETE CASCADE,
     PRIMARY KEY(`id`)

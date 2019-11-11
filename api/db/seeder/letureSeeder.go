@@ -9,7 +9,8 @@ func letureSeeder() {
 
 	letureData := []map[string]interface{}{
 		map[string]interface{}{"ID": uint(1), "Name": "自然科學領域化學專長", "MinCredit": uint(42), "Comment": "適合化學系所等"},
-		map[string]interface{}{"ID": uint(2), "Name": "藝術領域藝術生活科－表演藝術專長", "MinCredit": uint(38), "Comment": "劇場藝術學系所等"},
+		map[string]interface{}{"ID": uint(2), "Name": "藝術領域藝術生活科－表演藝術專長", "MinCredit": uint(38), "Comment": "適合劇場藝術學系所等"},
+		map[string]interface{}{"ID": uint(3), "Name": "藝術領域表演藝術專長", "MinCredit": uint(44), "Comment": "適合劇場藝術學系所等"},
 	}
 
 	for _, data := range letureData {
@@ -32,6 +33,9 @@ func letureSeeder() {
 
 		map[string]interface{}{"ID": uint(4), "LetureID": uint(2), "Name": "領域核心課程", "MinCredit": uint(3), "MinType": uint(0)},
 		map[string]interface{}{"ID": uint(5), "LetureID": uint(2), "Name": "表演藝術專長課程", "MinCredit": uint(30), "MinType": uint(0)},
+
+		map[string]interface{}{"ID": uint(6), "LetureID": uint(3), "Name": "領域核心", "MinCredit": uint(3), "MinType": uint(0)},
+		map[string]interface{}{"ID": uint(7), "LetureID": uint(3), "Name": "表演藝術專長課程", "MinCredit": uint(34), "MinType": uint(0)},
 	}
 
 	for _, data := range categoryData {
@@ -62,6 +66,11 @@ func letureSeeder() {
 		map[string]interface{}{"ID": uint(10), "LetureCategoryID": uint(5), "Name": "實踐與展現", "MinCredit": uint(12)},
 		map[string]interface{}{"ID": uint(11), "LetureCategoryID": uint(5), "Name": "表演藝術進階跨科/跨領域", "MinCredit": uint(6)},
 		map[string]interface{}{"ID": uint(12), "LetureCategoryID": uint(5), "Name": "教學知能", "MinCredit": uint(2)},
+
+		map[string]interface{}{"ID": uint(13), "LetureCategoryID": uint(6), "Name": "藝術領域核心", "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(14), "LetureCategoryID": uint(7), "Name": "理解與應用", "MinCredit": uint(12)},
+		map[string]interface{}{"ID": uint(15), "LetureCategoryID": uint(7), "Name": "實踐與展現", "MinCredit": uint(20)},
+		map[string]interface{}{"ID": uint(16), "LetureCategoryID": uint(7), "Name": "教學知能", "MinCredit": uint(2)},
 	}
 
 	for _, data := range typeData {
@@ -92,6 +101,11 @@ func letureSeeder() {
 		map[string]interface{}{"ID": uint(11), "LetureTypeID": uint(10), "MinCredit": uint(0)},
 		map[string]interface{}{"ID": uint(12), "LetureTypeID": uint(11), "MinCredit": uint(0)},
 		map[string]interface{}{"ID": uint(13), "LetureTypeID": uint(12), "MinCredit": uint(0)},
+
+		map[string]interface{}{"ID": uint(14), "LetureTypeID": uint(13), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(15), "LetureTypeID": uint(14), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(16), "LetureTypeID": uint(15), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(17), "LetureTypeID": uint(16), "MinCredit": uint(0)},
 	}
 
 	for _, data := range groupData {
@@ -230,6 +244,47 @@ func letureSeeder() {
 		map[string]interface{}{"SubjectGroupID": uint(12), "Name": "(碩)經典服裝設計", "Credit": uint(3), "Compulsory": false},
 		map[string]interface{}{"SubjectGroupID": uint(13), "Name": "創作性戲劇", "Credit": uint(2), "Compulsory": false},
 		map[string]interface{}{"SubjectGroupID": uint(13), "Name": "戲劇治療與PBT設計", "Credit": uint(3), "Compulsory": false},
+
+		map[string]interface{}{"SubjectGroupID": uint(14), "Name": "藝術概論", "Credit": uint(2), "Compulsory": false},
+		map[string]interface{}{"SubjectGroupID": uint(14), "Name": "劇場美學", "Credit": uint(3), "Compulsory": true},
+		map[string]interface{}{"SubjectGroupID": uint(15), "Name": "表演技藝導論", "Credit": uint(3), "Compulsory": true},
+		map[string]interface{}{"SubjectGroupID": uint(15), "Name": "劇場設計導論", "Credit": uint(2), "Compulsory": false},
+		map[string]interface{}{"SubjectGroupID": uint(15), "Name": "西洋戲劇史(一)", "Credit": uint(2), "Compulsory": true},
+		map[string]interface{}{"SubjectGroupID": uint(15), "Name": "西洋戲劇史(二)", "Credit": uint(2), "Compulsory": false},
+		map[string]interface{}{"SubjectGroupID": uint(15), "Name": "中國戲劇史(一)", "Credit": uint(2), "Compulsory": true},
+		map[string]interface{}{"SubjectGroupID": uint(15), "Name": "中國戲劇史(二)", "Credit": uint(2), "Compulsory": false},
+		map[string]interface{}{"SubjectGroupID": uint(15), "Name": "中國戲劇史(二)", "Credit": uint(2), "Compulsory": false},
+		map[string]interface{}{"SubjectGroupID": uint(15), "Name": "西洋藝術史", "Credit": uint(2), "Compulsory": false},
+		map[string]interface{}{"SubjectGroupID": uint(15), "Name": "劇本導讀", "Credit": uint(2), "Compulsory": true},
+		map[string]interface{}{"SubjectGroupID": uint(15), "Name": "劇本解析", "Credit": uint(3), "Compulsory": false},
+		map[string]interface{}{"SubjectGroupID": uint(15), "Name": "臺灣劇場", "Credit": uint(2), "Compulsory": false},
+		map[string]interface{}{"SubjectGroupID": uint(15), "Name": "現當代華語文戲劇選讀", "Credit": uint(2), "Compulsory": false},
+		map[string]interface{}{"SubjectGroupID": uint(15), "Name": "臺灣傳統戲曲", "Credit": uint(2), "Compulsory": false},
+		map[string]interface{}{"SubjectGroupID": uint(16), "Name": "劇場製作基礎", "Credit": uint(3), "Compulsory": true},
+		map[string]interface{}{"SubjectGroupID": uint(16), "Name": "劇場製作基礎", "Credit": uint(3), "Compulsory": true},
+		map[string]interface{}{"SubjectGroupID": uint(16), "Name": "導演概論", "Credit": uint(2), "Compulsory": true},
+		map[string]interface{}{"SubjectGroupID": uint(16), "Name": "導演(一)", "Credit": uint(3), "Compulsory": false},
+		map[string]interface{}{"SubjectGroupID": uint(16), "Name": "基礎表演", "Credit": uint(3), "Compulsory": true},
+		map[string]interface{}{"SubjectGroupID": uint(16), "Name": "傳統戲曲表演身段(一)", "Credit": uint(2), "Compulsory": false},
+		map[string]interface{}{"SubjectGroupID": uint(16), "Name": "觀點技巧表演", "Credit": uint(2), "Compulsory": false},
+		map[string]interface{}{"SubjectGroupID": uint(16), "Name": "基礎發聲", "Credit": uint(2), "Compulsory": false},
+		map[string]interface{}{"SubjectGroupID": uint(16), "Name": "聲音訓練", "Credit": uint(2), "Compulsory": false},
+		map[string]interface{}{"SubjectGroupID": uint(16), "Name": "歌唱技巧", "Credit": uint(2), "Compulsory": false},
+		map[string]interface{}{"SubjectGroupID": uint(16), "Name": "肢體開發(一)", "Credit": uint(2), "Compulsory": false},
+		map[string]interface{}{"SubjectGroupID": uint(16), "Name": "肢體開發(二)", "Credit": uint(2), "Compulsory": false},
+		map[string]interface{}{"SubjectGroupID": uint(16), "Name": "舞蹈技巧", "Credit": uint(2), "Compulsory": false},
+		map[string]interface{}{"SubjectGroupID": uint(16), "Name": "舞蹈創作", "Credit": uint(2), "Compulsory": false},
+		map[string]interface{}{"SubjectGroupID": uint(16), "Name": "排演", "Credit": uint(3), "Compulsory": false},
+		map[string]interface{}{"SubjectGroupID": uint(16), "Name": "燈光設計及技術", "Credit": uint(2), "Compulsory": false},
+		map[string]interface{}{"SubjectGroupID": uint(16), "Name": "劇場服裝技術", "Credit": uint(2), "Compulsory": false},
+		map[string]interface{}{"SubjectGroupID": uint(16), "Name": "人物服裝畫", "Credit": uint(2), "Compulsory": false},
+		map[string]interface{}{"SubjectGroupID": uint(16), "Name": "劇場服裝設計", "Credit": uint(2), "Compulsory": false},
+		map[string]interface{}{"SubjectGroupID": uint(16), "Name": "舞臺化妝與造型", "Credit": uint(2), "Compulsory": false},
+		map[string]interface{}{"SubjectGroupID": uint(16), "Name": "基礎設計", "Credit": uint(3), "Compulsory": false},
+		map[string]interface{}{"SubjectGroupID": uint(16), "Name": "進階技術繪圖", "Credit": uint(2), "Compulsory": false},
+		map[string]interface{}{"SubjectGroupID": uint(16), "Name": "模型製作", "Credit": uint(2), "Compulsory": false},
+		map[string]interface{}{"SubjectGroupID": uint(17), "Name": "創作性戲劇", "Credit": uint(2), "Compulsory": false},
+		map[string]interface{}{"SubjectGroupID": uint(17), "Name": "戲劇治療與PBT設計", "Credit": uint(3), "Compulsory": false},
 	}
 
 	for _, data := range subjectData {
@@ -240,7 +295,7 @@ func letureSeeder() {
 			Compulsory:     data["Compulsory"].(bool),
 		}
 
-		if gorm.SubjectDao.GetByName(tx, subject.Name) == nil {
+		if gorm.SubjectDao.GetByNameAndGroup(tx, subject.Name, subject.SubjectGroupID) == nil {
 			gorm.SubjectDao.New(tx, subject)
 		}
 	}

@@ -57,11 +57,12 @@ func (dao *subjectDao) GetByID(tx *gorm.DB, id uint) *Subject {
 	return &result
 }
 
-// GetByIDAndType get a record by name
-func (dao *subjectDao) GetByName(tx *gorm.DB, name string) *Subject {
+// GetByIDAndType get a record by name and group
+func (dao *subjectDao) GetByNameAndGroup(tx *gorm.DB, name string, groupID uint) *Subject {
 	result := Subject{}
 	err := tx.Table(dao.table).
 		Where("name = ?", name).
+		Where("subject_group_id = ?", groupID).
 		Where("deleted_at IS NULL").
 		Scan(&result).Error
 
