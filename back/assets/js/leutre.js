@@ -1,3 +1,7 @@
+let STATUS = {
+    'enable': '啟用',
+    'disable': '停用',
+}
 let letures = []
 
 const courseTable = $('table#leture').DataTable({
@@ -19,7 +23,7 @@ const courseTable = $('table#leture').DataTable({
                     <button class="btn btn-danger" onclick="$('#deleteModal').modal('show'); courseID=${element.ID}">刪除</button>
                 `
 
-                array[index].Information = `<div onclick="getInformation(${element.ID}, '${element.Information}')">${element.Information}</div>`
+                array[index].Status = STATUS[element.Status]
             })
             return d.list
         },
@@ -34,6 +38,7 @@ const courseTable = $('table#leture').DataTable({
         { data: "Name" },
         { data: "MinCredit" },
         { data: "Comment" },
+        { data: "Status" },
         { data: "Button" },
     ],
     language: {
@@ -56,63 +61,60 @@ const detail = (index) => {
         success: (response) => {
             if (response.code === 0) {
                 let leture = response.data
+                let html = ''
+
+                for (let category of leture.Categories) {
+                    let content = ''
+                    let comment = ''
+                    let subjects = 0
+
+                    if (category.MinCredit > 1) {
+                        comment += `總共至少修習${category.MinCredit}學分<br>`
+                    }
+
+                    if (category.MinType > 1) {
+                        comment += `總共至少修習${category.MinType}類別<br>`
+                    }
+
+                    for (let type of category.Types) {
+                        for (let group of type.Groups) {
+                            subjects += group.Subjects.length
+
+                            for (let subject of group.Subjects) {
+                                let temp = '<tr>'
+                                let condition1 = category.Types.indexOf(type) === category.Types.length - 1
+                                let condition2 = group.Subjects.indexOf(subject) === group.Subjects.length - 1
+
+                                if (condition1 && condition2) {
+                                    temp += `<td colspan="2" rowspan="${subjects}" class="align-middle">${category.Name}</td>`
+                                }
+
+                                if (condition2) {
+                                    temp += `<td colspan="2" rowspan="${group.Subjects.length}" class="align-middle">${type.Name}</td>`
+                                }
+
+                                temp += `<td colspan="1" class="align-middle">${subject.Compulsory ? "必修" : "選修"}</td>`
+                                temp += `<td colspan="4" class="align-middle">${subject.Name}</td>`
+                                temp += `<td colspan="1" class="align-middle">${subject.Credit}</td>`
+
+                                if (condition1 && condition2) {
+                                    temp += `<td colspan="2" rowspan="${subjects}" class="align-middle">${comment}</td>`
+                                }
+
+                                temp += `</tr>`
+                                content = `${temp}${content}`
+                            }
+                        }
+                    }
+
+                    html += content
+                }
+
                 $('#detailModal .modal-title').html(leture.Name)
                 $('#detailModal #name').html(leture.Name)
                 $('#detailModal #min_credit').html(leture.MinCredit)
                 $('#detailModal #comment').html(leture.Comment)
-
-                let categories = ''
-                leture.Categories.forEach(category => {
-                    let types = ''
-                    let groups = ''
-
-                    category.Types.forEach(type => {
-                        types += `
-                            <div class='row'>
-                                <div class='col border border-dark'>${type.Name}</div>
-                            </div>
-                        `
-
-                        type.Groups.forEach(group => {
-                            let subjects = ``
-                            group.Subjects.forEach(subject => {
-                                subjects += `
-                                    <div class='row'>
-                                        <div class='col border border-dark'>${subject.Name}</div>
-                                    </div>
-                                `
-                            })
-
-                            groups += `
-                                <div class='row'>
-                                    <div class='col'>
-                                        <div class='row'>
-                                            <div class='col'>${subjects}</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            `
-                        })
-                    })
-
-
-
-                    categories += `
-                        <div class='row'>
-                            <div class='col'>
-                                <div class='row'>
-                                    <div class='col border border-dark'>${category.Name}</div>
-                                    <div class='col'>${types}</div>
-                                </div>
-                            </div>
-                            <div class='col'>${groups}</div>
-                            <div class='col-2'></div>
-                            <div class='col'></div>
-                        </div>
-                    `
-                })
-
-                $('#detailModal #categories').html(categories)
+                $('#detailModal #categories').html(html)
                 $('#detailModal').modal('show')
             } else {
                 swal({

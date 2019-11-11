@@ -131,6 +131,7 @@
                                     <th>科目名稱</th>
                                     <th>最低學分</th>
                                     <th>備註</th>
+                                    <th>狀態</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -139,6 +140,7 @@
                                     <th>科目名稱</th>
                                     <th>最低學分</th>
                                     <th>備註</th>
+                                    <th>狀態</th>
                                     <th></th>
                                 </tr>
                             </tfoot>
@@ -203,29 +205,33 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col border border-dark"><strong>領域專長名稱</strong></div>
-                            <div class="col border border-dark" id="name"></div>
-                        </div>
-                        <div class="row">
-                            <div class="col border border-dark"><strong>要求最低應修畢總學分數</strong></div>
-                            <div class="col border border-dark" id="min_credit"></div>
-                        </div>
-                        <div class="row">
-                            <div class="col border border-dark"><strong>備註</strong></div>
-                            <div class="col border border-dark" id="comment"></div>
-                        </div>
-                        <div class="row">
-                            <div class="col border border-dark"><strong>課程類別</strong></div>
-                            <div class="col border border-dark"><strong>科目名稱</strong></div>
-                            <div class="col-2 border border-dark"><strong>學分數</strong></div>
-                            <div class="col border border-dark"><strong>備註</strong></div>
-                        </div>
-                        <div class="row">
-                            <div class="col" id="categories"></div>
-                        </div>
-                    </div>
+                    <table class="table table-bordered" style="margin-bottom: 0px;">
+                        <tbody>
+                            <tr>
+                                <th>領域專長名稱</th>
+                                <td id="name"></td>
+                            </tr>
+                            <tr>
+                                <th>要求最低應修畢總學分數</th>
+                                <td id="min_credit"></td>
+                            </tr>
+                            <tr>
+                                <th>備註</th>
+                                <td id="comment"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th colspan="4">課程類別</th>
+                                <th colspan="5">科目名稱</th>
+                                <th colspan="1">學分數</th>
+                                <th colspan="2">備註</th>
+                            </tr>
+                        </thead>
+                        <tbody id="categories"></tbody>
+                    </table>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary" type="button" data-dismiss="modal">OK</button>
