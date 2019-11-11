@@ -11,16 +11,20 @@ type Subject struct {
 	Name           string `gorm:"column:name;"`
 	Credit         uint   `gorm:"column:credit;"`
 	Compulsory     bool   `grom:"column:compulsory;"`
-	Status         string `gorm:"column:status;"`
+	Status         string `gorm:"column:status; default:'enable'"`
 }
 
 type subjectDao struct {
-	table string
+	table   string
+	Enable  string
+	Disable string
 }
 
 // SubjectDao subject data acces object
 var SubjectDao = &subjectDao{
-	table: "subject",
+	table:   "subject",
+	Enable:  "enable",
+	Disable: "disable",
 }
 
 // New a record

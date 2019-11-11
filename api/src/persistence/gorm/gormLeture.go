@@ -10,7 +10,7 @@ type Leture struct {
 	Name       string           `gorm:"column:name;"`
 	MinCredit  uint             `gorm:"column:min_credit;"`
 	Comment    string           `gorm:"column:comment;"`
-	Status     string           `gorm:"column:status;"`
+	Status     string           `gorm:"column:status; default:'enable'"`
 	Categories []LetureCategory `gorm:"foreignkey:LetureID"`
 }
 
