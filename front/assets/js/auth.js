@@ -1,4 +1,6 @@
-$('button#login').click(() => {
+$('#login-form').on('submit', (e) => {
+    e.preventDefault();
+
     let account = $('input.input100.account').val()
     let password = $('input.input100.password').val()
 
