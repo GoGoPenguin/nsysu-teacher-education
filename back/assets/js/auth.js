@@ -73,7 +73,7 @@ $('#logoutModal button.btn.btn-primary').click(() => {
     });
 })
 
-const error = (xhr, msg) => {
+const errorHandle = (xhr, msg) => {
     if (xhr.status == 401) {
         setTimeout(() => {
             let cookies = $.cookie()

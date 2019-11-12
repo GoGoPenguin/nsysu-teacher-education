@@ -51,7 +51,7 @@ const courseTable = $('table#course').DataTable({
             setHeader(xhr)
         },
         error: (xhr, error, thrown) => {
-            error(xhr, xhr.responseText)
+            errorHandle(xhr, xhr.responseText)
         }
     },
     columns: [
@@ -110,7 +110,7 @@ const studentCourseTable = $('table#student-course').DataTable({
             setHeader(xhr)
         },
         error: (xhr, error, thrown) => {
-            error(xhr, xhr.responseText)
+            errorHandle(xhr, xhr.responseText)
         }
     },
     columns: [
@@ -182,6 +182,20 @@ $(document).ready(() => {
             down: "fas fa-angle-down",
         }
     })
+
+    $("#info").fileinput({
+        language: 'zh-TW',
+        theme: "fas",
+        showUpload: false,
+        uploadUrl: `${config.server}/v1/course`,
+    })
+
+    $("#update-info").fileinput({
+        language: 'zh-TW',
+        theme: "fas",
+        showUpload: false,
+        uploadUrl: `${config.server}/v1/course`,
+    })
 })
 
 const getInformation = (id, filename) => {
@@ -192,7 +206,7 @@ const getInformation = (id, filename) => {
             responseType: "blob"
         },
         error: (xhr) => {
-            error(xhr, '失敗')
+            errorHandle(xhr, '失敗')
         },
         beforeSend: (xhr) => {
             setHeader(xhr)
@@ -210,45 +224,28 @@ const getInformation = (id, filename) => {
     });
 }
 
-$("#info").fileinput({
-    language: 'zh-TW',
-    theme: "fas",
-    showUpload: false,
-    uploadUrl: `${config.server}/v1/course`,
-    ajaxSettings: {
-        headers: {
-            'Authorization': `Bearer ${$.cookie('token')}`,
+$('#course-form').on('submit', (e) => {
+    e.preventDefault();
+
+    let filestack = $('#info').fileinput('getFileStack')
+    let fstack = []
+    $.each(filestack, (fileID, fileObj) => {
+        if (fileObj !== undefined) {
+            fstack.push(fileObj)
         }
-    },
-    uploadExtraData: (previewId, index) => {
-        return {
-            'Topic': $('#topic').val(),
-            'Type': $('#type').val(),
-            'Start': $('#start input').val(),
-            'End': $('#end input').val(),
-        }
+    })
+
+    let form = new FormData()
+    form.append("Topic", $('#topic').val())
+    form.append("Type", $('#type').val())
+    form.append("Start", $('#start input').val())
+    form.append("End", $('#end input').val())
+
+    if (fstack.length > 0) {
+        form.append("Information", fstack[0].file)
     }
-}).on('fileuploaded', (event, previewId, index, fileId) => {
-    swal({
-        title: '',
-        text: '成功',
-        icon: "success",
-        timer: 1000,
-        buttons: false,
-    })
-    courseTable.ajax.reload();
-    $('#course-form')[0].reset()
-}).on('fileuploaderror', function (event, data, msg) {
-    swal({
-        title: '',
-        text: '新增失敗',
-        icon: "error",
-        timer: 1000,
-        buttons: false,
-    })
-    $('div.kv-upload-progress.kv-hidden').css({ 'display': 'none' })
-}).on('filepreupload', function (event, data, previewId, index) {
-    let filename = data.files[0].name
+
+    let filename = fstack[0].file.name
     let length = (new TextEncoder().encode(filename)).length
 
     if (length > 36) {
@@ -259,87 +256,43 @@ $("#info").fileinput({
             timer: 1500,
             buttons: false,
         })
-
-        // this doesn't work at all
-        // https://plugins.krajee.com/file-input/plugin-events#event-manipulation
-        return {
-            message: '檔名太長',
-        }
+        return
     }
-}).on('filecustomerror', function (event, params) {
-    $("#info").fileinput('enable')
-    $("#info").fileinput('reset')
-})
 
-$('#course-form').on('submit', (e) => {
-    e.preventDefault();
-    $("#info").fileinput('upload')
-})
-
-$("#update-info").fileinput({
-    language: 'zh-TW',
-    theme: "fas",
-    showUpload: false,
-    uploadUrl: `${config.server}/v1/course`,
-    ajaxSettings: {
-        headers: {
-            'Authorization': `Bearer ${$.cookie('token')}`,
+    $.ajax({
+        url: `${config.server}/v1/course`,
+        type: 'POST',
+        data: form,
+        contentType: false,
+        processData: false,
+        beforeSend: (xhr) => {
+            setHeader(xhr)
+        },
+        error: (xhr) => {
+            errorHandle(xhr, '失敗')
+        },
+        success: (response) => {
+            if (response.code === 0) {
+                swal({
+                    title: '',
+                    text: '成功',
+                    icon: "success",
+                    timer: 1000,
+                    buttons: false,
+                })
+                courseTable.ajax.reload();
+            } else {
+                swal({
+                    title: '',
+                    text: '失敗',
+                    icon: "error",
+                    timer: 1000,
+                    buttons: false,
+                })
+            }
+            $('#course-form')[0].reset()
         }
-    },
-    uploadExtraData: (previewId, index) => {
-        return {
-            'Topic': $('#topic').val(),
-            'Type': $('#type').val(),
-            'Start': $('#start input').val(),
-            'End': $('#end input').val(),
-        }
-    }
-}).on('fileuploaded', (event, previewId, index, fileId) => {
-    swal({
-        title: '',
-        text: '成功',
-        icon: "success",
-        timer: 1000,
-        buttons: false,
-    })
-    courseTable.ajax.reload();
-    $('#course-form')[0].reset()
-}).on('fileuploaderror', (event, data, msg) => {
-    swal({
-        title: '',
-        text: '新增失敗',
-        icon: "error",
-        timer: 1000,
-        buttons: false,
-    })
-    $('div.kv-upload-progress.kv-hidden').css({ 'display': 'none' })
-}).on('filepreupload', function (event, data, previewId, index) {
-    let filename = data.files[0].name
-    let length = (new TextEncoder().encode(filename)).length
-
-    if (length > 36) {
-        swal({
-            title: '',
-            text: '檔名太長',
-            icon: "error",
-            timer: 1500,
-            buttons: false,
-        })
-
-        // this doesn't work at all
-        // https://plugins.krajee.com/file-input/plugin-events#event-manipulation
-        return {
-            message: '檔名太長',
-        }
-    }
-}).on('filecustomerror', function (event, params) {
-    $("#info").fileinput('enable')
-    $("#info").fileinput('reset')
-})
-
-$('#course-form').on('submit', (e) => {
-    e.preventDefault();
-    $("#info").fileinput('upload')
+    });
 })
 
 const check = (index, readonly) => {
@@ -379,7 +332,7 @@ $('#checkModal .btn-primary').click(() => {
             Comment: $('#comment').val(),
         },
         error: (xhr) => {
-            error(xhr, '修改失敗')
+            errorHandle(xhr, '修改失敗')
         },
         beforeSend: (xhr) => {
             setHeader(xhr)
@@ -420,7 +373,7 @@ $('#checkModal .btn-danger').click(() => {
             Comment: $('#comment').val(),
         },
         error: (xhr) => {
-            error(xhr, '修改失敗')
+            errorHandle(xhr, '修改失敗')
         },
         beforeSend: (xhr) => {
             setHeader(xhr)
@@ -489,6 +442,20 @@ $('#update-form').on('submit', (e) => {
         form.append("Information", fstack[0].file)
     }
 
+    let filename = fstack[0].file.name
+    let length = (new TextEncoder().encode(filename)).length
+
+    if (length > 36) {
+        swal({
+            title: '',
+            text: '檔名太長',
+            icon: "error",
+            timer: 1500,
+            buttons: false,
+        })
+        return
+    }
+
     $.ajax({
         url: `${config.server}/v1/course`,
         type: 'PATCH',
@@ -499,7 +466,7 @@ $('#update-form').on('submit', (e) => {
             setHeader(xhr)
         },
         error: (xhr) => {
-            error(xhr, '修改失敗')
+            errorHandle(xhr, '失敗')
         },
         success: (response) => {
             if (response.code === 0) {
@@ -536,7 +503,7 @@ const deleteCourse = () => {
             setHeader(xhr)
         },
         error: (xhr) => {
-            error(xhr, '修改失敗')
+            errorHandle(xhr, '修改失敗')
         },
         success: (response) => {
             if (response.code === 0) {

@@ -41,7 +41,7 @@ const serviceLearningTable = $('table#service-learning').DataTable({
             setHeader(xhr)
         },
         error: (xhr, error, thrown) => {
-            error(xhr, xhr.responseText)
+            errorHandle(xhr, xhr.responseText)
         }
     },
     columns: [
@@ -87,7 +87,7 @@ const studentServiceLearningTable = $('table#student-service-learning').DataTabl
             setHeader(xhr)
         },
         error: (xhr, error, thrown) => {
-            error(xhr, xhr.responseText)
+            errorHandle(xhr, xhr.responseText)
         }
     },
     columns: [
@@ -222,7 +222,7 @@ $('#service-learning-form').on('submit', (e) => {
             setHeader(xhr)
         },
         error: (xhr) => {
-            error(xhr, '失敗')
+            errorHandle(xhr, '失敗')
         },
         success: (response) => {
             swal({
@@ -284,7 +284,7 @@ const getFile = (file) => {
             'StudentServiceLearningID': ID,
         },
         error: (xhr) => {
-            error(xhr, '失敗')
+            errorHandle(xhr, '失敗')
         },
         beforeSend: (xhr) => {
             setHeader(xhr)
@@ -317,7 +317,7 @@ const updateStatus = (status) => {
             setHeader(xhr)
         },
         error: (xhr) => {
-            error(xhr, '失敗')
+            errorHandle(xhr, '失敗')
         },
         success: (response) => {
             if (response.code === 0) {
@@ -385,7 +385,7 @@ $('#update-form').on('submit', (e) => {
             setHeader(xhr)
         },
         error: (xhr) => {
-            error(xhr, '失敗')
+            errorHandle(xhr, '失敗')
         },
         success: (response) => {
             if (response.code === 0) {
@@ -421,7 +421,7 @@ const deleteServiceLearning = () => {
             setHeader(xhr)
         },
         error: (xhr) => {
-            error(xhr, '失敗')
+            errorHandle(xhr, '失敗')
         },
         success: (response) => {
             if (response.code === 0) {

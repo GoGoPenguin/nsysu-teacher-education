@@ -15,7 +15,7 @@ const studentTable = $('table#students').DataTable({
             setHeader(xhr)
         },
         error: (xhr, error, thrown) => {
-            error(xhr, xhr.responseText)
+            errorHandle(xhr, xhr.responseText)
         }
     },
     columns: [

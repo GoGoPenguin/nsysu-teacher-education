@@ -31,7 +31,7 @@ const courseTable = $('table#leture').DataTable({
             setHeader(xhr)
         },
         error: (xhr, error, thrown) => {
-            error(xhr, xhr.responseText)
+            errorHandle(xhr, xhr.responseText)
         }
     },
     columns: [
@@ -53,7 +53,7 @@ const detail = (index) => {
         url: `${config.server}/v1/leture/${leture.ID}`,
         type: 'GET',
         error: (xhr) => {
-            error(xhr, '失敗')
+            errorHandle(xhr, '失敗')
         },
         beforeSend: (xhr) => {
             setHeader(xhr)
