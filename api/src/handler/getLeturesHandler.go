@@ -13,7 +13,7 @@ func GetLeturesHandler(ctx iris.Context) {
 	type rule struct {
 		Start  string `valid:"required"`
 		Length string `valid:"required"`
-		Draw   string `valid:"required"`
+		Draw   string `valid:"-"`
 		Search string `valid:"-"`
 	}
 
