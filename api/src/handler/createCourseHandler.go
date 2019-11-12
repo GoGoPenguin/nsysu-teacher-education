@@ -22,9 +22,7 @@ func CreateCourseHandler(ctx iris.Context) {
 	file, header, err := ctx.FormFile("Information")
 
 	if err != nil {
-		json(ctx, map[string]interface{}{
-			"error": "Information: non zero value required",
-		})
+		failed(ctx, errors.ValidateError("Information: non zero value required"))
 		return
 	}
 	defer file.Close()
@@ -32,22 +30,16 @@ func CreateCourseHandler(ctx iris.Context) {
 	loc, _ := time.LoadLocation("Asia/Taipei")
 	startTime, err := time.ParseInLocation(t.DateTime, ctx.FormValue("Start"), loc)
 	if err != nil {
-		json(ctx, map[string]interface{}{
-			"error": "Start: " + ctx.FormValue("Start") + " does not validate as timestamp",
-		})
+		failed(ctx, errors.ValidateError("Start: "+ctx.FormValue("Start")+" does not validate as timestamp"))
 		return
 	}
 	endTime, err := time.ParseInLocation(t.DateTime, ctx.FormValue("End"), loc)
 	if err != nil {
-		json(ctx, map[string]interface{}{
-			"error": "End: " + ctx.FormValue("Start") + " does not validate as timestamp",
-		})
+		failed(ctx, errors.ValidateError("End: "+ctx.FormValue("Start")+" does not validate as timestamp"))
 		return
 	}
 	if !startTime.Before(endTime) {
-		json(ctx, map[string]interface{}{
-			"error": "Start: " + ctx.FormValue("Start") + " does not before " + ctx.FormValue("End"),
-		})
+		failed(ctx, errors.ValidateError("Start: "+ctx.FormValue("Start")+" does not before "+ctx.FormValue("End")))
 		return
 	}
 
@@ -59,13 +51,11 @@ func CreateCourseHandler(ctx iris.Context) {
 	}
 
 	if _, err := govalidator.ValidateStruct(params); err != nil {
-		json(ctx, map[string]interface{}{
-			"error": err.Error(),
-		})
+		failed(ctx, err)
 		return
 	}
 
-	_, err = service.CreateCourse(
+	result, err := service.CreateCourse(
 		params.Topic,
 		params.Type,
 		file,
@@ -75,12 +65,10 @@ func CreateCourseHandler(ctx iris.Context) {
 	)
 
 	if err != (*errors.Error)(nil) {
-		json(ctx, map[string]interface{}{
-			"error": err.Error(),
-		})
+		failed(ctx, err)
 		return
 	}
 
-	json(ctx, map[string]interface{}{})
+	success(ctx, result)
 	return
 }
