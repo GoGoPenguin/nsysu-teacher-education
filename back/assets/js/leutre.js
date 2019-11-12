@@ -77,32 +77,46 @@ const detail = (index) => {
                     }
 
                     for (let type of category.Types) {
+                        let condition1 = category.Types.indexOf(type) === category.Types.length - 1
+                        let subjectGroups = 0
 
                         if (type.MinCredit > 1) {
                             comment += `${type.Name}至少修習${type.MinCredit}學分<br>`
                         }
 
                         for (let group of type.Groups) {
+                            let condition2 = type.Groups.indexOf(group) === type.Groups.length - 1
+
                             subjects += group.Subjects.length
+                            subjectGroups += group.Subjects.length
 
                             for (let subject of group.Subjects) {
+                                let condition3 = group.Subjects.indexOf(subject) === group.Subjects.length - 1
                                 let temp = '<tr>'
-                                let condition1 = category.Types.indexOf(type) === category.Types.length - 1
-                                let condition2 = group.Subjects.indexOf(subject) === group.Subjects.length - 1
 
-                                if (condition1 && condition2) {
+                                if (condition1 && condition2 && condition3) {
                                     temp += `<td colspan="2" rowspan="${subjects}" class="align-middle">${category.Name}</td>`
                                 }
 
-                                if (condition2) {
-                                    temp += `<td colspan="2" rowspan="${group.Subjects.length}" class="align-middle">${type.Name}</td>`
+                                if (condition2 && condition3) {
+                                    temp += `<td colspan="2" rowspan="${subjectGroups}" class="align-middle">${type.Name}</td>`
                                 }
 
                                 temp += `<td colspan="1" class="align-middle">${subject.Compulsory ? "必修" : "選修"}</td>`
-                                temp += `<td colspan="4" class="align-middle">${subject.Name}</td>`
+
+                                if (group.MinCredit > 0) {
+                                    temp += `<td colspan="3" class="align-middle">${subject.Name}</td>`
+
+                                    if (condition3) {
+                                        temp += `<td colspan="1" rowspan="${group.Subjects.length}" class="align-middle vericaltext">至少${group.MinCredit}學分</td>`
+                                    }
+                                } else {
+                                    temp += `<td colspan="4" class="align-middle">${subject.Name}</td>`
+                                }
+
                                 temp += `<td colspan="1" class="align-middle">${subject.Credit}</td>`
 
-                                if (condition1 && condition2) {
+                                if (condition1 && condition2 && condition3) {
                                     temp += `<td colspan="2" rowspan="${subjects}" class="align-middle">${comment}</td>`
                                 }
 
