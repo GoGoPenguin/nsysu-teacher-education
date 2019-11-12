@@ -10,8 +10,22 @@ const STATUS = {
 }
 let StudentServiceLearningID = undefined
 
+$(document).ready(() => {
+    loading()
+
+    Promise.all([
+        getStudentServiceLearning(),
+    ]).then(() => {
+        unloading()
+    }).catch(() => {
+        setTimeout(() => {
+            removeCookie()
+        }, 1500)
+    })
+})
+
 const getStudentServiceLearning = () => {
-    $.ajax({
+    return $.ajax({
         url: `${config.server}/v1/service-learning/student`,
         type: 'GET',
         beforeSend: (xhr) => {
@@ -61,85 +75,81 @@ const getStudentServiceLearning = () => {
     });
 }
 
-$(document).ready(() => {
-    getStudentServiceLearning()
-
-    $("#reference").fileinput({
-        language: 'zh-TW',
-        theme: "fas",
-        showPreview: false,
-        uploadUrl: `${config.server}/v1/service-learning/student`,
-        ajaxSettings: {
-            headers: {
-                'Authorization': `Bearer ${$.cookie('token')}`,
-            },
-            method: "PATCH"
-        },
-        uploadExtraData: (previewId, index) => {
-            return {
-                'StudentServiceLearningID': StudentServiceLearningID,
-            }
-        }
-    }).on('fileuploaded', (event, previewId, index, fileId) => {
-        swal({
-            title: '',
-            text: '成功',
-            icon: "success",
-            timer: 1000,
-            buttons: false,
-        })
-        setTimeout(() => {
-            $('#reference').fileinput('clear')
-        }, 1000)
-    }).on('fileuploaderror', (event, data, msg) => {
-        swal({
-            title: '',
-            text: '失敗',
-            icon: "error",
-            timer: 1000,
-            buttons: false,
-        })
-    })
-
-    $("#review").fileinput({
-        language: 'zh-TW',
-        theme: "fas",
-        showPreview: false,
-        uploadUrl: `${config.server}/v1/service-learning/student`,
-        ajaxSettings: {
-            headers: {
-                'Authorization': `Bearer ${$.cookie('token')}`,
-            },
-            method: "PATCH"
-        },
-        uploadExtraData: (previewId, index) => {
-            return {
-                'StudentServiceLearningID': StudentServiceLearningID,
-            }
-        }
-    }).on('fileuploaded', (event, previewId, index, fileId) => {
-        swal({
-            title: '',
-            text: '成功',
-            icon: "success",
-            timer: 1000,
-            buttons: false,
-        })
-        setTimeout(() => {
-            $('#review').fileinput('clear')
-        }, 1000)
-    }).on('fileuploaderror', (event, data, msg) => {
-        swal({
-            title: '',
-            text: '失敗',
-            icon: "error",
-            timer: 1000,
-            buttons: false,
-        })
-    })
-})
-
 const edit = id => {
     StudentServiceLearningID = id
     $('#Modal').modal('show')
 }
+
+$("#reference").fileinput({
+    language: 'zh-TW',
+    theme: "fas",
+    showPreview: false,
+    uploadUrl: `${config.server}/v1/service-learning/student`,
+    ajaxSettings: {
+        headers: {
+            'Authorization': `Bearer ${$.cookie('token')}`,
+        },
+        method: "PATCH"
+    },
+    uploadExtraData: (previewId, index) => {
+        return {
+            'StudentServiceLearningID': StudentServiceLearningID,
+        }
+    }
+}).on('fileuploaded', (event, previewId, index, fileId) => {
+    swal({
+        title: '',
+        text: '成功',
+        icon: "success",
+        timer: 1000,
+        buttons: false,
+    })
+    setTimeout(() => {
+        $('#reference').fileinput('clear')
+    }, 1000)
+}).on('fileuploaderror', (event, data, msg) => {
+    swal({
+        title: '',
+        text: '失敗',
+        icon: "error",
+        timer: 1000,
+        buttons: false,
+    })
+})
+
+$("#review").fileinput({
+    language: 'zh-TW',
+    theme: "fas",
+    showPreview: false,
+    uploadUrl: `${config.server}/v1/service-learning/student`,
+    ajaxSettings: {
+        headers: {
+            'Authorization': `Bearer ${$.cookie('token')}`,
+        },
+        method: "PATCH"
+    },
+    uploadExtraData: (previewId, index) => {
+        return {
+            'StudentServiceLearningID': StudentServiceLearningID,
+        }
+    }
+}).on('fileuploaded', (event, previewId, index, fileId) => {
+    swal({
+        title: '',
+        text: '成功',
+        icon: "success",
+        timer: 1000,
+        buttons: false,
+    })
+    setTimeout(() => {
+        $('#review').fileinput('clear')
+    }, 1000)
+}).on('fileuploaderror', (event, data, msg) => {
+    swal({
+        title: '',
+        text: '失敗',
+        icon: "error",
+        timer: 1000,
+        buttons: false,
+    })
+})

@@ -5,13 +5,23 @@ const TYPE = {
 }
 
 $(document).ready(() => {
-    getCourses()
-    getServiceLearning()
-    getLetures()
+    loading()
+
+    Promise.all([
+        getCourses(),
+        getServiceLearning(),
+        getLetures()
+    ]).then(() => {
+        unloading()
+    }).catch(() => {
+        setTimeout(() => {
+            removeCookie()
+        }, 1500)
+    })
 })
 
 const getCourses = () => {
-    $.ajax({
+    return $.ajax({
         url: `${config.server}/v1/course`,
         type: 'GET',
         beforeSend: (xhr) => {
@@ -58,7 +68,7 @@ const getCourses = () => {
 }
 
 const getServiceLearning = () => {
-    $.ajax({
+    return $.ajax({
         url: `${config.server}/v1/service-learning`,
         type: 'GET',
         beforeSend: (xhr) => {
@@ -97,7 +107,7 @@ const getServiceLearning = () => {
 }
 
 const getLetures = () => {
-    $.ajax({
+    return $.ajax({
         url: `${config.server}/v1/leture`,
         type: 'GET',
         beforeSend: (xhr) => {

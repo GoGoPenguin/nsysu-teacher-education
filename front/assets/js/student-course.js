@@ -11,7 +11,21 @@ const MEAL = {
 let studentCourses = []
 
 $(document).ready(() => {
-    $.ajax({
+    loading()
+
+    Promise.all([
+        getStudentCourses(),
+    ]).then(() => {
+        unloading()
+    }).catch(() => {
+        setTimeout(() => {
+            removeCookie()
+        }, 1500)
+    })
+})
+
+const getStudentCourses = () => {
+    return $.ajax({
         url: `${config.server}/v1/course/student`,
         type: 'GET',
         beforeSend: (xhr) => {
@@ -74,7 +88,7 @@ $(document).ready(() => {
             }
         }
     });
-})
+}
 
 const edit = (index) => {
     let id = studentCourses[index].ID

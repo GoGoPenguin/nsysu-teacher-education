@@ -27,6 +27,7 @@
     <!-- Custom styles for this template -->
     <link href="/node_modules/startbootstrap-scrolling-nav/css/scrolling-nav.css" rel="stylesheet">
     <link href="/assets/css/index.css" rel="stylesheet">
+    <link href="/assets/css/overlay.css" rel="stylesheet">
 
 </head>
 
@@ -46,7 +47,7 @@
                         <a class="nav-link js-scroll-trigger" href="#education">教育學分</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link js-scroll-trigger" href="#subject">專門科目</a>
+                        <a class="nav-link js-scroll-trigger" href="#leture">專門科目</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link js-scroll-trigger" href="#course">研習</a>
@@ -269,6 +270,13 @@
         </div>
     </div>
 
+    <!-- Overlay -->
+    <div id="overlay">
+        <div class="spinner-border text-light" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+
     <!-- Bootstrap core JavaScript -->
     <script src="/node_modules/jquery/dist/jquery.min.js"></script>
     <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -284,6 +292,7 @@
     <script src="/node_modules/startbootstrap-scrolling-nav/js/scrolling-nav.js"></script>
 
     <script src="/assets/js/auth.js"></script>
+    <script src="/assets/js/loading.js"></script>
     <script src="/assets/js/index.js"></script>
 
 </body>
