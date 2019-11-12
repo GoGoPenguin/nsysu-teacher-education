@@ -14,20 +14,11 @@ const getStudentServiceLearning = () => {
     $.ajax({
         url: `${config.server}/v1/service-learning/student`,
         type: 'GET',
-        error: (xhr) => {
-            if (xhr.status === 401) {
-                removeCookie()
-            } else {
-            }
-        },
         beforeSend: (xhr) => {
-            let token = $.cookie('token')
-            if (token == undefined) {
-                renewToken()
-                token = $.cookie('token')
-            }
-
-            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+            setHeader(xhr)
+        },
+        error: (xhr) => {
+            errorHandle(xhr, "錯誤")
         },
         success: (response) => {
             if (response.list.length == 0) {
@@ -72,7 +63,6 @@ const getStudentServiceLearning = () => {
 
 $(document).ready(() => {
     getStudentServiceLearning()
-
 
     $("#reference").fileinput({
         language: 'zh-TW',

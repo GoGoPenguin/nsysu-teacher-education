@@ -8,21 +8,17 @@ const MEAL = {
     'meat': '葷',
 }
 
+let studentCourses = []
+
 $(document).ready(() => {
     $.ajax({
         url: `${config.server}/v1/course/student`,
         type: 'GET',
-        error: (xhr) => {
-            console.error(xhr);
-        },
         beforeSend: (xhr) => {
-            let token = $.cookie('token')
-            if (token == undefined) {
-                renewToken()
-                token = $.cookie('token')
-            }
-
-            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+            setHeader(xhr)
+        },
+        error: (xhr) => {
+            errorHandle(xhr, "錯誤")
         },
         success: (response) => {
             if (response.list.length == 0) {
@@ -32,7 +28,10 @@ $(document).ready(() => {
                         </tr>
                     `)
             } else {
+                studentCourses = []
                 response.list.forEach((element, index) => {
+                    studentCourses.push(Object.assign({}, element))
+
                     let startDate = element.Course.Start.substring(0, 10)
                     let startTime = element.Course.Start.substring(11, 19)
                     let endDate = element.Course.End.substring(0, 10)
@@ -55,17 +54,17 @@ $(document).ready(() => {
                     let result = `
                         <tr>
                             <th scope="row">${index}</th>\
+                            <td ${color}>${STATUS[element.Status]}</td>\
                             <td>${element.Course.Topic}</td>\
                             <td>${time}</td>\
                             <td>${element.Course.Type}</td>\
                             <td>${MEAL[element.Meal]}</td>\
-                            <td ${color}>${STATUS[element.Status]}</td>\
                             <td>${element.Comment}</td>\
                             <td>${element.Review}</td>\
                     `
 
                     if (element.Status !== 'pass') {
-                        result = `${result}<td><button class="btn btn-primary" onclick="edit('${element.ID}')">編輯</button></td></tr>`
+                        result = `${result}<td><button class="btn btn-primary" onclick="edit(${index})">編輯</button></td></tr>`
                     } else {
                         result = `${result}<td></td></tr>`
                     }
@@ -77,8 +76,9 @@ $(document).ready(() => {
     });
 })
 
-const edit = (id) => {
-    let review = $(this).prev().html()
+const edit = (index) => {
+    let id = studentCourses[index].ID
+    let review = studentCourses[index].Review
 
     $('#updateReviewModal textarea').val(review)
     $('#updateReviewModal input').val(id)
@@ -94,31 +94,15 @@ $('#updateReviewModal form').on('submit', (e) => {
     $.ajax({
         url: `${config.server}/v1/course/student/review`,
         type: 'PATCH',
-        error: (xhr) => {
-            if (xhr.status === 401) {
-                removeCookie()
-            } else {
-                swal({
-                    title: '',
-                    text: '錯誤',
-                    icon: "error",
-                    timer: 1500,
-                    buttons: false,
-                })
-            }
-        },
         data: {
             'StudentCourseID': studentCourseID,
             'Review': review,
         },
         beforeSend: (xhr) => {
-            let token = $.cookie('token')
-            if (token == undefined) {
-                renewToken()
-                token = $.cookie('token')
-            }
-
-            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+            setHeader(xhr)
+        },
+        error: (xhr) => {
+            errorHandle(xhr, "錯誤")
         },
         success: (response) => {
             $('#updateReviewModal').modal('hide')

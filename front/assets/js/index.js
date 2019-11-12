@@ -8,20 +8,11 @@ const getCourses = () => {
     $.ajax({
         url: `${config.server}/v1/course`,
         type: 'GET',
-        error: (xhr) => {
-            if (xhr.status === 401) {
-                removeCookie()
-            } else {
-            }
-        },
         beforeSend: (xhr) => {
-            let token = $.cookie('token')
-            if (token == undefined) {
-                renewToken()
-                token = $.cookie('token')
-            }
-
-            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+            setHeader(xhr)
+        },
+        error: (xhr) => {
+            errorHandle(xhr, "錯誤")
         },
         success: (response) => {
             if (response.list.length == 0) {
@@ -64,21 +55,11 @@ const getServiceLearning = () => {
     $.ajax({
         url: `${config.server}/v1/service-learning`,
         type: 'GET',
-        error: (xhr) => {
-            if (xhr.status === 401) {
-                removeCookie()
-            } else {
-
-            }
-        },
         beforeSend: (xhr) => {
-            let token = $.cookie('token')
-            if (token == undefined) {
-                renewToken()
-                token = $.cookie('token')
-            }
-
-            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+            setHeader(xhr)
+        },
+        error: (xhr) => {
+            errorHandle(xhr, "錯誤")
         },
         success: (response) => {
             if (response.list.length == 0) {
@@ -122,27 +103,11 @@ const getInformation = (id, filename) => {
         xhrFields: {
             responseType: "blob"
         },
-        error: (xhr) => {
-            if (xhr.status === 401) {
-                removeCookie()
-            } else {
-                swal({
-                    title: '',
-                    text: '失敗',
-                    icon: "error",
-                    timer: 1500,
-                    buttons: false,
-                })
-            }
-        },
         beforeSend: (xhr) => {
-            let token = $.cookie('token')
-            if (token == undefined) {
-                renewToken()
-                token = $.cookie('token')
-            }
-
-            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+            setHeader(xhr)
+        },
+        error: (xhr) => {
+            errorHandle(xhr, "錯誤")
         },
         success: (response) => {
             let a = document.createElement('a');
@@ -173,27 +138,11 @@ $('#courseModal form').on('submit', (e) => {
             'CourseID': $('input.course-id').val(),
             'Meal': $('#meal').val(),
         },
-        error: (xhr) => {
-            if (xhr.status === 401) {
-                removeCookie()
-            } else {
-                swal({
-                    title: '',
-                    text: '報名失敗',
-                    icon: "error",
-                    timer: 1500,
-                    buttons: false,
-                })
-            }
-        },
         beforeSend: (xhr) => {
-            let token = $.cookie('token')
-            if (token == undefined) {
-                renewToken()
-                token = $.cookie('token')
-            }
-
-            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+            setHeader(xhr)
+        },
+        error: (xhr) => {
+            errorHandle(xhr, "錯誤")
         },
         success: (response) => {
             $('#courseModal').modal('hide')
@@ -227,27 +176,11 @@ const signUpServiceLearning = (id) => {
             'Account': $.cookie('account'),
             'ServiceLearningID': id,
         },
-        error: (xhr) => {
-            if (xhr.status === 401) {
-                removeCookie()
-            } else {
-                swal({
-                    title: '',
-                    text: '報名失敗',
-                    icon: "error",
-                    timer: 1500,
-                    buttons: false,
-                })
-            }
-        },
         beforeSend: (xhr) => {
-            let token = $.cookie('token')
-            if (token == undefined) {
-                renewToken()
-                token = $.cookie('token')
-            }
-
-            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+            setHeader(xhr)
+        },
+        error: (xhr) => {
+            errorHandle(xhr, "錯誤")
         },
         success: (response) => {
             $('#signUpModal').modal('hide')

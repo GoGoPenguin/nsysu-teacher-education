@@ -4,6 +4,16 @@ All notable changes are documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+### Added
+
+- 新增登入逾時提示訊息
+
+### Fixed
+
+- 修正「我的研習」頁面編輯按鈕bug
+
 ## [0.1.1] - 2019.11.06
 
 ### Fixed
