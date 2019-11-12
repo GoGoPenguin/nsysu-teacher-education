@@ -10,6 +10,10 @@ $('button#login').click(() => {
             'Password': password,
             'Role': 'student',
         },
+        beforeSend: () => {
+            $('#login').html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>&nbsp載入中...')
+            $('#login').attr("disabled", true)
+        },
         error: (xhr) => {
             $('div.flex-sb-m div.alert-danger').show('fast')
             setTimeout(() => {
@@ -34,6 +38,10 @@ $('button#login').click(() => {
 
                 location.href = '/'
             }
+        },
+        complete: (jqXHR, textStatus) => {
+            $('#login').html('送出')
+            $('#login').attr("disabled", false)
         }
     });
 })
