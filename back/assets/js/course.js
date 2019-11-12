@@ -205,11 +205,11 @@ const getInformation = (id, filename) => {
         xhrFields: {
             responseType: "blob"
         },
-        error: (xhr) => {
-            errorHandle(xhr, '失敗')
-        },
         beforeSend: (xhr) => {
             setHeader(xhr)
+        },
+        error: (xhr) => {
+            errorHandle(xhr, '失敗')
         },
         success: (response) => {
             let a = document.createElement('a');
@@ -331,11 +331,11 @@ $('#checkModal .btn-primary').click(() => {
             Status: 'pass',
             Comment: $('#comment').val(),
         },
-        error: (xhr) => {
-            errorHandle(xhr, '修改失敗')
-        },
         beforeSend: (xhr) => {
             setHeader(xhr)
+        },
+        error: (xhr) => {
+            errorHandle(xhr, '修改失敗')
         },
         success: (response) => {
             if (response.code === 0) {
@@ -372,11 +372,11 @@ $('#checkModal .btn-danger').click(() => {
             Status: 'failed',
             Comment: $('#comment').val(),
         },
-        error: (xhr) => {
-            errorHandle(xhr, '修改失敗')
-        },
         beforeSend: (xhr) => {
             setHeader(xhr)
+        },
+        error: (xhr) => {
+            errorHandle(xhr, '修改失敗')
         },
         success: (response) => {
             if (response.code === 0) {

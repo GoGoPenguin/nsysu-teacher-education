@@ -283,11 +283,11 @@ const getFile = (file) => {
         data: {
             'StudentServiceLearningID': ID,
         },
-        error: (xhr) => {
-            errorHandle(xhr, '失敗')
-        },
         beforeSend: (xhr) => {
             setHeader(xhr)
+        },
+        error: (xhr) => {
+            errorHandle(xhr, '失敗')
         },
         success: (response) => {
             let a = document.createElement('a');

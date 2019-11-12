@@ -52,11 +52,11 @@ const detail = (index) => {
     $.ajax({
         url: `${config.server}/v1/leture/${leture.ID}`,
         type: 'GET',
-        error: (xhr) => {
-            errorHandle(xhr, '失敗')
-        },
         beforeSend: (xhr) => {
             setHeader(xhr)
+        },
+        error: (xhr) => {
+            errorHandle(xhr, '失敗')
         },
         success: (response) => {
             if (response.code === 0) {

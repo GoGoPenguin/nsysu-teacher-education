@@ -12,6 +12,10 @@ $('#loginform').on('submit', (e) => {
             'Password': password,
             'Role': 'admin',
         },
+        beforeSend: (xhr) => {
+            $('#loginform button').html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>&nbsp載入中...')
+            $('#loginform button').attr("disabled", true)
+        },
         error: (xhr) => {
             swal({
                 title: '',
@@ -42,8 +46,12 @@ $('#loginform').on('submit', (e) => {
 
                 location.href = '/'
             }
+        },
+        complete: () => {
+            $('#loginform button').html('送出')
+            $('#loginform button').attr("disabled", false)
         }
-    });
+    })
 });
 
 $('button#logout').click(() => {
@@ -54,9 +62,6 @@ $('#logoutModal button.btn.btn-primary').click(() => {
     $.ajax({
         url: `${config.server}/v1/logout`,
         type: 'POST',
-        error: (xhr) => {
-            console.error(xhr);
-        },
         beforeSend: (xhr) => {
             let token = $.cookie('token')
             if (token == undefined) {
@@ -66,35 +71,18 @@ $('#logoutModal button.btn.btn-primary').click(() => {
 
             xhr.setRequestHeader('Authorization', `Bearer ${token}`);
         },
+        error: (xhr) => {
+            removeCookie()
+        },
         success: (response) => {
-            if (response.code != 0) {
-                console.error(response.message)
-            } else {
-                let date = new Date()
-                date.setTime(date.getTime() + (response.data.Expire * 1000));
-
-                let cookies = $.cookie()
-                for (var cookie in cookies) {
-                    $.removeCookie(cookie)
-                }
-
-                location.href = '/login.html'
-            }
+            removeCookie()
         }
     });
 })
 
 const errorHandle = (xhr, msg) => {
     if (xhr.status == 401) {
-        setTimeout(() => {
-            let cookies = $.cookie()
-            for (var cookie in cookies) {
-                $.removeCookie(cookie)
-            }
-
-            location.href = '/login.html'
-        }, 2000);
-
+        setTimeout(removeCookie, 2000);
 
         swal({
             title: '',

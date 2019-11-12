@@ -1,6 +1,15 @@
 let token = $.cookie('token')
 let refreshToken = $.cookie('refresh-token')
 
+const removeCookie = () => {
+    let cookies = $.cookie()
+    for (var cookie in cookies) {
+        $.removeCookie(cookie)
+    }
+
+    location.href = '/login.html'
+}
+
 const renewToken = () => {
     let account = $.cookie('account')
     let refreshToken = $.cookie('refresh-token')
