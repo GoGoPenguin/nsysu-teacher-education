@@ -13,12 +13,23 @@ $('#loginform').on('submit', (e) => {
             'Role': 'admin',
         },
         error: (xhr) => {
-            alert('Unexcepted Error')
-            console.error(xhr);
+            swal({
+                title: '',
+                text: '系統錯誤',
+                icon: "error",
+                timer: 2000,
+                buttons: false,
+            })
         },
         success: (response) => {
             if (response.code != 0) {
-                alert(response.message)
+                swal({
+                    title: '',
+                    text: '帳號或密碼錯誤',
+                    icon: "error",
+                    timer: 1500,
+                    buttons: false,
+                })
             } else {
                 let date = new Date()
                 date.setTime(date.getTime() + (response.data.Expire * 1000));
