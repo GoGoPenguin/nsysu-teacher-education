@@ -18,7 +18,7 @@ type letureCategoryDao struct {
 	table string
 }
 
-// LetureCategoryDao leture_category data acces object
+// LetureCategoryDao leture_category data access object
 var LetureCategoryDao = &letureCategoryDao{
 	table: "leture_category",
 }

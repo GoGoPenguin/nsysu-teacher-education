@@ -20,7 +20,7 @@ type letureDao struct {
 	Disable string
 }
 
-// LetureDao leture data acces object
+// LetureDao leture data access object
 var LetureDao = &letureDao{
 	table:   "leture",
 	Enable:  "enable",

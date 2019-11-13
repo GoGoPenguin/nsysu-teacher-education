@@ -25,7 +25,7 @@ type studentCourseDao struct {
 	StatusFailed string
 }
 
-// StudentCourseDao user data acces object
+// StudentCourseDao student course data access object
 var StudentCourseDao = &studentCourseDao{
 	table:        "student_course",
 	Meat:         "meate",

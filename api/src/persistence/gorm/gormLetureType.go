@@ -17,7 +17,7 @@ type letureTypeDao struct {
 	table string
 }
 
-// LetureTypeDao leture_type data acces object
+// LetureTypeDao leture_type data access object
 var LetureTypeDao = &letureTypeDao{
 	table: "leture_type",
 }

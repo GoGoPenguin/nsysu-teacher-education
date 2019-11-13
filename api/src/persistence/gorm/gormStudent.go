@@ -19,7 +19,7 @@ type studentDao struct {
 	Role  string
 }
 
-// StudentDao user data acces object
+// StudentDao user data access object
 var StudentDao = studentDao{
 	table: "student",
 	Role:  "student",

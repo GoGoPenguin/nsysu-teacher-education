@@ -20,7 +20,7 @@ type subjectDao struct {
 	Disable string
 }
 
-// SubjectDao subject data acces object
+// SubjectDao subject data access object
 var SubjectDao = &subjectDao{
 	table:   "subject",
 	Enable:  "enable",

@@ -24,7 +24,7 @@ type serviceLearningDao struct {
 	TypeBoth       string
 }
 
-// ServiceLearningDao user data acces object
+// ServiceLearningDao service-learning data access object
 var ServiceLearningDao = &serviceLearningDao{
 	table:          "service_learning",
 	TypeInternship: "internship",

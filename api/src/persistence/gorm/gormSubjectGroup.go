@@ -16,7 +16,7 @@ type subjectGroupDao struct {
 	table string
 }
 
-// SubjectGroupDao subject_group data acces object
+// SubjectGroupDao subject_group data access object
 var SubjectGroupDao = &subjectGroupDao{
 	table: "subject_group",
 }

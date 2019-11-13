@@ -16,7 +16,7 @@ type User struct {
 
 type userDao struct{}
 
-// UserDao user data acces object
+// UserDao user data access object
 var UserDao userDao
 
 func (*userDao) Get(conn *Conn, account string) *User {

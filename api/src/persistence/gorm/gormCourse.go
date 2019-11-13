@@ -23,7 +23,7 @@ type courseDao struct {
 	TypeC string
 }
 
-// CourseDao user data acces object
+// CourseDao course data access object
 var CourseDao = &courseDao{
 	table: "course",
 	TypeA: "A",
