@@ -56,22 +56,12 @@ func GetCourse(account, start, length, search string) (result map[string]interfa
 		}
 	}()
 
-	var (
-		courses  *[]gorm.Course
-		filtered int
-	)
-
+	var courses *[]gorm.Course
 	if operator := gorm.AdminDao.GetByAccount(tx, account); operator != nil {
 		courses = gorm.CourseDao.Query(
 			tx,
 			specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
 			specification.OrderSpecification("start", specification.OrderDirectionDESC),
-			specification.LikeSpecification([]string{"topic", "information", "type", "start", "end"}, search),
-			specification.IsNullSpecification("deleted_at"),
-		)
-
-		filtered = gorm.CourseDao.Count(
-			tx,
 			specification.LikeSpecification([]string{"topic", "information", "type", "start", "end"}, search),
 			specification.IsNullSpecification("deleted_at"),
 		)
@@ -93,7 +83,7 @@ func GetCourse(account, start, length, search string) (result map[string]interfa
 	result = map[string]interface{}{
 		"list":            assembler.CoursesDTO(courses),
 		"recordsTotal":    total,
-		"recordsFiltered": filtered,
+		"recordsFiltered": len(*courses),
 	}
 
 	return result, nil
@@ -169,22 +159,13 @@ func GetSutdentCourseList(account, start, length string) (result map[string]inte
 		}
 	}()
 
-	var (
-		studentCourses *[]gorm.StudentCourse
-		filtered       int
-	)
-
+	var studentCourses *[]gorm.StudentCourse
 	if operator := gorm.AdminDao.GetByAccount(tx, account); operator != nil {
 		studentCourses = gorm.StudentCourseDao.Query(
 			tx,
 			specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
 			specification.OrderSpecification("`student_course`."+specification.IDColumn, specification.OrderDirectionDESC),
-			specification.IsNullSpecification("`student_course`.deleted_at"),
-		)
-
-		filtered = gorm.StudentCourseDao.Count(
-			tx,
-			specification.IsNullSpecification("`student_course`.deleted_at"),
+			specification.IsNullSpecification("deleted_at"),
 		)
 	} else {
 		student := gorm.StudentDao.GetByAccount(tx, account)
@@ -205,7 +186,7 @@ func GetSutdentCourseList(account, start, length string) (result map[string]inte
 	result = map[string]interface{}{
 		"list":            assembler.StudentCoursesDTO(studentCourses),
 		"recordsTotal":    total,
-		"recordsFiltered": filtered,
+		"recordsFiltered": len(*studentCourses),
 	}
 
 	return

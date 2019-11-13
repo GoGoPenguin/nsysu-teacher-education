@@ -11,6 +11,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 - 取得科目列表
 - 取得科目詳細資訊
 
+### Fixed
+
+- 修正一些小bug
+
 ## [0.1.1] - 2019.11.06
 
 ### Added

@@ -136,22 +136,13 @@ func GetSutdentServiceLearningList(account, start, length string) (result map[st
 		}
 	}()
 
-	var (
-		studentServiceLearnings *[]gorm.StudentServiceLearning
-		filtered                int
-	)
-
+	var studentServiceLearnings *[]gorm.StudentServiceLearning
 	if operator := gorm.AdminDao.GetByAccount(tx, account); operator != nil {
 		studentServiceLearnings = gorm.StudentServiceLearningDao.Query(
 			tx,
 			specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
 			specification.OrderSpecification("`student_service_learning`."+specification.IDColumn, specification.OrderDirectionDESC),
-			specification.IsNullSpecification("`student_service_learning`.deleted_at"),
-		)
-
-		filtered = gorm.StudentCourseDao.Count(
-			tx,
-			specification.IsNullSpecification("`student_service_learning`.deleted_at"),
+			specification.IsNullSpecification("deleted_at"),
 		)
 	} else {
 		student := gorm.StudentDao.GetByAccount(tx, account)
@@ -164,7 +155,7 @@ func GetSutdentServiceLearningList(account, start, length string) (result map[st
 		)
 	}
 
-	total := gorm.StudentCourseDao.Count(
+	total := gorm.StudentServiceLearningDao.Count(
 		tx,
 		specification.IsNullSpecification("deleted_at"),
 	)
@@ -172,7 +163,7 @@ func GetSutdentServiceLearningList(account, start, length string) (result map[st
 	result = map[string]interface{}{
 		"list":            assembler.StudentServiceLearningsDTO(studentServiceLearnings),
 		"recordsTotal":    total,
-		"recordsFiltered": filtered,
+		"recordsFiltered": len(*studentServiceLearnings),
 	}
 
 	return
@@ -202,7 +193,7 @@ func UpdateStudentServiceLearning(reference, review multipart.File, studentServi
 
 		file, err := os.OpenFile(
 			fileName,
-			os.O_WRONLY|os.O_CREATE,
+			os.O_WRONLY|os.O_CREATE|os.O_TRUNC,
 			0666,
 		)
 		if err != nil {
