@@ -78,7 +78,7 @@ const getStudentCourses = () => {
                     `
 
                     if (element.Status !== 'pass') {
-                        result = `${result}<td><button class="btn btn-primary" onclick="edit(${index})">編輯</button></td></tr>`
+                        result = `${result}<td><button class="btn btn-primary" onclick="edit(${index})" id="${element.ID}">編輯</button></td></tr>`
                     } else {
                         result = `${result}<td></td></tr>`
                     }
@@ -113,22 +113,37 @@ $('#updateReviewModal form').on('submit', (e) => {
             'Review': review,
         },
         beforeSend: (xhr) => {
+            $('#updateReviewModal button.btn.btn-primary').html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>&nbsp載入中...')
+            $('#updateReviewModal button.btn.btn-primary').attr("disabled", true)
             setHeader(xhr)
         },
         error: (xhr) => {
             errorHandle(xhr, "錯誤")
         },
         success: (response) => {
+            if (response.code === 0) {
+                swal({
+                    title: '',
+                    text: '成功',
+                    icon: "success",
+                    timer: 1500,
+                    buttons: false,
+                })
+            } else {
+                swal({
+                    title: '',
+                    text: '失敗',
+                    icon: "error",
+                    timer: 1500,
+                    buttons: false,
+                })
+            }
+        },
+        complete: () => {
+            $('#updateReviewModal button.btn.btn-primary').html('送出')
+            $('#updateReviewModal button.btn.btn-primary').attr("disabled", false)
             $('#updateReviewModal').modal('hide')
             $(`button#${studentCourseID}`).parent().prev().html(review)
-
-            swal({
-                title: '',
-                text: '成功',
-                icon: "success",
-                timer: 1500,
-                buttons: false,
-            })
         }
     })
 })

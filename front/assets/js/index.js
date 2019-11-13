@@ -97,7 +97,7 @@ const getServiceLearning = () => {
                         <td>${startDate} ~ ${endDate}</td>
                         <td>${element.Session}</td>
                         <td>${element.Hours}</td>
-                        <td><button class="btn btn-primary" onclick="signUpServiceLearning(${element.ID})">報名</button></td>
+                        <td><button class="btn btn-primary" onclick="signUpServiceLearning(${element.ID}, this)">報名</button></td>
                     </tr>
                 `)
                 })
@@ -131,7 +131,7 @@ const getLetures = () => {
                         <td>${element.Name}</td>
                         <td>${element.MinCredit}</td>
                         <td>${element.Comment}</td>
-                        <td><button class="btn btn-secondary mr-3" onclick="detail(${element.ID})">查看</button><button class="btn btn-primary">報名</button></td>
+                        <td><button class="btn btn-secondary mr-3" onclick="detail(${element.ID}, this)">查看</button><button class="btn btn-primary">報名</button></td>
                     </tr>
                 `)
                 })
@@ -183,14 +183,14 @@ $('#courseModal form').on('submit', (e) => {
             'Meal': $('#meal').val(),
         },
         beforeSend: (xhr) => {
+            $('#courseModal div.modal-footer button.btn.btn-primary').html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>&nbsp載入中...')
+            $('#courseModal div.modal-footer button.btn.btn-primary').attr("disabled", true)
             setHeader(xhr)
         },
         error: (xhr) => {
             errorHandle(xhr, "錯誤")
         },
         success: (response) => {
-            $('#courseModal').modal('hide')
-
             if (response.code === 0) {
                 swal({
                     title: '',
@@ -208,11 +208,16 @@ $('#courseModal form').on('submit', (e) => {
                     buttons: false,
                 })
             }
+        },
+        complete: () => {
+            $('#courseModal div.modal-footer button.btn.btn-primary').html('送出')
+            $('#courseModal div.modal-footer button.btn.btn-primary').attr("disabled", false)
+            $('#courseModal').modal('hide')
         }
     });
 })
 
-const signUpServiceLearning = (id) => {
+const signUpServiceLearning = (id, el) => {
     $.ajax({
         url: `${config.server}/v1/service-learning/sign-up`,
         type: 'POST',
@@ -221,14 +226,14 @@ const signUpServiceLearning = (id) => {
             'ServiceLearningID': id,
         },
         beforeSend: (xhr) => {
+            $(el).html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>&nbsp載入中...')
+            $(el).attr("disabled", true)
             setHeader(xhr)
         },
         error: (xhr) => {
             errorHandle(xhr, "錯誤")
         },
         success: (response) => {
-            $('#signUpModal').modal('hide')
-
             if (response.code === 0) {
                 swal({
                     title: '',
@@ -246,15 +251,21 @@ const signUpServiceLearning = (id) => {
                     buttons: false,
                 })
             }
+        },
+        complete: () => {
+            $(el).html('報名')
+            $(el).attr("disabled", false)
         }
     });
 }
 
-const detail = (id) => {
+const detail = (id, el) => {
     $.ajax({
         url: `${config.server}/v1/leture/${id}`,
         type: 'GET',
         beforeSend: (xhr) => {
+            $(el).html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>&nbsp載入中...')
+            $(el).attr("disabled", true)
             setHeader(xhr)
         },
         error: (xhr) => {
@@ -346,6 +357,10 @@ const detail = (id) => {
                     buttons: false,
                 })
             }
+        },
+        complete: () => {
+            $(el).html('查看')
+            $(el).attr("disabled", false)
         }
     });
 }
