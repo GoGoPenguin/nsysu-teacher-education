@@ -4,12 +4,18 @@ const TYPE = {
     'volunteer': '志工服務',
 }
 
+let studentCourses = []
+let studentServiceLearnings = []
+
+let editedID = null
+let editedItem = null
+
 $(document).ready(() => {
     loading()
 
     Promise.all([
-        getCourses(),
-        getServiceLearning(),
+        getStudentCourses(),
+        getStudentServiceLearning(),
         getLetures()
     ]).then(() => {
         unloading()
@@ -20,8 +26,54 @@ $(document).ready(() => {
     })
 })
 
+const getStudentCourses = () => {
+    $.ajax({
+        url: `${config.server}/v1/course/student`,
+        type: 'GET',
+        beforeSend: (xhr) => {
+            setHeader(xhr)
+        },
+        error: (xhr) => {
+            errorHandle(xhr, "錯誤")
+        },
+        success: (response) => {
+            if (response.list.length > 0) {
+                response.list.forEach((element, index) => {
+                    studentCourses.push(Object.assign({}, element))
+                })
+            }
+        },
+        complete: () => {
+            getCourses()
+        }
+    });
+}
+
+const getStudentServiceLearning = () => {
+    $.ajax({
+        url: `${config.server}/v1/service-learning/student`,
+        type: 'GET',
+        beforeSend: (xhr) => {
+            setHeader(xhr)
+        },
+        error: (xhr) => {
+            errorHandle(xhr, "錯誤")
+        },
+        success: (response) => {
+            if (response.list.length > 0) {
+                response.list.forEach((element, index) => {
+                    studentServiceLearnings.push(Object.assign({}, element))
+                })
+            }
+        },
+        complete: () => {
+            getServiceLearning()
+        }
+    });
+}
+
 const getCourses = () => {
-    return $.ajax({
+    $.ajax({
         url: `${config.server}/v1/course`,
         type: 'GET',
         beforeSend: (xhr) => {
@@ -39,11 +91,12 @@ const getCourses = () => {
                 `)
             } else {
                 response.list.forEach((element, index) => {
-                    let startDate = element.Start.substring(0, 10)
-                    let startTime = element.Start.substring(11, 19)
-                    let endDate = element.End.substring(0, 10)
-                    let endTime = element.End.substring(11, 19)
+                    let startDate = dayjs(element.Start).format('YYYY-MM-DD')
+                    let startTime = dayjs(element.Start).format('HH:mm:ss')
+                    let endDate = dayjs(element.End).format('YYYY-MM-DD')
+                    let endTime = dayjs(element.End).format('HH:mm:ss')
                     let time = ""
+                    let action = ''
 
                     if (startDate == endDate) {
                         time = `${startDate} ${startTime} ~ ${endTime}`
@@ -51,16 +104,26 @@ const getCourses = () => {
                         time = `${startDate} ${startTime} ~ ${endDate}  ${endTime}`
                     }
 
+                    let studentCourse = studentCourses.find(studentCourse => {
+                        return element.ID === studentCourse.Course.ID
+                    })
+
+                    if (studentCourse !== undefined) {
+                        action = `<button class="btn btn-primary" disabled>已報名</button>`
+                    } else {
+                        action = `<button class="btn btn-primary" onclick="signUpCourse(${element.ID}, this)">報名</button>`
+                    }
+
                     $('#course tbody').append(`
-                    <tr>
-                        <th scope="row">${index}</th>
-                        <td>${element.Topic}</td>
-                        <td>${time}</td>
-                        <td class="info" onclick="getInformation(${element.ID}, '${element.Information}')">${element.Information}</td>
-                        <td>${element.Type}</td>
-                        <td><button class="btn btn-primary" onclick="signUpCourse(${element.ID})">報名</button></td>
-                    </tr>
-                `)
+                        <tr>
+                            <th scope="row">${index}</th>
+                            <td>${element.Topic}</td>
+                            <td>${time}</td>
+                            <td class="info" onclick="getInformation(${element.ID}, '${element.Information}')">${element.Information}</td>
+                            <td>${element.Type}</td>
+                            <td>${action}</td>
+                        </tr>
+                    `)
                 })
             }
         }
@@ -68,7 +131,7 @@ const getCourses = () => {
 }
 
 const getServiceLearning = () => {
-    return $.ajax({
+    $.ajax({
         url: `${config.server}/v1/service-learning`,
         type: 'GET',
         beforeSend: (xhr) => {
@@ -86,20 +149,31 @@ const getServiceLearning = () => {
                 `)
             } else {
                 response.list.forEach((element, index) => {
-                    let startDate = element.Start.substring(0, 10)
-                    let endDate = element.End.substring(0, 10)
+                    let startDate = dayjs(element.Start).format('YYYY-MM-DD')
+                    let endDate = dayjs(element.End).format('YYYY-MM-DD')
+                    let action = ''
+
+                    let studentServiceLearning = studentServiceLearnings.find(studentServiceLearning => {
+                        return element.ID === studentServiceLearning.ServiceLearning.ID
+                    })
+
+                    if (studentServiceLearning !== undefined) {
+                        action = `<button class="btn btn-primary" disabled>已報名</button>`
+                    } else {
+                        action = `<button class="btn btn-primary" onclick="signUpServiceLearning(${element.ID}, this)">報名</button>`
+                    }
 
                     $('#service-learning tbody').append(`
-                    <tr>
-                        <th scope="row">${index}</th>
-                        <td>${TYPE[element.Type]}</td>
-                        <td>${element.Content}</td>
-                        <td>${startDate} ~ ${endDate}</td>
-                        <td>${element.Session}</td>
-                        <td>${element.Hours}</td>
-                        <td><button class="btn btn-primary" onclick="signUpServiceLearning(${element.ID}, this)">報名</button></td>
-                    </tr>
-                `)
+                        <tr>
+                            <th scope="row">${index}</th>
+                            <td>${TYPE[element.Type]}</td>
+                            <td>${element.Content}</td>
+                            <td>${startDate} ~ ${endDate}</td>
+                            <td>${element.Session}</td>
+                            <td>${element.Hours}</td>
+                            <td>${action}</td>
+                        </tr>
+                    `)
                 })
             }
         }
@@ -166,8 +240,9 @@ const getInformation = (id, filename) => {
     });
 }
 
-const signUpCourse = (id) => {
-    $('input.course-id').val(id)
+const signUpCourse = (id, el) => {
+    editedID = id
+    editedItem = el
     $('#courseModal').modal('show')
 }
 
@@ -179,7 +254,7 @@ $('#courseModal form').on('submit', (e) => {
         type: 'POST',
         data: {
             'Account': $.cookie('account'),
-            'CourseID': $('input.course-id').val(),
+            'CourseID': editedID,
             'Meal': $('#meal').val(),
         },
         beforeSend: (xhr) => {
@@ -212,7 +287,12 @@ $('#courseModal form').on('submit', (e) => {
         complete: () => {
             $('#courseModal div.modal-footer button.btn.btn-primary').html('送出')
             $('#courseModal div.modal-footer button.btn.btn-primary').attr("disabled", false)
+            $(editedItem).html('已報名')
+            $(editedItem).attr("disabled", true)
             $('#courseModal').modal('hide')
+
+            editedID = null
+            editedItem = null
         }
     });
 })
@@ -253,8 +333,7 @@ const signUpServiceLearning = (id, el) => {
             }
         },
         complete: () => {
-            $(el).html('報名')
-            $(el).attr("disabled", false)
+            $(el).html('已報名')
         }
     });
 }

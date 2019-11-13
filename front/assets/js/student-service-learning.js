@@ -8,7 +8,8 @@ const STATUS = {
     'pass': '通過',
     'failed': '未通過',
 }
-let StudentServiceLearningID = undefined
+
+let studentServiceLearningID = undefined
 
 $(document).ready(() => {
     loading()
@@ -25,7 +26,7 @@ $(document).ready(() => {
 })
 
 const getStudentServiceLearning = () => {
-    return $.ajax({
+    $.ajax({
         url: `${config.server}/v1/service-learning/student`,
         type: 'GET',
         beforeSend: (xhr) => {
@@ -50,7 +51,7 @@ const getStudentServiceLearning = () => {
                         color = 'class="text-danger"'
                     }
 
-                    let date = `${element.ServiceLearning.Start.substring(0, 10)} ~ ${element.ServiceLearning.End.substring(0, 10)}`
+                    let date = `${dayjs(element.ServiceLearning.Start).format('YYYY-MM-DD')} ~ ${dayjs(element.ServiceLearning.End).format('YYYY-MM-DD')}`
                     let result = `
                         <tr>
                             <th scope="row">${index}</th>
@@ -76,7 +77,7 @@ const getStudentServiceLearning = () => {
 }
 
 const edit = id => {
-    StudentServiceLearningID = id
+    studentServiceLearningID = id
     $('#Modal').modal('show')
 }
 
@@ -93,7 +94,7 @@ $("#reference").fileinput({
     },
     uploadExtraData: (previewId, index) => {
         return {
-            'StudentServiceLearningID': StudentServiceLearningID,
+            'StudentServiceLearningID': studentServiceLearningID,
         }
     }
 }).on('fileuploaded', (event, previewId, index, fileId) => {
@@ -130,7 +131,7 @@ $("#review").fileinput({
     },
     uploadExtraData: (previewId, index) => {
         return {
-            'StudentServiceLearningID': StudentServiceLearningID,
+            'StudentServiceLearningID': studentServiceLearningID,
         }
     }
 }).on('fileuploaded', (event, previewId, index, fileId) => {

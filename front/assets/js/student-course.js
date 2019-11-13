@@ -25,7 +25,7 @@ $(document).ready(() => {
 })
 
 const getStudentCourses = () => {
-    return $.ajax({
+    $.ajax({
         url: `${config.server}/v1/course/student`,
         type: 'GET',
         beforeSend: (xhr) => {
@@ -46,10 +46,10 @@ const getStudentCourses = () => {
                 response.list.forEach((element, index) => {
                     studentCourses.push(Object.assign({}, element))
 
-                    let startDate = element.Course.Start.substring(0, 10)
-                    let startTime = element.Course.Start.substring(11, 19)
-                    let endDate = element.Course.End.substring(0, 10)
-                    let endTime = element.Course.End.substring(11, 19)
+                    let startDate = dayjs(element.Course.Start).format('YYYY-MM-DD')
+                    let startTime = dayjs(element.Course.Start).format('HH:mm:ss')
+                    let endDate = dayjs(element.Course.End).format('YYYY-MM-DD')
+                    let endTime = dayjs(element.Course.End).format('HH:mm:ss')
                     let time = ""
 
                     if (startDate == endDate) {
