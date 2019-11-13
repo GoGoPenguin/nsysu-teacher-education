@@ -18,10 +18,11 @@ func StudentCoursesDTO(studentCourses *[]gorm.StudentCourse) []map[string]interf
 				"Number":  studentCourse.Student.Number,
 			},
 			"Course": map[string]interface{}{
+				"ID":    studentCourse.Course.ID,
 				"Topic": studentCourse.Course.Topic,
 				"Type":  studentCourse.Course.Type,
-				"Start": studentCourse.Course.Start.String(),
-				"End":   studentCourse.Course.End.String(),
+				"Start": studentCourse.Course.Start,
+				"End":   studentCourse.Course.End,
 			},
 			"Meal":    studentCourse.Meal,
 			"Status":  studentCourse.Status,

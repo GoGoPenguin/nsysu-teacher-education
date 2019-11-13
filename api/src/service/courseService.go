@@ -280,7 +280,6 @@ func UpdateCourse(courseID, topic, courseType string, file multipart.File, heade
 
 		io.Copy(f, file)
 	}
-	logger.Debug(course)
 
 	gorm.CourseDao.Update(tx, course)
 
