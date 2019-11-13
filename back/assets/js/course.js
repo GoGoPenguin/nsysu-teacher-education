@@ -30,10 +30,10 @@ const courseTable = $('table#course').DataTable({
             d.list.forEach((element, index, array) => {
                 courses.push(Object.assign({}, element))
 
-                let startDate = array[index].Start.substring(0, 10)
-                let startTime = array[index].Start.substring(11, 19)
-                let endDate = array[index].End.substring(0, 10)
-                let endTime = array[index].End.substring(11, 19)
+                let startDate = dayjs(element.Start).format('YYYY-MM-DD')
+                let startTime = dayjs(element.Start).format('HH:mm:ss')
+                let endDate = dayjs(element.End).format('YYYY-MM-DD')
+                let endTime = dayjs(element.End).format('HH:mm:ss')
 
                 if (startDate == endDate) {
                     array[index].Time = `${startDate} ${startTime} ~ ${endTime}`
@@ -84,10 +84,10 @@ const studentCourseTable = $('table#student-course').DataTable({
             studentCourses = []
 
             d.list.forEach((element, index, array) => {
-                let startDate = array[index].Course.Start.substring(0, 10)
-                let startTime = array[index].Course.Start.substring(11, 19)
-                let endDate = array[index].Course.End.substring(0, 10)
-                let endTime = array[index].Course.End.substring(11, 19)
+                let startDate = dayjs(element.Course.Start).format('YYYY-MM-DD')
+                let startTime = dayjs(element.Course.Start).format('HH:mm:ss')
+                let endDate = dayjs(element.Course.End).format('YYYY-MM-DD')
+                let endTime = dayjs(element.Course.End).format('HH:mm:ss')
 
                 if (startDate == endDate) {
                     array[index].Time = `${startDate} ${startTime} ~ ${endTime}`
@@ -426,8 +426,8 @@ const update = (index) => {
 
     $('#update-topic').val(course.Topic)
     $('#update-type').val(course.Type)
-    $('#update-start input').val(course.Start.substring(0, 19))
-    $('#update-end input').val(course.End.substring(0, 19))
+    $('#update-start input').val(dayjs(course.Start).format('YYYY-MM-DD HH:mm:ss'))
+    $('#update-end input').val(dayjs(course.End).format('YYYY-MM-DD HH:mm:ss'))
 
     $('#updateModal').modal('show')
 }

@@ -7,7 +7,7 @@ const studentTable = $('table#students').DataTable({
         type: 'GET',
         dataSrc: (d) => {
             d.list.forEach((element, index, array) => {
-                array[index].CreatedAt = element.CreatedAt.substring(0, 19)
+                array[index].CreatedAt = dayjs(element.CreatedAt).format('YYYY-MM-DD HH:mm:ss')
             })
             return d.list
         },

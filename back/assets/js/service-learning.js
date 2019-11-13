@@ -32,7 +32,7 @@ const serviceLearningTable = $('table#service-learning').DataTable({
                 serviceLearnings.push(Object.assign({}, element))
 
                 array[index].Type = TYPE[element.Type];
-                array[index].Date = `${element.Start.substring(0, 10)} ~ ${element.End.substring(0, 10)}`
+                array[index].Date = `${dayjs(element.Start).format('YYYY-MM-DD')} ~ ${dayjs(element.End).format('YYYY-MM-DD')}`
                 array[index].Button = `
                     <button class="btn btn-primary mr-1" onclick="update(${index})">編輯</button>
                     <button class="btn btn-danger" onclick="$('#deleteModal').modal('show'); serviceLearningID=${element.ID}">刪除</button>
@@ -80,7 +80,7 @@ const studentServiceLearningTable = $('table#student-service-learning').DataTabl
 
                 array[index].ServiceLearning.Type = TYPE[element.ServiceLearning.Type];
                 array[index].Status = STATUS[array[index].Status]
-                array[index].Date = `${element.ServiceLearning.Start.substring(0, 10)} ~ ${element.ServiceLearning.End.substring(0, 10)}`
+                array[index].Date = `${dayjs(element.ServiceLearning.Start).format('YYYY-MM-DD')} ~ ${dayjs(element.ServiceLearning.End).format('YYYY-MM-DD')}`
 
                 studentServiceLearnings.push(element)
             })
@@ -384,8 +384,8 @@ const update = (index) => {
 
     $('#update-type').val(serviceLearning.Type)
     $('#update-content').val(serviceLearning.Content)
-    $('#update-start-date input').val(serviceLearning.Start.substring(0, 10))
-    $('#update-end-date input').val(serviceLearning.End.substring(0, 10))
+    $('#update-start-date input').val(dayjs(serviceLearning.Start).format('YYYY-MM-DD'))
+    $('#update-end-date input').val(dayjs(serviceLearning.End).format('YYYY-MM-DD'))
     $('#update-start-time input').val(startTime)
     $('#update-end-time input').val(endTime)
     $('#update-hours').val(serviceLearning.Hours)
