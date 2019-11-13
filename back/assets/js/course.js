@@ -14,6 +14,9 @@ let courses = []
 let studentCourses = []
 let studentCoursesIndex = null
 
+$(document).ready(() => {
+})
+
 const courseTable = $('table#course').DataTable({
     processing: true,
     serverSide: true,
@@ -130,73 +133,72 @@ const studentCourseTable = $('table#student-course').DataTable({
     },
 });
 
-$(document).ready(() => {
-    $('#start').datetimepicker({
-        format: 'YYYY-MM-DD HH:mm:00',
-        locale: 'zh-tw',
-        initialDate: new Date(),
-        autoclose: true,
-        icons: {
-            time: "fas fa-clock",
-            date: "fa fa-calendar",
-            up: "fas fa-angle-up",
-            down: "fas fa-angle-down",
-        }
-    })
-
-    $('#end').datetimepicker({
-        format: 'YYYY-MM-DD HH:mm:00',
-        locale: 'zh-tw',
-        initialDate: new Date(),
-        autoclose: true,
-        icons: {
-            time: "fas fa-clock",
-            date: "fa fa-calendar",
-            up: "fas fa-angle-up",
-            down: "fas fa-angle-down",
-        }
-    })
-
-    $('#update-start').datetimepicker({
-        format: 'YYYY-MM-DD HH:mm:00',
-        locale: 'zh-tw',
-        initialDate: new Date(),
-        autoclose: true,
-        icons: {
-            time: "fas fa-clock",
-            date: "fa fa-calendar",
-            up: "fas fa-angle-up",
-            down: "fas fa-angle-down",
-        }
-    })
-
-    $('#update-end').datetimepicker({
-        format: 'YYYY-MM-DD HH:mm:00',
-        locale: 'zh-tw',
-        initialDate: new Date(),
-        autoclose: true,
-        icons: {
-            time: "fas fa-clock",
-            date: "fa fa-calendar",
-            up: "fas fa-angle-up",
-            down: "fas fa-angle-down",
-        }
-    })
-
-    $("#info").fileinput({
-        language: 'zh-TW',
-        theme: "fas",
-        showUpload: false,
-        uploadUrl: `${config.server}/v1/course`,
-    })
-
-    $("#update-info").fileinput({
-        language: 'zh-TW',
-        theme: "fas",
-        showUpload: false,
-        uploadUrl: `${config.server}/v1/course`,
-    })
+$('#start').datetimepicker({
+    format: 'YYYY-MM-DD HH:mm:00',
+    locale: 'zh-tw',
+    initialDate: new Date(),
+    autoclose: true,
+    icons: {
+        time: "fas fa-clock",
+        date: "fa fa-calendar",
+        up: "fas fa-angle-up",
+        down: "fas fa-angle-down",
+    }
 })
+
+$('#end').datetimepicker({
+    format: 'YYYY-MM-DD HH:mm:00',
+    locale: 'zh-tw',
+    initialDate: new Date(),
+    autoclose: true,
+    icons: {
+        time: "fas fa-clock",
+        date: "fa fa-calendar",
+        up: "fas fa-angle-up",
+        down: "fas fa-angle-down",
+    }
+})
+
+$('#update-start').datetimepicker({
+    format: 'YYYY-MM-DD HH:mm:00',
+    locale: 'zh-tw',
+    initialDate: new Date(),
+    autoclose: true,
+    icons: {
+        time: "fas fa-clock",
+        date: "fa fa-calendar",
+        up: "fas fa-angle-up",
+        down: "fas fa-angle-down",
+    }
+})
+
+$('#update-end').datetimepicker({
+    format: 'YYYY-MM-DD HH:mm:00',
+    locale: 'zh-tw',
+    initialDate: new Date(),
+    autoclose: true,
+    icons: {
+        time: "fas fa-clock",
+        date: "fa fa-calendar",
+        up: "fas fa-angle-up",
+        down: "fas fa-angle-down",
+    }
+})
+
+$("#info").fileinput({
+    language: 'zh-TW',
+    theme: "fas",
+    showUpload: false,
+    uploadUrl: `${config.server}/v1/course`,
+})
+
+$("#update-info").fileinput({
+    language: 'zh-TW',
+    theme: "fas",
+    showUpload: false,
+    uploadUrl: `${config.server}/v1/course`,
+})
+
 
 const getInformation = (id, filename) => {
     $.ajax({
@@ -243,20 +245,20 @@ $('#course-form').on('submit', (e) => {
 
     if (fstack.length > 0) {
         form.append("Information", fstack[0].file)
-    }
 
-    let filename = fstack[0].file.name
-    let length = (new TextEncoder().encode(filename)).length
+        let filename = fstack[0].file.name
+        let length = (new TextEncoder().encode(filename)).length
 
-    if (length > 36) {
-        swal({
-            title: '',
-            text: '檔名太長',
-            icon: "error",
-            timer: 1500,
-            buttons: false,
-        })
-        return
+        if (length > 36) {
+            swal({
+                title: '',
+                text: '檔名太長',
+                icon: "error",
+                timer: 1500,
+                buttons: false,
+            })
+            return
+        }
     }
 
     $.ajax({
@@ -266,6 +268,8 @@ $('#course-form').on('submit', (e) => {
         contentType: false,
         processData: false,
         beforeSend: (xhr) => {
+            $('#course-form button.btn.btn-primary').html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>&nbsp載入中...')
+            $('#course-form button.btn.btn-primary').attr("disabled", true)
             setHeader(xhr)
         },
         error: (xhr) => {
@@ -291,6 +295,10 @@ $('#course-form').on('submit', (e) => {
                 })
             }
             $('#course-form')[0].reset()
+        },
+        complete: () => {
+            $('#course-form button.btn.btn-primary').html('送出')
+            $('#course-form button.btn.btn-primary').attr("disabled", false)
         }
     });
 })
@@ -332,6 +340,8 @@ $('#checkModal .btn-primary').click(() => {
             Comment: $('#comment').val(),
         },
         beforeSend: (xhr) => {
+            $('#checkModal div.modal-footer button.btn.btn-primary').html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>&nbsp載入中...')
+            $('#checkModal div.modal-footer button.btn.btn-primary').attr("disabled", true)
             setHeader(xhr)
         },
         error: (xhr) => {
@@ -358,6 +368,8 @@ $('#checkModal .btn-primary').click(() => {
             }
         },
         complete: (data) => {
+            $('#checkModal div.modal-footer button.btn.btn-primary').html('通過')
+            $('#checkModal div.modal-footer button.btn.btn-primary').attr("disabled", false)
             $('#checkModal').modal('hide')
         }
     });
@@ -373,6 +385,8 @@ $('#checkModal .btn-danger').click(() => {
             Comment: $('#comment').val(),
         },
         beforeSend: (xhr) => {
+            $('#checkModal div.modal-footer button.btn.btn-danger').html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>&nbsp載入中...')
+            $('#checkModal div.modal-footer button.btn.btn-danger').attr("disabled", true)
             setHeader(xhr)
         },
         error: (xhr) => {
@@ -399,6 +413,8 @@ $('#checkModal .btn-danger').click(() => {
             }
         },
         complete: (data) => {
+            $('#checkModal div.modal-footer button.btn.btn-danger').html('未通過')
+            $('#checkModal div.modal-footer button.btn.btn-danger').attr("disabled", false)
             $('#checkModal').modal('hide')
         }
     });
@@ -440,20 +456,20 @@ $('#update-form').on('submit', (e) => {
 
     if (fstack.length > 0) {
         form.append("Information", fstack[0].file)
-    }
 
-    let filename = fstack[0].file.name
-    let length = (new TextEncoder().encode(filename)).length
+        let filename = fstack[0].file.name
+        let length = (new TextEncoder().encode(filename)).length
 
-    if (length > 36) {
-        swal({
-            title: '',
-            text: '檔名太長',
-            icon: "error",
-            timer: 1500,
-            buttons: false,
-        })
-        return
+        if (length > 36) {
+            swal({
+                title: '',
+                text: '檔名太長',
+                icon: "error",
+                timer: 1500,
+                buttons: false,
+            })
+            return
+        }
     }
 
     $.ajax({
@@ -463,6 +479,8 @@ $('#update-form').on('submit', (e) => {
         contentType: false,
         processData: false,
         beforeSend: (xhr) => {
+            $('#updateModal div.modal-footer button.btn.btn-primary').html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>&nbsp載入中...')
+            $('#updateModal div.modal-footer button.btn.btn-primary').attr("disabled", true)
             setHeader(xhr)
         },
         error: (xhr) => {
@@ -490,6 +508,8 @@ $('#update-form').on('submit', (e) => {
             $('#update-form')[0].reset()
         },
         complete: (data) => {
+            $('#updateModal div.modal-footer button.btn.btn-primary').html('送出')
+            $('#updateModal div.modal-footer button.btn.btn-primary').attr("disabled", false)
             $('#updateModal').modal('hide')
         }
     });
@@ -503,6 +523,8 @@ const deleteCourse = () => {
             setHeader(xhr)
         },
         error: (xhr) => {
+            $('#deleteModal div.modal-footer button.btn.btn-danger').html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>&nbsp載入中...')
+            $('#deleteModal div.modal-footer button.btn.btn-danger').attr("disabled", true)
             errorHandle(xhr, '修改失敗')
         },
         success: (response) => {
@@ -526,6 +548,8 @@ const deleteCourse = () => {
             }
         },
         complete: (data) => {
+            $('#deleteModal div.modal-footer button.btn.btn-danger').html('送出')
+            $('#deleteModal div.modal-footer button.btn.btn-danger').attr("disabled", false)
             $('#deleteModal').modal('hide')
         }
     });

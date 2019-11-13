@@ -1,6 +1,6 @@
 let STATUS = {
     'enable': '啟用',
-    'disable': '停用',
+    'disabled': '停用',
 }
 let letures = []
 
@@ -18,9 +18,9 @@ const courseTable = $('table#leture').DataTable({
                 letures.push(Object.assign({}, element))
 
                 array[index].Button = `
-                    <button class="btn btn-secondary mr-1" onclick="detail(${index})">查看</button>
-                    <button class="btn btn-primary mr-1" onclick="update(${index})">編輯</button>
-                    <button class="btn btn-danger" onclick="$('#deleteModal').modal('show'); courseID=${element.ID}">刪除</button>
+                    <button class="btn btn-secondary mr-1" onclick="detail(${index}, this)">查看</button>
+                    <button class="btn btn-primary mr-1">編輯</button>
+                    <button class="btn btn-danger">刪除</button>
                 `
 
                 array[index].Status = STATUS[element.Status]
@@ -46,13 +46,15 @@ const courseTable = $('table#leture').DataTable({
     },
 });
 
-const detail = (index) => {
+const detail = (index, el) => {
     let leture = letures[index]
 
     $.ajax({
         url: `${config.server}/v1/leture/${leture.ID}`,
         type: 'GET',
         beforeSend: (xhr) => {
+            $(el).html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>&nbsp載入中...')
+            $(el).attr("disabled", true)
             setHeader(xhr)
         },
         error: (xhr) => {
@@ -144,6 +146,10 @@ const detail = (index) => {
                     buttons: false,
                 })
             }
+        },
+        complete: () => {
+            $(el).html('查看')
+            $(el).attr("disabled", false)
         }
     });
 }

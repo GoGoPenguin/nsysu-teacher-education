@@ -10,7 +10,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 - 新增專業科目頁面
 - 新增登入逾時提示訊息
-- 新增登入頁面載入中訊息
+- 新增載入中訊息
 
 ### Changed
 

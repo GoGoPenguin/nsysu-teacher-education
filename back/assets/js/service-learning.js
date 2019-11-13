@@ -15,6 +15,9 @@ let serviceLearnings = []
 let studentServiceLearningIndex = undefined
 let studentServiceLearnings = []
 
+$(document).ready(() => {
+})
+
 const serviceLearningTable = $('table#service-learning').DataTable({
     processing: true,
     serverSide: true,
@@ -108,100 +111,98 @@ const studentServiceLearningTable = $('table#student-service-learning').DataTabl
     },
 });
 
-$(document).ready(() => {
-    $('#start-date').datetimepicker({
-        format: 'YYYY-MM-DD',
-        locale: 'zh-tw',
-        autoclose: true,
-        icons: {
-            time: "fas fa-clock",
-            date: "fa fa-calendar",
-            up: "fas fa-angle-up",
-            down: "fas fa-angle-down",
-        }
-    })
+$('#start-date').datetimepicker({
+    format: 'YYYY-MM-DD',
+    locale: 'zh-tw',
+    autoclose: true,
+    icons: {
+        time: "fas fa-clock",
+        date: "fa fa-calendar",
+        up: "fas fa-angle-up",
+        down: "fas fa-angle-down",
+    }
+})
 
-    $('#end-date').datetimepicker({
-        format: 'YYYY-MM-DD',
-        locale: 'zh-tw',
-        autoclose: true,
-        icons: {
-            time: "fas fa-clock",
-            date: "fa fa-calendar",
-            up: "fas fa-angle-up",
-            down: "fas fa-angle-down",
-        }
-    })
-    $('#start-time').datetimepicker({
-        format: 'LT',
-        locale: 'zh-tw',
-        autoclose: true,
-        icons: {
-            time: "fas fa-clock",
-            date: "fa fa-calendar",
-            up: "fas fa-angle-up",
-            down: "fas fa-angle-down",
-        }
-    })
+$('#end-date').datetimepicker({
+    format: 'YYYY-MM-DD',
+    locale: 'zh-tw',
+    autoclose: true,
+    icons: {
+        time: "fas fa-clock",
+        date: "fa fa-calendar",
+        up: "fas fa-angle-up",
+        down: "fas fa-angle-down",
+    }
+})
+$('#start-time').datetimepicker({
+    format: 'LT',
+    locale: 'zh-tw',
+    autoclose: true,
+    icons: {
+        time: "fas fa-clock",
+        date: "fa fa-calendar",
+        up: "fas fa-angle-up",
+        down: "fas fa-angle-down",
+    }
+})
 
-    $('#end-time').datetimepicker({
-        format: 'LT',
-        locale: 'zh-tw',
-        autoclose: true,
-        icons: {
-            time: "fas fa-clock",
-            date: "fa fa-calendar",
-            up: "fas fa-angle-up",
-            down: "fas fa-angle-down",
-        }
-    })
+$('#end-time').datetimepicker({
+    format: 'LT',
+    locale: 'zh-tw',
+    autoclose: true,
+    icons: {
+        time: "fas fa-clock",
+        date: "fa fa-calendar",
+        up: "fas fa-angle-up",
+        down: "fas fa-angle-down",
+    }
+})
 
-    $('#update-start-date').datetimepicker({
-        format: 'YYYY-MM-DD',
-        locale: 'zh-tw',
-        autoclose: true,
-        icons: {
-            time: "fas fa-clock",
-            date: "fa fa-calendar",
-            up: "fas fa-angle-up",
-            down: "fas fa-angle-down",
-        }
-    })
+$('#update-start-date').datetimepicker({
+    format: 'YYYY-MM-DD',
+    locale: 'zh-tw',
+    autoclose: true,
+    icons: {
+        time: "fas fa-clock",
+        date: "fa fa-calendar",
+        up: "fas fa-angle-up",
+        down: "fas fa-angle-down",
+    }
+})
 
-    $('#update-end-date').datetimepicker({
-        format: 'YYYY-MM-DD',
-        locale: 'zh-tw',
-        autoclose: true,
-        icons: {
-            time: "fas fa-clock",
-            date: "fa fa-calendar",
-            up: "fas fa-angle-up",
-            down: "fas fa-angle-down",
-        }
-    })
-    $('#update-start-time').datetimepicker({
-        format: 'LT',
-        locale: 'zh-tw',
-        autoclose: true,
-        icons: {
-            time: "fas fa-clock",
-            date: "fa fa-calendar",
-            up: "fas fa-angle-up",
-            down: "fas fa-angle-down",
-        }
-    })
+$('#update-end-date').datetimepicker({
+    format: 'YYYY-MM-DD',
+    locale: 'zh-tw',
+    autoclose: true,
+    icons: {
+        time: "fas fa-clock",
+        date: "fa fa-calendar",
+        up: "fas fa-angle-up",
+        down: "fas fa-angle-down",
+    }
+})
+$('#update-start-time').datetimepicker({
+    format: 'LT',
+    locale: 'zh-tw',
+    autoclose: true,
+    icons: {
+        time: "fas fa-clock",
+        date: "fa fa-calendar",
+        up: "fas fa-angle-up",
+        down: "fas fa-angle-down",
+    }
+})
 
-    $('#update-end-time').datetimepicker({
-        format: 'LT',
-        locale: 'zh-tw',
-        autoclose: true,
-        icons: {
-            time: "fas fa-clock",
-            date: "fa fa-calendar",
-            up: "fas fa-angle-up",
-            down: "fas fa-angle-down",
-        }
-    })
+$('#update-end-time').datetimepicker({
+    format: 'LT',
+    locale: 'zh-tw',
+    autoclose: true,
+    icons: {
+        time: "fas fa-clock",
+        date: "fa fa-calendar",
+        up: "fas fa-angle-up",
+        down: "fas fa-angle-down",
+    }
 })
 
 $('#service-learning-form').on('submit', (e) => {
@@ -219,21 +220,37 @@ $('#service-learning-form').on('submit', (e) => {
             'End': $('#end-date input').val(),
         },
         beforeSend: (xhr) => {
+            $('#service-learning-form button.btn.btn-primary').html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>&nbsp載入中...')
+            $('#service-learning-form button.btn.btn-primary').attr("disabled", true)
             setHeader(xhr)
         },
         error: (xhr) => {
             errorHandle(xhr, '失敗')
         },
         success: (response) => {
-            swal({
-                title: '',
-                text: '成功',
-                icon: "success",
-                timer: 1000,
-                buttons: false,
-            })
-            serviceLearningTable.ajax.reload()
+            if (response.code === 0) {
+                swal({
+                    title: '',
+                    text: '成功',
+                    icon: "success",
+                    timer: 1000,
+                    buttons: false,
+                })
+                serviceLearningTable.ajax.reload()
+            } else {
+                swal({
+                    title: '',
+                    text: '失敗',
+                    icon: "error",
+                    timer: 1000,
+                    buttons: false,
+                })
+            }
             $('#service-learning-form')[0].reset()
+        },
+        complete: () => {
+            $('#service-learning-form button.btn.btn-primary').html('送出')
+            $('#service-learning-form button.btn.btn-primary').attr("disabled", false)
         }
     });
 })
@@ -314,6 +331,13 @@ const updateStatus = (status) => {
             'Comment': $('#comment').val(),
         },
         beforeSend: (xhr) => {
+            if (status == 'pass') {
+                $('#checkModal div.modal-footer button.btn.btn-primary').html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>&nbsp載入中...')
+                $('#checkModal div.modal-footer button.btn.btn-primary').attr("disabled", true)
+            } else if (status == 'failed') {
+                $('#checkModal div.modal-footer button.btn.btn-danger').html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>&nbsp載入中...')
+                $('#checkModal div.modal-footer button.btn.btn-danger').attr("disabled", true)
+            }
             setHeader(xhr)
         },
         error: (xhr) => {
@@ -340,6 +364,13 @@ const updateStatus = (status) => {
             }
         },
         complete: (data) => {
+            if (status == 'pass') {
+                $('#checkModal div.modal-footer button.btn.btn-primary').html('通過')
+                $('#checkModal div.modal-footer button.btn.btn-primary').attr("disabled", true)
+            } else if (status == 'failed') {
+                $('#checkModal div.modal-footer button.btn.btn-danger').html('未通過')
+                $('#checkModal div.modal-footer button.btn.btn-danger').attr("disabled", true)
+            }
             $('#checkModal').modal('hide')
         }
     });
@@ -382,6 +413,8 @@ $('#update-form').on('submit', (e) => {
             'End': $('#update-end-date input').val(),
         },
         beforeSend: (xhr) => {
+            $('#updateModal div.modal-footer button.btn.btn-primary').html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>&nbsp載入中...')
+            $('#updateModal div.modal-footer button.btn.btn-primary').attr("disabled", true)
             setHeader(xhr)
         },
         error: (xhr) => {
@@ -408,6 +441,8 @@ $('#update-form').on('submit', (e) => {
             }
         },
         complete: (data) => {
+            $('#updateModal div.modal-footer button.btn.btn-primary').html('送出')
+            $('#updateModal div.modal-footer button.btn.btn-primary').attr("disabled", false)
             $('#updateModal').modal('hide')
         }
     });
@@ -418,6 +453,8 @@ const deleteServiceLearning = () => {
         url: `${config.server}/v1/service-learning/${serviceLearningID}`,
         type: 'DELETE',
         beforeSend: (xhr) => {
+            $('#deleteModal div.modal-footer button.btn.btn-danger').html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>&nbsp載入中...')
+            $('#deleteModal div.modal-footer button.btn.btn-danger').attr("disabled", true)
             setHeader(xhr)
         },
         error: (xhr) => {
@@ -444,6 +481,8 @@ const deleteServiceLearning = () => {
             }
         },
         complete: (data) => {
+            $('#deleteModal div.modal-footer button.btn.btn-danger').html('送出')
+            $('#deleteModal div.modal-footer button.btn.btn-danger').attr("disabled", false)
             $('#deleteModal').modal('hide')
         }
     });
