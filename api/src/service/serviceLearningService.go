@@ -104,6 +104,11 @@ func SingUpServiceLearning(account, serviceLearningID string) (result interface{
 	}()
 
 	student := gorm.StudentDao.GetByAccount(tx, account)
+
+	if student == nil {
+		return nil, errors.NotFoundError("Student " + account)
+	}
+
 	serviceLearning := gorm.ServiceLearningDao.Query(
 		tx,
 		specification.IDSpecification(serviceLearningID),

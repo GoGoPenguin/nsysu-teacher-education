@@ -5,18 +5,17 @@ import (
 	"github.com/kataras/iris"
 	"github.com/nsysu/teacher-education/src/errors"
 	"github.com/nsysu/teacher-education/src/service"
+	"github.com/nsysu/teacher-education/src/utils/auth"
 )
 
 // SignUpCourseHandler sign up course
 func SignUpCourseHandler(ctx iris.Context) {
 	type rule struct {
-		Account  string `valid:"required"`
 		CourseID string `valid:"required"`
 		Meal     string `valid:"required, in(meat|vegetable)"`
 	}
 
 	params := &rule{
-		Account:  ctx.FormValue("Account"),
 		CourseID: ctx.FormValue("CourseID"),
 		Meal:     ctx.FormValue("Meal"),
 	}
@@ -26,7 +25,8 @@ func SignUpCourseHandler(ctx iris.Context) {
 		return
 	}
 
-	result, err := service.SingUpCourse(params.Account, params.CourseID, params.Meal)
+	account := auth.Account(ctx)
+	result, err := service.SingUpCourse(account, params.CourseID, params.Meal)
 
 	if err != (*errors.Error)(nil) {
 		failed(ctx, err)

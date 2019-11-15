@@ -126,6 +126,11 @@ func SingUpCourse(account, courseID, meal string) (result interface{}, e *errors
 	}()
 
 	student := gorm.StudentDao.GetByAccount(tx, account)
+
+	if student == nil {
+		return nil, errors.NotFoundError("Student " + account)
+	}
+
 	course := gorm.CourseDao.Query(
 		tx,
 		specification.IDSpecification(courseID),

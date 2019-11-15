@@ -67,3 +67,42 @@ func GetLetureDetail(letureID string) (result interface{}, e *errors.Error) {
 	leture := gorm.LetureDao.GetByID(tx, typecast.StringToUint(letureID))
 	return leture, nil
 }
+
+// SingUpLeture sudent sign up leture
+func SingUpLeture(account, letureID string) (result interface{}, e *errors.Error) {
+	tx := gorm.DB()
+
+	defer func() {
+		if r := recover(); r != nil {
+			logger.Error(r)
+			e = errors.UnexpectedError()
+		}
+	}()
+
+	student := gorm.StudentDao.GetByAccount(tx, account)
+
+	if student == nil {
+		return nil, errors.NotFoundError("Student " + account)
+	}
+
+	leture := gorm.LetureDao.Query(
+		tx,
+		specification.IDSpecification(letureID),
+		specification.IsNullSpecification("deleted_at"),
+		specification.StatusSpecification(gorm.LetureDao.Enable),
+	)
+
+	if len(*leture) == 0 {
+		return nil, errors.NotFoundError("service-learning ID " + letureID)
+	}
+
+	studentLeture := &gorm.StudentLeture{
+		StudentID: student.ID,
+		LetureID:  typecast.StringToUint(letureID),
+		Pass:      false,
+	}
+
+	gorm.StudentLetureDao.New(tx, studentLeture)
+
+	return "success", nil
+}
