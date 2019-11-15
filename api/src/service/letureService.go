@@ -106,3 +106,47 @@ func SingUpLeture(account, letureID string) (result interface{}, e *errors.Error
 
 	return "success", nil
 }
+
+// GetSutdentLetureList get the list of student leture
+func GetSutdentLetureList(account, start, length string) (result map[string]interface{}, e *errors.Error) {
+	tx := gorm.DB()
+
+	defer func() {
+		if r := recover(); r != nil {
+			logger.Error(r)
+			e = errors.UnexpectedError()
+		}
+	}()
+
+	var studentLetures *[]gorm.StudentLeture
+	if operator := gorm.AdminDao.GetByAccount(tx, account); operator != nil {
+		studentLetures = gorm.StudentLetureDao.Query(
+			tx,
+			specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
+			specification.OrderSpecification("`student_leture`."+specification.IDColumn, specification.OrderDirectionDESC),
+			specification.IsNullSpecification("deleted_at"),
+		)
+	} else {
+		student := gorm.StudentDao.GetByAccount(tx, account)
+		studentLetures = gorm.StudentLetureDao.Query(
+			tx,
+			specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
+			specification.OrderSpecification("`student_leture`."+specification.IDColumn, specification.OrderDirectionDESC),
+			specification.IsNullSpecification("deleted_at"),
+			specification.StudentSpecification(student.ID),
+		)
+	}
+
+	total := gorm.StudentLetureDao.Count(
+		tx,
+		specification.IsNullSpecification("deleted_at"),
+	)
+
+	result = map[string]interface{}{
+		"list":            assembler.StudentLeturesDTO(studentLetures),
+		"recordsTotal":    total,
+		"recordsFiltered": len(*studentLetures),
+	}
+
+	return
+}

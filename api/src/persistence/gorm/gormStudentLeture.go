@@ -59,7 +59,7 @@ func (dao *studentLetureDao) Update(tx *gorm.DB, studentLeture *StudentLeture) {
 	err := tx.Model(&studentLeture).
 		Updates(map[string]interface{}{
 			"StudentID": studentLeture.StudentID,
-			"CourseID":  studentLeture.LetureID,
+			"LetureID":  studentLeture.LetureID,
 			"Meal":      studentLeture.Pass,
 		}).Error
 
@@ -82,8 +82,8 @@ func (dao *studentLetureDao) Count(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB
 }
 
 // Query custom query
-func (dao *studentLetureDao) Query(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) *[]StudentCourse {
-	var result []StudentCourse
+func (dao *studentLetureDao) Query(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) *[]StudentLeture {
+	var result []StudentLeture
 	err := tx.Preload("Student").
 		Preload("Leture").
 		Table(dao.table).

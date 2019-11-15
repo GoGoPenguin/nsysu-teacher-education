@@ -73,6 +73,11 @@ func Run() {
 			leture.Get("/", hero.Handler(handler.GetLeturesHandler))
 			leture.Get("/{letureID}", hero.Handler(handler.GetLeturDetailHandler))
 			leture.Post("/sign-up", hero.Handler(handler.SignUpLetureHandler))
+
+			student := leture.Party("/student")
+			{
+				student.Get("/", hero.Handler(handler.GetStudentLetureHandler))
+			}
 		}
 	}
 
