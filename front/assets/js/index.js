@@ -273,6 +273,8 @@ $('#courseModal form').on('submit', (e) => {
                     timer: 1500,
                     buttons: false,
                 })
+                $(editedItem).html('已報名')
+                $(editedItem).attr("disabled", true)
             } else {
                 swal({
                     title: '',
@@ -281,13 +283,12 @@ $('#courseModal form').on('submit', (e) => {
                     timer: 1500,
                     buttons: false,
                 })
+                $(editedItem).html('報名')
             }
         },
         complete: () => {
             $('#courseModal div.modal-footer button.btn.btn-primary').html('送出')
             $('#courseModal div.modal-footer button.btn.btn-primary').attr("disabled", false)
-            $(editedItem).html('已報名')
-            $(editedItem).attr("disabled", true)
             $('#courseModal').modal('hide')
 
             editedID = null
@@ -320,6 +321,7 @@ const signUpServiceLearning = (id, el) => {
                     timer: 1500,
                     buttons: false,
                 })
+                $(el).html('已報名')
             } else {
                 swal({
                     title: '',
@@ -328,10 +330,9 @@ const signUpServiceLearning = (id, el) => {
                     timer: 1500,
                     buttons: false,
                 })
+                $(el).html('報名')
+                $(el).attr("disabled", false)
             }
-        },
-        complete: () => {
-            $(el).html('已報名')
         }
     });
 }
