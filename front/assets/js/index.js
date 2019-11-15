@@ -253,7 +253,6 @@ $('#courseModal form').on('submit', (e) => {
         url: `${config.server}/v1/course/sign-up`,
         type: 'POST',
         data: {
-            'Account': $.cookie('account'),
             'CourseID': editedID,
             'Meal': $('#meal').val(),
         },
@@ -302,7 +301,6 @@ const signUpServiceLearning = (id, el) => {
         url: `${config.server}/v1/service-learning/sign-up`,
         type: 'POST',
         data: {
-            'Account': $.cookie('account'),
             'ServiceLearningID': id,
         },
         beforeSend: (xhr) => {
