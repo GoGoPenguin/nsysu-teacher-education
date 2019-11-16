@@ -70,12 +70,13 @@ func GetLetureDetail(letureID string) (result interface{}, e *errors.Error) {
 
 // SingUpLeture sudent sign up leture
 func SingUpLeture(account, letureID string) (result interface{}, e *errors.Error) {
-	tx := gorm.DB()
+	tx := gorm.DB().Set("gorm:auto_preload", true).Begin()
 
 	defer func() {
 		if r := recover(); r != nil {
 			logger.Error(r)
 			e = errors.UnexpectedError()
+			tx.Rollback()
 		}
 	}()
 
@@ -103,6 +104,25 @@ func SingUpLeture(account, letureID string) (result interface{}, e *errors.Error
 	}
 
 	gorm.StudentLetureDao.New(tx, studentLeture)
+
+	for _, category := range (*leture)[0].Categories {
+		for _, letureType := range category.Types {
+			for _, group := range letureType.Groups {
+				for _, subject := range group.Subjects {
+					studentSubject := &gorm.StudentSubject{
+						StudentLetureID: studentLeture.ID,
+						SubjectID:       subject.ID,
+						Pass:            false,
+					}
+					gorm.StudentSubjectDao.New(tx, studentSubject)
+				}
+			}
+		}
+	}
+
+	if err := tx.Commit().Error; err != nil {
+		panic(err)
+	}
 
 	return "success", nil
 }
@@ -149,4 +169,20 @@ func GetSutdentLetureList(account, start, length string) (result map[string]inte
 	}
 
 	return
+}
+
+// GetStudentLetureDetail get studnet leture detail
+func GetStudentLetureDetail(studentLetureID string) (result interface{}, e *errors.Error) {
+	tx := gorm.DB().Preload("Leture.Categories.Types.Groups.Subjects.StudentSubject").Preload("Student")
+
+	defer func() {
+		if r := recover(); r != nil {
+			logger.Error(r)
+			e = errors.UnexpectedError()
+		}
+	}()
+
+	studentLeture := gorm.StudentLetureDao.GetByID(tx, typecast.StringToUint(studentLetureID))
+
+	return assembler.StudentLeturesDetailDTO(studentLeture), nil
 }

@@ -21,6 +21,7 @@ func CreateStudents(file multipart.File) (result interface{}, e *errors.Error) {
 		if r := recover(); r != nil {
 			logger.Error(r)
 			e = errors.UnexpectedError()
+			tx.Rollback()
 		}
 	}()
 

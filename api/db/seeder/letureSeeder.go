@@ -2,10 +2,18 @@ package main
 
 import (
 	"github.com/nsysu/teacher-education/src/persistence/gorm"
+	"github.com/nsysu/teacher-education/src/utils/logger"
 )
 
 func letureSeeder() {
 	tx := gorm.DB().Begin()
+
+	defer func() {
+		if r := recover(); r != nil {
+			logger.Error(r)
+			tx.Rollback()
+		}
+	}()
 
 	letureData := []map[string]interface{}{
 		map[string]interface{}{"ID": uint(1), "Name": "自然科學領域化學專長", "MinCredit": uint(42), "Comment": "適合化學系所等"},

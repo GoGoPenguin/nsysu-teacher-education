@@ -182,6 +182,7 @@ func UpdateStudentServiceLearning(reference, review multipart.File, studentServi
 		if r := recover(); r != nil {
 			logger.Error(r)
 			e = errors.UnexpectedError()
+			tx.Rollback()
 		}
 	}()
 
@@ -235,7 +236,7 @@ func UpdateStudentServiceLearning(reference, review multipart.File, studentServi
 		gorm.StudentServiceLearningDao.Update(tx, studentServiceLearning)
 	}
 
-	if err := tx.Commit(); err != nil {
+	if err := tx.Commit().Error; err != nil {
 		panic(err)
 	}
 

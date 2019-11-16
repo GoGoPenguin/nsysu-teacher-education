@@ -70,13 +70,14 @@ func Run() {
 
 		leture := v1.Party("/leture")
 		{
-			leture.Get("/", hero.Handler(handler.GetLeturesHandler))
-			leture.Get("/{letureID}", hero.Handler(handler.GetLeturDetailHandler))
-			leture.Post("/sign-up", hero.Handler(handler.SignUpLetureHandler))
+			leture.Get("/", hero.Handler(handler.GetLeturesHandler))               // 取得課程列表
+			leture.Get("/{letureID}", hero.Handler(handler.GetLeturDetailHandler)) // 取得課程詳細資料
+			leture.Post("/sign-up", hero.Handler(handler.SignUpLetureHandler))     // 報名課程
 
 			student := leture.Party("/student")
 			{
-				student.Get("/", hero.Handler(handler.GetStudentLetureHandler))
+				student.Get("/", hero.Handler(handler.GetStudentLetureHandler))                               // 取得報名課程列表
+				student.Get("/detail/{studentLetureID}", hero.Handler(handler.GetStudentLetureDetailHandler)) // 取得學生課程詳細資料
 			}
 		}
 	}

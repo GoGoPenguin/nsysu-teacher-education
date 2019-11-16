@@ -7,11 +7,12 @@ import (
 // Subject model
 type Subject struct {
 	gorm.Model
-	SubjectGroupID uint   `gorm:"column:subject_group_id;"`
-	Name           string `gorm:"column:name;"`
-	Credit         uint   `gorm:"column:credit;"`
-	Compulsory     bool   `grom:"column:compulsory;"`
-	Status         string `gorm:"column:status; default:'enable'"`
+	SubjectGroupID uint           `gorm:"column:subject_group_id;"`
+	Name           string         `gorm:"column:name;"`
+	Credit         uint           `gorm:"column:credit;"`
+	Compulsory     bool           `grom:"column:compulsory;"`
+	Status         string         `gorm:"column:status; default:'enable'"`
+	StudentSubject StudentSubject `gorm:"foreignkey:SubjectID; PRELOAD:false"`
 }
 
 type subjectDao struct {

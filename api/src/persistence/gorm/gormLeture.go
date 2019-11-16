@@ -88,7 +88,7 @@ func (dao *letureDao) Query(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) *[]Le
 	var result []Leture
 	err := tx.Table(dao.table).
 		Scopes(funcs...).
-		Scan(&result).Error
+		Find(&result).Error
 
 	if gorm.IsRecordNotFoundError(err) {
 		return nil

@@ -39,11 +39,13 @@ func (dao *studentLetureDao) New(tx *gorm.DB, studentLeture *StudentLeture) {
 
 // GetByID get a record by id
 func (dao *studentLetureDao) GetByID(tx *gorm.DB, id uint) *StudentLeture {
-	result := StudentLeture{}
+	result := StudentLeture{
+		Model: gorm.Model{
+			ID: id,
+		},
+	}
 	err := tx.Table(dao.table).
-		Where("id = ?", id).
-		Where("deleted_at IS NULL").
-		Scan(&result).Error
+		Find(&result).Error
 
 	if gorm.IsRecordNotFoundError(err) {
 		return nil
