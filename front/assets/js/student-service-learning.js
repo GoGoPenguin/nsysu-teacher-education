@@ -38,10 +38,10 @@ const getStudentServiceLearning = () => {
         success: (response) => {
             if (response.list.length == 0) {
                 $('#student-service-learning tbody').append(`
-                        <tr>
-                            <td scope="row" colspan="8" style="text-align: center">尚無資料</td>
-                        </tr>
-                    `)
+                    <tr>
+                        <td scope="row" colspan="8" style="text-align: center">尚無資料</td>
+                    </tr>
+                `)
             } else {
                 response.list.forEach((element, index) => {
                     let color = 'class="text-dark"'

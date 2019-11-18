@@ -26,7 +26,7 @@
 
     <!-- Custom styles for this template -->
     <link href="/node_modules/startbootstrap-scrolling-nav/css/scrolling-nav.css" rel="stylesheet">
-    <link href="/assets/css/course.css" rel="stylesheet">
+    <link href="/assets/css/leture.css" rel="stylesheet">
     <link href="/assets/css/overlay.css" rel="stylesheet">
 
 </head>
@@ -62,22 +62,19 @@
         </div>
     </nav>
 
-    <section id="student-course" class="bg-white">
+    <section id="student-leture" class="bg-white">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 mx-auto">
-                    <h2>我的研習</h2>
+                    <h2>我的專業科目</h2>
                     <table class="table table-borderless table-hover">
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
-                                <th scope="col">審核情況</th>
-                                <th scope="col">研習主題</th>
-                                <th scope="col">研習時段</th>
-                                <th scope="col">研習類別</th>
-                                <th scope="col">便當</th>
-                                <th scope="col">審核結果說明</th>
-                                <th scope="col">心得</th>
+                                <th scope="col">狀態</th>
+                                <th scope="col">科目名稱</th>
+                                <th scope="col">最低學分</th>
+                                <th scope="col">備註</th>
                                 <th scope="col"></th>
                             </tr>
                         </thead>
@@ -116,31 +113,51 @@
         </div>
     </div>
 
-    <!-- Update Review Modal -->
-    <div class="modal fade" id="updateReviewModal" tabindex="-1" role="dialog" aria-labelledby="updateReviewLabel"
+    <!-- Detail Modal-->
+    <div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
             <div class="modal-content">
-                <form>
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="updateReviewLabel">心得上傳</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <textarea class="form-control"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <input type="hidden"></input>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
-                        <button type="submit" class="btn btn-primary">送出</button>
-                    </div>
-                </form>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered table-sm" style="margin-bottom: 0px;">
+                        <tbody>
+                            <tr>
+                                <th>領域專長名稱</th>
+                                <td id="name"></td>
+                            </tr>
+                            <tr>
+                                <th>要求最低應修畢總學分數</th>
+                                <td id="min_credit"></td>
+                            </tr>
+                            <tr>
+                                <th>備註</th>
+                                <td id="comment"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-bordered table-sm">
+                        <thead>
+                            <tr>
+                                <th colspan="4">課程類別</th>
+                                <th colspan="5">科目名稱</th>
+                                <th colspan="1">學分數</th>
+                                <th colspan="1">成績</th>
+                                <th colspan="1">通過</th>
+                                <th colspan="2">備註</th>
+                            </tr>
+                        </thead>
+                        <tbody id="categories"></tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" type="button" data-dismiss="modal">OK</button>
+                </div>
             </div>
         </div>
     </div>
@@ -168,7 +185,7 @@
 
     <script src="/assets/js/auth.js"></script>
     <script src="/assets/js/loading.js"></script>
-    <script src="/assets/js/student-course.js"></script>
+    <script src="/assets/js/student-leture.js"></script>
 
 </body>
 

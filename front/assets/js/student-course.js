@@ -37,10 +37,10 @@ const getStudentCourses = () => {
         success: (response) => {
             if (response.list.length == 0) {
                 $('#student-course tbody').append(`
-                        <tr>
-                            <td scope="row" colspan="8" style="text-align: center">尚無資料</td>
-                        </tr>
-                    `)
+                    <tr>
+                        <td scope="row" colspan="8" style="text-align: center">尚無資料</td>
+                    </tr>
+                `)
             } else {
                 studentCourses = []
                 response.list.forEach((element, index) => {

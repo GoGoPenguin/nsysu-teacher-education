@@ -236,14 +236,14 @@ const getLetures = () => {
                     }
 
                     $('#leture tbody').append(`
-                    <tr>
-                        <th scope="row">${index}</th>
-                        <td>${element.Name}</td>
-                        <td>${element.MinCredit}</td>
-                        <td>${element.Comment}</td>
-                        <td><button class="btn btn-secondary mr-3" onclick="detail(${element.ID}, this)">查看</button>${action}</td>
-                    </tr>
-                `)
+                        <tr>
+                            <th scope="row">${index}</th>
+                            <td>${element.Name}</td>
+                            <td>${element.MinCredit}</td>
+                            <td>${element.Comment}</td>
+                            <td><button class="btn btn-secondary mr-3" onclick="detail(${element.ID}, this)">查看</button>${action}</td>
+                        </tr>
+                    `)
                 })
             }
         }
