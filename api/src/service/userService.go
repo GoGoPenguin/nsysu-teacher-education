@@ -73,10 +73,16 @@ func GetStudents(start, length, search string) (result map[string]interface{}, e
 		specification.IsNullSpecification("deleted_at"),
 	)
 
+	filtered := gorm.StudentDao.Count(
+		tx,
+		specification.LikeSpecification([]string{"name", "account", "major", "number", "created_at"}, search),
+		specification.IsNullSpecification("deleted_at"),
+	)
+
 	result = map[string]interface{}{
 		"list":            assembler.StudentsDTO(students),
 		"recordsTotal":    total,
-		"recordsFiltered": len(*students),
+		"recordsFiltered": filtered,
 	}
 
 	return result, nil

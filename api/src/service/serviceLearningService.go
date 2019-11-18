@@ -58,12 +58,22 @@ func GetServiceLearningList(account, start, length, search string) (result map[s
 		search = "volunteer"
 	}
 
-	var serviceLearnings *[]gorm.ServiceLearning
+	var (
+		serviceLearnings *[]gorm.ServiceLearning
+		filtered         int
+	)
+
 	if operator := gorm.AdminDao.GetByAccount(tx, account); operator != nil {
 		serviceLearnings = gorm.ServiceLearningDao.Query(
 			tx,
 			specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
 			specification.OrderSpecification("start", specification.OrderDirectionDESC),
+			specification.LikeSpecification([]string{"type", "content", "start", "end", "hours"}, search),
+			specification.IsNullSpecification("deleted_at"),
+		)
+
+		filtered = gorm.ServiceLearningDao.Count(
+			tx,
 			specification.LikeSpecification([]string{"type", "content", "start", "end", "hours"}, search),
 			specification.IsNullSpecification("deleted_at"),
 		)
@@ -86,7 +96,7 @@ func GetServiceLearningList(account, start, length, search string) (result map[s
 	result = map[string]interface{}{
 		"list":            list,
 		"recordsTotal":    total,
-		"recordsFiltered": len(list),
+		"recordsFiltered": filtered,
 	}
 
 	return
@@ -141,12 +151,21 @@ func GetSutdentServiceLearningList(account, start, length string) (result map[st
 		}
 	}()
 
-	var studentServiceLearnings *[]gorm.StudentServiceLearning
+	var (
+		studentServiceLearnings *[]gorm.StudentServiceLearning
+		filtered                int
+	)
+
 	if operator := gorm.AdminDao.GetByAccount(tx, account); operator != nil {
 		studentServiceLearnings = gorm.StudentServiceLearningDao.Query(
 			tx,
 			specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
 			specification.OrderSpecification("`student_service_learning`."+specification.IDColumn, specification.OrderDirectionDESC),
+			specification.IsNullSpecification("deleted_at"),
+		)
+
+		filtered = gorm.StudentServiceLearningDao.Count(
+			tx,
 			specification.IsNullSpecification("deleted_at"),
 		)
 	} else {
@@ -168,7 +187,7 @@ func GetSutdentServiceLearningList(account, start, length string) (result map[st
 	result = map[string]interface{}{
 		"list":            assembler.StudentServiceLearningsDTO(studentServiceLearnings),
 		"recordsTotal":    total,
-		"recordsFiltered": len(*studentServiceLearnings),
+		"recordsFiltered": filtered,
 	}
 
 	return

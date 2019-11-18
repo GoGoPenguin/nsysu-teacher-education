@@ -56,12 +56,22 @@ func GetCourse(account, start, length, search string) (result map[string]interfa
 		}
 	}()
 
-	var courses *[]gorm.Course
+	var (
+		courses *[]gorm.Course
+		filered int
+	)
+
 	if operator := gorm.AdminDao.GetByAccount(tx, account); operator != nil {
 		courses = gorm.CourseDao.Query(
 			tx,
 			specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
 			specification.OrderSpecification("start", specification.OrderDirectionDESC),
+			specification.LikeSpecification([]string{"topic", "information", "type", "start", "end"}, search),
+			specification.IsNullSpecification("deleted_at"),
+		)
+
+		filered = gorm.CourseDao.Count(
+			tx,
 			specification.LikeSpecification([]string{"topic", "information", "type", "start", "end"}, search),
 			specification.IsNullSpecification("deleted_at"),
 		)
@@ -83,7 +93,7 @@ func GetCourse(account, start, length, search string) (result map[string]interfa
 	result = map[string]interface{}{
 		"list":            assembler.CoursesDTO(courses),
 		"recordsTotal":    total,
-		"recordsFiltered": len(*courses),
+		"recordsFiltered": filered,
 	}
 
 	return result, nil
@@ -164,12 +174,21 @@ func GetSutdentCourseList(account, start, length string) (result map[string]inte
 		}
 	}()
 
-	var studentCourses *[]gorm.StudentCourse
+	var (
+		studentCourses *[]gorm.StudentCourse
+		filtered       int
+	)
+
 	if operator := gorm.AdminDao.GetByAccount(tx, account); operator != nil {
 		studentCourses = gorm.StudentCourseDao.Query(
 			tx,
 			specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
 			specification.OrderSpecification("`student_course`."+specification.IDColumn, specification.OrderDirectionDESC),
+			specification.IsNullSpecification("deleted_at"),
+		)
+
+		filtered = gorm.StudentCourseDao.Count(
+			tx,
 			specification.IsNullSpecification("deleted_at"),
 		)
 	} else {
@@ -191,7 +210,7 @@ func GetSutdentCourseList(account, start, length string) (result map[string]inte
 	result = map[string]interface{}{
 		"list":            assembler.StudentCoursesDTO(studentCourses),
 		"recordsTotal":    total,
-		"recordsFiltered": len(*studentCourses),
+		"recordsFiltered": filtered,
 	}
 
 	return

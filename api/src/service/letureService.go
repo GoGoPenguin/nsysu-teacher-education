@@ -20,12 +20,22 @@ func GetLetures(account, start, length, search string) (result map[string]interf
 		}
 	}()
 
-	var letures *[]gorm.Leture
+	var (
+		letures  *[]gorm.Leture
+		filtered int
+	)
+
 	if operator := gorm.AdminDao.GetByAccount(tx, account); operator != nil {
 		letures = gorm.LetureDao.Query(
 			tx,
 			specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
 			specification.OrderSpecification("created_at", specification.OrderDirectionASC),
+			specification.LikeSpecification([]string{"name", "comment", "min_credit", "status"}, search),
+			specification.IsNullSpecification("deleted_at"),
+		)
+
+		filtered = gorm.LetureDao.Count(
+			tx,
 			specification.LikeSpecification([]string{"name", "comment", "min_credit", "status"}, search),
 			specification.IsNullSpecification("deleted_at"),
 		)
@@ -46,7 +56,7 @@ func GetLetures(account, start, length, search string) (result map[string]interf
 	result = map[string]interface{}{
 		"list":            assembler.LeturesDTO(letures),
 		"recordsTotal":    total,
-		"recordsFiltered": len(*letures),
+		"recordsFiltered": filtered,
 	}
 
 	return result, nil
@@ -138,12 +148,21 @@ func GetSutdentLetureList(account, start, length string) (result map[string]inte
 		}
 	}()
 
-	var studentLetures *[]gorm.StudentLeture
+	var (
+		studentLetures *[]gorm.StudentLeture
+		filtered       int
+	)
+
 	if operator := gorm.AdminDao.GetByAccount(tx, account); operator != nil {
 		studentLetures = gorm.StudentLetureDao.Query(
 			tx,
 			specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
 			specification.OrderSpecification("`student_leture`."+specification.IDColumn, specification.OrderDirectionDESC),
+			specification.IsNullSpecification("deleted_at"),
+		)
+
+		filtered = gorm.StudentLetureDao.Count(
+			tx,
 			specification.IsNullSpecification("deleted_at"),
 		)
 	} else {
@@ -165,7 +184,7 @@ func GetSutdentLetureList(account, start, length string) (result map[string]inte
 	result = map[string]interface{}{
 		"list":            assembler.StudentLeturesDTO(studentLetures),
 		"recordsTotal":    total,
-		"recordsFiltered": len(*studentLetures),
+		"recordsFiltered": filtered,
 	}
 
 	return
