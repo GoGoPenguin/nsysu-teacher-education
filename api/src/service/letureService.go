@@ -205,3 +205,37 @@ func GetStudentLetureDetail(studentLetureID string) (result interface{}, e *erro
 
 	return assembler.StudentLeturesDetailDTO(studentLeture), nil
 }
+
+// UpdateStudentSubject update student subject
+func UpdateStudentSubject(account, studentLetureID, subjectID, score, pass string) (result interface{}, e *errors.Error) {
+	tx := gorm.DB()
+
+	defer func() {
+		if r := recover(); r != nil {
+			logger.Error(r)
+			e = errors.UnexpectedError()
+		}
+	}()
+
+	if gorm.StudentDao.GetByAccount(tx, account) == nil {
+		return nil, errors.NotFoundError("Student " + account)
+	}
+
+	studentSbject := gorm.StudentSubjectDao.GetByLetureAndSubject(tx, typecast.StringToUint(studentLetureID), typecast.StringToUint(subjectID))
+
+	if studentSbject == nil {
+		return nil, errors.NotFoundError("Student Subject")
+	}
+
+	if pass != "" {
+		studentSbject.Pass = typecast.StringToBool(pass)
+	}
+	if score != "" {
+		temp := typecast.StringToUint(score)
+		studentSbject.Score = &temp
+	}
+
+	gorm.StudentSubjectDao.Update(tx, studentSbject)
+
+	return "success", nil
+}

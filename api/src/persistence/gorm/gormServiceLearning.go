@@ -99,7 +99,7 @@ func (dao *serviceLearningDao) Delete(tx *gorm.DB, id uint) {
 	}
 }
 
-// Modify a record
+// Update a record
 func (dao *serviceLearningDao) Update(tx *gorm.DB, serviceLearning *ServiceLearning) {
 	attrs := map[string]interface{}{
 		"Type":    serviceLearning.Type,

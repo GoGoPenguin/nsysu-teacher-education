@@ -132,7 +132,7 @@ func (dao *courseDao) Delete(tx *gorm.DB, id uint) {
 	}
 }
 
-// Modify a record
+// Update a record
 func (dao *courseDao) Update(tx *gorm.DB, course *Course) {
 	attrs := map[string]interface{}{
 		"Topic":       course.Topic,
