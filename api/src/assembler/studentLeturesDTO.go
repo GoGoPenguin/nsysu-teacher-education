@@ -18,6 +18,7 @@ func StudentLeturesDTO(studentLetures *[]gorm.StudentLeture) []map[string]interf
 				"Number":  studentLeture.Student.Number,
 			},
 			"Leture": map[string]interface{}{
+				"ID":        studentLeture.Leture.ID,
 				"Name":      studentLeture.Leture.Name,
 				"MinCredit": studentLeture.Leture.MinCredit,
 				"Comment":   studentLeture.Leture.Comment,
