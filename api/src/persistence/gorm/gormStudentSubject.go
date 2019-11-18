@@ -7,9 +7,10 @@ import (
 // StudentSubject model
 type StudentSubject struct {
 	gorm.Model
-	StudentLetureID uint `gorm:"column:student_leture_id;"`
-	SubjectID       uint `gorm:"column:subject_id;"`
-	Pass            bool `gorm:"column:pass;"`
+	StudentLetureID uint  `gorm:"column:student_leture_id;"`
+	SubjectID       uint  `gorm:"column:subject_id;"`
+	Pass            bool  `gorm:"column:pass;"`
+	Score           *uint `gorm:"column:score;"`
 }
 
 type studentSubjectDao struct {

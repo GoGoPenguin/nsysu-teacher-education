@@ -5,6 +5,7 @@ CREATE TABLE `student_subject` (
     `student_leture_id` INT NOT NULL COMMENT '學生課程ID',
     `subject_id` INT NOT NULL COMMENT '科目ID',
     `pass` BOOLEAN NOT NULL COMMENT '通過',
+    `score` TINYINT DEFAULT NULL COMMENT '成績',
     `created_at` DATETIME NOT NULL DEFAULT NOW() COMMENT '創建日期',
     `updated_at` DATETIME ON UPDATE CURRENT_TIMESTAMP COMMENT '更新日期',
     `deleted_at` DATETIME COMMENT '刪除日期',

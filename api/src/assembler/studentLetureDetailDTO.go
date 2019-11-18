@@ -24,6 +24,7 @@ func StudentLeturesDetailDTO(studentLeture *gorm.StudentLeture) map[string]inter
 						"Credit":     subject.Credit,
 						"Compulsory": subject.Compulsory,
 						"Pass":       subject.StudentSubject.Pass,
+						"Score":      subject.StudentSubject.Score,
 					})
 				}
 
