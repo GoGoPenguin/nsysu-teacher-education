@@ -6,6 +6,7 @@ const TYPE = {
 
 let studentCourses = []
 let studentServiceLearnings = []
+let studentLetures = []
 
 let editedID = null
 let editedItem = null
@@ -16,7 +17,7 @@ $(document).ready(() => {
     Promise.all([
         getStudentCourses(),
         getStudentServiceLearning(),
-        getLetures()
+        getStudentLeture(),
     ]).then(() => {
         unloading()
     }).catch(() => {
@@ -63,6 +64,29 @@ const getStudentServiceLearning = () => {
             if (response.list.length > 0) {
                 response.list.forEach((element, index) => {
                     studentServiceLearnings.push(Object.assign({}, element))
+                })
+            }
+        },
+        complete: () => {
+            getLetures()
+        }
+    });
+}
+
+const getStudentLeture = () => {
+    $.ajax({
+        url: `${config.server}/v1/leture/student`,
+        type: 'GET',
+        beforeSend: (xhr) => {
+            setHeader(xhr)
+        },
+        error: (xhr) => {
+            errorHandle(xhr, "錯誤")
+        },
+        success: (response) => {
+            if (response.list.length > 0) {
+                response.list.forEach((element, index) => {
+                    studentLetures.push(Object.assign({}, element))
                 })
             }
         },
@@ -199,13 +223,25 @@ const getLetures = () => {
                 `)
             } else {
                 response.list.forEach((element, index) => {
+                    let action = ''
+
+                    let studentLeture = studentLetures.find(studentLeture => {
+                        return element.ID === studentLeture.Leture.ID
+                    })
+
+                    if (studentLeture !== undefined) {
+                        action = `<button class="btn btn-primary" disabled>已報名</button>`
+                    } else {
+                        action = `<button class="btn btn-primary" onclick="signUpLeture(${element.ID}, this)">報名</button>`
+                    }
+
                     $('#leture tbody').append(`
                     <tr>
                         <th scope="row">${index}</th>
                         <td>${element.Name}</td>
                         <td>${element.MinCredit}</td>
                         <td>${element.Comment}</td>
-                        <td><button class="btn btn-secondary mr-3" onclick="detail(${element.ID}, this)">查看</button><button class="btn btn-primary">報名</button></td>
+                        <td><button class="btn btn-secondary mr-3" onclick="detail(${element.ID}, this)">查看</button>${action}</td>
                     </tr>
                 `)
                 })
@@ -439,6 +475,46 @@ const detail = (id, el) => {
         complete: () => {
             $(el).html('查看')
             $(el).attr("disabled", false)
+        }
+    });
+}
+
+const signUpLeture = (id, el) => {
+    $.ajax({
+        url: `${config.server}/v1/leture/sign-up`,
+        type: 'POST',
+        data: {
+            'LetureID': id,
+        },
+        beforeSend: (xhr) => {
+            $(el).html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>&nbsp載入中...')
+            $(el).attr("disabled", true)
+            setHeader(xhr)
+        },
+        error: (xhr) => {
+            errorHandle(xhr, "錯誤")
+        },
+        success: (response) => {
+            if (response.code === 0) {
+                swal({
+                    title: '',
+                    text: '報名成功',
+                    icon: "success",
+                    timer: 1500,
+                    buttons: false,
+                })
+                $(el).html('已報名')
+            } else {
+                swal({
+                    title: '',
+                    text: '報名失敗',
+                    icon: "error",
+                    timer: 1500,
+                    buttons: false,
+                })
+                $(el).html('報名')
+                $(el).attr("disabled", false)
+            }
         }
     });
 }
