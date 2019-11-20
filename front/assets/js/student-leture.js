@@ -26,14 +26,15 @@ const getStudentLeture = () => {
         },
         success: (response) => {
             if (response.list.length == 0) {
-                $('#student-leture tbody').append(`
+                $('#student-leture tbody').html(`
                     <tr>
                         <td scope="row" colspan="8" style="text-align: center">尚無資料</td>
                     </tr>
                 `)
             } else {
+                let html = ''
                 response.list.forEach((element, index) => {
-                    $('#student-leture tbody').append(`
+                    html += `
                         <tr>
                             <th scope="row">${index}</th>
                             <td class="${element.Pass ? 'text-success' : 'text-danger'}">${element.Pass ? '通過' : '未通過'}</td>
@@ -42,8 +43,9 @@ const getStudentLeture = () => {
                             <td>${element.Leture.Comment}</td>
                             <td><button class="btn btn-primary" onclick="getStudentLetureDetail(${element.ID})">編輯</button></td>
                         </tr>
-                    `)
+                    `
                 })
+                $('#student-leture tbody').html(html)
             }
         }
     });
@@ -104,7 +106,7 @@ const getStudentLetureDetail = (id) => {
                                     temp += `<td colspan="2" rowspan="${subjectGroups}" class="align-middle" id="type${type.ID}">${type.Name}</td>`
                                 }
 
-                                temp += `<td colspan="1" class="align-middle" id="subject${subject.ID}">${subject.Compulsory ? "必修" : "選修"}</td>`
+                                temp += `<td colspan="1" class="align-middle">${subject.Compulsory ? "必修" : "選修"}</td>`
 
                                 if (group.MinCredit > 0) {
                                     temp += `<td colspan="3" class="align-middle">${subject.Name}</td>`
@@ -113,7 +115,7 @@ const getStudentLetureDetail = (id) => {
                                         temp += `<td colspan="1" rowspan="${group.Subjects.length}" class="align-middle vericaltext" id="group${group.ID}">至少${group.MinCredit}學分</td>`
                                     }
                                 } else {
-                                    temp += `<td colspan="4" class="align-middle">${subject.Name}</td>`
+                                    temp += `<td colspan="4" class="align-middle" id="subject${subject.ID}">${subject.Name}</td>`
                                 }
 
                                 temp += `<td colspan="1" class="align-middle">${subject.Credit}</td>`
@@ -311,6 +313,7 @@ const check = () => {
             timer: 1500,
             buttons: false,
         })
+        updateStudentLeturePass(leture.ID, true)
     } else {
         swal({
             title: '',
@@ -319,7 +322,39 @@ const check = () => {
             timer: 1500,
             buttons: false,
         })
+        updateStudentLeturePass(leture.ID, false)
     }
+}
+
+const updateStudentLeturePass = (letureID, pass) => {
+    $.ajax({
+        url: `${config.server}/v1/leture/student/pass`,
+        type: 'PATCH',
+        data: {
+            'LetureID': letureID,
+            'Pass': pass,
+        },
+        beforeSend: (xhr) => {
+            setHeader(xhr)
+        },
+        error: (xhr) => {
+            errorHandle(xhr, "錯誤")
+        },
+        success: (response) => {
+            if (response.code !== 0) {
+                swal({
+                    title: '',
+                    text: '失敗',
+                    icon: "error",
+                    timer: 1500,
+                    buttons: false,
+                })
+            }
+        },
+        complete: () => {
+            getStudentLeture()
+        }
+    })
 }
 
 $('#detailModal').on('hidden.bs.modal', () => {
