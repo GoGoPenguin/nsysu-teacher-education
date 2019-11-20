@@ -56,13 +56,31 @@ func (dao *studentLetureDao) GetByID(tx *gorm.DB, id uint) *StudentLeture {
 	return &result
 }
 
+// GetByID get a record by id
+func (dao *studentLetureDao) GetByLetureAndStudent(tx *gorm.DB, letureID, studentID uint) *StudentLeture {
+	var result StudentLeture
+
+	err := tx.Table(dao.table).
+		Where(&StudentLeture{
+			StudentID: studentID,
+			LetureID:  letureID,
+		}).
+		Find(&result).Error
+
+	if gorm.IsRecordNotFoundError(err) {
+		return nil
+	}
+	if err != nil {
+		panic(err)
+	}
+	return &result
+}
+
 // Update record
 func (dao *studentLetureDao) Update(tx *gorm.DB, studentLeture *StudentLeture) {
 	err := tx.Model(&studentLeture).
 		Updates(map[string]interface{}{
-			"StudentID": studentLeture.StudentID,
-			"LetureID":  studentLeture.LetureID,
-			"Meal":      studentLeture.Pass,
+			"Pass": studentLeture.Pass,
 		}).Error
 
 	if gorm.IsRecordNotFoundError(err) {

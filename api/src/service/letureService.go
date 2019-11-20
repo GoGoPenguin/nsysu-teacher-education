@@ -242,3 +242,30 @@ func UpdateStudentSubject(account, studentLetureID, subjectID, score, pass strin
 
 	return "success", nil
 }
+
+// UpdateStudentLetuerPass update student leture pass
+func UpdateStudentLetuerPass(account, letureID, pass string) (result interface{}, e *errors.Error) {
+	tx := gorm.DB()
+
+	defer func() {
+		if r := recover(); r != nil {
+			logger.Error(r)
+			e = errors.UnexpectedError()
+		}
+	}()
+
+	stduent := gorm.StudentDao.GetByAccount(tx, account)
+	if stduent == nil {
+		return nil, errors.NotFoundError("Student " + account)
+	}
+
+	studentLeture := gorm.StudentLetureDao.GetByLetureAndStudent(tx, typecast.StringToUint(letureID), stduent.ID)
+	if studentLeture == nil {
+		return nil, errors.NotFoundError("Student Leture")
+	}
+
+	studentLeture.Pass = typecast.StringToBool(pass)
+	gorm.StudentLetureDao.Update(tx, studentLeture)
+
+	return "success", nil
+}
