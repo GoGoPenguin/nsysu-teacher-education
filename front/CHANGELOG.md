@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 - 新增專門科目
 - 新增登入逾時提示訊息
 - 新增載入中動畫
+- 新增「我的專門科目」頁面
 
 ### Changed
 
