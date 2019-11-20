@@ -155,7 +155,7 @@ func GetSutdentLetureList(account, start, length string) (result map[string]inte
 
 	if operator := gorm.AdminDao.GetByAccount(tx, account); operator != nil {
 		studentLetures = gorm.StudentLetureDao.Query(
-			tx,
+			tx.Preload("Leture").Preload("Student"),
 			specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
 			specification.OrderSpecification("`student_leture`."+specification.IDColumn, specification.OrderDirectionDESC),
 			specification.IsNullSpecification("deleted_at"),
@@ -168,7 +168,7 @@ func GetSutdentLetureList(account, start, length string) (result map[string]inte
 	} else {
 		student := gorm.StudentDao.GetByAccount(tx, account)
 		studentLetures = gorm.StudentLetureDao.Query(
-			tx,
+			tx.Preload("Leture"),
 			specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
 			specification.OrderSpecification("`student_leture`."+specification.IDColumn, specification.OrderDirectionDESC),
 			specification.IsNullSpecification("deleted_at"),
@@ -192,7 +192,7 @@ func GetSutdentLetureList(account, start, length string) (result map[string]inte
 
 // GetStudentLetureDetail get studnet leture detail
 func GetStudentLetureDetail(studentLetureID string) (result interface{}, e *errors.Error) {
-	tx := gorm.DB().Preload("Leture.Categories.Types.Groups.Subjects.StudentSubject").Preload("Student")
+	tx := gorm.DB().Preload("Leture.Categories.Types.Groups.Subjects.StudentSubject")
 
 	defer func() {
 		if r := recover(); r != nil {
@@ -230,9 +230,12 @@ func UpdateStudentSubject(account, studentLetureID, subjectID, score, pass strin
 	if pass != "" {
 		studentSbject.Pass = typecast.StringToBool(pass)
 	}
+
 	if score != "" {
 		temp := typecast.StringToUint(score)
 		studentSbject.Score = &temp
+	} else {
+		studentSbject.Score = nil
 	}
 
 	gorm.StudentSubjectDao.Update(tx, studentSbject)

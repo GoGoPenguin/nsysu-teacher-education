@@ -29,18 +29,21 @@ func StudentLeturesDetailDTO(studentLeture *gorm.StudentLeture) map[string]inter
 				}
 
 				groups = append(groups, map[string]interface{}{
+					"ID":        group.ID,
 					"MinCredit": group.MinCredit,
 					"Subjects":  subjects,
 				})
 			}
 
 			letureTypes = append(letureTypes, map[string]interface{}{
+				"ID":        letureType.ID,
 				"Name":      letureType.Name,
 				"MinCredit": letureType.MinCredit,
 				"Groups":    groups,
 			})
 		}
 		categories = append(categories, map[string]interface{}{
+			"ID":        category.ID,
 			"Name":      category.Name,
 			"MinCredit": category.MinCredit,
 			"MinType":   category.MinType,
@@ -50,13 +53,8 @@ func StudentLeturesDetailDTO(studentLeture *gorm.StudentLeture) map[string]inter
 
 	result := map[string]interface{}{
 		"ID": studentLeture.ID,
-		"Student": map[string]interface{}{
-			"Name":    studentLeture.Student.Name,
-			"Account": studentLeture.Student.Account,
-			"Major":   studentLeture.Student.Major,
-			"Number":  studentLeture.Student.Number,
-		},
 		"Leture": map[string]interface{}{
+			"ID":         studentLeture.Leture.ID,
 			"Name":       studentLeture.Leture.Name,
 			"MinCredit":  studentLeture.Leture.MinCredit,
 			"Comment":    studentLeture.Leture.Comment,

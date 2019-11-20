@@ -53,11 +53,13 @@ func (dao *studentSubjectDao) GetByID(tx *gorm.DB, id uint) *StudentSubject {
 
 // GetByID get a record by id
 func (dao *studentSubjectDao) GetByLetureAndSubject(tx *gorm.DB, letureID, subjectID uint) *StudentSubject {
-	result := StudentSubject{
-		StudentLetureID: letureID,
-		SubjectID:       subjectID,
-	}
+	var result StudentSubject
+
 	err := tx.Table(dao.table).
+		Where(&StudentSubject{
+			StudentLetureID: letureID,
+			SubjectID:       subjectID,
+		}).
 		Find(&result).Error
 
 	if gorm.IsRecordNotFoundError(err) {

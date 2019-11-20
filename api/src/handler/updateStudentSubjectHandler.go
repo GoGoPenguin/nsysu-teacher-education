@@ -13,8 +13,8 @@ func UpdateStudentSubjectHandler(ctx iris.Context) {
 	type rule struct {
 		StudentLetureID string `valid:"required"`
 		SubjectID       string `valid:"required"`
-		Score           string `valid:"range(0|100)"`
-		Pass            string `valid:"in(true|false)"`
+		Score           string `valid:"range(0|100), int"`
+		Pass            string `valid:"required, in(true|false)"`
 	}
 
 	params := &rule{
