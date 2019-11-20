@@ -8,7 +8,7 @@ import (
 	"github.com/nsysu/teacher-education/src/utils/auth"
 )
 
-// GetStudentLetureHandler get student-course list
+// GetStudentLetureHandler get student-leture list
 func GetStudentLetureHandler(ctx iris.Context) {
 	type rule struct {
 		Start  string `valid:"required"`

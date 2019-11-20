@@ -7,7 +7,7 @@ import (
 	"github.com/nsysu/teacher-education/src/service"
 )
 
-// GetCourseInformationHandler get list of course
+// GetCourseInformationHandler get course information file
 func GetCourseInformationHandler(ctx iris.Context) {
 	type rule struct {
 		CourseID string `valid:"required"`

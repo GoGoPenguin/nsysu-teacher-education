@@ -8,7 +8,7 @@ import (
 	"github.com/nsysu/teacher-education/src/utils/auth"
 )
 
-// UpdateStudentSubjectHandler update course
+// UpdateStudentSubjectHandler update student subject
 func UpdateStudentSubjectHandler(ctx iris.Context) {
 	type rule struct {
 		StudentLetureID string `valid:"required"`
