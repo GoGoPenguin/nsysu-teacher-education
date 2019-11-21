@@ -1,8 +1,7 @@
 let editedItem = null
 
+loading()
 $(document).ready(() => {
-    loading()
-
     Promise.all([
         getStudentLeture()
     ]).then(() => {
@@ -149,6 +148,14 @@ const getStudentLetureDetail = (id) => {
                 $('#detailModal #min_credit').html(leture.MinCredit)
                 $('#detailModal #comment').html(leture.Comment)
                 $('#detailModal #categories').html(html)
+
+                let buttons = '<button class="btn btn-primary" type="button" onclick="check()">審核</button>'
+                if (response.data.Pass) {
+                    buttons += '<button class="btn btn-secondary ml-3" onclick="applictionForm(this)">下載申請書</button>'
+                    $('#detailModal .modal-footer').html()
+                }
+
+                $('#detailModal .modal-footer').html(buttons)
                 $('#detailModal').modal('show')
             } else {
                 swal({
@@ -357,6 +364,176 @@ const updateStudentLeturePass = (letureID, pass) => {
     })
 }
 
+const applictionForm = (el) => {
+    $(el).attr('disabled', true)
+    $(el).html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>&nbsp下載中...')
+
+    setTimeout(() => {
+        let doc = new jsPDF()
+        doc.setTextColor(0);
+        doc.setFont('kaiu')
+        doc.setFontStyle('normal');
+        doc.setFontSize(10);
+
+        const white = 255
+        const black = 0
+        const gray = 230
+        const cellWidth = 25
+        const styleDef = {
+            font: 'kaiu',
+            fontStyle: 'normal',
+            fillColor: white,
+            textColor: black,
+            lineColor: black,
+            lineWidth: 0.1,
+            valign: 'middle',
+        }
+        const didDrawPage = (HookData) => {
+            let header = '國立中山大學中等學校各任教學科專門科目學分認定申請表'
+            doc.setFontSize(16);
+            doc.center(header, 15);
+
+            let footer = '【請單面列印，未申請採認之科目請刪除(含表格)】'
+            let pageSize = doc.internal.pageSize;
+            let pageHeight = pageSize.height ? pageSize.height : pageSize.getHeight();
+            doc.setFontSize(10);
+            doc.center(footer, pageHeight - 5);
+        }
+
+        let information = {
+            theme: 'grid',
+            headStyles: styleDef,
+            footStyle: styleDef,
+            styles: styleDef,
+            margin: { top: 20 },
+            body: [
+                [
+                    { content: '姓名', styles: { cellWidth: cellWidth } },
+                    { content: '' },
+                    { content: '聯絡電話', styles: { cellWidth: cellWidth } },
+                    { content: '' },
+                    { content: '身分證字號', styles: { cellWidth: cellWidth } },
+                    { content: '', colSpan: 2 },
+                ],
+                [
+                    { content: '畢業學校系所', styles: { cellWidth: cellWidth } },
+                    { content: '', colSpan: 3 },
+                    { content: '學號', styles: { cellWidth: cellWidth } },
+                    { content: '', colSpan: 2 },
+                ],
+                [
+                    { content: '申請任教科別', styles: { cellWidth: cellWidth } },
+                    { content: '', colSpan: 6 },
+                ],
+                [
+                    { content: '資格', styles: { cellWidth: cellWidth } },
+                    { content: '□ 參加教師資格考試\n□ 加科/加另一類科（請附教師證書影本）', colSpan: 3 },
+                    { content: '學程編號', styles: { cellWidth: cellWidth } },
+                    { content: '', colSpan: 2 },
+                ],
+                [
+                    { content: '修習起訖期間', styles: { cellWidth: cellWidth } },
+                    { content: '   年   月   日～    年   月   日（   年   月   日～   年   月   日他校學分採認）', colSpan: 6 },
+                ],
+                [
+                    { content: '教育部核定專門課程文號：   年   月   日臺教師(   )字第                    號函', colSpan: 7, styles: { cellWidth: cellWidth } },
+                ],
+            ],
+        }
+        doc.autoTable(information);
+
+        let leture = {
+            startY: doc.autoTable.previous.finalY + 5,
+            headStyles: styleDef,
+            footStyle: styleDef,
+            margin: { top: 20 },
+            showHead: 'everyPage',
+            rowPageBreak: 'avoid',
+            styles: styleDef,
+            didDrawPage: didDrawPage,
+            head: [
+                [
+                    { content: '師資生自行填寫（請用電腦打字）', colSpan: 10, styles: { halign: 'center' } },
+                    { content: '系所審查意見', colSpan: 3, rowSpan: 2, styles: { halign: 'center' } },
+                ],
+                [
+                    { content: '編號', colSpan: 1, rowSpan: 2, styles: { cellWidth: 7, fillColor: gray, halign: 'center' } },
+                    { content: '課程類別', colSpan: 2, rowSpan: 2, styles: { fillColor: gray, halign: 'center' } },
+                    { content: '教育部核定科目', colSpan: 2, cellWidth: 15, styles: { fillColor: gray, halign: 'center' } },
+                    { content: '師資生已修習科目（依成績單確實填寫）', colSpan: 5, styles: { fillColor: gray, halign: 'center' } },
+                ],
+                [
+                    { content: '科目名稱', cellWidth: 15, styles: { fillColor: gray, halign: 'center' } },
+                    { content: '學分', styles: { cellWidth: 7, fillColor: gray, halign: 'center' } },
+                    { content: '學年', styles: { cellWidth: 7, fillColor: gray, halign: 'center' } },
+                    { content: '學期', styles: { cellWidth: 7, fillColor: gray, halign: 'center' } },
+                    { content: '科目名稱', cellWidth: 15, styles: { fillColor: gray, halign: 'center' } },
+                    { content: '學分', styles: { cellWidth: 7, fillColor: gray, halign: 'center' } },
+                    { content: '成績', styles: { cellWidth: 7, fillColor: gray, halign: 'center' } },
+                    { content: '完全採認', styles: { cellWidth: 12, fillColor: gray, halign: 'center' } },
+                    { content: '不能採認', styles: { cellWidth: 12, fillColor: gray, halign: 'center' } },
+                    { content: '系主任簽章', styles: { cellWidth: 12, fillColor: gray, halign: 'center' } },
+                ],
+            ],
+            body: [],
+        }
+
+        for (let category of editedItem.Categories) {
+            for (let type of category.Types) {
+                for (let group of type.Groups) {
+                    for (let subject of group.Subjects) {
+                        leture.body.push([
+                            { content: '', styles: { fillColor: white } },
+                            { content: '', styles: { fillColor: white, cellWidth: 7 } },
+                            { content: subject.Compulsory ? '必修' : '選修', styles: { fillColor: white, cellWidth: 7 } },
+                            { content: subject.Name, styles: { fillColor: white } },
+                            { content: subject.Credit, styles: { fillColor: white } },
+                            { content: '', styles: { fillColor: white } },
+                            { content: '', styles: { fillColor: white } },
+                            { content: '', styles: { fillColor: white } },
+                            { content: '', styles: { fillColor: white } },
+                            { content: '', styles: { fillColor: white } },
+                            { content: '', styles: { fillColor: white } },
+                            { content: '', styles: { fillColor: white } },
+                            { content: '', styles: { fillColor: white } },
+                        ])
+                    }
+                }
+            }
+        }
+
+        doc.autoTable(leture);
+        doc.output('dataurlnewwindow')
+
+        $(el).attr('disabled', false)
+        $(el).html('下載申請書')
+    }, 1)
+}
+
 $('#detailModal').on('hidden.bs.modal', () => {
     editedItem = null
-})
+});
+
+(function (API) {
+    API.center = function (txt, y) {
+        // Get current font size
+        let fontSize = this.internal.getFontSize();
+
+        // Get page width
+        let pageWidth = this.internal.pageSize.width;
+
+        // Get the actual text's width
+        // You multiply the unit width of your string by your font size and divide
+        // by the internal scale factor. The division is necessary
+        // for the case where you use units other than 'pt' in the constructor
+        // of jsPDF.
+        //
+        txtWidth = this.getStringUnitWidth(txt) * fontSize / this.internal.scaleFactor;
+
+        // Calculate text's x coordinate
+        x = (pageWidth - txtWidth) / 2;
+
+        // Draw text at x,y
+        this.text(txt, x, y);
+    }
+})(jsPDF.API);
