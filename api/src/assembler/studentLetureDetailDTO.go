@@ -58,9 +58,9 @@ func StudentLeturesDetailDTO(studentLeture *gorm.StudentLeture) map[string]inter
 			"Name":       studentLeture.Leture.Name,
 			"MinCredit":  studentLeture.Leture.MinCredit,
 			"Comment":    studentLeture.Leture.Comment,
-			"Status":     studentLeture.Leture.Status,
 			"Categories": categories,
 		},
+		"Pass": studentLeture.Pass,
 	}
 
 	return result
