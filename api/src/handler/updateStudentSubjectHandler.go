@@ -13,15 +13,21 @@ func UpdateStudentSubjectHandler(ctx iris.Context) {
 	type rule struct {
 		StudentLetureID string `valid:"required"`
 		SubjectID       string `valid:"required"`
-		Score           string `valid:"range(0|100), int"`
-		Pass            string `valid:"required, in(true|false)"`
+		Name            string `valid:"required"`
+		Year            string `valid:"required"`
+		Semester        string `valid:"required"`
+		Credit          string `valid:"required"`
+		Score           string `valid:"required"`
 	}
 
 	params := &rule{
 		StudentLetureID: ctx.FormValue("StudentLetureID"),
 		SubjectID:       ctx.FormValue("SubjectID"),
+		Name:            ctx.FormValue("Name"),
+		Year:            ctx.FormValue("Year"),
+		Semester:        ctx.FormValue("Semester"),
+		Credit:          ctx.FormValue("Credit"),
 		Score:           ctx.FormValue("Score"),
-		Pass:            ctx.FormValue("Pass"),
 	}
 
 	if _, err := govalidator.ValidateStruct(params); err != nil {
@@ -30,7 +36,16 @@ func UpdateStudentSubjectHandler(ctx iris.Context) {
 	}
 
 	account := auth.Account(ctx)
-	result, err := service.UpdateStudentSubject(account, params.StudentLetureID, params.SubjectID, params.Score, params.Pass)
+	result, err := service.UpdateStudentSubject(
+		account,
+		params.StudentLetureID,
+		params.SubjectID,
+		params.Name,
+		params.Year,
+		params.Semester,
+		params.Credit,
+		params.Score,
+	)
 
 	if err != (*errors.Error)(nil) {
 		failed(ctx, err)

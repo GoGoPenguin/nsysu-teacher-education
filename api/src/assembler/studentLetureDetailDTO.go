@@ -19,12 +19,15 @@ func StudentLeturesDetailDTO(studentLeture *gorm.StudentLeture) map[string]inter
 
 				for _, subject := range group.Subjects {
 					subjects = append(subjects, map[string]interface{}{
-						"ID":         subject.ID,
-						"Name":       subject.Name,
-						"Credit":     subject.Credit,
-						"Compulsory": subject.Compulsory,
-						"Pass":       subject.StudentSubject.Pass,
-						"Score":      subject.StudentSubject.Score,
+						"ID":            subject.ID,
+						"Name":          subject.Name,
+						"Credit":        subject.Credit,
+						"Compulsory":    subject.Compulsory,
+						"StudentName":   subject.StudentSubject.Name,
+						"Year":          subject.StudentSubject.Year,
+						"Semester":      subject.StudentSubject.Semester,
+						"StudentCredit": subject.StudentSubject.Credit,
+						"Score":         subject.StudentSubject.Score,
 					})
 				}
 

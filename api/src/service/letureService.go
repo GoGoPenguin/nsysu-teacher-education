@@ -122,7 +122,6 @@ func SingUpLeture(account, letureID string) (result interface{}, e *errors.Error
 					studentSubject := &gorm.StudentSubject{
 						StudentLetureID: studentLeture.ID,
 						SubjectID:       subject.ID,
-						Pass:            false,
 					}
 					gorm.StudentSubjectDao.New(tx, studentSubject)
 				}
@@ -207,7 +206,7 @@ func GetStudentLetureDetail(studentLetureID string) (result interface{}, e *erro
 }
 
 // UpdateStudentSubject update student subject
-func UpdateStudentSubject(account, studentLetureID, subjectID, score, pass string) (result interface{}, e *errors.Error) {
+func UpdateStudentSubject(account, studentLetureID, subjectID, name, year, semester, credit, score string) (result interface{}, e *errors.Error) {
 	tx := gorm.DB()
 
 	defer func() {
@@ -227,16 +226,11 @@ func UpdateStudentSubject(account, studentLetureID, subjectID, score, pass strin
 		return nil, errors.NotFoundError("Student Subject")
 	}
 
-	if pass != "" {
-		studentSbject.Pass = typecast.StringToBool(pass)
-	}
-
-	if score != "" {
-		temp := typecast.StringToUint(score)
-		studentSbject.Score = &temp
-	} else {
-		studentSbject.Score = nil
-	}
+	studentSbject.Name = name
+	studentSbject.Year = year
+	studentSbject.Semester = semester
+	studentSbject.Credit = credit
+	studentSbject.Score = score
 
 	gorm.StudentSubjectDao.Update(tx, studentSbject)
 

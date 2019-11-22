@@ -7,10 +7,13 @@ import (
 // StudentSubject model
 type StudentSubject struct {
 	gorm.Model
-	StudentLetureID uint  `gorm:"column:student_leture_id;"`
-	SubjectID       uint  `gorm:"column:subject_id;"`
-	Pass            bool  `gorm:"column:pass;"`
-	Score           *uint `gorm:"column:score;"`
+	StudentLetureID uint   `gorm:"column:student_leture_id;"`
+	SubjectID       uint   `gorm:"column:subject_id;"`
+	Name            string `gorm:"column:name;"`
+	Year            string `gorm:"column:year;"`
+	Semester        string `gorm:"column:semester;"`
+	Credit          string `gorm:"column:credit;"`
+	Score           string `gorm:"column:score;"`
 }
 
 type studentSubjectDao struct {
@@ -90,8 +93,11 @@ func (dao *studentSubjectDao) Query(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.D
 // Update a record
 func (dao *studentSubjectDao) Update(tx *gorm.DB, studentSubject *StudentSubject) {
 	attrs := map[string]interface{}{
-		"Pass":  studentSubject.Pass,
-		"Score": studentSubject.Score,
+		"Name":     studentSubject.Name,
+		"Year":     studentSubject.Year,
+		"Semester": studentSubject.Semester,
+		"Credit":   studentSubject.Credit,
+		"Score":    studentSubject.Score,
 	}
 	err := tx.Model(studentSubject).
 		Where("id = ?", studentSubject.ID).

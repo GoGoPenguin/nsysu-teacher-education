@@ -4,7 +4,7 @@ CREATE TABLE `leture_type` (
     `id` INT NOT NULL AUTO_INCREMENT,
     `leture_category_id` INT NOT NULL COMMENT '課程領域ID',
     `name` VARCHAR(150) NOT NULL COMMENT '名稱',
-    `min_credit` INT NOT NULL COMMENT '最低學分數',
+    `min_credit` TINYINT NOT NULL COMMENT '最低學分數',
     `created_at` DATETIME NOT NULL DEFAULT NOW() COMMENT '創建日期',
     `updated_at` DATETIME ON UPDATE CURRENT_TIMESTAMP COMMENT '更新日期',
     `deleted_at` DATETIME COMMENT '刪除日期',
