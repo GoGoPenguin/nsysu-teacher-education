@@ -19,8 +19,8 @@ const courseTable = $('table#leture').DataTable({
 
                 array[index].Button = `
                     <button class="btn btn-secondary mr-1" onclick="detail(${index}, this)">查看</button>
-                    <button class="btn btn-primary mr-1">編輯</button>
-                    <button class="btn btn-danger">刪除</button>
+                    <button class="btn btn-primary mr-1" onclick="underconstruction()">編輯</button>
+                    <button class="btn btn-danger" onclick="underconstruction()">刪除</button>
                 `
 
                 array[index].Status = STATUS[element.Status]
@@ -152,4 +152,14 @@ const detail = (index, el) => {
             $(el).attr("disabled", false)
         }
     });
+}
+
+const underconstruction = () => {
+    swal({
+        title: '',
+        text: '尚未完成',
+        icon: "warning",
+        timer: 1500,
+        buttons: false,
+    })
 }
