@@ -28,6 +28,11 @@ func Run() {
 		v1.Post("/logout", hero.Handler(handler.LogoutHandler))          // 登出
 		v1.Post("/renew-token", hero.Handler(handler.RenewTokenHandler)) // 取得新的 access token
 
+		user := v1.Party("/user")
+		{
+			user.Get("/", hero.Handler(handler.GetStudentInformationHandler))
+		}
+
 		users := v1.Party("/users")
 		{
 			users.Get("/", hero.Handler(handler.GetStudentsHandler))     // 取得學生列表
