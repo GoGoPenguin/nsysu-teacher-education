@@ -10,8 +10,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 - 取得科目列表
 - 取得科目詳細資訊
-- 取得報名專業科目
 - 取得專業科目報名列表
+- 取得學生個人資訊
+- 報名專業科目
 - 更新學生專業科目成績及狀態
 
 ### Fixed
