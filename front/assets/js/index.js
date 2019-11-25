@@ -396,11 +396,11 @@ const detail = (id, el) => {
                     let subjects = 0
 
                     if (category.MinCredit > 1) {
-                        comment += `總共至少修習${category.MinCredit}學分<br>`
+                        comment += `總共至少修習${category.MinCredit}學分<br><br>`
                     }
 
                     if (category.MinType > 1) {
-                        comment += `總共至少修習${category.MinType}類別<br>`
+                        comment += `總共至少修習${category.MinType}類別<br><br>`
                     }
 
                     for (let type of category.Types) {
@@ -408,7 +408,7 @@ const detail = (id, el) => {
                         let subjectGroups = 0
 
                         if (type.MinCredit > 1) {
-                            comment += `${type.Name}至少修習${type.MinCredit}學分<br>`
+                            comment += `${type.Name}至少修習${type.MinCredit}學分<br><br>`
                         }
 
                         for (let group of type.Groups) {

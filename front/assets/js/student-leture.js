@@ -1,9 +1,11 @@
 let editedItem = null
+let student = null
 
 loading()
 $(document).ready(() => {
     Promise.all([
-        getStudentLeture()
+        getStudentLeture(),
+        getStudentInformation()
     ]).then(() => {
         unloading()
     }).catch(() => {
@@ -12,6 +14,22 @@ $(document).ready(() => {
         }, 1500)
     })
 })
+
+const getStudentInformation = () => {
+    $.ajax({
+        url: `${config.server}/v1/user`,
+        type: 'GET',
+        beforeSend: (xhr) => {
+            setHeader(xhr)
+        },
+        error: (xhr) => {
+            errorHandle(xhr, "錯誤")
+        },
+        success: (response) => {
+            student = Object.assign({}, response.data)
+        }
+    });
+}
 
 const getStudentLeture = () => {
     $.ajax({
@@ -66,43 +84,43 @@ const getStudentLetureDetail = (id) => {
                 let leture = response.data.Leture
                 let html = ''
 
-                for (let category of leture.Categories) {
+                for (const category of leture.Categories) {
                     let content = ''
                     let comment = ''
                     let subjects = 0
 
                     if (category.MinCredit > 1) {
-                        comment += `總共至少修習${category.MinCredit}學分<br>`
+                        comment += `總共至少修習${category.MinCredit}學分<br><br>`
                     }
 
                     if (category.MinType > 1) {
-                        comment += `總共至少修習${category.MinType}專長<br>`
+                        comment += `總共至少修習${category.MinType}專長<br><br>`
                     }
 
-                    for (let type of category.Types) {
+                    for (const type of category.Types) {
                         let condition1 = category.Types.indexOf(type) === category.Types.length - 1
                         let subjectGroups = 0
 
                         if (type.MinCredit > 1) {
-                            comment += `${type.Name}至少修習${type.MinCredit}學分<br>`
+                            comment += `${type.Name}至少修習${type.MinCredit}學分<br><br>`
                         }
 
-                        for (let group of type.Groups) {
+                        for (const group of type.Groups) {
                             let condition2 = type.Groups.indexOf(group) === type.Groups.length - 1
 
                             subjects += group.Subjects.length
                             subjectGroups += group.Subjects.length
 
-                            for (let subject of group.Subjects) {
+                            for (const subject of group.Subjects) {
                                 let condition3 = group.Subjects.indexOf(subject) === group.Subjects.length - 1
                                 let temp = '<tr>'
 
                                 if (condition1 && condition2 && condition3) {
-                                    temp += `<td colspan="2" rowspan="${subjects}" class="align-middle" id="category${category.ID}">${category.Name}</td>`
+                                    temp += `<td colspan="2" rowspan="${subjects}" class="align-middle vericaltext" id="category${category.ID}">${category.Name}</td>`
                                 }
 
                                 if (condition2 && condition3) {
-                                    temp += `<td colspan="2" rowspan="${subjectGroups}" class="align-middle" id="type${type.ID}">${type.Name}</td>`
+                                    temp += `<td colspan="2" rowspan="${subjectGroups}" class="align-middle vericaltext" id="type${type.ID}">${type.Name}</td>`
                                 }
 
                                 temp += `<td colspan="1" class="align-middle">${subject.Compulsory ? "必修" : "選修"}</td>`
@@ -120,14 +138,23 @@ const getStudentLetureDetail = (id) => {
                                 temp += `<td colspan="1" class="align-middle">${subject.Credit}</td>`
                                 temp += `
                                     <td colspan="1" class="align-middle">
-                                        <input type="number" class="form-control form-control-sm" max="100" min="0" value="${subject.Score}" onblur="updateSubject(${id}, ${subject.ID})" id="score${subject.ID}">
+                                        <input type="text" class="form-control form-control-sm" value="${subject.Year}" onblur="updateSubject(${id}, ${subject.ID})" id="year${subject.ID}">
                                     </td>`
                                 temp += `
                                     <td colspan="1" class="align-middle">
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="check${subject.ID}" onclick="updateSubject(${id}, ${subject.ID})" ${subject.Pass == 1 ? 'checked' : ''} ${subject.Score == null ? 'disabled' : ''}>
-                                            <label class="custom-control-label" for="check${subject.ID}"></label>
-                                        </div>
+                                        <input type="text" class="form-control form-control-sm" value="${subject.Semester}" onblur="updateSubject(${id}, ${subject.ID})" id="semester${subject.ID}">
+                                    </td>`
+                                temp += `
+                                    <td colspan="1" class="align-middle">
+                                        <input type="text" class="form-control form-control-sm" value="${subject.StudentName}" onblur="updateSubject(${id}, ${subject.ID})" id="studentName${subject.ID}">
+                                    </td>`
+                                temp += `
+                                    <td colspan="1" class="align-middle">
+                                        <input type="text" class="form-control form-control-sm" value="${subject.StudentCredit}" onblur="updateSubject(${id}, ${subject.ID})" id="studentCredit${subject.ID}">
+                                    </td>`
+                                temp += `
+                                    <td colspan="1" class="align-middle">
+                                        <input type="text" class="form-control form-control-sm" value="${subject.Score}" onblur="updateSubject(${id}, ${subject.ID})" id="score${subject.ID}">
                                     </td>`
 
                                 if (condition1 && condition2 && condition3) {
@@ -152,7 +179,6 @@ const getStudentLetureDetail = (id) => {
                 let buttons = '<button class="btn btn-primary" type="button" onclick="check()">審核</button>'
                 if (response.data.Pass) {
                     buttons += '<button class="btn btn-secondary ml-3" onclick="applictionForm(this)">下載申請書</button>'
-                    $('#detailModal .modal-footer').html()
                 }
 
                 $('#detailModal .modal-footer').html(buttons)
@@ -171,32 +197,17 @@ const getStudentLetureDetail = (id) => {
 }
 
 const updateSubject = (studentLetureID, subjectID) => {
-    if ($(`#score${subjectID}`).val() > 100 || $(`#score${subjectID}`).val() < 0) {
-        swal({
-            title: '',
-            text: '成績應介於0到100之間',
-            icon: "error",
-            timer: 1500,
-            buttons: false,
-        })
-        $(`#score${subjectID}`).val(null)
-        return
-    }
-    if ($(`#score${subjectID}`).val() == '') {
-        $(`#check${subjectID}`).prop("disabled", true)
-        $(`#check${subjectID}`).prop("checked", false)
-    } else {
-        $(`#check${subjectID}`).prop("disabled", false)
-    }
-
     $.ajax({
         url: `${config.server}/v1/leture/student/subject`,
         type: 'PATCH',
         data: {
             'StudentLetureID': studentLetureID,
             'SubjectID': subjectID,
+            'Name': $(`#studentName${subjectID}`).val(),
+            'Year': $(`#year${subjectID}`).val(),
+            'Semester': $(`#semester${subjectID}`).val(),
+            'Credit': $(`#studentCredit${subjectID}`).val(),
             'Score': $(`#score${subjectID}`).val(),
-            'Pass': $(`#check${subjectID}`).prop("checked"),
         },
         beforeSend: (xhr) => {
             setHeader(xhr)
@@ -250,28 +261,34 @@ const check = () => {
     let leture = editedItem
     let pass = true
 
-    for (let category of leture.Categories) {
+    for (const category of leture.Categories) {
         let categoryCredit = 0
         let categoryTypes = 0
 
-        for (let type of category.Types) {
+        for (const type of category.Types) {
             let typeCredit = 0
 
-            for (let group of type.Groups) {
+            for (const group of type.Groups) {
                 let groupCredit = 0
 
-                for (let subject of group.Subjects) {
-                    if (subject.Pass) {
+                for (const subject of group.Subjects) {
+                    if (
+                        subject.Year !== ''
+                        && subject.Semester !== ''
+                        && subject.StudentName !== ''
+                        && subject.StudentCredit !== ''
+                        && subject.Score !== ''
+                    ) {
                         groupCredit += subject.Credit
-                    }
-
-                    if (subject.Compulsory && !subject.Pass) {
-                        if (!$(`#subject${subject.ID}`).hasClass('text-danger')) {
-                            $(`#subject${subject.ID}`).addClass('text-danger')
-                        }
-                        pass = false
                     } else {
-                        $(`#subject${subject.ID}`).removeClass('text-danger')
+                        if (subject.Compulsory) {
+                            if (!$(`#subject${subject.ID}`).hasClass('text-danger')) {
+                                $(`#subject${subject.ID}`).addClass('text-danger')
+                            }
+                            pass = false
+                        } else {
+                            $(`#subject${subject.ID}`).removeClass('text-danger')
+                        }
                     }
                 }
 
@@ -321,6 +338,10 @@ const check = () => {
             buttons: false,
         })
         updateStudentLeturePass(leture.ID, true)
+
+        let buttons = '<button class="btn btn-primary" type="button" onclick="check()">審核</button>'
+        buttons += '<button class="btn btn-secondary ml-3" onclick="applictionForm(this)">下載申請書</button>'
+        $('#detailModal .modal-footer').html(buttons)
     } else {
         swal({
             title: '',
@@ -330,6 +351,9 @@ const check = () => {
             buttons: false,
         })
         updateStudentLeturePass(leture.ID, false)
+
+        let buttons = '<button class="btn btn-primary" type="button" onclick="check()">審核</button>'
+        $('#detailModal .modal-footer').html(buttons)
     }
 }
 
@@ -393,23 +417,24 @@ const applictionForm = (el) => {
             doc.setFontSize(16);
             doc.center(header, 15);
 
-            let footer = '【請單面列印，未申請採認之科目請刪除(含表格)】'
+            let footer = '【請單面列印】'
             let pageSize = doc.internal.pageSize;
             let pageHeight = pageSize.height ? pageSize.height : pageSize.getHeight();
             doc.setFontSize(10);
             doc.center(footer, pageHeight - 5);
         }
 
-        let information = {
+        doc.autoTable({
             theme: 'grid',
             headStyles: styleDef,
             footStyle: styleDef,
             styles: styleDef,
             margin: { top: 20 },
+            didDrawPage: didDrawPage,
             body: [
                 [
                     { content: '姓名', styles: { cellWidth: cellWidth } },
-                    { content: '' },
+                    { content: student.Name, styles: { cellWidth: cellWidth } },
                     { content: '聯絡電話', styles: { cellWidth: cellWidth } },
                     { content: '' },
                     { content: '身分證字號', styles: { cellWidth: cellWidth } },
@@ -417,9 +442,9 @@ const applictionForm = (el) => {
                 ],
                 [
                     { content: '畢業學校系所', styles: { cellWidth: cellWidth } },
-                    { content: '', colSpan: 3 },
+                    { content: student.Major, colSpan: 3 },
                     { content: '學號', styles: { cellWidth: cellWidth } },
-                    { content: '', colSpan: 2 },
+                    { content: student.Account, colSpan: 2 },
                 ],
                 [
                     { content: '申請任教科別', styles: { cellWidth: cellWidth } },
@@ -429,7 +454,7 @@ const applictionForm = (el) => {
                     { content: '資格', styles: { cellWidth: cellWidth } },
                     { content: '□ 參加教師資格考試\n□ 加科/加另一類科（請附教師證書影本）', colSpan: 3 },
                     { content: '學程編號', styles: { cellWidth: cellWidth } },
-                    { content: '', colSpan: 2 },
+                    { content: student.Number, colSpan: 2 },
                 ],
                 [
                     { content: '修習起訖期間', styles: { cellWidth: cellWidth } },
@@ -439,17 +464,16 @@ const applictionForm = (el) => {
                     { content: '教育部核定專門課程文號：   年   月   日臺教師(   )字第                    號函', colSpan: 7, styles: { cellWidth: cellWidth } },
                 ],
             ],
-        }
-        doc.autoTable(information);
+        });
 
         let leture = {
             startY: doc.autoTable.previous.finalY + 5,
             headStyles: styleDef,
             footStyle: styleDef,
+            styles: styleDef,
             margin: { top: 20 },
             showHead: 'everyPage',
             rowPageBreak: 'avoid',
-            styles: styleDef,
             didDrawPage: didDrawPage,
             head: [
                 [
@@ -457,19 +481,19 @@ const applictionForm = (el) => {
                     { content: '系所審查意見', colSpan: 3, rowSpan: 2, styles: { halign: 'center' } },
                 ],
                 [
-                    { content: '編號', colSpan: 1, rowSpan: 2, styles: { cellWidth: 7, fillColor: gray, halign: 'center' } },
+                    { content: '編號', colSpan: 1, rowSpan: 2, styles: { cellWidth: 9, fillColor: gray, halign: 'center' } },
                     { content: '課程類別', colSpan: 2, rowSpan: 2, styles: { fillColor: gray, halign: 'center' } },
                     { content: '教育部核定科目', colSpan: 2, cellWidth: 15, styles: { fillColor: gray, halign: 'center' } },
                     { content: '師資生已修習科目（依成績單確實填寫）', colSpan: 5, styles: { fillColor: gray, halign: 'center' } },
                 ],
                 [
                     { content: '科目名稱', cellWidth: 15, styles: { fillColor: gray, halign: 'center' } },
-                    { content: '學分', styles: { cellWidth: 7, fillColor: gray, halign: 'center' } },
-                    { content: '學年', styles: { cellWidth: 7, fillColor: gray, halign: 'center' } },
-                    { content: '學期', styles: { cellWidth: 7, fillColor: gray, halign: 'center' } },
+                    { content: '學分', styles: { cellWidth: 9, fillColor: gray, halign: 'center' } },
+                    { content: '學年', styles: { cellWidth: 9, fillColor: gray, halign: 'center' } },
+                    { content: '學期', styles: { cellWidth: 9, fillColor: gray, halign: 'center' } },
                     { content: '科目名稱', cellWidth: 15, styles: { fillColor: gray, halign: 'center' } },
-                    { content: '學分', styles: { cellWidth: 7, fillColor: gray, halign: 'center' } },
-                    { content: '成績', styles: { cellWidth: 7, fillColor: gray, halign: 'center' } },
+                    { content: '學分', styles: { cellWidth: 9, fillColor: gray, halign: 'center' } },
+                    { content: '成績', styles: { cellWidth: 9, fillColor: gray, halign: 'center' } },
                     { content: '完全採認', styles: { cellWidth: 12, fillColor: gray, halign: 'center' } },
                     { content: '不能採認', styles: { cellWidth: 12, fillColor: gray, halign: 'center' } },
                     { content: '系主任簽章', styles: { cellWidth: 12, fillColor: gray, halign: 'center' } },
@@ -478,32 +502,103 @@ const applictionForm = (el) => {
             body: [],
         }
 
-        for (let category of editedItem.Categories) {
-            for (let type of category.Types) {
-                for (let group of type.Groups) {
-                    for (let subject of group.Subjects) {
-                        leture.body.push([
-                            { content: '', styles: { fillColor: white } },
-                            { content: '', styles: { fillColor: white, cellWidth: 7 } },
-                            { content: subject.Compulsory ? '必修' : '選修', styles: { fillColor: white, cellWidth: 7 } },
-                            { content: subject.Name, styles: { fillColor: white } },
-                            { content: subject.Credit, styles: { fillColor: white } },
-                            { content: '', styles: { fillColor: white } },
-                            { content: '', styles: { fillColor: white } },
-                            { content: '', styles: { fillColor: white } },
-                            { content: '', styles: { fillColor: white } },
-                            { content: '', styles: { fillColor: white } },
-                            { content: '', styles: { fillColor: white } },
-                            { content: '', styles: { fillColor: white } },
-                            { content: '', styles: { fillColor: white } },
-                        ])
+        for (const category of editedItem.Categories) {
+            for (const type of category.Types) {
+                let temp = []
+                for (const group of type.Groups) {
+                    for (const subject of group.Subjects) {
+                        if (subject.Year !== ''
+                            && subject.Semester !== ''
+                            && subject.StudentName !== ''
+                            && subject.StudentCredit !== ''
+                            && subject.Score !== ''
+                        ) {
+                            temp.push([
+                                { content: '', styles: { fillColor: white } },
+                                { content: subject.Compulsory ? '必修' : '選修', styles: { fillColor: white, cellWidth: 7 } },
+                                { content: subject.Name, styles: { fillColor: white } },
+                                { content: subject.Credit, styles: { fillColor: white, halign: 'center' } },
+                                { content: subject.Year.split(',').join('\n'), styles: { fillColor: white, halign: 'center' } },
+                                { content: subject.Semester.split(',').join('\n'), styles: { fillColor: white, halign: 'center' } },
+                                { content: subject.StudentName.split(',').join('\n'), styles: { fillColor: white, halign: 'center' } },
+                                { content: subject.StudentCredit.split(',').join('\n'), styles: { fillColor: white, halign: 'center' } },
+                                { content: subject.Score.split(',').join('\n'), styles: { fillColor: white, halign: 'center' } },
+                                { content: '', styles: { fillColor: white } },
+                                { content: '', styles: { fillColor: white } },
+                                { content: '', styles: { fillColor: white } },
+                            ])
+                        }
                     }
+                }
+                if (temp.length > 0) {
+                    temp[0].splice(1, 0, { content: type.Name, rowSpan: temp.length, styles: { fillColor: white, cellWidth: 7 } })
+                    leture.body = leture.body.concat(temp);
                 }
             }
         }
 
         doc.autoTable(leture);
-        doc.output('dataurlnewwindow')
+
+        let result = {
+            theme: 'plain',
+            startY: doc.autoTable.previous.finalY + 5,
+            styles: styleDef,
+            margin: { top: 20 },
+            rowPageBreak: 'avoid',
+            didDrawPage: didDrawPage,
+            body: [],
+        }
+
+        let content = '【審查結果】\n'
+        for (const category of editedItem.Categories) {
+            for (const type of category.Types) {
+                content += `${category.Name}${type.Name}____學分，`
+            }
+        }
+        result.body.push([{ content: content }])
+
+        doc.autoTable(result);
+
+        content = '附繳資料及注意事項：\n'
+        content += '1.該科目之專門課程科目及學分一覽表（請將表訂科目編號對應填寫至一覽表上）。\n'
+        content += '2.歷年成績單正本/第二專長學分證明（請將表訂科目編號對應填寫至成績單上）。\n'
+        content += '3.畢業證書影本\n'
+        content += '4.課程大綱（科目名稱不同者務必檢附）。\n'
+        content += '5.申請加科/加另一類科者另須繳交審查費：1200元（請至本校線上收款系統列印繳付：\n'
+        content += 'http://140.117.13.70/OLPRS/pay.asp，繳款師資培育中心師資職前教育專門課程審查費）'
+
+        doc.autoTable({
+            startY: doc.autoTable.previous.finalY + 5,
+            styles: styleDef,
+            margin: { top: 20 },
+            rowPageBreak: 'avoid',
+            didDrawPage: didDrawPage,
+            body: [
+                [
+                    { content: '審查順序：師培中心彙整表件、初審→各系所審查、採認→師培中心複審、建檔→教務處註冊組製證', colSpan: 4, styles: { fillColor: white } },
+                ],
+                [
+                    { content: '申請人簽章', styles: { fillColor: gray, halign: 'center' } },
+                    { content: '師培中心承辦人核章', styles: { fillColor: gray, halign: 'center' } },
+                    { content: '系所主任核章', styles: { fillColor: gray, halign: 'center' } },
+                    { content: '教務處註冊組核章', styles: { fillColor: gray, halign: 'center' } },
+                ],
+                [
+                    { content: '', rowSpan: 2, styles: { fillColor: white } },
+                    { content: '', styles: { fillColor: white } },
+                    { content: '', rowSpan: 2, styles: { fillColor: white } },
+                    { content: '', rowSpan: 2, styles: { fillColor: white } },
+                ],
+                [
+                    { content: '', styles: { fillColor: white } },
+                ],
+                [
+                    { content: content, colSpan: 4, styles: { fillColor: white } },
+                ],
+            ],
+        })
+
+        doc.save(`${editedItem.Name}申請表.pdf`)
 
         $(el).attr('disabled', false)
         $(el).html('下載申請書')

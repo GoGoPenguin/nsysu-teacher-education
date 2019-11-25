@@ -125,6 +125,29 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    <div class="alert alert-secondary" role="alert">
+                        複數科目請使用逗號(,)分隔，如下<br>
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>學年度</th>
+                                    <th>學期</th>
+                                    <th>科目名稱</th>
+                                    <th>學分</th>
+                                    <th>成績</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>100,100</td>
+                                    <td>1,2</td>
+                                    <td>科目一,科目二</td>
+                                    <td>1,1</td>
+                                    <td>90,95</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                     <table class="table table-bordered table-sm" style="margin-bottom: 0px;">
                         <tbody>
                             <tr>
@@ -145,11 +168,14 @@
                         <thead>
                             <tr>
                                 <th colspan="4">課程類別</th>
-                                <th colspan="5">科目名稱</th>
-                                <th colspan="1">學分數</th>
-                                <th colspan="1">成績</th>
-                                <th colspan="1">通過</th>
-                                <th colspan="2">備註</th>
+                                <th colspan="5" style="width: 12%">科目名稱</th>
+                                <th colspan="1">學分</th>
+                                <th colspan="1" style="width: 8%">學年度</th>
+                                <th colspan="1" style="width: 5%">學期</th>
+                                <th colspan="1">科目名稱</th>
+                                <th colspan="1" style="width: 5%">學分</th>
+                                <th colspan="1" style="width: 8%">成績</th>
+                                <th colspan="2" style="width: 12%">備註</th>
                             </tr>
                         </thead>
                         <tbody id="categories"></tbody>
