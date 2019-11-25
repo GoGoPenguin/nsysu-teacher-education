@@ -6,10 +6,6 @@ import (
 	"github.com/kataras/iris"
 )
 
-var (
-	account string
-)
-
 // Account get account field of token
 func Account(ctx iris.Context) string {
 	tokenString, _ := jwtmiddleware.FromAuthHeader(ctx)

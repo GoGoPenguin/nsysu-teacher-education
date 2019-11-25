@@ -13,8 +13,8 @@
 
 	<!-- Core plugin JavaScript-->
 	<script src="/node_modules/jquery/dist/jquery.min.js"></script>
-	<script src="/node_modules/jquery.cookie/jquery.cookie.js"></script>
-	<script src="/assets/js/bootstrap.js"></script>
+	<script src="/node_modules/jquery.cookie/jquery.cookie.js?v=0.2.0"></script>
+	<script src="/assets/js/bootstrap.js?v=0.2.0"></script>
 
 	<!-- Font -->
 	<link rel="stylesheet" type="text/css" href="/node_modules/font-awesome/css/font-awesome.min.css">
@@ -29,48 +29,49 @@
 	<link rel="stylesheet" type="text/css" href="/node_modules/select2/dist/css/select2.min.css">
 	<link rel="stylesheet" type="text/css" href="/node_modules/daterangepicker/daterangepicker.css">
 
-	<link rel="stylesheet" type="text/css" href="/assets/css/util.css">
-	<link rel="stylesheet" type="text/css" href="/assets/css/login.css">
+	<link rel="stylesheet" type="text/css" href="/assets/css/util.css?v=0.2.0">
+	<link rel="stylesheet" type="text/css" href="/assets/css/login.css?v=0.2.0">
 
 </head>
 
 <body>
 
-	<div class="limiter">
-		<div class="container-login100">
-			<div class="wrap-login100 p-l-85 p-r-85 p-t-55 p-b-55">
-				<div class="login100-form validate-form flex-sb flex-w">
-					<span class="login100-form-title p-b-32">登入</span>
+	<form id="login-form">
+		<div class="limiter">
+			<div class="container-login100">
+				<div class="wrap-login100 p-l-85 p-r-85 p-t-55 p-b-55">
+					<div class="login100-form validate-form flex-sb flex-w">
+						<span class="login100-form-title p-b-32">登入</span>
 
-					<span class="txt1 p-b-11"> 學號 </span>
-					<div class="wrap-input100 validate-input m-b-36" data-validate="Username is required">
-						<input class="input100 account" type="text" name="account">
-						<span class="focus-input100"></span>
-					</div>
-
-					<span class="txt1 p-b-11"> 密碼 </span>
-					<div class="wrap-input100 validate-input m-b-12" data-validate="Password is required">
-						<span class="btn-show-pass">
-							<i class="fa fa-eye"></i>
-						</span>
-						<input class="input100 password" type="password" name="pass">
-						<span class="focus-input100"></span>
-					</div>
-					<div class="flex-sb-m w-full p-b-48">
-						<div class="alert alert-danger alert-dismissible fade show" role="alert" style="display: none">
-							帳號或密碼錯誤！
-							<button type="button" class="close">
-								<span aria-hidden="true">&times;</span>
-							</button>
+						<span class="txt1 p-b-11">學號</span>
+						<div class="wrap-input100 validate-input m-b-36" data-validate="Username is required">
+							<input class="input100 account" type="text" oninvalid="this.setCustomValidity('請輸入帳號')"
+								oninput="this.setCustomValidity('')" required>
+							<span class="focus-input100"></span>
 						</div>
-					</div>
-					<div class="container-login100-form-btn">
-						<button class="login100-form-btn" id="login"> 送出 </button>
+
+						<span class="txt1 p-b-11">密碼</span>
+						<div class="wrap-input100 validate-input m-b-12" data-validate="Password is required">
+							<span class="btn-show-pass">
+								<i class="fa fa-eye"></i>
+							</span>
+							<input class="input100 password" type="password" oninvalid="this.setCustomValidity('請輸入帳號')"
+								oninput="this.setCustomValidity('')" required>
+							<span class="focus-input100"></span>
+						</div>
+						<div class="flex-sb-m w-full p-b-48">
+							<div class="alert alert-danger alert-dismissible fade show" role="alert"
+								style="display: none"> 帳號或密碼錯誤！
+							</div>
+						</div>
+						<div class="container-login100-form-btn">
+							<button type="submit" class="login100-form-btn" id="login">送出</button>
+						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
+	</form>
 
 	<!-- Bootstrap core JavaScript -->
 	<script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -82,9 +83,9 @@
 	<script src="/node_modules/daterangepicker/daterangepicker.js"></script>
 
 	<!-- Custom JavaScript for this theme -->
-	<script src="/assets/js/config.js"></script>
-	<script src="/assets/js/login.js"></script>
-	<script src="/assets/js/auth.js"></script>
+	<script src="/assets/js/config.js?v=0.2.0"></script>
+	<script src="/assets/js/login.js?v=0.2.0"></script>
+	<script src="/assets/js/auth.js?v=0.2.0"></script>
 
 </body>
 

@@ -57,8 +57,8 @@ func GetCourse(account, start, length, search string) (result map[string]interfa
 	}()
 
 	var (
-		courses  *[]gorm.Course
-		filtered int
+		courses *[]gorm.Course
+		filered int
 	)
 
 	if operator := gorm.AdminDao.GetByAccount(tx, account); operator != nil {
@@ -70,7 +70,7 @@ func GetCourse(account, start, length, search string) (result map[string]interfa
 			specification.IsNullSpecification("deleted_at"),
 		)
 
-		filtered = gorm.CourseDao.Count(
+		filered = gorm.CourseDao.Count(
 			tx,
 			specification.LikeSpecification([]string{"topic", "information", "type", "start", "end"}, search),
 			specification.IsNullSpecification("deleted_at"),
@@ -93,7 +93,7 @@ func GetCourse(account, start, length, search string) (result map[string]interfa
 	result = map[string]interface{}{
 		"list":            assembler.CoursesDTO(courses),
 		"recordsTotal":    total,
-		"recordsFiltered": filtered,
+		"recordsFiltered": filered,
 	}
 
 	return result, nil
@@ -136,6 +136,11 @@ func SingUpCourse(account, courseID, meal string) (result interface{}, e *errors
 	}()
 
 	student := gorm.StudentDao.GetByAccount(tx, account)
+
+	if student == nil {
+		return nil, errors.NotFoundError("Student " + account)
+	}
+
 	course := gorm.CourseDao.Query(
 		tx,
 		specification.IDSpecification(courseID),
@@ -179,12 +184,12 @@ func GetSutdentCourseList(account, start, length string) (result map[string]inte
 			tx,
 			specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
 			specification.OrderSpecification("`student_course`."+specification.IDColumn, specification.OrderDirectionDESC),
-			specification.IsNullSpecification("`student_course`.deleted_at"),
+			specification.IsNullSpecification("deleted_at"),
 		)
 
 		filtered = gorm.StudentCourseDao.Count(
 			tx,
-			specification.IsNullSpecification("`student_course`.deleted_at"),
+			specification.IsNullSpecification("deleted_at"),
 		)
 	} else {
 		student := gorm.StudentDao.GetByAccount(tx, account)
@@ -299,7 +304,6 @@ func UpdateCourse(courseID, topic, courseType string, file multipart.File, heade
 
 		io.Copy(f, file)
 	}
-	logger.Debug(course)
 
 	gorm.CourseDao.Update(tx, course)
 

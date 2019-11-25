@@ -23,7 +23,7 @@ type courseDao struct {
 	TypeC string
 }
 
-// CourseDao user data acces object
+// CourseDao course data access object
 var CourseDao = &courseDao{
 	table: "course",
 	TypeA: "A",
@@ -132,7 +132,7 @@ func (dao *courseDao) Delete(tx *gorm.DB, id uint) {
 	}
 }
 
-// Modify a record
+// Update a record
 func (dao *courseDao) Update(tx *gorm.DB, course *Course) {
 	attrs := map[string]interface{}{
 		"Topic":       course.Topic,

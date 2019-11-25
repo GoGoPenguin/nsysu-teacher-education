@@ -9,3 +9,9 @@ td.info:hover {
     color: #0056b3;
     text-decoration: underline;
 }
+
+.vericaltext {
+    width: 1px;
+    word-wrap: break-word;
+    white-space: pre-wrap;
+}

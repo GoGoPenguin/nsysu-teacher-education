@@ -14,7 +14,7 @@ func StudentsDTO(students *[]gorm.Student) []map[string]interface{} {
 			"Account":   student.Account,
 			"Major":     student.Major,
 			"Number":    student.Number,
-			"CreatedAt": student.CreatedAt.String(),
+			"CreatedAt": student.CreatedAt,
 		})
 	}
 	return result

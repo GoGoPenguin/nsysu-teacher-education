@@ -8,35 +8,48 @@ const MEAL = {
     'meat': '葷',
 }
 
+let studentCourses = []
+
 $(document).ready(() => {
+    loading()
+
+    Promise.all([
+        getStudentCourses(),
+    ]).then(() => {
+        unloading()
+    }).catch(() => {
+        setTimeout(() => {
+            removeCookie()
+        }, 1500)
+    })
+})
+
+const getStudentCourses = () => {
     $.ajax({
         url: `${config.server}/v1/course/student`,
         type: 'GET',
-        error: (xhr) => {
-            console.error(xhr);
-        },
         beforeSend: (xhr) => {
-            let token = $.cookie('token')
-            if (token == undefined) {
-                renewToken()
-                token = $.cookie('token')
-            }
-
-            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+            setHeader(xhr)
+        },
+        error: (xhr) => {
+            errorHandle(xhr, "錯誤")
         },
         success: (response) => {
             if (response.list.length == 0) {
                 $('#student-course tbody').append(`
-                        <tr>
-                            <td scope="row" colspan="8" style="text-align: center">尚無資料</td>
-                        </tr>
-                    `)
+                    <tr>
+                        <td scope="row" colspan="8" style="text-align: center">尚無資料</td>
+                    </tr>
+                `)
             } else {
+                studentCourses = []
                 response.list.forEach((element, index) => {
-                    let startDate = element.Course.Start.substring(0, 10)
-                    let startTime = element.Course.Start.substring(11, 19)
-                    let endDate = element.Course.End.substring(0, 10)
-                    let endTime = element.Course.End.substring(11, 19)
+                    studentCourses.push(Object.assign({}, element))
+
+                    let startDate = dayjs(element.Course.Start).format('YYYY-MM-DD')
+                    let startTime = dayjs(element.Course.Start).format('HH:mm:ss')
+                    let endDate = dayjs(element.Course.End).format('YYYY-MM-DD')
+                    let endTime = dayjs(element.Course.End).format('HH:mm:ss')
                     let time = ""
 
                     if (startDate == endDate) {
@@ -55,17 +68,17 @@ $(document).ready(() => {
                     let result = `
                         <tr>
                             <th scope="row">${index}</th>\
+                            <td ${color}>${STATUS[element.Status]}</td>\
                             <td>${element.Course.Topic}</td>\
                             <td>${time}</td>\
                             <td>${element.Course.Type}</td>\
                             <td>${MEAL[element.Meal]}</td>\
-                            <td ${color}>${STATUS[element.Status]}</td>\
                             <td>${element.Comment}</td>\
                             <td>${element.Review}</td>\
                     `
 
                     if (element.Status !== 'pass') {
-                        result = `${result}<td><button class="btn btn-primary" onclick="edit('${element.ID}')">編輯</button></td></tr>`
+                        result = `${result}<td><button class="btn btn-primary" onclick="edit(${index})" id="${element.ID}">編輯</button></td></tr>`
                     } else {
                         result = `${result}<td></td></tr>`
                     }
@@ -75,10 +88,11 @@ $(document).ready(() => {
             }
         }
     });
-})
+}
 
-const edit = (id) => {
-    let review = $(this).prev().html()
+const edit = (index) => {
+    let id = studentCourses[index].ID
+    let review = studentCourses[index].Review
 
     $('#updateReviewModal textarea').val(review)
     $('#updateReviewModal input').val(id)
@@ -94,43 +108,42 @@ $('#updateReviewModal form').on('submit', (e) => {
     $.ajax({
         url: `${config.server}/v1/course/student/review`,
         type: 'PATCH',
+        data: {
+            'StudentCourseID': studentCourseID,
+            'Review': review,
+        },
+        beforeSend: (xhr) => {
+            $('#updateReviewModal button.btn.btn-primary').html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>&nbsp載入中...')
+            $('#updateReviewModal button.btn.btn-primary').attr("disabled", true)
+            setHeader(xhr)
+        },
         error: (xhr) => {
-            if (xhr.status === 401) {
-                removeCookie()
+            errorHandle(xhr, "錯誤")
+        },
+        success: (response) => {
+            if (response.code === 0) {
+                swal({
+                    title: '',
+                    text: '成功',
+                    icon: "success",
+                    timer: 1500,
+                    buttons: false,
+                })
             } else {
                 swal({
                     title: '',
-                    text: '錯誤',
+                    text: '失敗',
                     icon: "error",
                     timer: 1500,
                     buttons: false,
                 })
             }
         },
-        data: {
-            'StudentCourseID': studentCourseID,
-            'Review': review,
-        },
-        beforeSend: (xhr) => {
-            let token = $.cookie('token')
-            if (token == undefined) {
-                renewToken()
-                token = $.cookie('token')
-            }
-
-            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
-        },
-        success: (response) => {
+        complete: () => {
+            $('#updateReviewModal button.btn.btn-primary').html('送出')
+            $('#updateReviewModal button.btn.btn-primary').attr("disabled", false)
             $('#updateReviewModal').modal('hide')
             $(`button#${studentCourseID}`).parent().prev().html(review)
-
-            swal({
-                title: '',
-                text: '成功',
-                icon: "success",
-                timer: 1500,
-                buttons: false,
-            })
         }
     })
 })

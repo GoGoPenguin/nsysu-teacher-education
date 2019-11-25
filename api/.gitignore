@@ -2,5 +2,5 @@
 .vscode/
 
 # binary file
-main
-main.exe
+main*
+!main.go

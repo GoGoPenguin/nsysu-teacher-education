@@ -7,36 +7,15 @@ const studentTable = $('table#students').DataTable({
         type: 'GET',
         dataSrc: (d) => {
             d.list.forEach((element, index, array) => {
-                array[index].CreatedAt = element.CreatedAt.substring(0, 19)
+                array[index].CreatedAt = dayjs(element.CreatedAt).format('YYYY-MM-DD HH:mm:ss')
             })
             return d.list
         },
         beforeSend: (xhr) => {
-            let token = $.cookie('token')
-            if (token == undefined) {
-                renewToken()
-                token = $.cookie('token')
-            }
-
-            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+            setHeader(xhr)
         },
         error: (xhr, error, thrown) => {
-            if (xhr.status == 401) {
-                let cookies = $.cookie()
-                for (var cookie in cookies) {
-                    $.removeCookie(cookie)
-                }
-
-                location.href = '/login.html'
-            } else {
-                swal({
-                    title: '',
-                    text: xhr.responseText,
-                    icon: "error",
-                    timer: 1500,
-                    buttons: false,
-                })
-            }
+            errorHandle(xhr, xhr.responseText)
         }
     },
     columns: [

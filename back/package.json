@@ -11,8 +11,10 @@
     "bootstrap-fileinput": "^5.0.5",
     "datatables.net-bs4": "^1.10.19",
     "datatables.net-scroller-bs4": "^2.0.0",
+    "dayjs": "^1.8.17",
     "jquery": "^3.4.1",
     "jquery.cookie": "^1.4.1",
+    "showdown": "^1.9.1",
     "startbootstrap-sb-admin": "^5.1.1",
     "sweetalert": "^2.1.2",
     "tempusdominus-bootstrap-4": "^5.1.2"

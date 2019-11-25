@@ -23,7 +23,7 @@ type studentServiceLearningDao struct {
 	StatusFailed string
 }
 
-// StudentServiceLearningDao user data acces object
+// StudentServiceLearningDao student service-learning data access object
 var StudentServiceLearningDao = &studentServiceLearningDao{
 	table:        "student_service_learning",
 	StatusPass:   "pass",

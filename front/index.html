@@ -26,7 +26,8 @@
 
     <!-- Custom styles for this template -->
     <link href="/node_modules/startbootstrap-scrolling-nav/css/scrolling-nav.css" rel="stylesheet">
-    <link href="/assets/css/index.css" rel="stylesheet">
+    <link href="/assets/css/index.css?v=0.2.0" rel="stylesheet">
+    <link href="/assets/css/overlay.css?v=0.2.0" rel="stylesheet">
 
 </head>
 
@@ -46,7 +47,7 @@
                         <a class="nav-link js-scroll-trigger" href="#education">教育學分</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link js-scroll-trigger" href="#subject">專門科目</a>
+                        <a class="nav-link js-scroll-trigger" href="#leture">專門科目</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link js-scroll-trigger" href="#course">研習</a>
@@ -60,6 +61,7 @@
                             <i class="fas fa-user-circle fa-fw"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                            <a class="dropdown-item" href="/leture.html">我的專門科目</a>
                             <a class="dropdown-item" href="/course.html">我的研習</a>
                             <a class="dropdown-item" href="/service-learning.html">我的服務學習</a>
                             <div class="dropdown-divider"></div>
@@ -91,12 +93,23 @@
         </div>
     </section>
 
-    <section id="subject" class="bg-light">
+    <section id="leture" class="bg-light">
         <div class="container">
             <div class="row">
                 <div class="col-lg-12 mx-auto">
                     <h2>專門科目</h2>
-                    <p class="lead">Coming Soon</p>
+                    <table class="table table-borderless table-hover" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">科目名稱</th>
+                                <th scope="col">最低學分</th>
+                                <th scope="col">備註</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -198,16 +211,67 @@
                                 <option value="vegetable">素</option>
                             </select>
                         </div>
-                        <div class="form-group">
-                            <input type="text" class="course-id" hidden></input>
-                        </div>
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-secondary" type="button" data-dismiss="modal">取消</button>
-                        <button class="btn btn-primary" type="submit">報名</button>
+                        <button class="btn btn-primary" type="submit">送出</button>
                     </div>
                 </form>
             </div>
+        </div>
+    </div>
+
+    <!-- Detail Modal-->
+    <div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel"></h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered table-sm" style="margin-bottom: 0px;">
+                        <tbody>
+                            <tr>
+                                <th>領域專長名稱</th>
+                                <td id="name"></td>
+                            </tr>
+                            <tr>
+                                <th>要求最低應修畢總學分數</th>
+                                <td id="min_credit"></td>
+                            </tr>
+                            <tr>
+                                <th>備註</th>
+                                <td id="comment"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table table-bordered table-sm">
+                        <thead>
+                            <tr>
+                                <th colspan="4">課程類別</th>
+                                <th colspan="5">科目名稱</th>
+                                <th colspan="1">學分數</th>
+                                <th colspan="2">備註</th>
+                            </tr>
+                        </thead>
+                        <tbody id="categories"></tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" type="button" data-dismiss="modal">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overlay -->
+    <div id="overlay">
+        <div class="spinner-border text-light" role="status">
+            <span class="sr-only">Loading...</span>
         </div>
     </div>
 
@@ -221,12 +285,14 @@
     <script src="/node_modules/@fortawesome/fontawesome-free/js/all.js"></script>
     <script src="/node_modules/sweetalert/dist/sweetalert.min.js"></script>
     <script src="/node_modules/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="/node_modules/dayjs/dayjs.min.js"></script>
 
     <!-- Custom JavaScript for this theme -->
     <script src="/node_modules/startbootstrap-scrolling-nav/js/scrolling-nav.js"></script>
 
-    <script src="/assets/js/auth.js"></script>
-    <script src="/assets/js/index.js"></script>
+    <script src="/assets/js/auth.js?v=0.2.0"></script>
+    <script src="/assets/js/loading.js?v=0.2.0"></script>
+    <script src="/assets/js/index.js?v=0.2.0"></script>
 
 </body>
 

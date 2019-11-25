@@ -15,6 +15,9 @@ let serviceLearnings = []
 let studentServiceLearningIndex = undefined
 let studentServiceLearnings = []
 
+$(document).ready(() => {
+})
+
 const serviceLearningTable = $('table#service-learning').DataTable({
     processing: true,
     serverSide: true,
@@ -29,7 +32,7 @@ const serviceLearningTable = $('table#service-learning').DataTable({
                 serviceLearnings.push(Object.assign({}, element))
 
                 array[index].Type = TYPE[element.Type];
-                array[index].Date = `${element.Start.substring(0, 10)} ~ ${element.End.substring(0, 10)}`
+                array[index].Date = `${dayjs(element.Start).format('YYYY-MM-DD')} ~ ${dayjs(element.End).format('YYYY-MM-DD')}`
                 array[index].Button = `
                     <button class="btn btn-primary mr-1" onclick="update(${index})">編輯</button>
                     <button class="btn btn-danger" onclick="$('#deleteModal').modal('show'); serviceLearningID=${element.ID}">刪除</button>
@@ -38,31 +41,10 @@ const serviceLearningTable = $('table#service-learning').DataTable({
             return d.list
         },
         beforeSend: (xhr) => {
-            let token = $.cookie('token')
-            if (token == undefined) {
-                renewToken()
-                token = $.cookie('token')
-            }
-
-            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+            setHeader(xhr)
         },
         error: (xhr, error, thrown) => {
-            if (xhr.status == 401) {
-                let cookies = $.cookie()
-                for (var cookie in cookies) {
-                    $.removeCookie(cookie)
-                }
-
-                location.href = '/login.html'
-            } else {
-                swal({
-                    title: '',
-                    text: xhr.responseText,
-                    icon: "error",
-                    timer: 1000,
-                    buttons: false,
-                })
-            }
+            errorHandle(xhr, xhr.responseText)
         }
     },
     columns: [
@@ -98,38 +80,17 @@ const studentServiceLearningTable = $('table#student-service-learning').DataTabl
 
                 array[index].ServiceLearning.Type = TYPE[element.ServiceLearning.Type];
                 array[index].Status = STATUS[array[index].Status]
-                array[index].Date = `${element.ServiceLearning.Start.substring(0, 10)} ~ ${element.ServiceLearning.End.substring(0, 10)}`
+                array[index].Date = `${dayjs(element.ServiceLearning.Start).format('YYYY-MM-DD')} ~ ${dayjs(element.ServiceLearning.End).format('YYYY-MM-DD')}`
 
                 studentServiceLearnings.push(element)
             })
             return d.list
         },
         beforeSend: (xhr) => {
-            let token = $.cookie('token')
-            if (token == undefined) {
-                renewToken()
-                token = $.cookie('token')
-            }
-
-            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+            setHeader(xhr)
         },
         error: (xhr, error, thrown) => {
-            if (xhr.status == 401) {
-                let cookies = $.cookie()
-                for (var cookie in cookies) {
-                    $.removeCookie(cookie)
-                }
-
-                location.href = '/login.html'
-            } else {
-                swal({
-                    title: '',
-                    text: xhr.responseText,
-                    icon: "error",
-                    timer: 1000,
-                    buttons: false,
-                })
-            }
+            errorHandle(xhr, xhr.responseText)
         }
     },
     columns: [
@@ -150,100 +111,98 @@ const studentServiceLearningTable = $('table#student-service-learning').DataTabl
     },
 });
 
-$(document).ready(() => {
-    $('#start-date').datetimepicker({
-        format: 'YYYY-MM-DD',
-        locale: 'zh-tw',
-        autoclose: true,
-        icons: {
-            time: "fas fa-clock",
-            date: "fa fa-calendar",
-            up: "fas fa-angle-up",
-            down: "fas fa-angle-down",
-        }
-    })
+$('#start-date').datetimepicker({
+    format: 'YYYY-MM-DD',
+    locale: 'zh-tw',
+    autoclose: true,
+    icons: {
+        time: "fas fa-clock",
+        date: "fa fa-calendar",
+        up: "fas fa-angle-up",
+        down: "fas fa-angle-down",
+    }
+})
 
-    $('#end-date').datetimepicker({
-        format: 'YYYY-MM-DD',
-        locale: 'zh-tw',
-        autoclose: true,
-        icons: {
-            time: "fas fa-clock",
-            date: "fa fa-calendar",
-            up: "fas fa-angle-up",
-            down: "fas fa-angle-down",
-        }
-    })
-    $('#start-time').datetimepicker({
-        format: 'LT',
-        locale: 'zh-tw',
-        autoclose: true,
-        icons: {
-            time: "fas fa-clock",
-            date: "fa fa-calendar",
-            up: "fas fa-angle-up",
-            down: "fas fa-angle-down",
-        }
-    })
+$('#end-date').datetimepicker({
+    format: 'YYYY-MM-DD',
+    locale: 'zh-tw',
+    autoclose: true,
+    icons: {
+        time: "fas fa-clock",
+        date: "fa fa-calendar",
+        up: "fas fa-angle-up",
+        down: "fas fa-angle-down",
+    }
+})
+$('#start-time').datetimepicker({
+    format: 'LT',
+    locale: 'zh-tw',
+    autoclose: true,
+    icons: {
+        time: "fas fa-clock",
+        date: "fa fa-calendar",
+        up: "fas fa-angle-up",
+        down: "fas fa-angle-down",
+    }
+})
 
-    $('#end-time').datetimepicker({
-        format: 'LT',
-        locale: 'zh-tw',
-        autoclose: true,
-        icons: {
-            time: "fas fa-clock",
-            date: "fa fa-calendar",
-            up: "fas fa-angle-up",
-            down: "fas fa-angle-down",
-        }
-    })
+$('#end-time').datetimepicker({
+    format: 'LT',
+    locale: 'zh-tw',
+    autoclose: true,
+    icons: {
+        time: "fas fa-clock",
+        date: "fa fa-calendar",
+        up: "fas fa-angle-up",
+        down: "fas fa-angle-down",
+    }
+})
 
-    $('#update-start-date').datetimepicker({
-        format: 'YYYY-MM-DD',
-        locale: 'zh-tw',
-        autoclose: true,
-        icons: {
-            time: "fas fa-clock",
-            date: "fa fa-calendar",
-            up: "fas fa-angle-up",
-            down: "fas fa-angle-down",
-        }
-    })
+$('#update-start-date').datetimepicker({
+    format: 'YYYY-MM-DD',
+    locale: 'zh-tw',
+    autoclose: true,
+    icons: {
+        time: "fas fa-clock",
+        date: "fa fa-calendar",
+        up: "fas fa-angle-up",
+        down: "fas fa-angle-down",
+    }
+})
 
-    $('#update-end-date').datetimepicker({
-        format: 'YYYY-MM-DD',
-        locale: 'zh-tw',
-        autoclose: true,
-        icons: {
-            time: "fas fa-clock",
-            date: "fa fa-calendar",
-            up: "fas fa-angle-up",
-            down: "fas fa-angle-down",
-        }
-    })
-    $('#update-start-time').datetimepicker({
-        format: 'LT',
-        locale: 'zh-tw',
-        autoclose: true,
-        icons: {
-            time: "fas fa-clock",
-            date: "fa fa-calendar",
-            up: "fas fa-angle-up",
-            down: "fas fa-angle-down",
-        }
-    })
+$('#update-end-date').datetimepicker({
+    format: 'YYYY-MM-DD',
+    locale: 'zh-tw',
+    autoclose: true,
+    icons: {
+        time: "fas fa-clock",
+        date: "fa fa-calendar",
+        up: "fas fa-angle-up",
+        down: "fas fa-angle-down",
+    }
+})
+$('#update-start-time').datetimepicker({
+    format: 'LT',
+    locale: 'zh-tw',
+    autoclose: true,
+    icons: {
+        time: "fas fa-clock",
+        date: "fa fa-calendar",
+        up: "fas fa-angle-up",
+        down: "fas fa-angle-down",
+    }
+})
 
-    $('#update-end-time').datetimepicker({
-        format: 'LT',
-        locale: 'zh-tw',
-        autoclose: true,
-        icons: {
-            time: "fas fa-clock",
-            date: "fa fa-calendar",
-            up: "fas fa-angle-up",
-            down: "fas fa-angle-down",
-        }
-    })
+$('#update-end-time').datetimepicker({
+    format: 'LT',
+    locale: 'zh-tw',
+    autoclose: true,
+    icons: {
+        time: "fas fa-clock",
+        date: "fa fa-calendar",
+        up: "fas fa-angle-up",
+        down: "fas fa-angle-down",
+    }
 })
 
 $('#service-learning-form').on('submit', (e) => {
@@ -261,34 +220,37 @@ $('#service-learning-form').on('submit', (e) => {
             'End': $('#end-date input').val(),
         },
         beforeSend: (xhr) => {
-            let token = $.cookie('token')
-            if (token == undefined) {
-                renewToken()
-                token = $.cookie('token')
-            }
-
-            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+            $('#service-learning-form button.btn.btn-primary').html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>&nbsp載入中...')
+            $('#service-learning-form button.btn.btn-primary').attr("disabled", true)
+            setHeader(xhr)
         },
         error: (xhr) => {
-            swal({
-                title: '',
-                text: '失敗',
-                icon: "error",
-                timer: 1000,
-                buttons: false,
-            })
-            console.error(xhr);
+            errorHandle(xhr, '失敗')
         },
         success: (response) => {
-            swal({
-                title: '',
-                text: '成功',
-                icon: "success",
-                timer: 1000,
-                buttons: false,
-            })
-            serviceLearningTable.ajax.reload()
+            if (response.code === 0) {
+                swal({
+                    title: '',
+                    text: '成功',
+                    icon: "success",
+                    timer: 1000,
+                    buttons: false,
+                })
+                serviceLearningTable.ajax.reload()
+            } else {
+                swal({
+                    title: '',
+                    text: '失敗',
+                    icon: "error",
+                    timer: 1000,
+                    buttons: false,
+                })
+            }
             $('#service-learning-form')[0].reset()
+        },
+        complete: () => {
+            $('#service-learning-form button.btn.btn-primary').html('送出')
+            $('#service-learning-form button.btn.btn-primary').attr("disabled", false)
         }
     });
 })
@@ -338,24 +300,11 @@ const getFile = (file) => {
         data: {
             'StudentServiceLearningID': ID,
         },
-        error: (xhr) => {
-            swal({
-                title: '',
-                text: '失敗',
-                icon: "error",
-                timer: 1000,
-                buttons: false,
-            })
-            console.error(xhr);
-        },
         beforeSend: (xhr) => {
-            let token = $.cookie('token')
-            if (token == undefined) {
-                renewToken()
-                token = $.cookie('token')
-            }
-
-            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+            setHeader(xhr)
+        },
+        error: (xhr) => {
+            errorHandle(xhr, '失敗')
         },
         success: (response) => {
             let a = document.createElement('a');
@@ -382,23 +331,17 @@ const updateStatus = (status) => {
             'Comment': $('#comment').val(),
         },
         beforeSend: (xhr) => {
-            let token = $.cookie('token')
-            if (token == undefined) {
-                renewToken()
-                token = $.cookie('token')
+            if (status == 'pass') {
+                $('#checkModal div.modal-footer button.btn.btn-primary').html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>&nbsp載入中...')
+                $('#checkModal div.modal-footer button.btn.btn-primary').attr("disabled", true)
+            } else if (status == 'failed') {
+                $('#checkModal div.modal-footer button.btn.btn-danger').html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>&nbsp載入中...')
+                $('#checkModal div.modal-footer button.btn.btn-danger').attr("disabled", true)
             }
-
-            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+            setHeader(xhr)
         },
         error: (xhr) => {
-            swal({
-                title: '',
-                text: '失敗',
-                icon: "error",
-                timer: 1000,
-                buttons: false,
-            })
-            console.error(xhr);
+            errorHandle(xhr, '失敗')
         },
         success: (response) => {
             if (response.code === 0) {
@@ -421,6 +364,13 @@ const updateStatus = (status) => {
             }
         },
         complete: (data) => {
+            if (status == 'pass') {
+                $('#checkModal div.modal-footer button.btn.btn-primary').html('通過')
+                $('#checkModal div.modal-footer button.btn.btn-primary').attr("disabled", true)
+            } else if (status == 'failed') {
+                $('#checkModal div.modal-footer button.btn.btn-danger').html('未通過')
+                $('#checkModal div.modal-footer button.btn.btn-danger').attr("disabled", true)
+            }
             $('#checkModal').modal('hide')
         }
     });
@@ -434,8 +384,8 @@ const update = (index) => {
 
     $('#update-type').val(serviceLearning.Type)
     $('#update-content').val(serviceLearning.Content)
-    $('#update-start-date input').val(serviceLearning.Start.substring(0, 10))
-    $('#update-end-date input').val(serviceLearning.End.substring(0, 10))
+    $('#update-start-date input').val(dayjs(serviceLearning.Start).format('YYYY-MM-DD'))
+    $('#update-end-date input').val(dayjs(serviceLearning.End).format('YYYY-MM-DD'))
     $('#update-start-time input').val(startTime)
     $('#update-end-time input').val(endTime)
     $('#update-hours').val(serviceLearning.Hours)
@@ -463,23 +413,12 @@ $('#update-form').on('submit', (e) => {
             'End': $('#update-end-date input').val(),
         },
         beforeSend: (xhr) => {
-            let token = $.cookie('token')
-            if (token == undefined) {
-                renewToken()
-                token = $.cookie('token')
-            }
-
-            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+            $('#updateModal div.modal-footer button.btn.btn-primary').html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>&nbsp載入中...')
+            $('#updateModal div.modal-footer button.btn.btn-primary').attr("disabled", true)
+            setHeader(xhr)
         },
         error: (xhr) => {
-            swal({
-                title: '',
-                text: '失敗',
-                icon: "error",
-                timer: 1000,
-                buttons: false,
-            })
-            console.error(xhr);
+            errorHandle(xhr, '失敗')
         },
         success: (response) => {
             if (response.code === 0) {
@@ -502,6 +441,8 @@ $('#update-form').on('submit', (e) => {
             }
         },
         complete: (data) => {
+            $('#updateModal div.modal-footer button.btn.btn-primary').html('送出')
+            $('#updateModal div.modal-footer button.btn.btn-primary').attr("disabled", false)
             $('#updateModal').modal('hide')
         }
     });
@@ -512,23 +453,12 @@ const deleteServiceLearning = () => {
         url: `${config.server}/v1/service-learning/${serviceLearningID}`,
         type: 'DELETE',
         beforeSend: (xhr) => {
-            let token = $.cookie('token')
-            if (token == undefined) {
-                renewToken()
-                token = $.cookie('token')
-            }
-
-            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+            $('#deleteModal div.modal-footer button.btn.btn-danger').html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>&nbsp載入中...')
+            $('#deleteModal div.modal-footer button.btn.btn-danger').attr("disabled", true)
+            setHeader(xhr)
         },
         error: (xhr) => {
-            swal({
-                title: '',
-                text: '失敗',
-                icon: "error",
-                timer: 1000,
-                buttons: false,
-            })
-            console.error(xhr);
+            errorHandle(xhr, '失敗')
         },
         success: (response) => {
             if (response.code === 0) {
@@ -551,6 +481,8 @@ const deleteServiceLearning = () => {
             }
         },
         complete: (data) => {
+            $('#deleteModal div.modal-footer button.btn.btn-danger').html('送出')
+            $('#deleteModal div.modal-footer button.btn.btn-danger').attr("disabled", false)
             $('#deleteModal').modal('hide')
         }
     });

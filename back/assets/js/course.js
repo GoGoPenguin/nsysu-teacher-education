@@ -14,6 +14,9 @@ let courses = []
 let studentCourses = []
 let studentCoursesIndex = null
 
+$(document).ready(() => {
+})
+
 const courseTable = $('table#course').DataTable({
     processing: true,
     serverSide: true,
@@ -27,10 +30,10 @@ const courseTable = $('table#course').DataTable({
             d.list.forEach((element, index, array) => {
                 courses.push(Object.assign({}, element))
 
-                let startDate = array[index].Start.substring(0, 10)
-                let startTime = array[index].Start.substring(11, 19)
-                let endDate = array[index].End.substring(0, 10)
-                let endTime = array[index].End.substring(11, 19)
+                let startDate = dayjs(element.Start).format('YYYY-MM-DD')
+                let startTime = dayjs(element.Start).format('HH:mm:ss')
+                let endDate = dayjs(element.End).format('YYYY-MM-DD')
+                let endTime = dayjs(element.End).format('HH:mm:ss')
 
                 if (startDate == endDate) {
                     array[index].Time = `${startDate} ${startTime} ~ ${endTime}`
@@ -48,31 +51,10 @@ const courseTable = $('table#course').DataTable({
             return d.list
         },
         beforeSend: (xhr) => {
-            let token = $.cookie('token')
-            if (token == undefined) {
-                renewToken()
-                token = $.cookie('token')
-            }
-
-            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+            setHeader(xhr)
         },
         error: (xhr, error, thrown) => {
-            if (xhr.status == 401) {
-                let cookies = $.cookie()
-                for (var cookie in cookies) {
-                    $.removeCookie(cookie)
-                }
-
-                location.href = '/login.html'
-            } else {
-                swal({
-                    title: '',
-                    text: xhr.responseText,
-                    icon: "error",
-                    timer: 1000,
-                    buttons: false,
-                })
-            }
+            errorHandle(xhr, xhr.responseText)
         }
     },
     columns: [
@@ -102,10 +84,10 @@ const studentCourseTable = $('table#student-course').DataTable({
             studentCourses = []
 
             d.list.forEach((element, index, array) => {
-                let startDate = array[index].Course.Start.substring(0, 10)
-                let startTime = array[index].Course.Start.substring(11, 19)
-                let endDate = array[index].Course.End.substring(0, 10)
-                let endTime = array[index].Course.End.substring(11, 19)
+                let startDate = dayjs(element.Course.Start).format('YYYY-MM-DD')
+                let startTime = dayjs(element.Course.Start).format('HH:mm:ss')
+                let endDate = dayjs(element.Course.End).format('YYYY-MM-DD')
+                let endTime = dayjs(element.Course.End).format('HH:mm:ss')
 
                 if (startDate == endDate) {
                     array[index].Time = `${startDate} ${startTime} ~ ${endTime}`
@@ -128,31 +110,10 @@ const studentCourseTable = $('table#student-course').DataTable({
             return d.list
         },
         beforeSend: (xhr) => {
-            let token = $.cookie('token')
-            if (token == undefined) {
-                renewToken()
-                token = $.cookie('token')
-            }
-
-            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+            setHeader(xhr)
         },
         error: (xhr, error, thrown) => {
-            if (xhr.status == 401) {
-                let cookies = $.cookie()
-                for (var cookie in cookies) {
-                    $.removeCookie(cookie)
-                }
-
-                location.href = '/login.html'
-            } else {
-                swal({
-                    title: '',
-                    text: xhr.responseText,
-                    icon: "error",
-                    timer: 1000,
-                    buttons: false,
-                })
-            }
+            errorHandle(xhr, xhr.responseText)
         }
     },
     columns: [
@@ -172,59 +133,72 @@ const studentCourseTable = $('table#student-course').DataTable({
     },
 });
 
-$(document).ready(() => {
-    $('#start').datetimepicker({
-        format: 'YYYY-MM-DD HH:mm:00',
-        locale: 'zh-tw',
-        initialDate: new Date(),
-        autoclose: true,
-        icons: {
-            time: "fas fa-clock",
-            date: "fa fa-calendar",
-            up: "fas fa-angle-up",
-            down: "fas fa-angle-down",
-        }
-    })
-
-    $('#end').datetimepicker({
-        format: 'YYYY-MM-DD HH:mm:00',
-        locale: 'zh-tw',
-        initialDate: new Date(),
-        autoclose: true,
-        icons: {
-            time: "fas fa-clock",
-            date: "fa fa-calendar",
-            up: "fas fa-angle-up",
-            down: "fas fa-angle-down",
-        }
-    })
-
-    $('#update-start').datetimepicker({
-        format: 'YYYY-MM-DD HH:mm:00',
-        locale: 'zh-tw',
-        initialDate: new Date(),
-        autoclose: true,
-        icons: {
-            time: "fas fa-clock",
-            date: "fa fa-calendar",
-            up: "fas fa-angle-up",
-            down: "fas fa-angle-down",
-        }
-    })
-
-    $('#update-end').datetimepicker({
-        format: 'YYYY-MM-DD HH:mm:00',
-        locale: 'zh-tw',
-        initialDate: new Date(),
-        autoclose: true,
-        icons: {
-            time: "fas fa-clock",
-            date: "fa fa-calendar",
-            up: "fas fa-angle-up",
-            down: "fas fa-angle-down",
-        }
-    })
+$('#start').datetimepicker({
+    format: 'YYYY-MM-DD HH:mm:00',
+    locale: 'zh-tw',
+    initialDate: new Date(),
+    autoclose: true,
+    icons: {
+        time: "fas fa-clock",
+        date: "fa fa-calendar",
+        up: "fas fa-angle-up",
+        down: "fas fa-angle-down",
+    }
 })
+
+$('#end').datetimepicker({
+    format: 'YYYY-MM-DD HH:mm:00',
+    locale: 'zh-tw',
+    initialDate: new Date(),
+    autoclose: true,
+    icons: {
+        time: "fas fa-clock",
+        date: "fa fa-calendar",
+        up: "fas fa-angle-up",
+        down: "fas fa-angle-down",
+    }
+})
+
+$('#update-start').datetimepicker({
+    format: 'YYYY-MM-DD HH:mm:00',
+    locale: 'zh-tw',
+    initialDate: new Date(),
+    autoclose: true,
+    icons: {
+        time: "fas fa-clock",
+        date: "fa fa-calendar",
+        up: "fas fa-angle-up",
+        down: "fas fa-angle-down",
+    }
+})
+
+$('#update-end').datetimepicker({
+    format: 'YYYY-MM-DD HH:mm:00',
+    locale: 'zh-tw',
+    initialDate: new Date(),
+    autoclose: true,
+    icons: {
+        time: "fas fa-clock",
+        date: "fa fa-calendar",
+        up: "fas fa-angle-up",
+        down: "fas fa-angle-down",
+    }
+})
+
+$("#info").fileinput({
+    language: 'zh-TW',
+    theme: "fas",
+    showUpload: false,
+    uploadUrl: `${config.server}/v1/course`,
+})
+
+$("#update-info").fileinput({
+    language: 'zh-TW',
+    theme: "fas",
+    showUpload: false,
+    uploadUrl: `${config.server}/v1/course`,
+})
+
 
 const getInformation = (id, filename) => {
     $.ajax({
@@ -233,24 +207,11 @@ const getInformation = (id, filename) => {
         xhrFields: {
             responseType: "blob"
         },
-        error: (xhr) => {
-            swal({
-                title: '',
-                text: '失敗',
-                icon: "error",
-                timer: 1000,
-                buttons: false,
-            })
-            console.error(xhr);
-        },
         beforeSend: (xhr) => {
-            let token = $.cookie('token')
-            if (token == undefined) {
-                renewToken()
-                token = $.cookie('token')
-            }
-
-            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+            setHeader(xhr)
+        },
+        error: (xhr) => {
+            errorHandle(xhr, '失敗')
         },
         success: (response) => {
             let a = document.createElement('a');
@@ -265,136 +226,81 @@ const getInformation = (id, filename) => {
     });
 }
 
-$("#info").fileinput({
-    language: 'zh-TW',
-    theme: "fas",
-    showUpload: false,
-    uploadUrl: `${config.server}/v1/course`,
-    ajaxSettings: {
-        headers: {
-            'Authorization': `Bearer ${$.cookie('token')}`,
-        }
-    },
-    uploadExtraData: (previewId, index) => {
-        return {
-            'Topic': $('#topic').val(),
-            'Type': $('#type').val(),
-            'Start': $('#start input').val(),
-            'End': $('#end input').val(),
-        }
-    }
-}).on('fileuploaded', (event, previewId, index, fileId) => {
-    swal({
-        title: '',
-        text: '成功',
-        icon: "success",
-        timer: 1000,
-        buttons: false,
-    })
-    courseTable.ajax.reload();
-    $('#course-form')[0].reset()
-}).on('fileuploaderror', (event, data, msg) => {
-    swal({
-        title: '',
-        text: '新增失敗',
-        icon: "error",
-        timer: 1000,
-        buttons: false,
-    })
-    $('div.kv-upload-progress.kv-hidden').css({ 'display': 'none' })
-}).on('filepreupload', function (event, data, previewId, index) {
-    let filename = data.files[0].name
-    let length = (new TextEncoder().encode(filename)).length
-
-    if (length > 36) {
-        swal({
-            title: '',
-            text: '檔名太長',
-            icon: "error",
-            timer: 1500,
-            buttons: false,
-        })
-
-        // this doesn't work at all
-        // https://plugins.krajee.com/file-input/plugin-events#event-manipulation
-        return {
-            message: '檔名太長',
-        }
-    }
-}).on('filecustomerror', function (event, params) {
-    $("#info").fileinput('enable')
-    $("#info").fileinput('reset')
-})
-
 $('#course-form').on('submit', (e) => {
     e.preventDefault();
-    $("#info").fileinput('upload')
-})
 
-$("#update-info").fileinput({
-    language: 'zh-TW',
-    theme: "fas",
-    showUpload: false,
-    uploadUrl: `${config.server}/v1/course`,
-    ajaxSettings: {
-        headers: {
-            'Authorization': `Bearer ${$.cookie('token')}`,
+    let filestack = $('#info').fileinput('getFileStack')
+    let fstack = []
+    $.each(filestack, (fileID, fileObj) => {
+        if (fileObj !== undefined) {
+            fstack.push(fileObj)
         }
-    },
-    uploadExtraData: (previewId, index) => {
-        return {
-            'Topic': $('#topic').val(),
-            'Type': $('#type').val(),
-            'Start': $('#start input').val(),
-            'End': $('#end input').val(),
+    })
+
+    let form = new FormData()
+    form.append("Topic", $('#topic').val())
+    form.append("Type", $('#type').val())
+    form.append("Start", $('#start input').val())
+    form.append("End", $('#end input').val())
+
+    if (fstack.length > 0) {
+        form.append("Information", fstack[0].file)
+
+        let filename = fstack[0].file.name
+        let length = (new TextEncoder().encode(filename)).length
+
+        if (length > 36) {
+            swal({
+                title: '',
+                text: '檔名太長',
+                icon: "error",
+                timer: 1500,
+                buttons: false,
+            })
+            return
         }
     }
-}).on('fileuploaded', (event, previewId, index, fileId) => {
-    swal({
-        title: '',
-        text: '成功',
-        icon: "success",
-        timer: 1000,
-        buttons: false,
-    })
-    courseTable.ajax.reload();
-    $('#course-form')[0].reset()
-}).on('fileuploaderror', (event, data, msg) => {
-    swal({
-        title: '',
-        text: '新增失敗',
-        icon: "error",
-        timer: 1000,
-        buttons: false,
-    })
-    $('div.kv-upload-progress.kv-hidden').css({ 'display': 'none' })
-}).on('filepreupload', function (event, data, previewId, index) {
-    let filename = data.files[0].name
-    let length = (new TextEncoder().encode(filename)).length
 
-    if (length > 36) {
-        swal({
-            title: '',
-            text: '檔名太長',
-            icon: "error",
-            timer: 1500,
-            buttons: false,
-        })
-
-        // this doesn't work at all
-        // https://plugins.krajee.com/file-input/plugin-events#event-manipulation
-        return {
-            message: '檔名太長',
+    $.ajax({
+        url: `${config.server}/v1/course`,
+        type: 'POST',
+        data: form,
+        contentType: false,
+        processData: false,
+        beforeSend: (xhr) => {
+            $('#course-form button.btn.btn-primary').html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>&nbsp載入中...')
+            $('#course-form button.btn.btn-primary').attr("disabled", true)
+            setHeader(xhr)
+        },
+        error: (xhr) => {
+            errorHandle(xhr, '失敗')
+        },
+        success: (response) => {
+            if (response.code === 0) {
+                swal({
+                    title: '',
+                    text: '成功',
+                    icon: "success",
+                    timer: 1000,
+                    buttons: false,
+                })
+                courseTable.ajax.reload();
+            } else {
+                swal({
+                    title: '',
+                    text: '失敗',
+                    icon: "error",
+                    timer: 1000,
+                    buttons: false,
+                })
+            }
+            $('#course-form')[0].reset()
+        },
+        complete: () => {
+            $('#course-form button.btn.btn-primary').html('送出')
+            $('#course-form button.btn.btn-primary').attr("disabled", false)
         }
-    }
-}).on('filecustomerror', function (event, params) {
-    $("#info").fileinput('enable')
-    $("#info").fileinput('reset')
-})
-
-$('#course-form').on('submit', (e) => {
-    e.preventDefault();
-    $("#info").fileinput('upload')
+    });
 })
 
 const check = (index, readonly) => {
@@ -433,24 +339,13 @@ $('#checkModal .btn-primary').click(() => {
             Status: 'pass',
             Comment: $('#comment').val(),
         },
-        error: (xhr) => {
-            console.error(xhr);
-            swal({
-                title: '',
-                text: '修改失敗',
-                icon: "error",
-                timer: 1500,
-                buttons: false,
-            })
-        },
         beforeSend: (xhr) => {
-            let token = $.cookie('token')
-            if (token == undefined) {
-                renewToken()
-                token = $.cookie('token')
-            }
-
-            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+            $('#checkModal div.modal-footer button.btn.btn-primary').html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>&nbsp載入中...')
+            $('#checkModal div.modal-footer button.btn.btn-primary').attr("disabled", true)
+            setHeader(xhr)
+        },
+        error: (xhr) => {
+            errorHandle(xhr, '修改失敗')
         },
         success: (response) => {
             if (response.code === 0) {
@@ -473,6 +368,8 @@ $('#checkModal .btn-primary').click(() => {
             }
         },
         complete: (data) => {
+            $('#checkModal div.modal-footer button.btn.btn-primary').html('通過')
+            $('#checkModal div.modal-footer button.btn.btn-primary').attr("disabled", false)
             $('#checkModal').modal('hide')
         }
     });
@@ -487,24 +384,13 @@ $('#checkModal .btn-danger').click(() => {
             Status: 'failed',
             Comment: $('#comment').val(),
         },
-        error: (xhr) => {
-            console.error(xhr);
-            swal({
-                title: '',
-                text: '修改失敗',
-                icon: "error",
-                timer: 1500,
-                buttons: false,
-            })
-        },
         beforeSend: (xhr) => {
-            let token = $.cookie('token')
-            if (token == undefined) {
-                renewToken()
-                token = $.cookie('token')
-            }
-
-            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+            $('#checkModal div.modal-footer button.btn.btn-danger').html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>&nbsp載入中...')
+            $('#checkModal div.modal-footer button.btn.btn-danger').attr("disabled", true)
+            setHeader(xhr)
+        },
+        error: (xhr) => {
+            errorHandle(xhr, '修改失敗')
         },
         success: (response) => {
             if (response.code === 0) {
@@ -527,6 +413,8 @@ $('#checkModal .btn-danger').click(() => {
             }
         },
         complete: (data) => {
+            $('#checkModal div.modal-footer button.btn.btn-danger').html('未通過')
+            $('#checkModal div.modal-footer button.btn.btn-danger').attr("disabled", false)
             $('#checkModal').modal('hide')
         }
     });
@@ -538,8 +426,8 @@ const update = (index) => {
 
     $('#update-topic').val(course.Topic)
     $('#update-type').val(course.Type)
-    $('#update-start input').val(course.Start.substring(0, 19))
-    $('#update-end input').val(course.End.substring(0, 19))
+    $('#update-start input').val(dayjs(course.Start).format('YYYY-MM-DD HH:mm:ss'))
+    $('#update-end input').val(dayjs(course.End).format('YYYY-MM-DD HH:mm:ss'))
 
     $('#updateModal').modal('show')
 }
@@ -568,6 +456,20 @@ $('#update-form').on('submit', (e) => {
 
     if (fstack.length > 0) {
         form.append("Information", fstack[0].file)
+
+        let filename = fstack[0].file.name
+        let length = (new TextEncoder().encode(filename)).length
+
+        if (length > 36) {
+            swal({
+                title: '',
+                text: '檔名太長',
+                icon: "error",
+                timer: 1500,
+                buttons: false,
+            })
+            return
+        }
     }
 
     $.ajax({
@@ -577,23 +479,12 @@ $('#update-form').on('submit', (e) => {
         contentType: false,
         processData: false,
         beforeSend: (xhr) => {
-            let token = $.cookie('token')
-            if (token == undefined) {
-                renewToken()
-                token = $.cookie('token')
-            }
-
-            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+            $('#updateModal div.modal-footer button.btn.btn-primary').html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>&nbsp載入中...')
+            $('#updateModal div.modal-footer button.btn.btn-primary').attr("disabled", true)
+            setHeader(xhr)
         },
         error: (xhr) => {
-            swal({
-                title: '',
-                text: '失敗',
-                icon: "error",
-                timer: 1000,
-                buttons: false,
-            })
-            console.error(xhr);
+            errorHandle(xhr, '失敗')
         },
         success: (response) => {
             if (response.code === 0) {
@@ -617,6 +508,8 @@ $('#update-form').on('submit', (e) => {
             $('#update-form')[0].reset()
         },
         complete: (data) => {
+            $('#updateModal div.modal-footer button.btn.btn-primary').html('送出')
+            $('#updateModal div.modal-footer button.btn.btn-primary').attr("disabled", false)
             $('#updateModal').modal('hide')
         }
     });
@@ -627,23 +520,12 @@ const deleteCourse = () => {
         url: `${config.server}/v1/course/${courseID}`,
         type: 'DELETE',
         beforeSend: (xhr) => {
-            let token = $.cookie('token')
-            if (token == undefined) {
-                renewToken()
-                token = $.cookie('token')
-            }
-
-            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+            setHeader(xhr)
         },
         error: (xhr) => {
-            swal({
-                title: '',
-                text: '失敗',
-                icon: "error",
-                timer: 1000,
-                buttons: false,
-            })
-            console.error(xhr);
+            $('#deleteModal div.modal-footer button.btn.btn-danger').html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>&nbsp載入中...')
+            $('#deleteModal div.modal-footer button.btn.btn-danger').attr("disabled", true)
+            errorHandle(xhr, '修改失敗')
         },
         success: (response) => {
             if (response.code === 0) {
@@ -666,6 +548,8 @@ const deleteCourse = () => {
             }
         },
         complete: (data) => {
+            $('#deleteModal div.modal-footer button.btn.btn-danger').html('送出')
+            $('#deleteModal div.modal-footer button.btn.btn-danger').attr("disabled", false)
             $('#deleteModal').modal('hide')
         }
     });

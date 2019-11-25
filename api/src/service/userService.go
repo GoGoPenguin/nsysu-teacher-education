@@ -21,6 +21,7 @@ func CreateStudents(file multipart.File) (result interface{}, e *errors.Error) {
 		if r := recover(); r != nil {
 			logger.Error(r)
 			e = errors.UnexpectedError()
+			tx.Rollback()
 		}
 	}()
 
@@ -85,4 +86,23 @@ func GetStudents(start, length, search string) (result map[string]interface{}, e
 	}
 
 	return result, nil
+}
+
+// GetStudentInformation get student information
+func GetStudentInformation(account string) (result interface{}, e *errors.Error) {
+	tx := gorm.DB()
+
+	defer func() {
+		if r := recover(); r != nil {
+			logger.Error(r)
+			e = errors.UnexpectedError()
+		}
+	}()
+
+	student := gorm.StudentDao.GetByAccount(tx, account)
+
+	if student == nil {
+		return nil, errors.NotFoundError("Account " + account)
+	}
+	return assembler.StudentDTO(student), nil
 }

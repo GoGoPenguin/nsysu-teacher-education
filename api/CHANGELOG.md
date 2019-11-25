@@ -4,7 +4,22 @@ All notable changes are documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-## [0.1.1]
+## Unreleased
+
+### Added
+
+- 取得科目列表
+- 取得科目詳細資訊
+- 取得專業科目報名列表
+- 取得學生個人資訊
+- 報名專業科目
+- 更新學生專業科目成績及狀態
+
+### Fixed
+
+- 修正一些小bug
+
+## [0.1.1] - 2019.11.06
 
 ### Added
 
@@ -24,7 +39,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 - 改變講座以及服務學習檔案的儲存規則
 - Update Router
 
-## [0.1.0]
+## [0.1.0] - 2019.10.29
 
 ### Added
 

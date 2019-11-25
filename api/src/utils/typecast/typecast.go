@@ -38,8 +38,8 @@ func StringToFloat64(from string) float64 {
 }
 
 // StringToBool convert string to boolean
-func StringToBool(form string) bool {
-	to, err := strconv.ParseBool(form)
+func StringToBool(from string) bool {
+	to, err := strconv.ParseBool(from)
 	if err != nil {
 		panic(err)
 	}

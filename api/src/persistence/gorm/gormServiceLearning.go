@@ -24,7 +24,7 @@ type serviceLearningDao struct {
 	TypeBoth       string
 }
 
-// ServiceLearningDao user data acces object
+// ServiceLearningDao service-learning data access object
 var ServiceLearningDao = &serviceLearningDao{
 	table:          "service_learning",
 	TypeInternship: "internship",
@@ -99,7 +99,7 @@ func (dao *serviceLearningDao) Delete(tx *gorm.DB, id uint) {
 	}
 }
 
-// Modify a record
+// Update a record
 func (dao *serviceLearningDao) Update(tx *gorm.DB, serviceLearning *ServiceLearning) {
 	attrs := map[string]interface{}{
 		"Type":    serviceLearning.Type,

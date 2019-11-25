@@ -28,6 +28,11 @@ func Run() {
 		v1.Post("/logout", hero.Handler(handler.LogoutHandler))          // 登出
 		v1.Post("/renew-token", hero.Handler(handler.RenewTokenHandler)) // 取得新的 access token
 
+		user := v1.Party("/user")
+		{
+			user.Get("/", hero.Handler(handler.GetStudentInformationHandler))
+		}
+
 		users := v1.Party("/users")
 		{
 			users.Get("/", hero.Handler(handler.GetStudentsHandler))     // 取得學生列表
@@ -65,6 +70,21 @@ func Run() {
 				student.Get("/{file}", hero.Handler(handler.GetStudentServiceLearningFileHandler))        // 取得佐證資料或心得
 				student.Patch("/", hero.Handler(handler.UpdateStudentServiceLearningHandler))             // 上傳資料
 				student.Patch("/status", hero.Handler(handler.UpdateStudentServiceLearningStatusHandler)) // 審核
+			}
+		}
+
+		leture := v1.Party("/leture")
+		{
+			leture.Get("/", hero.Handler(handler.GetLeturesHandler))               // 取得課程列表
+			leture.Get("/{letureID}", hero.Handler(handler.GetLeturDetailHandler)) // 取得課程詳細資料
+			leture.Post("/sign-up", hero.Handler(handler.SignUpLetureHandler))     // 報名課程
+
+			student := leture.Party("/student")
+			{
+				student.Get("/", hero.Handler(handler.GetStudentLetureHandler))                               // 取得報名課程列表
+				student.Get("/detail/{studentLetureID}", hero.Handler(handler.GetStudentLetureDetailHandler)) // 取得學生課程詳細資料
+				student.Patch("/subject", hero.Handler(handler.UpdateStudentSubjectHandler))                  // 更新學生成績
+				student.Patch("/pass", hero.Handler(handler.UpdateStudentLetureStatusHandler))                // 更新狀態
 			}
 		}
 	}

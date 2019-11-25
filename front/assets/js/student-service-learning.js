@@ -8,34 +8,40 @@ const STATUS = {
     'pass': '通過',
     'failed': '未通過',
 }
-let StudentServiceLearningID = undefined
+
+let studentServiceLearningID = undefined
+
+$(document).ready(() => {
+    loading()
+
+    Promise.all([
+        getStudentServiceLearning(),
+    ]).then(() => {
+        unloading()
+    }).catch(() => {
+        setTimeout(() => {
+            removeCookie()
+        }, 1500)
+    })
+})
 
 const getStudentServiceLearning = () => {
     $.ajax({
         url: `${config.server}/v1/service-learning/student`,
         type: 'GET',
-        error: (xhr) => {
-            if (xhr.status === 401) {
-                removeCookie()
-            } else {
-            }
-        },
         beforeSend: (xhr) => {
-            let token = $.cookie('token')
-            if (token == undefined) {
-                renewToken()
-                token = $.cookie('token')
-            }
-
-            xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+            setHeader(xhr)
+        },
+        error: (xhr) => {
+            errorHandle(xhr, "錯誤")
         },
         success: (response) => {
             if (response.list.length == 0) {
                 $('#student-service-learning tbody').append(`
-                        <tr>
-                            <td scope="row" colspan="8" style="text-align: center">尚無資料</td>
-                        </tr>
-                    `)
+                    <tr>
+                        <td scope="row" colspan="8" style="text-align: center">尚無資料</td>
+                    </tr>
+                `)
             } else {
                 response.list.forEach((element, index) => {
                     let color = 'class="text-dark"'
@@ -45,7 +51,7 @@ const getStudentServiceLearning = () => {
                         color = 'class="text-danger"'
                     }
 
-                    let date = `${element.ServiceLearning.Start.substring(0, 10)} ~ ${element.ServiceLearning.End.substring(0, 10)}`
+                    let date = `${dayjs(element.ServiceLearning.Start).format('YYYY-MM-DD')} ~ ${dayjs(element.ServiceLearning.End).format('YYYY-MM-DD')}`
                     let result = `
                         <tr>
                             <th scope="row">${index}</th>
@@ -70,86 +76,81 @@ const getStudentServiceLearning = () => {
     });
 }
 
-$(document).ready(() => {
-    getStudentServiceLearning()
+const edit = id => {
+    studentServiceLearningID = id
+    $('#Modal').modal('show')
+}
 
-
-    $("#reference").fileinput({
-        language: 'zh-TW',
-        theme: "fas",
-        showPreview: false,
-        uploadUrl: `${config.server}/v1/service-learning/student`,
-        ajaxSettings: {
-            headers: {
-                'Authorization': `Bearer ${$.cookie('token')}`,
-            },
-            method: "PATCH"
+$("#reference").fileinput({
+    language: 'zh-TW',
+    theme: "fas",
+    showPreview: false,
+    uploadUrl: `${config.server}/v1/service-learning/student`,
+    ajaxSettings: {
+        headers: {
+            'Authorization': `Bearer ${$.cookie('token')}`,
         },
-        uploadExtraData: (previewId, index) => {
-            return {
-                'StudentServiceLearningID': StudentServiceLearningID,
-            }
+        method: "PATCH"
+    },
+    uploadExtraData: (previewId, index) => {
+        return {
+            'StudentServiceLearningID': studentServiceLearningID,
         }
-    }).on('fileuploaded', (event, previewId, index, fileId) => {
-        swal({
-            title: '',
-            text: '成功',
-            icon: "success",
-            timer: 1000,
-            buttons: false,
-        })
-        setTimeout(() => {
-            $('#reference').fileinput('clear')
-        }, 1000)
-    }).on('fileuploaderror', (event, data, msg) => {
-        swal({
-            title: '',
-            text: '失敗',
-            icon: "error",
-            timer: 1000,
-            buttons: false,
-        })
+    }
+}).on('fileuploaded', (event, previewId, index, fileId) => {
+    swal({
+        title: '',
+        text: '成功',
+        icon: "success",
+        timer: 1000,
+        buttons: false,
     })
-
-    $("#review").fileinput({
-        language: 'zh-TW',
-        theme: "fas",
-        showPreview: false,
-        uploadUrl: `${config.server}/v1/service-learning/student`,
-        ajaxSettings: {
-            headers: {
-                'Authorization': `Bearer ${$.cookie('token')}`,
-            },
-            method: "PATCH"
-        },
-        uploadExtraData: (previewId, index) => {
-            return {
-                'StudentServiceLearningID': StudentServiceLearningID,
-            }
-        }
-    }).on('fileuploaded', (event, previewId, index, fileId) => {
-        swal({
-            title: '',
-            text: '成功',
-            icon: "success",
-            timer: 1000,
-            buttons: false,
-        })
-        setTimeout(() => {
-            $('#review').fileinput('clear')
-        }, 1000)
-    }).on('fileuploaderror', (event, data, msg) => {
-        swal({
-            title: '',
-            text: '失敗',
-            icon: "error",
-            timer: 1000,
-            buttons: false,
-        })
+    setTimeout(() => {
+        $('#reference').fileinput('clear')
+    }, 1000)
+}).on('fileuploaderror', (event, data, msg) => {
+    swal({
+        title: '',
+        text: '失敗',
+        icon: "error",
+        timer: 1000,
+        buttons: false,
     })
 })
 
-const edit = id => {
-    StudentServiceLearningID = id
-    $('#Modal').modal('show')
-}
+$("#review").fileinput({
+    language: 'zh-TW',
+    theme: "fas",
+    showPreview: false,
+    uploadUrl: `${config.server}/v1/service-learning/student`,
+    ajaxSettings: {
+        headers: {
+            'Authorization': `Bearer ${$.cookie('token')}`,
+        },
+        method: "PATCH"
+    },
+    uploadExtraData: (previewId, index) => {
+        return {
+            'StudentServiceLearningID': studentServiceLearningID,
+        }
+    }
+}).on('fileuploaded', (event, previewId, index, fileId) => {
+    swal({
+        title: '',
+        text: '成功',
+        icon: "success",
+        timer: 1000,
+        buttons: false,
+    })
+    setTimeout(() => {
+        $('#review').fileinput('clear')
+    }, 1000)
+}).on('fileuploaderror', (event, data, msg) => {
+    swal({
+        title: '',
+        text: '失敗',
+        icon: "error",
+        timer: 1000,
+        buttons: false,
+    })
+})

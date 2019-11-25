@@ -16,7 +16,7 @@ type adminDao struct {
 	Role  string
 }
 
-// AdminDao user data acces object
+// AdminDao user data access object
 var AdminDao = &adminDao{
 	table: "admin",
 	Role:  "admin",

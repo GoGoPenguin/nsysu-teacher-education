@@ -17,8 +17,8 @@
     <!-- Core plugin JavaScript-->
     <script src="/node_modules/jquery/dist/jquery.min.js"></script>
     <script src="/node_modules/jquery.cookie/jquery.cookie.js"></script>
-    <script src="/assets/js/config.js"></script>
-    <script src="/assets/js/bootstrap.js"></script>
+    <script src="/assets/js/config.js?v=0.2.0"></script>
+    <script src="/assets/js/bootstrap.js?v=0.2.0"></script>
 
     <!-- Bootstrap core CSS -->
     <link href="/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -26,7 +26,8 @@
 
     <!-- Custom styles for this template -->
     <link href="/node_modules/startbootstrap-scrolling-nav/css/scrolling-nav.css" rel="stylesheet">
-    <link href="/assets/css/course.css" rel="stylesheet">
+    <link href="/assets/css/course.css?v=0.2.0" rel="stylesheet">
+    <link href="/assets/css/overlay.css?v=0.2.0" rel="stylesheet">
 
 </head>
 
@@ -48,6 +49,7 @@
                             <i class="fas fa-user-circle fa-fw"></i>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
+                            <a class="dropdown-item" href="/leture.html">我的專門科目</a>
                             <a class="dropdown-item" href="/course.html">我的研習</a>
                             <a class="dropdown-item" href="/service-learning.html">我的服務學習</a>
                             <div class="dropdown-divider"></div>
@@ -69,11 +71,11 @@
                         <thead>
                             <tr>
                                 <th scope="col">#</th>
+                                <th scope="col">審核情況</th>
                                 <th scope="col">研習主題</th>
                                 <th scope="col">研習時段</th>
                                 <th scope="col">研習類別</th>
                                 <th scope="col">便當</th>
-                                <th scope="col">審核情況</th>
                                 <th scope="col">審核結果說明</th>
                                 <th scope="col">心得</th>
                                 <th scope="col"></th>
@@ -136,10 +138,17 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
-                        <button type="submit" class="btn btn-primary">上傳</button>
+                        <button type="submit" class="btn btn-primary">送出</button>
                     </div>
                 </form>
             </div>
+        </div>
+    </div>
+
+    <!-- Overlay -->
+    <div id="overlay">
+        <div class="spinner-border text-light" role="status">
+            <span class="sr-only">Loading...</span>
         </div>
     </div>
 
@@ -152,12 +161,14 @@
     <script src="/node_modules/jquery.cookie/jquery.cookie.js"></script>
     <script src="/node_modules/@fortawesome/fontawesome-free/js/all.js"></script>
     <script src="/node_modules/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="/node_modules/dayjs/dayjs.min.js"></script>
 
     <!-- Custom JavaScript for this theme -->
     <script src="/node_modules/startbootstrap-scrolling-nav/js/scrolling-nav.js"></script>
 
-    <script src="/assets/js/auth.js"></script>
-    <script src="/assets/js/student-course.js"></script>
+    <script src="/assets/js/auth.js?v=0.2.0"></script>
+    <script src="/assets/js/loading.js?v=0.2.0"></script>
+    <script src="/assets/js/student-course.js?v=0.2.0"></script>
 
 </body>
 
