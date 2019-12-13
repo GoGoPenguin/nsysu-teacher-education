@@ -1,5 +1,7 @@
 # README
 
+![Go](https://img.shields.io/badge/Go-v1.12.7-blue) ![version](https://img.shields.io/badge/version-0.2.0-success)
+
 ## Introduce
 
 API Server of CTEP

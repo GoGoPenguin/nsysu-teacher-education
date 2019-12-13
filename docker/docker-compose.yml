@@ -1,4 +1,4 @@
-version: '3.0'
+version: "3.7"
 services:
     api:
         user: root
@@ -79,9 +79,9 @@ services:
 
 networks:
     net:
+        name: nte-net
         driver: bridge
         ipam:
             driver: default
             config:
-            -
-              subnet: 172.18.0.0/24
+                - subnet: 172.18.0.0/24

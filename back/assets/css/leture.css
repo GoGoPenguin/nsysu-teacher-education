@@ -3,3 +3,18 @@
     word-wrap: break-word;
     white-space: pre-wrap;
 }
+
+.list-group-item {
+    background-color: white !important;
+    border-color: #ddd !important;
+    color: #333333;
+}
+
+.list-group-item.active {
+    background-color: rgba(0, 0, 0, 0.03) !important;
+    color: #333333;
+}
+
+.list-group-item.active:hover {
+    background-color: #F5F5F5 !important;
+}

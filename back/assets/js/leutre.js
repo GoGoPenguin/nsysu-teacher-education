@@ -154,6 +154,15 @@ const detail = (index, el) => {
     });
 }
 
+$('.list-group-item').click(function () {
+    $(this).children('i').toggleClass('fa-angle-right fa-angle-down')
+    $('').fadeToggle('fast')
+})
+
+const treeview = () => {
+
+}
+
 const underconstruction = () => {
     swal({
         title: '',
