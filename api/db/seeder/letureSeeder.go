@@ -22,7 +22,7 @@ func letureSeeder() {
 		map[string]interface{}{"ID": uint(4), "Name": "語文領域國語文專長", "MinCredit": uint(48), "Comment": "適合中國文學系所等"},
 		map[string]interface{}{"ID": uint(5), "Name": "數學領域數學專長", "MinCredit": uint(44), "Comment": "適合應用數學系所等"},
 		map[string]interface{}{"ID": uint(6), "Name": "全民國防教育科", "MinCredit": uint(28), "Comment": "適合中國與亞太區域研究所等"},
-		map[string]interface{}{"ID": uint(7), "Name": "社會領域公民與社會專長", "MinCredit": uint(50), "Comment": "政治學研究所"},
+		// map[string]interface{}{"ID": uint(7), "Name": "社會領域公民與社會專長", "MinCredit": uint(50), "Comment": "政治學研究所"},
 	}
 
 	for _, data := range letureData {
@@ -55,9 +55,9 @@ func letureSeeder() {
 
 		map[string]interface{}{"ID": uint(10), "LetureID": uint(6), "Name": "主修專長課程", "MinCredit": uint(0), "MinType": uint(0)},
 
-		map[string]interface{}{"ID": uint(11), "LetureID": uint(7), "Name": "領域核心課程", "MinCredit": uint(4), "MinType": uint(0)},
-		map[string]interface{}{"ID": uint(12), "LetureID": uint(7), "Name": "領域內跨科課程", "MinCredit": uint(12), "MinType": uint(2)},
-		map[string]interface{}{"ID": uint(13), "LetureID": uint(7), "Name": "公民與社會專長課程", "MinCredit": uint(34), "MinType": uint(0)},
+		// map[string]interface{}{"ID": uint(11), "LetureID": uint(7), "Name": "領域核心課程", "MinCredit": uint(4), "MinType": uint(0)},
+		// map[string]interface{}{"ID": uint(12), "LetureID": uint(7), "Name": "領域內跨科課程", "MinCredit": uint(12), "MinType": uint(2)},
+		// map[string]interface{}{"ID": uint(13), "LetureID": uint(7), "Name": "公民與社會專長課程", "MinCredit": uint(34), "MinType": uint(0)},
 	}
 
 	for _, data := range categoryData {
@@ -104,10 +104,10 @@ func letureSeeder() {
 		map[string]interface{}{"ID": uint(23), "LetureCategoryID": uint(9), "Name": "進階課程", "MinCredit": uint(3)},
 		map[string]interface{}{"ID": uint(24), "LetureCategoryID": uint(9), "Name": "應用課程", "MinCredit": uint(6)},
 
-		map[string]interface{}{"ID": uint(25), "LetureCategoryID": uint(10), "Name": "國際情勢", "MinCredit": uint(4)},
-		map[string]interface{}{"ID": uint(26), "LetureCategoryID": uint(10), "Name": "國家安全", "MinCredit": uint(4)},
-		map[string]interface{}{"ID": uint(27), "LetureCategoryID": uint(10), "Name": "全民國防概論", "MinCredit": uint(10)},
-		map[string]interface{}{"ID": uint(28), "LetureCategoryID": uint(10), "Name": "防衛動員與災害防救演練", "MinCredit": uint(10)},
+		// map[string]interface{}{"ID": uint(25), "LetureCategoryID": uint(10), "Name": "國際情勢", "MinCredit": uint(4)},
+		// map[string]interface{}{"ID": uint(26), "LetureCategoryID": uint(10), "Name": "國家安全", "MinCredit": uint(4)},
+		// map[string]interface{}{"ID": uint(27), "LetureCategoryID": uint(10), "Name": "全民國防概論", "MinCredit": uint(10)},
+		// map[string]interface{}{"ID": uint(28), "LetureCategoryID": uint(10), "Name": "防衛動員與災害防救演練", "MinCredit": uint(10)},
 	}
 
 	for _, data := range typeData {
@@ -158,10 +158,10 @@ func letureSeeder() {
 		map[string]interface{}{"ID": uint(28), "LetureTypeID": uint(23), "MinCredit": uint(0)},
 		map[string]interface{}{"ID": uint(29), "LetureTypeID": uint(24), "MinCredit": uint(0)},
 
-		map[string]interface{}{"ID": uint(30), "LetureTypeID": uint(25), "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(31), "LetureTypeID": uint(26), "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(32), "LetureTypeID": uint(27), "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(33), "LetureTypeID": uint(28), "MinCredit": uint(0)},
+		// map[string]interface{}{"ID": uint(30), "LetureTypeID": uint(25), "MinCredit": uint(0)},
+		// map[string]interface{}{"ID": uint(31), "LetureTypeID": uint(26), "MinCredit": uint(0)},
+		// map[string]interface{}{"ID": uint(32), "LetureTypeID": uint(27), "MinCredit": uint(0)},
+		// map[string]interface{}{"ID": uint(33), "LetureTypeID": uint(28), "MinCredit": uint(0)},
 	}
 
 	for _, data := range groupData {
@@ -444,21 +444,21 @@ func letureSeeder() {
 		map[string]interface{}{"SubjectGroupID": uint(29), "Name": "數學統計軟體應用", "Credit": uint(3), "Compulsory": false},
 		map[string]interface{}{"SubjectGroupID": uint(29), "Name": "拓樸學（一）", "Credit": uint(3), "Compulsory": false},
 
-		map[string]interface{}{"SubjectGroupID": uint(30), "Name": "美國與亞太安全", "Credit": uint(2), "Compulsory": true},
-		map[string]interface{}{"SubjectGroupID": uint(30), "Name": "中國國防與軍隊改革研究", "Credit": uint(2), "Compulsory": true},
-		map[string]interface{}{"SubjectGroupID": uint(31), "Name": "國家安全研究", "Credit": uint(2), "Compulsory": true},
-		map[string]interface{}{"SubjectGroupID": uint(31), "Name": "國際關係理論與實務", "Credit": uint(2), "Compulsory": true},
-		map[string]interface{}{"SubjectGroupID": uint(31), "Name": "臺灣經濟發展戰略", "Credit": uint(2), "Compulsory": false},
-		map[string]interface{}{"SubjectGroupID": uint(32), "Name": "全民國防理論與實踐", "Credit": uint(2), "Compulsory": true},
-		map[string]interface{}{"SubjectGroupID": uint(32), "Name": "中外戰史(含臺灣戰史)", "Credit": uint(2), "Compulsory": false},
-		map[string]interface{}{"SubjectGroupID": uint(32), "Name": "軍備與國防科技(含我國主要武器介紹)", "Credit": uint(2), "Compulsory": false},
-		map[string]interface{}{"SubjectGroupID": uint(32), "Name": "國際法(含戰爭法及戰爭對社會影響)", "Credit": uint(2), "Compulsory": false},
-		map[string]interface{}{"SubjectGroupID": uint(32), "Name": "戰略理論專題研究", "Credit": uint(2), "Compulsory": false},
-		map[string]interface{}{"SubjectGroupID": uint(33), "Name": "防衛動員理論與實務", "Credit": uint(2), "Compulsory": true},
-		map[string]interface{}{"SubjectGroupID": uint(33), "Name": "危機管理與政軍兵棋推演", "Credit": uint(2), "Compulsory": true},
-		map[string]interface{}{"SubjectGroupID": uint(33), "Name": "中華民國國防政策", "Credit": uint(2), "Compulsory": false},
-		map[string]interface{}{"SubjectGroupID": uint(33), "Name": "國土安全與防衛", "Credit": uint(2), "Compulsory": false},
-		map[string]interface{}{"SubjectGroupID": uint(33), "Name": "臺灣國防專題研究", "Credit": uint(2), "Compulsory": false},
+		// map[string]interface{}{"SubjectGroupID": uint(30), "Name": "美國與亞太安全", "Credit": uint(2), "Compulsory": true},
+		// map[string]interface{}{"SubjectGroupID": uint(30), "Name": "中國國防與軍隊改革研究", "Credit": uint(2), "Compulsory": true},
+		// map[string]interface{}{"SubjectGroupID": uint(31), "Name": "國家安全研究", "Credit": uint(2), "Compulsory": true},
+		// map[string]interface{}{"SubjectGroupID": uint(31), "Name": "國際關係理論與實務", "Credit": uint(2), "Compulsory": true},
+		// map[string]interface{}{"SubjectGroupID": uint(31), "Name": "臺灣經濟發展戰略", "Credit": uint(2), "Compulsory": false},
+		// map[string]interface{}{"SubjectGroupID": uint(32), "Name": "全民國防理論與實踐", "Credit": uint(2), "Compulsory": true},
+		// map[string]interface{}{"SubjectGroupID": uint(32), "Name": "中外戰史(含臺灣戰史)", "Credit": uint(2), "Compulsory": false},
+		// map[string]interface{}{"SubjectGroupID": uint(32), "Name": "軍備與國防科技(含我國主要武器介紹)", "Credit": uint(2), "Compulsory": false},
+		// map[string]interface{}{"SubjectGroupID": uint(32), "Name": "國際法(含戰爭法及戰爭對社會影響)", "Credit": uint(2), "Compulsory": false},
+		// map[string]interface{}{"SubjectGroupID": uint(32), "Name": "戰略理論專題研究", "Credit": uint(2), "Compulsory": false},
+		// map[string]interface{}{"SubjectGroupID": uint(33), "Name": "防衛動員理論與實務", "Credit": uint(2), "Compulsory": true},
+		// map[string]interface{}{"SubjectGroupID": uint(33), "Name": "危機管理與政軍兵棋推演", "Credit": uint(2), "Compulsory": true},
+		// map[string]interface{}{"SubjectGroupID": uint(33), "Name": "中華民國國防政策", "Credit": uint(2), "Compulsory": false},
+		// map[string]interface{}{"SubjectGroupID": uint(33), "Name": "國土安全與防衛", "Credit": uint(2), "Compulsory": false},
+		// map[string]interface{}{"SubjectGroupID": uint(33), "Name": "臺灣國防專題研究", "Credit": uint(2), "Compulsory": false},
 	}
 
 	for _, data := range subjectData {
