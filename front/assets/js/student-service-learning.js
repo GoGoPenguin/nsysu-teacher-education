@@ -44,18 +44,17 @@ const getStudentServiceLearning = () => {
                 `)
             } else {
                 response.list.forEach((element, index) => {
-                    let color = 'class="text-dark"'
+                    let color = 'class="waitting"'
                     if (element.Status === 'pass') {
-                        color = 'class="text-success"'
+                        color = 'class="success"'
                     } else if (element.Status === 'failed') {
-                        color = 'class="text-danger"'
+                        color = 'class="danger"'
                     }
 
                     let date = `${dayjs(element.ServiceLearning.Start).format('YYYY-MM-DD')} ~ ${dayjs(element.ServiceLearning.End).format('YYYY-MM-DD')}`
                     let result = `
                         <tr>
-                            <th scope="row">${index}</th>
-                            <td ${color}>${STATUS[element.Status]}</td>
+                            <td ${color}><span>●</span>${STATUS[element.Status]}</td>
                             <td>${TYPE[element.ServiceLearning.Type]}</td>
                             <td>${element.ServiceLearning.Content}</td>
                             <td>${date}</td>
@@ -64,9 +63,10 @@ const getStudentServiceLearning = () => {
                     `
 
                     if (element.Status !== 'pass') {
-                        result = `${result}<td><button class="btn btn-primary" onclick="edit(${element.ID})">編輯</button></td></tr>`
+                        result = `${result}<td><a class="btn_table">編輯</a></td></tr>`
+                        // result = `${result}<td><button class="btn btn-primary" onclick="edit(${element.ID})">編輯</button></td></tr>`
                     } else {
-                        result = `${result}<td></td></tr>`
+                        result = `${result}<td><a class="btn_table disabled">編輯</a></td></tr>`
                     }
 
                     $('#student-service-learning tbody').append(result)

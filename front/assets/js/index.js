@@ -6,7 +6,7 @@ const TYPE = {
 
 let studentCourses = []
 let studentServiceLearnings = []
-let studentLetures = []
+let studentLectures = []
 
 let editedID = null
 let editedItem = null
@@ -17,7 +17,7 @@ $(document).ready(() => {
     Promise.all([
         getStudentCourses(),
         getStudentServiceLearning(),
-        getStudentLeture(),
+        getStudentLecture(),
     ]).then(() => {
         unloading()
     }).catch(() => {
@@ -68,12 +68,12 @@ const getStudentServiceLearning = () => {
             }
         },
         complete: () => {
-            getLetures()
+            getLectures()
         }
     });
 }
 
-const getStudentLeture = () => {
+const getStudentLecture = () => {
     $.ajax({
         url: `${config.server}/v1/leture/student`,
         type: 'GET',
@@ -86,7 +86,7 @@ const getStudentLeture = () => {
         success: (response) => {
             if (response.list.length > 0) {
                 response.list.forEach((element, index) => {
-                    studentLetures.push(Object.assign({}, element))
+                    studentLectures.push(Object.assign({}, element))
                 })
             }
         },
@@ -116,9 +116,9 @@ const getCourses = () => {
             } else {
                 response.list.forEach((element, index) => {
                     let startDate = dayjs(element.Start).format('YYYY-MM-DD')
-                    let startTime = dayjs(element.Start).format('HH:mm:ss')
+                    let startTime = dayjs(element.Start).format('HH:mm')
                     let endDate = dayjs(element.End).format('YYYY-MM-DD')
-                    let endTime = dayjs(element.End).format('HH:mm:ss')
+                    let endTime = dayjs(element.End).format('HH:mm')
                     let time = ""
                     let action = ''
 
@@ -133,18 +133,17 @@ const getCourses = () => {
                     })
 
                     if (studentCourse !== undefined) {
-                        action = `<button class="btn btn-primary" disabled>已報名</button>`
+                        action = `<a href="#" class="btn_table disabled" disabled>已報名</a>`
                     } else {
-                        action = `<button class="btn btn-primary" onclick="signUpCourse(${element.ID}, this)">報名</button>`
+                        action = `<a href="#" class="btn_table" onclick="signUpCourse(${element.ID}, this)">報名</a>`
                     }
 
                     $('#course tbody').append(`
                         <tr>
-                            <th scope="row">${index}</th>
-                            <td>${element.Topic}</td>
-                            <td>${time}</td>
-                            <td class="info" onclick="getInformation(${element.ID}, '${element.Information}')">${element.Information}</td>
-                            <td>${element.Type}</td>
+                            <td data-title="演講主題">${element.Topic}</td>
+                            <td data-title="研習時段">${time}</td>
+                            <td data-title="研習資訊" class="info" onclick="getInformation(${element.ID}, '${element.Information}')">${element.Information}</td>
+                            <td data-title="類別">${element.Type}</td>
                             <td>${action}</td>
                         </tr>
                     `)
@@ -182,14 +181,13 @@ const getServiceLearning = () => {
                     })
 
                     if (studentServiceLearning !== undefined) {
-                        action = `<button class="btn btn-primary" disabled>已報名</button>`
+                        action = `<a href="#" class="btn_table">已報名</a>`
                     } else {
-                        action = `<button class="btn btn-primary" onclick="signUpServiceLearning(${element.ID}, this)">報名</button>`
+                        action = `a href="#" class="btn_table" onclick="signUpServiceLearning(${element.ID}, this)">報名</a>`
                     }
 
                     $('#service-learning tbody').append(`
                         <tr>
-                            <th scope="row">${index}</th>
                             <td>${TYPE[element.Type]}</td>
                             <td>${element.Content}</td>
                             <td>${startDate} ~ ${endDate}</td>
@@ -204,7 +202,7 @@ const getServiceLearning = () => {
     });
 }
 
-const getLetures = () => {
+const getLectures = () => {
     return $.ajax({
         url: `${config.server}/v1/leture`,
         type: 'GET',
@@ -216,7 +214,7 @@ const getLetures = () => {
         },
         success: (response) => {
             if (response.list.length == 0) {
-                $('#leture tbody').append(`
+                $('#lecture tbody').append(`
                     <tr>
                         <td scope="row" colspan="7" style="text-align: center">尚無資料</td>
                     </tr>
@@ -225,23 +223,22 @@ const getLetures = () => {
                 response.list.forEach((element, index) => {
                     let action = ''
 
-                    let studentLeture = studentLetures.find(studentLeture => {
+                    let studentLecture = studentLectures.find(studentLeture => {
                         return element.ID === studentLeture.Leture.ID
                     })
 
-                    if (studentLeture !== undefined) {
-                        action = `<button class="btn btn-primary" disabled>已報名</button>`
+                    if (studentLecture !== undefined) {
+                        action = `<a href="#" class="btn_table disabled">已報名</a>`
                     } else {
-                        action = `<button class="btn btn-primary" onclick="signUpLeture(${element.ID}, this)">報名</button>`
+                        action = `<a href="#" class="btn_table" onclick="signUpLecture(${element.ID}, this)">報名</a>`
                     }
 
-                    $('#leture tbody').append(`
+                    $('#lecture tbody').append(`
                         <tr>
-                            <th scope="row">${index}</th>
-                            <td>${element.Name}</td>
-                            <td>${element.MinCredit}</td>
-                            <td>${element.Comment}</td>
-                            <td><button class="btn btn-secondary mr-3" onclick="detail(${element.ID}, this)">查看</button>${action}</td>
+                            <td data-title="科目名稱">${element.Name}</td>
+                            <td data-title="最低學分">${element.MinCredit}</td>
+                            <td data-title="備註">${element.Comment}</td>
+                            <td>${action}</td>
                         </tr>
                     `)
                 })
@@ -387,10 +384,10 @@ const detail = (id, el) => {
         },
         success: (response) => {
             if (response.code === 0) {
-                let leture = response.data
+                let lecture = response.data
                 let html = ''
 
-                for (let category of leture.Categories) {
+                for (let category of lecture.Categories) {
                     let content = ''
                     let comment = ''
                     let subjects = 0
@@ -456,10 +453,10 @@ const detail = (id, el) => {
                     html += content
                 }
 
-                $('#detailModal .modal-title').html(leture.Name)
-                $('#detailModal #name').html(leture.Name)
-                $('#detailModal #min_credit').html(leture.MinCredit)
-                $('#detailModal #comment').html(leture.Comment)
+                $('#detailModal .modal-title').html(lecture.Name)
+                $('#detailModal #name').html(lecture.Name)
+                $('#detailModal #min_credit').html(lecture.MinCredit)
+                $('#detailModal #comment').html(lecture.Comment)
                 $('#detailModal #categories').html(html)
                 $('#detailModal').modal('show')
             } else {
@@ -479,7 +476,7 @@ const detail = (id, el) => {
     });
 }
 
-const signUpLeture = (id, el) => {
+const signUpLecture = (id, el) => {
     $.ajax({
         url: `${config.server}/v1/leture/sign-up`,
         type: 'POST',

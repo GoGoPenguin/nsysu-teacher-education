@@ -58,29 +58,27 @@ const getStudentCourses = () => {
                         time = `${startDate} ${startTime} ~ ${endDate} ${endTime}`
                     }
 
-                    let color = 'class="text-dark"'
+                    let color = 'class="waiting"'
                     if (element.Status === 'pass') {
-                        color = 'class="text-success"'
+                        color = 'class="success"'
                     } else if (element.Status === 'failed') {
-                        color = 'class="text-danger"'
+                        color = 'class="danger"'
                     }
 
                     let result = `
                         <tr>
-                            <th scope="row">${index}</th>\
-                            <td ${color}>${STATUS[element.Status]}</td>\
-                            <td>${element.Course.Topic}</td>\
-                            <td>${time}</td>\
-                            <td>${element.Course.Type}</td>\
-                            <td>${MEAL[element.Meal]}</td>\
-                            <td>${element.Comment}</td>\
-                            <td>${element.Review}</td>\
+                            <td data-title="審核情況" ${color}><span>●</span>${STATUS[element.Status]}</td>\
+                            <td data-title="類別">${element.Course.Topic}</td>\
+                            <td data-title="研習主題">${element.Course.Type}</td>\
+                            <td data-title="研習時段">${time}</td>\
+                            <td data-title="審核結果說明">${element.Comment}</td>\
                     `
 
                     if (element.Status !== 'pass') {
-                        result = `${result}<td><button class="btn btn-primary" onclick="edit(${index})" id="${element.ID}">編輯</button></td></tr>`
+                        result = `${result}<td><a class="btn_table">編輯</a></td></tr>`
+                        // result = `${result}<td><button class="btn btn-primary" onclick="edit(${index})" id="${element.ID}">編輯</button></td></tr>`
                     } else {
-                        result = `${result}<td></td></tr>`
+                        result = `${result}<td><a class="btn_table disabled">編輯</a></td></tr>`
                     }
 
                     $('#student-course tbody').append(result)

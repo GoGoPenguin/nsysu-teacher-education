@@ -8,7 +8,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>國立中山大學師資培育中心 | 師資生學習歷程平臺</title>
+    <title>國立中山大學師資培育中心 | 師資生學習歷程平臺 我的專門科目</title>
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/img/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicon-16x16.png">
@@ -17,8 +17,8 @@
     <!-- Core plugin JavaScript-->
     <script src="/node_modules/jquery/dist/jquery.min.js"></script>
     <script src="/node_modules/jquery.cookie/jquery.cookie.js"></script>
-    <script src="/assets/js/config.js"></script>
-    <script src="/assets/js/bootstrap.js"></script>
+    <script src="/assets/js/config.js?v=0.2.0"></script>
+    <script src="/assets/js/bootstrap.js?v=0.2.0"></script>
 
     <!-- Bootstrap core CSS -->
     <!-- <link href="/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -27,13 +27,12 @@
     <!-- Custom styles for this template -->
     <link href="/node_modules/startbootstrap-scrolling-nav/css/scrolling-nav.css" rel="stylesheet">
     <link href="/assets/css/style.css" rel="stylesheet">
-    <link href="/assets/css/index.css?v=0.2.0" rel="stylesheet">
+    <link href="/assets/css/lecture.css?v=0.2.0" rel="stylesheet">
     <link href="/assets/css/overlay.css?v=0.2.0" rel="stylesheet">
 
 </head>
 
 <body id="page-top">
-
     <!-- Navigation -->
     <nav id="mainNav" class="navbar">
         <div class="nav">
@@ -41,18 +40,7 @@
                 <img src="/assets/img/logo.svg" class="logo-img" alt="logo">
             </a>
             <ul class="main_menu">
-                <li>
-                    <a href="#lecture" class="list">專門科目</a>
-                </li>
-                <li>
-                    <a href="#course" class="list">演講認證</a>
-                </li>
-                <li>
-                    <a href="#service-learning" class="list">服務學習</a>
-                </li>
-                <li>
-                    <a href="#education" class="list">教育學分</a>
-                </li>
+                <div class="greeting">Hi, OOO同學</div>
                 <div class="user">
                     <a href="#" class="user_img">
                         <img src="/assets/img/user.svg" alt="user-circle-solid">
@@ -76,16 +64,7 @@
             <!-- 漢堡選單 -->
             <ul class="mobile_menu">
                 <li>
-                    <a href="#lecture" class="list">專門科目</a>
-                </li>
-                <li>
-                    <a href="#course" class="list">演講認證</a>
-                </li>
-                <li>
-                    <a href="#service-learning" class="list">服務學習</a>
-                </li>
-                <li>
-                    <a href="#education" class="list">教育學分</a>
+                    <a href="index.html" class="list">首頁</a>
                 </li>
                 <li>
                     <a href="lecture.html">我的專門科目</a>
@@ -97,7 +76,7 @@
                     <a href="service-learning.html">我的服務學習</a>
                 </li>
                 <li class="logout">
-                    <a href="#">登出</a>
+                    <a href="login.html">登出</a>
                 </li>
             </ul>
             <div class="nav_burger">
@@ -107,29 +86,16 @@
             </div>
         </div>
     </nav>
-    <!-- header -->
-    <header class="header">
-        <div class="header_img">
-            <img src="/assets/img/header.svg" alt="header">
-        </div>
-        <div class="header_text">
-            <h1>國立中山大學師資培育中心<br>師資生學習歷程平臺</h1>
-            <p>歡迎進入國立中山大學師資培育中心師資生學習歷程平臺<br>
-                本系統主要提供師資生辦理教育學分、專門科目認證<br>
-                及登錄教學研習與實地學習時數、志工時數之用</p>
-            <a href="#lecture" class="btn">GET STARTED <img src="/assets/img/icon-start.svg"></a>
-        </div>
-    </header>
-    <!-- 專門科目 -->
-    <section id="lecture" class="block blue">
+    <!-- 我的專門科目 -->
+    <section id="student-lecture" class="block blue">
         <div class="container">
             <div class="block_title">
-                <h2>專門科目</h2>
-                <span>提供線上辦理專門學分登錄及認證</span>
+                <h2>我的專門科目</h2>
             </div>
             <table class="table" cellpadding="18" width="100%">
                 <thead>
                     <tr>
+                        <th scope="col">狀態</th>
                         <th scope="col">科目名稱</th>
                         <th scope="col">最低學分</th>
                         <th scope="col">備註</th>
@@ -137,70 +103,67 @@
                     </tr>
                 </thead>
                 <tbody>
-                </tbody>
-            </table>
-        </div>
-    </section>
-    <!-- 演講認證 -->
-    <section id="course" class="block yellow">
-        <div class="container">
-            <div class="block_title">
-                <h2>演講認證</h2>
-                <span>提供本中心舉辦之演講、研習活動、導生活動資訊及報名，並核發演講場次。</span>
-            </div>
-            <table class="table" cellpadding="18" width="100%">
-                <thead>
                     <tr>
-                        <th scope="col">演講主題</th>
-                        <th scope="col">研習時段</th>
-                        <th scope="col">研習資訊</th>
-                        <th scope="col">類別</th>
-                        <th scope="col"></th>
+                        <td data-title="狀態" class="success"><span>●</span>通過</td>
+                        <td data-title="科目名稱">自然科學領域化學專長</td>
+                        <td data-title="最低學分">42</td>
+                        <td data-title="備註">適合化學系所等</td>
+                        <td><a href="#" class="btn_table">下載申請書</a></td>
                     </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-        </div>
-    </section>
-    <!-- 服務學習 -->
-    <section id="service-learning" class="block blue">
-        <div class="container">
-            <div class="block_title">
-                <h2>服務學習</h2>
-                <span>實地學習及志工服務學習登錄及核發時數。</span>
-            </div>
-            <table class="table" cellpadding="18" width="100%">
-                <thead>
+
                     <tr>
-                        <th scope="col">類別</th>
-                        <th scope="col">服務內容說明</th>
-                        <th scope="col">日期</th>
-                        <th scope="col">時段</th>
-                        <th scope="col">時數</th>
-                        <th scope="col"></th>
+                        <td data-title="狀態" class="danger"><span>●</span>尚缺10學分</td>
+                        <td data-title="科目名稱">藝術領域藝術生活科－表演藝術專長</td>
+                        <td data-title="最低學分">42</td>
+                        <td data-title="備註">適合劇場藝術學系所等</td>
+                        <td><a href="#" class="btn_table disabled">下載申請書</a></td>
                     </tr>
-                </thead>
-                <tbody>
+
+                    <tr>
+                        <td data-title="狀態" class="danger"><span>●</span>尚缺4學分</td>
+                        <td data-title="科目名稱">藝術領域表演藝術專長</td>
+                        <td data-title="最低學分">42</td>
+                        <td data-title="備註">適合劇場藝術學系所等</td>
+                        <td><a href="#" class="btn_table disabled">下載申請書</a></td>
+                    </tr>
+
+                    <tr>
+                        <td data-title="狀態" class="danger"><span>●</span>尚缺12學分</td>
+                        <td data-title="科目名稱">語文領域國語文專長</td>
+                        <td data-title="最低學分">48</td>
+                        <td data-title="備註">適合中國文學系所等</td>
+                        <td><a href="#" class="btn_table disabled">下載申請書</a></td>
+                    </tr>
+
+                    <tr>
+                        <td data-title="狀態" class="danger"><span>●</span>尚缺12學分</td>
+                        <td data-title="科目名稱">語文領域國語文專長</td>
+                        <td data-title="最低學分">48</td>
+                        <td data-title="備註">適合中國文學系所等</td>
+                        <td><a href="#" class="btn_table disabled">下載申請書</a></td>
+                    </tr>
+
+                    <tr>
+                        <td data-title="狀態" class="danger"><span>●</span>尚缺12學分</td>
+                        <td data-title="科目名稱">語文領域國語文專長</td>
+                        <td data-title="最低學分">48</td>
+                        <td data-title="備註">適合中國文學系所等</td>
+                        <td><a href="#" class="btn_table disabled">下載申請書</a></td>
+                    </tr>
+
+                    <tr>
+                        <td data-title="狀態" class="danger"><span>●</span>尚缺12學分</td>
+                        <td data-title="科目名稱">語文領域國語文專長</td>
+                        <td data-title="最低學分">48</td>
+                        <td data-title="備註">適合中國文學系所等</td>
+                        <td><a href="#" class="btn_table disabled">下載申請書</a></td>
+                    </tr>
+
                 </tbody>
             </table>
         </div>
     </section>
-    <!-- 教育學分 -->
-    <section id="education" class="block yellow">
-        <div class="container">
-            <div class="left">
-                <div class="block_title">
-                    <h2>教育學分</h2>
-                    <span>提供線上辦理教育學分認證。</span>
-                </div>
-                <a href="http://selcrs.nsysu.edu.tw/gadchk/edu_chk_login.htm" class="btn">點此連結至本校系統 <img
-                        src="/assets/img/icon-start.svg"></a>
-            </div>
-            <div class="right">
-                <img src="/assets/img/education.svg">
-            </div>
-    </section>
+
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
@@ -229,37 +192,6 @@
         </div>
     </div> -->
 
-    <!-- Course Modal-->
-    <!-- <div class="modal fade" id="courseModal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">報名演講</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <form>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="meal">便當</label>
-                            <select required class="form-control" id="meal" oninvalid="this.setCustomValidity('請選擇便當')"
-                                oninput="this.setCustomValidity('')">
-                                <option value="" selected disabled>請選擇</option>
-                                <option value="meat">葷</option>
-                                <option value="vegetable">素</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-secondary" type="button" data-dismiss="modal">取消</button>
-                        <button class="btn btn-primary" type="submit">送出</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div> -->
-
     <!-- Detail Modal-->
     <!-- <div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
@@ -272,6 +204,29 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    <div class="alert alert-secondary" role="alert">
+                        複數科目請使用逗號(,)分隔，如下<br>
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>學年度</th>
+                                    <th>學期</th>
+                                    <th>科目名稱</th>
+                                    <th>學分</th>
+                                    <th>成績</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>100,100</td>
+                                    <td>1,2</td>
+                                    <td>科目一,科目二</td>
+                                    <td>1,1</td>
+                                    <td>90,95</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                     <table class="table table-bordered table-sm" style="margin-bottom: 0px;">
                         <tbody>
                             <tr>
@@ -292,17 +247,20 @@
                         <thead>
                             <tr>
                                 <th colspan="4">課程類別</th>
-                                <th colspan="5">科目名稱</th>
-                                <th colspan="1">學分數</th>
-                                <th colspan="2">備註</th>
+                                <th colspan="5" style="width: 12%">科目名稱</th>
+                                <th colspan="1">學分</th>
+                                <th colspan="1" style="width: 8%">學年度</th>
+                                <th colspan="1" style="width: 5%">學期</th>
+                                <th colspan="1">科目名稱</th>
+                                <th colspan="1" style="width: 5%">學分</th>
+                                <th colspan="1" style="width: 8%">成績</th>
+                                <th colspan="2" style="width: 12%">備註</th>
                             </tr>
                         </thead>
                         <tbody id="categories"></tbody>
                     </table>
                 </div>
-                <div class="modal-footer">
-                    <button class="btn btn-primary" type="button" data-dismiss="modal">OK</button>
-                </div>
+                <div class="modal-footer"></div>
             </div>
         </div>
     </div> -->
@@ -323,15 +281,17 @@
     <script src="/node_modules/jquery.cookie/jquery.cookie.js"></script>
     <script src="/node_modules/@fortawesome/fontawesome-free/js/all.js"></script>
     <script src="/node_modules/sweetalert/dist/sweetalert.min.js"></script>
-    <script src="/node_modules/sweetalert/dist/sweetalert.min.js"></script>
     <script src="/node_modules/dayjs/dayjs.min.js"></script>
+    <script src="/node_modules/jspdf/dist/jspdf.min.js"></script>
+    <script src="/node_modules/jspdf-autotable/dist/jspdf.plugin.autotable.js"></script>
 
     <!-- Custom JavaScript for this theme -->
     <script src="/node_modules/startbootstrap-scrolling-nav/js/scrolling-nav.js"></script>
 
     <script src="/assets/js/auth.js?v=0.2.0"></script>
     <script src="/assets/js/loading.js?v=0.2.0"></script>
-    <script src="/assets/js/index.js?v=0.2.0"></script>
+    <script src="/assets/js/student-lecture.js?v=0.2.0"></script>
+    <script src="/assets/font/kaiu-normal.js?v=0.2.0"></script>
     <script src="/assets/js/navbar.js"></script>
 
 </body>

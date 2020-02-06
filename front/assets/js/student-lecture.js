@@ -4,7 +4,7 @@ let student = null
 loading()
 $(document).ready(() => {
     Promise.all([
-        getStudentLeture(),
+        getStudentLecture(),
         getStudentInformation()
     ]).then(() => {
         unloading()
@@ -31,7 +31,7 @@ const getStudentInformation = () => {
     });
 }
 
-const getStudentLeture = () => {
+const getStudentLecture = () => {
     $.ajax({
         url: `${config.server}/v1/leture/student`,
         type: 'GET',
@@ -43,7 +43,7 @@ const getStudentLeture = () => {
         },
         success: (response) => {
             if (response.list.length == 0) {
-                $('#student-leture tbody').html(`
+                $('#student-lecture tbody').html(`
                     <tr>
                         <td scope="row" colspan="8" style="text-align: center">尚無資料</td>
                     </tr>
@@ -53,22 +53,21 @@ const getStudentLeture = () => {
                 response.list.forEach((element, index) => {
                     html += `
                         <tr>
-                            <th scope="row">${index}</th>
-                            <td class="${element.Pass ? 'text-success' : 'text-danger'}">${element.Pass ? '通過' : '未通過'}</td>
+                            <td class="${element.Pass ? 'success' : 'danger'}"><span>●</span>${element.Pass ? '通過' : '未通過'}</td>
                             <td>${element.Leture.Name}</td>
                             <td>${element.Leture.MinCredit}</td>
                             <td>${element.Leture.Comment}</td>
-                            <td><button class="btn btn-primary" onclick="getStudentLetureDetail(${element.ID})">編輯</button></td>
+                            <td><a class="btn_table" onclick="getStudentLectureDetail(${element.ID})">編輯</a></td>
                         </tr>
                     `
                 })
-                $('#student-leture tbody').html(html)
+                $('#student-lecture tbody').append(html)
             }
         }
     });
 }
 
-const getStudentLetureDetail = (id) => {
+const getStudentLectureDetail = (id) => {
     $.ajax({
         url: `${config.server}/v1/leture/student/detail/${id}`,
         type: 'GET',
@@ -80,11 +79,11 @@ const getStudentLetureDetail = (id) => {
         },
         success: (response) => {
             if (response.code === 0) {
-                editedItem = response.data.Leture
-                let leture = response.data.Leture
+                editedItem = response.data.Lecture
+                let lecture = response.data.Lecture
                 let html = ''
 
-                for (const category of leture.Categories) {
+                for (const category of lecture.Categories) {
                     let content = ''
                     let comment = ''
                     let subjects = 0
@@ -170,10 +169,10 @@ const getStudentLetureDetail = (id) => {
                     html += content
                 }
 
-                $('#detailModal .modal-title').html(leture.Name)
-                $('#detailModal #name').html(leture.Name)
-                $('#detailModal #min_credit').html(leture.MinCredit)
-                $('#detailModal #comment').html(leture.Comment)
+                $('#detailModal .modal-title').html(lecture.Name)
+                $('#detailModal #name').html(lecture.Name)
+                $('#detailModal #min_credit').html(lecture.MinCredit)
+                $('#detailModal #comment').html(lecture.Comment)
                 $('#detailModal #categories').html(html)
 
                 let buttons = '<button class="btn btn-primary" type="button" onclick="check()">審核</button>'
@@ -196,12 +195,12 @@ const getStudentLetureDetail = (id) => {
     });
 }
 
-const updateSubject = (studentLetureID, subjectID) => {
+const updateSubject = (studentLectureID, subjectID) => {
     $.ajax({
         url: `${config.server}/v1/leture/student/subject`,
         type: 'PATCH',
         data: {
-            'StudentLetureID': studentLetureID,
+            'StudentLetureID': studentLectureID,
             'SubjectID': subjectID,
             'Name': $(`#studentName${subjectID}`).val(),
             'Year': $(`#year${subjectID}`).val(),
@@ -217,7 +216,7 @@ const updateSubject = (studentLetureID, subjectID) => {
         },
         success: (response) => {
             if (response.code === 0) {
-                reloadLeture(studentLetureID)
+                reloadLecture(studentLectureID)
             } else {
                 swal({
                     title: '',
@@ -231,7 +230,7 @@ const updateSubject = (studentLetureID, subjectID) => {
     })
 }
 
-const reloadLeture = (id) => {
+const reloadLecture = (id) => {
     $.ajax({
         url: `${config.server}/v1/leture/student/detail/${id}`,
         type: 'GET',
@@ -243,7 +242,7 @@ const reloadLeture = (id) => {
         },
         success: (response) => {
             if (response.code === 0) {
-                editedItem = response.data.Leture
+                editedItem = response.data.Lecture
             } else {
                 swal({
                     title: '',
@@ -258,10 +257,10 @@ const reloadLeture = (id) => {
 }
 
 const check = () => {
-    let leture = editedItem
+    let lecture = editedItem
     let pass = true
 
-    for (const category of leture.Categories) {
+    for (const category of lecture.Categories) {
         let categoryCredit = 0
         let categoryTypes = 0
 
@@ -337,7 +336,7 @@ const check = () => {
             timer: 1500,
             buttons: false,
         })
-        updateStudentLeturePass(leture.ID, true)
+        updateStudentLecturePass(lecture.ID, true)
 
         let buttons = '<button class="btn btn-primary" type="button" onclick="check()">審核</button>'
         buttons += '<button class="btn btn-secondary ml-3" onclick="applictionForm(this)">下載申請書</button>'
@@ -350,19 +349,19 @@ const check = () => {
             timer: 1500,
             buttons: false,
         })
-        updateStudentLeturePass(leture.ID, false)
+        updateStudentLecturePass(lecture.ID, false)
 
         let buttons = '<button class="btn btn-primary" type="button" onclick="check()">審核</button>'
         $('#detailModal .modal-footer').html(buttons)
     }
 }
 
-const updateStudentLeturePass = (letureID, pass) => {
+const updateStudentLecturePass = (lectureID, pass) => {
     $.ajax({
         url: `${config.server}/v1/leture/student/pass`,
         type: 'PATCH',
         data: {
-            'LetureID': letureID,
+            'LetureID': lectureID,
             'Pass': pass,
         },
         beforeSend: (xhr) => {
@@ -383,7 +382,7 @@ const updateStudentLeturePass = (letureID, pass) => {
             }
         },
         complete: () => {
-            getStudentLeture()
+            getStudentLecture()
         }
     })
 }
@@ -466,7 +465,7 @@ const applictionForm = (el) => {
             ],
         });
 
-        let leture = {
+        let lecture = {
             startY: doc.autoTable.previous.finalY + 5,
             headStyles: styleDef,
             footStyle: styleDef,
@@ -532,12 +531,12 @@ const applictionForm = (el) => {
                 }
                 if (temp.length > 0) {
                     temp[0].splice(1, 0, { content: type.Name, rowSpan: temp.length, styles: { fillColor: white, cellWidth: 7 } })
-                    leture.body = leture.body.concat(temp);
+                    lecture.body = lecture.body.concat(temp);
                 }
             }
         }
 
-        doc.autoTable(leture);
+        doc.autoTable(lecture);
 
         let result = {
             theme: 'plain',
