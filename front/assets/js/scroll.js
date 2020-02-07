@@ -21,7 +21,7 @@ $(document).ready(function () {
                 window.location.hash = hash;
             });
         } // End if
-        else {
+        else if ($(this).attr('href') != undefined) {
             window.location = $(this).attr('href');
         }
     });
