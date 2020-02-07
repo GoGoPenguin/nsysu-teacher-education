@@ -68,10 +68,10 @@ const getStudentCourses = () => {
                     let result = `
                         <tr>
                             <td data-title="審核情況" ${color}><span>●</span>${STATUS[element.Status]}</td>\
-                            <td data-title="類別">${element.Course.Topic}</td>\
-                            <td data-title="研習主題">${element.Course.Type}</td>\
+                            <td data-title="類別">${element.Course.Type}</td>\
+                            <td data-title="研習主題">${element.Course.Topic}</td>\
                             <td data-title="研習時段">${time}</td>\
-                            <td data-title="審核結果說明">${element.Comment}</td>\
+                            <td data-title="審核結果說明">${element.Comment == "" ? "無" : element.Comment}</td>\
                     `
 
                     if (element.Status !== 'pass') {

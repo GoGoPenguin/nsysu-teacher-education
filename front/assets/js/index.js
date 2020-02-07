@@ -133,9 +133,9 @@ const getCourses = () => {
                     })
 
                     if (studentCourse !== undefined) {
-                        action = `<a href="#" class="btn_table disabled" disabled>已報名</a>`
+                        action = `<a class="btn_table disabled" disabled>已報名</a>`
                     } else {
-                        action = `<a href="#" class="btn_table" onclick="signUpCourse(${element.ID}, this)">報名</a>`
+                        action = `<a class="btn_table" onclick="signUpCourse(${element.ID}, this)">報名</a>`
                     }
 
                     $('#course tbody').append(`
@@ -181,9 +181,9 @@ const getServiceLearning = () => {
                     })
 
                     if (studentServiceLearning !== undefined) {
-                        action = `<a href="#" class="btn_table">已報名</a>`
+                        action = `<a class="btn_table">已報名</a>`
                     } else {
-                        action = `a href="#" class="btn_table" onclick="signUpServiceLearning(${element.ID}, this)">報名</a>`
+                        action = `<a class="btn_table" onclick="signUpServiceLearning(${element.ID}, this)">報名</a>`
                     }
 
                     $('#service-learning tbody').append(`
@@ -228,9 +228,9 @@ const getLectures = () => {
                     })
 
                     if (studentLecture !== undefined) {
-                        action = `<a href="#" class="btn_table disabled">已報名</a>`
+                        action = `<a class="btn_table disabled">已報名</a>`
                     } else {
-                        action = `<a href="#" class="btn_table" onclick="signUpLecture(${element.ID}, this)">報名</a>`
+                        action = `<a class="btn_table" onclick="signUpLecture(${element.ID}, this)">報名</a>`
                     }
 
                     $('#lecture tbody').append(`
@@ -290,8 +290,7 @@ $('#courseModal form').on('submit', (e) => {
             'Meal': $('#meal').val(),
         },
         beforeSend: (xhr) => {
-            $('#courseModal div.modal-footer button.btn.btn-primary').html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>&nbsp載入中...')
-            $('#courseModal div.modal-footer button.btn.btn-primary').attr("disabled", true)
+            $('#courseModal div.modal-footer button.btn.btn-primary').toggleClass("disabled")
             setHeader(xhr)
         },
         error: (xhr) => {
@@ -307,7 +306,7 @@ $('#courseModal form').on('submit', (e) => {
                     buttons: false,
                 })
                 $(editedItem).html('已報名')
-                $(editedItem).attr("disabled", true)
+                $(editedItem).toggleClass("disabled")
             } else {
                 swal({
                     title: '',
@@ -321,7 +320,7 @@ $('#courseModal form').on('submit', (e) => {
         },
         complete: () => {
             $('#courseModal div.modal-footer button.btn.btn-primary').html('送出')
-            $('#courseModal div.modal-footer button.btn.btn-primary').attr("disabled", false)
+            $('#courseModal div.modal-footer button.btn.btn-primary').toggleClass("disabled")
             $('#courseModal').modal('hide')
 
             editedID = null
@@ -338,8 +337,7 @@ const signUpServiceLearning = (id, el) => {
             'ServiceLearningID': id,
         },
         beforeSend: (xhr) => {
-            $(el).html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>&nbsp載入中...')
-            $(el).attr("disabled", true)
+            $(el).toggleClass("disabled")
             setHeader(xhr)
         },
         error: (xhr) => {
@@ -364,7 +362,7 @@ const signUpServiceLearning = (id, el) => {
                     buttons: false,
                 })
                 $(el).html('報名')
-                $(el).attr("disabled", false)
+                $(el).toggleClass("disabled")
             }
         }
     });
@@ -375,8 +373,7 @@ const detail = (id, el) => {
         url: `${config.server}/v1/leture/${id}`,
         type: 'GET',
         beforeSend: (xhr) => {
-            $(el).html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>&nbsp載入中...')
-            $(el).attr("disabled", true)
+            $(el).toggleClass("disabled")
             setHeader(xhr)
         },
         error: (xhr) => {
@@ -471,7 +468,7 @@ const detail = (id, el) => {
         },
         complete: () => {
             $(el).html('查看')
-            $(el).attr("disabled", false)
+            $(el).toggleClass("disabled")
         }
     });
 }
@@ -484,8 +481,7 @@ const signUpLecture = (id, el) => {
             'LetureID': id,
         },
         beforeSend: (xhr) => {
-            $(el).html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>&nbsp載入中...')
-            $(el).attr("disabled", true)
+            $(el).toggleClass("disabled")
             setHeader(xhr)
         },
         error: (xhr) => {
@@ -510,7 +506,7 @@ const signUpLecture = (id, el) => {
                     buttons: false,
                 })
                 $(el).html('報名')
-                $(el).attr("disabled", false)
+                $(el).toggleClass("disabled")
             }
         }
     });
