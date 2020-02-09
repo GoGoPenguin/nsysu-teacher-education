@@ -21,16 +21,17 @@
     <script src="/assets/js/bootstrap.js?v=0.2.0"></script>
 
     <!-- Bootstrap core CSS -->
-    <!-- <link href="/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- <link href="/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"> -->
     <link href="/node_modules/@fortawesome/fontawesome-free/css/all.css" rel="stylesheet">
     <link href="/node_modules/bootstrap-fileinput/css/fileinput.css" rel="stylesheet">
-    <link href="/node_modules/bootstrap-fileinput/css/fileinput-rtl.css" rel="stylesheet"> -->
+    <link href="/node_modules/bootstrap-fileinput/css/fileinput-rtl.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <link href="/node_modules/startbootstrap-scrolling-nav/css/scrolling-nav.css" rel="stylesheet">
     <link href="/assets/css/style.css" rel="stylesheet">
     <link href="/assets/css/service-learning.css?v=0.2.0" rel="stylesheet">
     <link href="/assets/css/overlay.css?v=0.2.0" rel="stylesheet">
+    <link href="/assets/css/modal.css?v=0.2.0" rel="stylesheet">
 
 </head>
 
@@ -44,7 +45,7 @@
             <ul class="main_menu">
                 <div class="greeting">Hi, OOO同學</div>
                 <div class="user">
-                    <a href="#" class="user_img">
+                    <a class="user_img">
                         <img src="/assets/img/user.svg" alt="user-circle-solid">
                     </a>
                     <ul class="sub_menu">
@@ -58,7 +59,7 @@
                             <a href="service-learning.html">我的服務學習</a>
                         </li>
                         <li class="logout">
-                            <a href="login.html">登出</a>
+                            <a>登出</a>
                         </li>
                     </ul>
                 </div>
@@ -78,7 +79,7 @@
                     <a href="service-learning.html">我的服務學習</a>
                 </li>
                 <li class="logout">
-                    <a href="login.html">登出</a>
+                    <a>登出</a>
                 </li>
             </ul>
             <div class="nav_burger">
@@ -106,35 +107,7 @@
                         <th scope="col"></th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td data-title="審核情況" class="success"><span>●</span>通過</td>
-                        <td data-title="類別">自然科學領域化學專長</td>
-                        <td data-title="服務內容說明">測試</td>
-                        <td data-title="日期">2019-12-01 ~ 2019-12-31</td>
-                        <td data-title="時段">08:00 ~ 17:00</td>
-                        <td data-title="時數">100</td>
-                        <td><a href="#" class="btn_table disabled">編輯</a></td>
-                    </tr>
-                    <tr>
-                        <td data-title="審核情況" class="waiting"><span>●</span>未審核</td>
-                        <td data-title="類別">同時認列教育實習服務暨志工服務</td>
-                        <td data-title="服務內容說明">史懷哲</td>
-                        <td data-title="日期">2019-12-01 ~ 2019-12-31</td>
-                        <td data-title="時段">09:00 ~ 17:10</td>
-                        <td data-title="時數">20</td>
-                        <td><a href="#" class="btn_table">編輯</a></td>
-                    </tr>
-                    <tr>
-                        <td data-title="審核情況" class="danger"><span>●</span>未通過</td>
-                        <td data-title="類別">同時認列教育實習服務暨志工服務</td>
-                        <td data-title="服務內容說明">史懷哲</td>
-                        <td data-title="日期">2019-12-01 ~ 2019-12-31</td>
-                        <td data-title="時段">09:00 ~ 17:10</td>
-                        <td data-title="時數">20</td>
-                        <td><a href="#" class="btn_table">編輯</a></td>
-                    </tr>
-
+                <tbody></tbody>
                 </tbody>
             </table>
         </div>
@@ -149,7 +122,7 @@
     </footer>
 
     <!-- Logout Modal-->
-    <!-- <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -166,10 +139,10 @@
                 </div>
             </div>
         </div>
-    </div> -->
+    </div>
 
     <!-- Update Review Modal -->
-    <!-- <div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="updateReviewLabel"
+    <div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="updateReviewLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
@@ -193,7 +166,7 @@
                 </form>
             </div>
         </div>
-    </div> -->
+    </div>
 
     <!-- Overlay -->
     <!-- <div id="overlay">
@@ -224,6 +197,8 @@
     <script src="/assets/js/student-service-learning.js?v=0.2.0"></script>
     <script src="/assets/js/navbar.js?v=0.2.0"></script>
     <script src="/assets/js/scroll.js?v=0.2.0"></script>
+    <script src="/assets/js/utils.js?v=0.2.0"></script>
+    <script src="/assets/js/modal.js?v=0.2.0"></script>
 
 </body>
 

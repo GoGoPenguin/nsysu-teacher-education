@@ -75,8 +75,7 @@ const getStudentCourses = () => {
                     `
 
                     if (element.Status !== 'pass') {
-                        result = `${result}<td><a class="btn_table">編輯</a></td></tr>`
-                        // result = `${result}<td><button class="btn btn-primary" onclick="edit(${index})" id="${element.ID}">編輯</button></td></tr>`
+                        result = `${result}<td><a class="btn_table" onclick="edit(${index})" id="${element.ID}">編輯</a></td></tr>`
                     } else {
                         result = `${result}<td><a class="btn_table disabled">編輯</a></td></tr>`
                     }
@@ -111,8 +110,7 @@ $('#updateReviewModal form').on('submit', (e) => {
             'Review': review,
         },
         beforeSend: (xhr) => {
-            $('#updateReviewModal button.btn.btn-primary').html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>&nbsp載入中...')
-            $('#updateReviewModal button.btn.btn-primary').attr("disabled", true)
+            $('#updateReviewModal .btn_table').addClass("disabled")
             setHeader(xhr)
         },
         error: (xhr) => {
@@ -138,10 +136,8 @@ $('#updateReviewModal form').on('submit', (e) => {
             }
         },
         complete: () => {
-            $('#updateReviewModal button.btn.btn-primary').html('送出')
-            $('#updateReviewModal button.btn.btn-primary').attr("disabled", false)
+            $('#updateReviewModal .btn_table').removeClass("disabled")
             $('#updateReviewModal').modal('hide')
-            $(`button#${studentCourseID}`).parent().prev().html(review)
         }
     })
 })

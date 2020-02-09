@@ -52,6 +52,10 @@ $('div.flex-sb-m button.close').click(() => {
     $('div.flex-sb-m div.alert-danger').hide('slow')
 })
 
+$('li.logout').click(() => {
+    $('#logoutModal').modal('show')
+})
+
 $('#logoutModal button.btn.btn-primary').click(() => {
     $.ajax({
         url: `${config.server}/v1/logout`,

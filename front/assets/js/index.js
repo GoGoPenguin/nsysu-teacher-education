@@ -234,7 +234,7 @@ const getLectures = () => {
                     }
 
                     $('#lecture tbody').append(`
-                        <tr>
+                        <tr onclick="detail(${element.ID})">
                             <td data-title="科目名稱">${element.Name}</td>
                             <td data-title="最低學分">${element.MinCredit}</td>
                             <td data-title="備註">${element.Comment}</td>
@@ -368,7 +368,7 @@ const signUpServiceLearning = (id, el) => {
     });
 }
 
-const detail = (id, el) => {
+const detail = (id) => {
     $.ajax({
         url: `${config.server}/v1/leture/${id}`,
         type: 'GET',

@@ -21,14 +21,15 @@
     <script src="/assets/js/bootstrap.js"></script>
 
     <!-- Bootstrap core CSS -->
-    <!-- <link href="/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/node_modules/@fortawesome/fontawesome-free/css/all.css" rel="stylesheet"> -->
+    <!-- <link href="/node_modules/bootstrap/dist/css/" rel="stylesheet"> -->
+    <link href="/node_modules/@fortawesome/fontawesome-free/css/all.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <link href="/node_modules/startbootstrap-scrolling-nav/css/scrolling-nav.css" rel="stylesheet">
     <link href="/assets/css/style.css" rel="stylesheet">
     <link href="/assets/css/index.css?v=0.2.0" rel="stylesheet">
     <link href="/assets/css/overlay.css?v=0.2.0" rel="stylesheet">
+    <link href="/assets/css/modal.css?v=0.2.0" rel="stylesheet">
 
 </head>
 
@@ -54,7 +55,7 @@
                     <a href="#education" class="list">教育學分</a>
                 </li>
                 <div class="user">
-                    <a href="#" class="user_img">
+                    <a class="user_img">
                         <img src="/assets/img/user.svg" alt="user-circle-solid">
                     </a>
                     <ul class="sub_menu">
@@ -68,7 +69,7 @@
                             <a href="service-learning.html">我的服務學習</a>
                         </li>
                         <li class="logout">
-                            <a href="login.html">登出</a>
+                            <a>登出</a>
                         </li>
                     </ul>
                 </div>
@@ -97,7 +98,7 @@
                     <a href="service-learning.html">我的服務學習</a>
                 </li>
                 <li class="logout">
-                    <a href="#">登出</a>
+                    <a>登出</a>
                 </li>
             </ul>
             <div class="nav_burger">
@@ -194,7 +195,7 @@
                     <h2>教育學分</h2>
                     <span>提供線上辦理教育學分認證。</span>
                 </div>
-                <a href="http://selcrs.nsysu.edu.tw/gadchk/edu_chk_login.htm" class="btn">點此連結至本校系統 <img
+                <a href="http://selcrs.nsysu.edu.tw/gadchk/edu_chk_login.htm" class="btn" target="_blank">點此連結至本校系統 <img
                         src="/assets/img/icon-start.svg"></a>
             </div>
             <div class="right">
@@ -210,8 +211,7 @@
     </footer>
 
     <!-- Logout Modal-->
-    <!-- <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
+    <div class="modal fade" id="logoutModal" tabindex="-1">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -227,10 +227,10 @@
                 </div>
             </div>
         </div>
-    </div> -->
+    </div>
 
     <!-- Course Modal-->
-    <!-- <div class="modal fade" id="courseModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal fade" id="courseModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -258,10 +258,10 @@
                 </form>
             </div>
         </div>
-    </div> -->
+    </div>
 
     <!-- Detail Modal-->
-    <!-- <div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    <div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
             <div class="modal-content">
@@ -305,7 +305,7 @@
                 </div>
             </div>
         </div>
-    </div> -->
+    </div>
 
     <!-- Overlay -->
     <!-- <div id="overlay">
@@ -334,6 +334,8 @@
     <script src="/assets/js/index.js?v=0.2.0"></script>
     <script src="/assets/js/navbar.js?v=0.2.0"></script>
     <script src="/assets/js/scroll.js?v=0.2.0"></script>
+    <script src="/assets/js/utils.js?v=0.2.0"></script>
+    <script src="/assets/js/modal.js?v=0.2.0"></script>
 
 </body>
 

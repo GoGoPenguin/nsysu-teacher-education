@@ -50,7 +50,7 @@ const getStudentLecture = () => {
                 `)
             } else {
                 let html = ''
-                response.list.forEach((element, index) => {
+                response.list.forEach((element) => {
                     html += `
                         <tr>
                             <td class="${element.Pass ? 'success' : 'danger'}"><span>●</span>${element.Pass ? '通過' : '未通過'}</td>
@@ -61,7 +61,7 @@ const getStudentLecture = () => {
                         </tr>
                     `
                 })
-                $('#student-lecture tbody').append(html)
+                $('#student-lecture tbody').html(html)
             }
         }
     });
@@ -79,8 +79,8 @@ const getStudentLectureDetail = (id) => {
         },
         success: (response) => {
             if (response.code === 0) {
-                editedItem = response.data.Lecture
-                let lecture = response.data.Lecture
+                editedItem = response.data.Leture
+                let lecture = response.data.Leture
                 let html = ''
 
                 for (const category of lecture.Categories) {
@@ -388,8 +388,7 @@ const updateStudentLecturePass = (lectureID, pass) => {
 }
 
 const applictionForm = (el) => {
-    $(el).attr('disabled', true)
-    $(el).html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>&nbsp下載中...')
+    $(el).addClass('disabled')
 
     setTimeout(() => {
         let doc = new jsPDF()
@@ -599,7 +598,7 @@ const applictionForm = (el) => {
 
         doc.save(`${editedItem.Name}申請表.pdf`)
 
-        $(el).attr('disabled', false)
+        $(el).removeClass('disabled')
         $(el).html('下載申請書')
     }, 1)
 }

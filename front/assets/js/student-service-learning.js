@@ -44,7 +44,7 @@ const getStudentServiceLearning = () => {
                 `)
             } else {
                 response.list.forEach((element, index) => {
-                    let color = 'class="waitting"'
+                    let color = 'class="waiting"'
                     if (element.Status === 'pass') {
                         color = 'class="success"'
                     } else if (element.Status === 'failed') {
@@ -63,7 +63,7 @@ const getStudentServiceLearning = () => {
                     `
 
                     if (element.Status !== 'pass') {
-                        result = `${result}<td><a class="btn_table">編輯</a></td></tr>`
+                        result = `${result}<td><a class="btn_table" onclick="edit(${element.ID})">編輯</a></td></tr>`
                         // result = `${result}<td><button class="btn btn-primary" onclick="edit(${element.ID})">編輯</button></td></tr>`
                     } else {
                         result = `${result}<td><a class="btn_table disabled">編輯</a></td></tr>`

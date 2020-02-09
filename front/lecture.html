@@ -21,14 +21,15 @@
     <script src="/assets/js/bootstrap.js?v=0.2.0"></script>
 
     <!-- Bootstrap core CSS -->
-    <!-- <link href="/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/node_modules/@fortawesome/fontawesome-free/css/all.css" rel="stylesheet"> -->
+    <!-- <link href="/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet"> -->
+    <link href="/node_modules/@fortawesome/fontawesome-free/css/all.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <link href="/node_modules/startbootstrap-scrolling-nav/css/scrolling-nav.css" rel="stylesheet">
     <link href="/assets/css/style.css" rel="stylesheet">
     <link href="/assets/css/lecture.css?v=0.2.0" rel="stylesheet">
     <link href="/assets/css/overlay.css?v=0.2.0" rel="stylesheet">
+    <link href="/assets/css/modal.css?v=0.2.0" rel="stylesheet">
 
 </head>
 
@@ -42,7 +43,7 @@
             <ul class="main_menu">
                 <div class="greeting">Hi, OOO同學</div>
                 <div class="user">
-                    <a href="#" class="user_img">
+                    <a class="user_img">
                         <img src="/assets/img/user.svg" alt="user-circle-solid">
                     </a>
                     <ul class="sub_menu">
@@ -56,7 +57,7 @@
                             <a href="service-learning.html">我的服務學習</a>
                         </li>
                         <li class="logout">
-                            <a href="login.html">登出</a>
+                            <a>登出</a>
                         </li>
                     </ul>
                 </div>
@@ -76,7 +77,7 @@
                     <a href="service-learning.html">我的服務學習</a>
                 </li>
                 <li class="logout">
-                    <a href="login.html">登出</a>
+                    <a>登出</a>
                 </li>
             </ul>
             <div class="nav_burger">
@@ -102,64 +103,7 @@
                         <th scope="col"></th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td data-title="狀態" class="success"><span>●</span>通過</td>
-                        <td data-title="科目名稱">自然科學領域化學專長</td>
-                        <td data-title="最低學分">42</td>
-                        <td data-title="備註">適合化學系所等</td>
-                        <td><a href="#" class="btn_table">下載申請書</a></td>
-                    </tr>
-
-                    <tr>
-                        <td data-title="狀態" class="danger"><span>●</span>尚缺10學分</td>
-                        <td data-title="科目名稱">藝術領域藝術生活科－表演藝術專長</td>
-                        <td data-title="最低學分">42</td>
-                        <td data-title="備註">適合劇場藝術學系所等</td>
-                        <td><a href="#" class="btn_table disabled">下載申請書</a></td>
-                    </tr>
-
-                    <tr>
-                        <td data-title="狀態" class="danger"><span>●</span>尚缺4學分</td>
-                        <td data-title="科目名稱">藝術領域表演藝術專長</td>
-                        <td data-title="最低學分">42</td>
-                        <td data-title="備註">適合劇場藝術學系所等</td>
-                        <td><a href="#" class="btn_table disabled">下載申請書</a></td>
-                    </tr>
-
-                    <tr>
-                        <td data-title="狀態" class="danger"><span>●</span>尚缺12學分</td>
-                        <td data-title="科目名稱">語文領域國語文專長</td>
-                        <td data-title="最低學分">48</td>
-                        <td data-title="備註">適合中國文學系所等</td>
-                        <td><a href="#" class="btn_table disabled">下載申請書</a></td>
-                    </tr>
-
-                    <tr>
-                        <td data-title="狀態" class="danger"><span>●</span>尚缺12學分</td>
-                        <td data-title="科目名稱">語文領域國語文專長</td>
-                        <td data-title="最低學分">48</td>
-                        <td data-title="備註">適合中國文學系所等</td>
-                        <td><a href="#" class="btn_table disabled">下載申請書</a></td>
-                    </tr>
-
-                    <tr>
-                        <td data-title="狀態" class="danger"><span>●</span>尚缺12學分</td>
-                        <td data-title="科目名稱">語文領域國語文專長</td>
-                        <td data-title="最低學分">48</td>
-                        <td data-title="備註">適合中國文學系所等</td>
-                        <td><a href="#" class="btn_table disabled">下載申請書</a></td>
-                    </tr>
-
-                    <tr>
-                        <td data-title="狀態" class="danger"><span>●</span>尚缺12學分</td>
-                        <td data-title="科目名稱">語文領域國語文專長</td>
-                        <td data-title="最低學分">48</td>
-                        <td data-title="備註">適合中國文學系所等</td>
-                        <td><a href="#" class="btn_table disabled">下載申請書</a></td>
-                    </tr>
-
-                </tbody>
+                <tbody></tbody>
             </table>
         </div>
     </section>
@@ -173,7 +117,7 @@
     </footer>
 
     <!-- Logout Modal-->
-    <!-- <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -190,10 +134,10 @@
                 </div>
             </div>
         </div>
-    </div> -->
+    </div>
 
     <!-- Detail Modal-->
-    <!-- <div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    <div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl" role="document">
             <div class="modal-content">
@@ -263,7 +207,7 @@
                 <div class="modal-footer"></div>
             </div>
         </div>
-    </div> -->
+    </div>
 
     <!-- Overlay -->
     <!-- <div id="overlay">
@@ -294,6 +238,8 @@
     <script src="/assets/font/kaiu-normal.js?v=0.2.0"></script>
     <script src="/assets/js/navbar.js?v=0.2.0"></script>
     <script src="/assets/js/scroll.js?v=0.2.0"></script>
+    <script src="/assets/js/utils.js?v=0.2.0"></script>
+    <script src="/assets/js/modal.js?v=0.2.0"></script>
 
 </body>
 
