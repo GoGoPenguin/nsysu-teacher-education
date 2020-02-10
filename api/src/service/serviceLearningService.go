@@ -130,12 +130,12 @@ func SingUpServiceLearning(account, serviceLearningID string) (result interface{
 		return nil, errors.NotFoundError("service-learning ID " + serviceLearningID)
 	}
 
-	studentServiceLearning := &gorm.StudentServiceLearning{
-		StudentID:         student.ID,
-		ServiceLearningID: typecast.StringToUint(serviceLearningID),
-	}
+	// studentServiceLearning := &gorm.StudentServiceLearning{
+	// 	StudentID:         student.ID,
+	// 	ServiceLearningID: typecast.StringToUint(serviceLearningID),
+	// }
 
-	gorm.StudentServiceLearningDao.New(tx, studentServiceLearning)
+	// gorm.StudentServiceLearningDao.New(tx, studentServiceLearning)
 
 	return "success", nil
 }

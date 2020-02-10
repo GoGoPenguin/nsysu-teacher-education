@@ -15,6 +15,7 @@ $(document).ready(() => {
     loading()
 
     Promise.all([
+        getStudentInformation(),
         getStudentServiceLearning(),
     ]).then(() => {
         unloading()
@@ -24,6 +25,23 @@ $(document).ready(() => {
         }, 1500)
     })
 })
+
+const getStudentInformation = () => {
+    $.ajax({
+        url: `${config.server}/v1/user`,
+        type: 'GET',
+        beforeSend: (xhr) => {
+            setHeader(xhr)
+        },
+        error: (xhr) => {
+            errorHandle(xhr, "錯誤")
+        },
+        success: (response) => {
+            student = Object.assign({}, response.data)
+            $('div.greeting').html(`Hi, ${student.Name}同學`)
+        }
+    });
+}
 
 const getStudentServiceLearning = () => {
     $.ajax({

@@ -128,10 +128,11 @@ func SingUpLeture(account, letureID string) (result interface{}, e *errors.Error
 			}
 		}
 	}
+	tx.Rollback()
 
-	if err := tx.Commit().Error; err != nil {
-		panic(err)
-	}
+	// if err := tx.Commit().Error; err != nil {
+	// 	panic(err)
+	// }
 
 	return "success", nil
 }

@@ -27,6 +27,7 @@ const getStudentInformation = () => {
         },
         success: (response) => {
             student = Object.assign({}, response.data)
+            $('div.greeting').html(`Hi, ${student.Name}同學`)
         }
     });
 }
