@@ -1,8 +1,8 @@
 $('#login-form').on('submit', (e) => {
     e.preventDefault();
 
-    let account = $('input.input100.account').val()
-    let password = $('input.input100.password').val()
+    let account = $('input#account').val()
+    let password = $('input#password').val()
 
     $.ajax({
         url: `${config.server}/v1/login`,
@@ -13,14 +13,10 @@ $('#login-form').on('submit', (e) => {
             'Role': 'student',
         },
         beforeSend: () => {
-            $('#login').html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>&nbsp載入中...')
-            $('#login').attr("disabled", true)
+            $('button#login').attr("disabled", true)
         },
         error: (xhr) => {
-            $('div.flex-sb-m div.alert-danger').show('fast')
-            setTimeout(() => {
-                $('div.flex-sb-m div.alert-danger').hide('slow')
-            }, 2000)
+            console.error(xhr)
         },
         success: (response) => {
             if (response.code != 0) {
@@ -42,14 +38,9 @@ $('#login-form').on('submit', (e) => {
             }
         },
         complete: (jqXHR, textStatus) => {
-            $('#login').html('送出')
-            $('#login').attr("disabled", false)
+            $('button#login').attr("disabled", false)
         }
     });
-})
-
-$('div.flex-sb-m button.close').click(() => {
-    $('div.flex-sb-m div.alert-danger').hide('slow')
 })
 
 $('li.logout').click(() => {

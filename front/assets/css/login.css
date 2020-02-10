@@ -3,6 +3,7 @@ body {
 }
 
 /* header開始 */
+
 .header {
   display: inline-block;
   position: relative;
@@ -23,6 +24,8 @@ body {
 
 .header .container {
   width: 90%;
+  padding: 0;
+  margin: 0 auto;
 }
 
 .header .container h1 {
@@ -35,6 +38,7 @@ body {
   margin: 15% 0;
   position: relative;
   top: 15%;
+  z-index: 2;
 }
 
 .header .header_img {
@@ -79,22 +83,54 @@ body {
     width: 100%;
     height: 50vh;
   }
-
+  .header .container h1 {
+    margin: 0;
+    padding: 10% 0;
+  }
+  .header .background {
+    display: none;
+  }
   .header .logo_img {
     display: none;
   }
-
-
+  .header .header_img {
+    bottom: -12%;
+    z-index: 1;
+  }
   .header .header_2_img {
     width: 15%;
-    top: 10%;
+    top: 35%;
     right: 5%;
+  }
+}
+
+@media screen and (max-width:650px) {
+  .header {
+    height: 40vh;
+  }
+  .header .header_img {
+    width: 100%;
+    bottom: -12%;
+  }
+  .header .container h1 {
+    font-size: 1.5rem;
+    padding: 40px 0;
+  }
+  .header .header_2_img {
+    top: 50%;
+  }
+}
+
+@media screen and (max-width:400px) {
+  .header .header_img {
+    bottom: -30px;
   }
 }
 
 /* header結束 */
 
 /* login開始 */
+
 .login {
   display: inline-block;
   position: relative;
@@ -110,6 +146,8 @@ body {
   min-width: 300px;
   left: 50%;
   top: 50%;
+  padding: 0;
+  margin: 0 auto;
   transform: translate(-50%, -50%);
 }
 
@@ -170,9 +208,21 @@ body {
     height: 50vh;
     background-color: #033139;
   }
-
   .login .container h2 {
     display: none;
+  }
+  .login .container .login_form .input:focus {
+    box-shadow: 0 0 5px 1px rgba(293, 154, 54, .6);
+  }
+}
+
+@media screen and (max-width:650px) {
+  .login {
+    height: 60vh;
+  }
+  .login .container {
+    width: 90%;
+    min-width: 290px;
   }
 }
 
