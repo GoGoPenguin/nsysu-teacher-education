@@ -54,12 +54,12 @@ const getStudentServiceLearning = () => {
                     let date = `${dayjs(element.ServiceLearning.Start).format('YYYY-MM-DD')} ~ ${dayjs(element.ServiceLearning.End).format('YYYY-MM-DD')}`
                     let result = `
                         <tr>
-                            <td ${color}><span>●</span>${STATUS[element.Status]}</td>
-                            <td>${TYPE[element.ServiceLearning.Type]}</td>
-                            <td>${element.ServiceLearning.Content}</td>
-                            <td>${date}</td>
-                            <td>${element.ServiceLearning.Session}</td>
-                            <td>${element.ServiceLearning.Hours}</td>
+                            <td data-title="審核情況" ${color}><span>●</span>${STATUS[element.Status]}</td>
+                            <td data-title="類別">${TYPE[element.ServiceLearning.Type]}</td>
+                            <td data-title="服務內容說明">${element.ServiceLearning.Content}</td>
+                            <td data-title="日期">${date}</td>
+                            <td data-title="時段">${element.ServiceLearning.Session}</td>
+                            <td data-title="時數">${element.ServiceLearning.Hours}</td>
                     `
 
                     if (element.Status !== 'pass') {

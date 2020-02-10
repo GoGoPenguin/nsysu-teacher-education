@@ -56,6 +56,10 @@ $('li.logout').click(() => {
     $('#logoutModal').modal('show')
 })
 
+$('li.logout a').click(() => {
+    $('#logoutModal').modal('show')
+})
+
 $('#logoutModal button.btn.btn-primary').click(() => {
     $.ajax({
         url: `${config.server}/v1/logout`,

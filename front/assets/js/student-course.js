@@ -47,9 +47,9 @@ const getStudentCourses = () => {
                     studentCourses.push(Object.assign({}, element))
 
                     let startDate = dayjs(element.Course.Start).format('YYYY-MM-DD')
-                    let startTime = dayjs(element.Course.Start).format('HH:mm:ss')
+                    let startTime = dayjs(element.Course.Start).format('HH:mm')
                     let endDate = dayjs(element.Course.End).format('YYYY-MM-DD')
-                    let endTime = dayjs(element.Course.End).format('HH:mm:ss')
+                    let endTime = dayjs(element.Course.End).format('HH:mm')
                     let time = ""
 
                     if (startDate == endDate) {

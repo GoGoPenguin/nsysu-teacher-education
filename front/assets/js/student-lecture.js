@@ -53,10 +53,10 @@ const getStudentLecture = () => {
                 response.list.forEach((element) => {
                     html += `
                         <tr>
-                            <td class="${element.Pass ? 'success' : 'danger'}"><span>●</span>${element.Pass ? '通過' : '未通過'}</td>
-                            <td>${element.Leture.Name}</td>
-                            <td>${element.Leture.MinCredit}</td>
-                            <td>${element.Leture.Comment}</td>
+                            <td data-title="狀態" class="${element.Pass ? 'success' : 'danger'}"><span>●</span>${element.Pass ? '通過' : '未通過'}</td>
+                            <td data-title="科目名稱">${element.Leture.Name}</td>
+                            <td data-title="最低學分">${element.Leture.MinCredit}</td>
+                            <td data-title="備註">${element.Leture.Comment}</td>
                             <td><a class="btn_table" onclick="getStudentLectureDetail(${element.ID})">編輯</a></td>
                         </tr>
                     `
