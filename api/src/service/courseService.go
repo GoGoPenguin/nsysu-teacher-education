@@ -145,20 +145,20 @@ func SingUpCourse(account, courseID, meal string) (result interface{}, e *errors
 		tx,
 		specification.IDSpecification(courseID),
 		specification.IsNullSpecification("deleted_at"),
-		specification.BiggerSpecification("start", time.Now().String()),
+		// specification.BiggerSpecification("start", time.Now().String()),
 	)
 
 	if len(*course) == 0 {
 		return nil, errors.NotFoundError("course ID " + courseID)
 	}
 
-	// srudentCourse := &gorm.StudentCourse{
-	// 	StudentID: student.ID,
-	// 	CourseID:  typecast.StringToUint(courseID),
-	// 	Meal:      meal,
-	// }
+	srudentCourse := &gorm.StudentCourse{
+		StudentID: student.ID,
+		CourseID:  typecast.StringToUint(courseID),
+		Meal:      meal,
+	}
 
-	// gorm.StudentCourseDao.New(tx, srudentCourse)
+	gorm.StudentCourseDao.New(tx, srudentCourse)
 
 	return "success", nil
 }

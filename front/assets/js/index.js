@@ -373,7 +373,6 @@ const detail = (id) => {
         url: `${config.server}/v1/leture/${id}`,
         type: 'GET',
         beforeSend: (xhr) => {
-            $(el).toggleClass("disabled")
             setHeader(xhr)
         },
         error: (xhr) => {
@@ -465,10 +464,6 @@ const detail = (id) => {
                     buttons: false,
                 })
             }
-        },
-        complete: () => {
-            $(el).html('查看')
-            $(el).toggleClass("disabled")
         }
     });
 }
