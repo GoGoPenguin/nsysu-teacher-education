@@ -230,11 +230,17 @@
 
 .block .table tr th:first-child {
     border-radius: 10px 0 0 10px;
+    min-width: 110px;
 }
 
 .block .table tr th:last-child {
     border-radius: 0 10px 10px 0;
     text-align: right;
+    min-width: 110px;
+}
+
+.block .table tr th:nth-child(5) {
+    min-width: 135px;
 }
 
 .block .table tr td:first-child {
@@ -253,6 +259,7 @@
 .block thead th {
     text-align: initial;
     padding: 13px 18px;
+    min-width: 70px;
 }
 
 .block tbody tr {
@@ -427,7 +434,7 @@
     margin-bottom: 0;
 }
 
-@media screen and (max-width:1000px) {
+@media screen and (max-width:1090px) {
     .footer {
         position: relative;
     }

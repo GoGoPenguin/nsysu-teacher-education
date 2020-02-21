@@ -228,9 +228,9 @@ const getLectures = () => {
                     })
 
                     if (studentLecture !== undefined) {
-                        action = `<a class="btn_table disabled">已報名</a>`
+                        action = `<a class="btn_table disabled">已申請</a>`
                     } else {
-                        action = `<a class="btn_table" onclick="signUpLecture(${element.ID}, this)">報名</a>`
+                        action = `<a class="btn_table" onclick="signUpLecture(${element.ID}, this)">申請</a>`
                     }
 
                     $('#lecture tbody').append(`
@@ -486,21 +486,21 @@ const signUpLecture = (id, el) => {
             if (response.code === 0) {
                 swal({
                     title: '',
-                    text: '報名成功',
+                    text: '申請成功',
                     icon: "success",
                     timer: 1500,
                     buttons: false,
                 })
-                $(el).html('已報名')
+                $(el).html('已申請')
             } else {
                 swal({
                     title: '',
-                    text: '報名失敗',
+                    text: '申請失敗',
                     icon: "error",
                     timer: 1500,
                     buttons: false,
                 })
-                $(el).html('報名')
+                $(el).html('申請')
                 $(el).toggleClass("disabled")
             }
         }

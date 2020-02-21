@@ -136,14 +136,31 @@
     -ms-flex-pack: justify;
     justify-content: space-between;
     padding: 1rem 1rem;
-    border-bottom: 1px solid #dee2e6;
     border-top-left-radius: 0.3rem;
     border-top-right-radius: 0.3rem;
 }
 
+.modal-header h5 {
+    font-size: 1rem;
+    font-weight: bold;
+    border-left: solid 5px #19AFC9;
+    padding-left: 5px;
+}
+
 .modal-header .close {
-    padding: 1rem 1rem;
+    cursor: pointer;
+    font-size: 1.5rem;
+    line-height: 1;
+    color: #8e8e8e;
+    border: initial;
+    background-color: initial;
+    padding: 5px 8px;
     margin: -1rem -1rem -1rem auto;
+    box-sizing: border-box;
+}
+
+.modal-header .close:hover {
+    color: #454545;
 }
 
 .modal-title {
@@ -156,6 +173,39 @@
     -ms-flex: 1 1 auto;
     flex: 1 1 auto;
     padding: 1rem;
+    text-align: center
+}
+
+#logoutModal .modal-body img {
+    position: relative;
+    left: 13px;
+}
+
+.modal-body h5 {
+    font-size: 1rem;
+    font-weight: normal;
+    margin: 25px auto 0;
+}
+
+.modal-body label {
+    margin-right: 10px;
+}
+
+.modal-body select {
+    appearance: none;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    padding: 5px 40px 5px 20px;
+    font-size: .9rem;
+    border-radius: 5px;
+    text-align: center;
+    border: solid 1px #E9E9E9;
+    background: url(/assets/img/select.svg) no-repeat scroll right center transparent;
+}
+
+.modal-body textarea {
+    width: 100%;
+    height: 180px;
 }
 
 .modal-footer {
@@ -164,11 +214,35 @@
     -ms-flex-align: center;
     align-items: center;
     -ms-flex-pack: end;
-    justify-content: flex-end;
-    padding: 1rem;
-    border-top: 1px solid #dee2e6;
+    justify-content: space-evenly;
+    padding: 3% 25% 6%;
     border-bottom-right-radius: 0.3rem;
     border-bottom-left-radius: 0.3rem;
+}
+
+.modal-footer .btn {
+    font-size: 1rem;
+    color: #fff;
+    padding: 10px 32px;
+    border: initial;
+    border-radius: 5px;
+    background-color: #19AFC9;
+    box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, .2);
+    cursor: pointer;
+    transition: all .2s ease-in-out;
+}
+
+.modal-footer .btn:hover {
+    background-color: #1294AB;
+}
+
+.modal-footer .btn.btn-secondary {
+    color: #8E8E8E;
+    background-color: #E9E9E9;
+}
+
+.modal-footer .btn.btn-secondary:hover {
+    background-color: #DFDFDF;
 }
 
 .modal-footer> :not(:first-child) {
@@ -187,10 +261,30 @@
     overflow: scroll;
 }
 
+@media screen and (max-width:480px) {
+    .modal-body select {
+        padding: 10px 70px;
+    }
+    .modal-footer {
+        flex-direction: column-reverse;
+        padding: 6%;
+    }
+    .modal-footer .btn {
+        display: block;
+        width: 100%;
+    }
+    .modal-footer> :not(:first-child) {
+        margin: 5px auto;
+    }
+    .modal-footer> :not(:last-child) {
+        margin: 5px auto;
+    }
+}
+
 @media (min-width: 576px) {
     .modal-dialog {
         max-width: 500px;
-        margin: 1.75rem auto;
+        margin: 5rem auto;
     }
     .modal-dialog-scrollable {
         max-height: calc(100% - 3.5rem);

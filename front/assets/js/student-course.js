@@ -61,6 +61,7 @@ const getStudentCourses = () => {
                 `)
             } else {
                 studentCourses = []
+                $('#student-course tbody').html('')
                 response.list.forEach((element, index) => {
                     studentCourses.push(Object.assign({}, element))
 
@@ -143,6 +144,7 @@ $('#updateReviewModal form').on('submit', (e) => {
                     timer: 1500,
                     buttons: false,
                 })
+                getStudentCourses()
             } else {
                 swal({
                     title: '',

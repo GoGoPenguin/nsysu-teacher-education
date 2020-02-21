@@ -60,6 +60,7 @@
     display: inline-block;
     margin-left: 40px;
     padding: 26px 0;
+    cursor: pointer;
 }
 
 .navbar .user_img {
@@ -312,7 +313,7 @@
 
 .block {
     width: 100%;
-    padding: 50px 0;
+    padding: 20px 0 50px 0;
 }
 
 .block .container {
@@ -343,9 +344,14 @@
     border-radius: 10px 0 0 10px;
 }
 
+#course.block .table tr th:nth-child(4) {
+    min-width: 70px;
+}
+
 .block .table tr th:last-child {
     border-radius: 0 10px 10px 0;
     text-align: right;
+    min-width: 110px;
 }
 
 .block .table tr td:first-child {

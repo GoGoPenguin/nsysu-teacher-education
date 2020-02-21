@@ -235,6 +235,15 @@
 .block .table tr th:last-child {
     border-radius: 0 10px 10px 0;
     text-align: right;
+    min-width: 110px;
+}
+
+#student-service-learning.block .table tr th:nth-child(3) {
+    min-width: 132px;
+}
+
+#student-service-learning.block .table tr th:nth-child(6) {
+    min-width: 70px;
 }
 
 .block .table tr td:first-child {
@@ -427,7 +436,7 @@
     margin-bottom: 0;
 }
 
-@media screen and (max-width:1000px) {
+@media screen and (max-width:1160px) {
     .footer {
         position: relative;
     }
