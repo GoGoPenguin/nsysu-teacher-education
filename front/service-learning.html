@@ -155,14 +155,28 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div class="form-group">
+                        <div class="form-group upload">
                             <label for="reference">佐證資料</label>
-                            <input id="reference" type="file" name="Reference">
+                            <div class="file">
+                                <input name="textfield" id="textField-1" class="filename" placeholder="選擇單一檔案">
+                                <input type="button" class="btn-browse" value="瀏覽...">
+                                <input type="file" name="Reference" class="btn-file"
+                                    onchange="document.getElementById('textField-1').value=this.value">
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="review">心得</label>
-                            <input id="review" type="file" name="Review">
+                        <div class="form-group upload">
+                            <label for="reference">心得</label>
+                            <div class="file">
+                                <input name="textfield" id="textField-2" class="filename" placeholder="選擇單一檔案">
+                                <input type="button" class="btn-browse" value="瀏覽...">
+                                <input type="file" name="Review" class="btn-file"
+                                    onchange="document.getElementById('textField-2').value=this.value">
+                            </div>
                         </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">取消</button>
+                        <button class="btn btn-primary">上傳</button>
                     </div>
                 </form>
             </div>
@@ -172,14 +186,7 @@
     <!-- Overlay -->
     <div id="overlay">
         <div class="spinner-border text-light" role="status">
-            <div class="sk-chase">
-                <div class="sk-chase-dot"></div>
-                <div class="sk-chase-dot"></div>
-                <div class="sk-chase-dot"></div>
-                <div class="sk-chase-dot"></div>
-                <div class="sk-chase-dot"></div>
-                <div class="sk-chase-dot"></div>
-            </div>
+            <span class="sr-only">Loading...</span>
         </div>
     </div>
 
