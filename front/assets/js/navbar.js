@@ -10,10 +10,13 @@ $(".user").mouseout(
     }
 )
 
-$(document).ready(function () {
+$(window).resize(function () {
     if ($(window).width() < 600) {
         $(".logo").css("width", "130px");
         $(".logo-img").attr("src", "/assets/img/logo-mobile.svg");
+    } else {
+        $(".logo").css("width", "410px");
+        $(".logo-img").attr("src", "/assets/img/logo.svg");
     }
 });
 
