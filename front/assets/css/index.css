@@ -410,6 +410,7 @@
     color: #FFF;
     padding: 8px 12px;
     border-radius: 5px;
+    cursor: pointer;
     box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, .2);
     transition: all .3s ease-in-out;
 }
@@ -595,7 +596,8 @@
     position: absolute;
     display: inline-block;
     right: 0;
-    width: 400px;
+    width: 30%;
+    max-width: 400px;
     vertical-align: middle;
 }
 

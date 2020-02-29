@@ -48,6 +48,7 @@
     display: inline-block;
     margin-left: 40px;
     padding: 26px 0;
+    cursor: pointer;
 }
 
 .navbar .user_img {
@@ -396,6 +397,7 @@
 
 .block.blue tbody .btn_table {
     background-color: #19AFC9;
+    cursor: pointer;
 }
 
 .block.blue tbody .btn_table:hover {

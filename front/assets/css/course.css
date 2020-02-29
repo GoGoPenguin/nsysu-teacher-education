@@ -48,6 +48,7 @@
     display: inline-block;
     margin-left: 40px;
     padding: 26px 0;
+    cursor: pointer;
 }
 
 .navbar .user_img {
@@ -411,6 +412,7 @@
 
 .block.yellow tbody .btn_table {
     background-color: #FDC236;
+    cursor: pointer;
 }
 
 .block.yellow tbody .btn_table:hover {

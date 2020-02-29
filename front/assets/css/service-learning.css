@@ -48,6 +48,7 @@
     display: inline-block;
     margin-left: 40px;
     padding: 26px 0;
+    cursor: pointer;
 }
 
 .navbar .user_img {
@@ -244,6 +245,7 @@
 
 .block .table tr th:first-child {
     border-radius: 10px 0 0 10px;
+    min-width: 105px;
 }
 
 .block .table tr th:last-child {
@@ -413,6 +415,7 @@
 
 .block.blue tbody .btn_table {
     background-color: #19AFC9;
+    cursor: pointer;
 }
 
 .block.blue tbody .btn_table:hover {
