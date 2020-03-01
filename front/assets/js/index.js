@@ -415,29 +415,29 @@ const detail = (id) => {
                                 let temp = '<tr>'
 
                                 if (condition1 && condition2 && condition3) {
-                                    temp += `<td colspan="2" rowspan="${subjects}" class="align-middle">${category.Name}</td>`
+                                    temp += `<td colspan="2" rowspan="${subjects}">${category.Name}</td>`
                                 }
 
                                 if (condition2 && condition3) {
-                                    temp += `<td colspan="2" rowspan="${subjectGroups}" class="align-middle">${type.Name}</td>`
+                                    temp += `<td colspan="2" rowspan="${subjectGroups}">${type.Name}</td>`
                                 }
 
-                                temp += `<td colspan="1" class="align-middle">${subject.Compulsory ? "必修" : "選修"}</td>`
+                                temp += `<td colspan="1">${subject.Compulsory ? "必修" : "選修"}</td>`
 
                                 if (group.MinCredit > 0) {
-                                    temp += `<td colspan="3" class="align-middle">${subject.Name}</td>`
+                                    temp += `<td colspan="3">${subject.Name}</td>`
 
                                     if (condition3) {
-                                        temp += `<td colspan="1" rowspan="${group.Subjects.length}" class="align-middle vericaltext">至少${group.MinCredit}學分</td>`
+                                        temp += `<td colspan="1" rowspan="${group.Subjects.length}">至少${group.MinCredit}學分</td>`
                                     }
                                 } else {
-                                    temp += `<td colspan="4" class="align-middle">${subject.Name}</td>`
+                                    temp += `<td colspan="4">${subject.Name}</td>`
                                 }
 
-                                temp += `<td colspan="1" class="align-middle">${subject.Credit}</td>`
+                                temp += `<td colspan="1">${subject.Credit}</td>`
 
                                 if (condition1 && condition2 && condition3) {
-                                    temp += `<td colspan="2" rowspan="${subjects}" class="align-middle">${comment}</td>`
+                                    temp += `<td colspan="2" rowspan="${subjects}">${comment}</td>`
                                 }
 
                                 temp += `</tr>`

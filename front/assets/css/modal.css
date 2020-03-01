@@ -190,20 +190,16 @@
 
 #detailModal .modal-body .example {
     padding: 15px;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     color: #5e5e5e;
     background-color: #F5F5F5;
     border-radius: 5px;
 }
 
 #detailModal .modal-body .example h5 {
-    font-weight: bo;
+    font-weight: bold;
     text-align: left;
     margin: 0 auto 10px;
-}
-
-#detailModal .modal-body .example table {
-    border: solid 1px #19AFC9;
 }
 
 #detailModal .modal-body table {
@@ -218,6 +214,40 @@
 
 #detailModal .modal-body table td {
     border: solid 1px #dee2e6;
+}
+
+#detailModal .modal-body .table-example {
+    border: solid 1px #dee2e6;
+}
+
+#detailModal .modal-body .table-title {
+    border: solid 1px #dee2e6;
+    text-align: left;
+}
+
+#detailModal .modal-body .table-detail {
+    border: solid 1px #dee2e6;
+    text-align: left;
+}
+
+#detailModal .modal-body .table-detail thead tr {
+    text-align: center;
+}
+
+#detailModal .modal-body .table-detail tr th:nth-child(3) {
+    min-width: 43px;
+}
+
+#detailModal .modal-body .table-detail tr th:nth-child(6) {
+    min-width: 75px;
+}
+
+#detailModal #categories td:nth-child(3) {
+    min-width: 43px;
+}
+
+#detailModal #categories input {
+    width: 100%;
 }
 
 .modal-body label {
@@ -346,6 +376,20 @@
     overflow: scroll;
 }
 
+@media screen and (max-width:992px) {
+    #detailModal .modal-body .table-detail tr th:nth-child(3) {
+        min-width: initial;
+    }
+
+    #detailModal .modal-body .table-detail tr th:nth-child(6) {
+        min-width: initial;
+    }
+
+    #detailModal #categories td:nth-child(3) {
+        min-width: initial;
+    }
+}
+
 @media screen and (max-width:480px) {
     .modal-body select {
         padding: 10px 70px;
@@ -382,6 +426,10 @@
     .modal-dialog {
         max-width: 500px;
         margin: 5rem auto;
+    }
+
+    .modal-dialog.modal-xl {
+        margin: 2rem auto;
     }
 
     .modal-dialog-scrollable {
