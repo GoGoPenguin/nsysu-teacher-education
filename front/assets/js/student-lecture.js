@@ -116,49 +116,49 @@ const getStudentLectureDetail = (id) => {
                                 let temp = '<tr>'
 
                                 if (condition1 && condition2 && condition3) {
-                                    temp += `<td colspan="2" rowspan="${subjects}" class="align-middle vericaltext" id="category${category.ID}">${category.Name}</td>`
+                                    temp += `<td colspan="2" rowspan="${subjects}" id="category${category.ID}">${category.Name}</td>`
                                 }
 
                                 if (condition2 && condition3) {
-                                    temp += `<td colspan="2" rowspan="${subjectGroups}" class="align-middle vericaltext" id="type${type.ID}">${type.Name}</td>`
+                                    temp += `<td colspan="2" rowspan="${subjectGroups}" id="type${type.ID}">${type.Name}</td>`
                                 }
 
-                                temp += `<td colspan="1" class="align-middle">${subject.Compulsory ? "必修" : "選修"}</td>`
+                                temp += `<td colspan="1">${subject.Compulsory ? "必修" : "選修"}</td>`
 
                                 if (group.MinCredit > 0) {
-                                    temp += `<td colspan="3" class="align-middle">${subject.Name}</td>`
+                                    temp += `<td colspan="3">${subject.Name}</td>`
 
                                     if (condition3) {
                                         temp += `<td colspan="1" rowspan="${group.Subjects.length}" class="align-middle vericaltext" id="group${group.ID}">至少${group.MinCredit}學分</td>`
                                     }
                                 } else {
-                                    temp += `<td colspan="4" class="align-middle" id="subject${subject.ID}">${subject.Name}</td>`
+                                    temp += `<td colspan="4" id="subject${subject.ID}">${subject.Name}</td>`
                                 }
 
-                                temp += `<td colspan="1" class="align-middle">${subject.Credit}</td>`
+                                temp += `<td colspan="1">${subject.Credit}</td>`
                                 temp += `
-                                    <td colspan="1" class="align-middle">
-                                        <input type="text" class="form-control form-control-sm" value="${subject.Year}" onblur="updateSubject(${id}, ${subject.ID})" id="year${subject.ID}">
+                                    <td colspan="1">
+                                        <input type="text" value="${subject.Year}" onblur="updateSubject(${id}, ${subject.ID})" id="year${subject.ID}">
                                     </td>`
                                 temp += `
-                                    <td colspan="1" class="align-middle">
-                                        <input type="text" class="form-control form-control-sm" value="${subject.Semester}" onblur="updateSubject(${id}, ${subject.ID})" id="semester${subject.ID}">
+                                    <td colspan="1">
+                                        <input type="text" value="${subject.Semester}" onblur="updateSubject(${id}, ${subject.ID})" id="semester${subject.ID}">
                                     </td>`
                                 temp += `
-                                    <td colspan="1" class="align-middle">
-                                        <input type="text" class="form-control form-control-sm" value="${subject.StudentName}" onblur="updateSubject(${id}, ${subject.ID})" id="studentName${subject.ID}">
+                                    <td colspan="1">
+                                        <input type="text" value="${subject.StudentName}" onblur="updateSubject(${id}, ${subject.ID})" id="studentName${subject.ID}">
                                     </td>`
                                 temp += `
-                                    <td colspan="1" class="align-middle">
-                                        <input type="text" class="form-control form-control-sm" value="${subject.StudentCredit}" onblur="updateSubject(${id}, ${subject.ID})" id="studentCredit${subject.ID}">
+                                    <td colspan="1">
+                                        <input type="text" value="${subject.StudentCredit}" onblur="updateSubject(${id}, ${subject.ID})" id="studentCredit${subject.ID}">
                                     </td>`
                                 temp += `
-                                    <td colspan="1" class="align-middle">
-                                        <input type="text" class="form-control form-control-sm" value="${subject.Score}" onblur="updateSubject(${id}, ${subject.ID})" id="score${subject.ID}">
+                                    <td colspan="1">
+                                        <input type="text" value="${subject.Score}" onblur="updateSubject(${id}, ${subject.ID})" id="score${subject.ID}">
                                     </td>`
 
                                 if (condition1 && condition2 && condition3) {
-                                    temp += `<td colspan="2" rowspan="${subjects}" class="align-middle">${comment}</td>`
+                                    temp += `<td colspan="2" rowspan="${subjects}">${comment}</td>`
                                 }
 
                                 temp += `</tr>`
@@ -273,11 +273,11 @@ const check = () => {
 
                 for (const subject of group.Subjects) {
                     if (
-                        subject.Year !== ''
-                        && subject.Semester !== ''
-                        && subject.StudentName !== ''
-                        && subject.StudentCredit !== ''
-                        && subject.Score !== ''
+                        subject.Year !== '' &&
+                        subject.Semester !== '' &&
+                        subject.StudentName !== '' &&
+                        subject.StudentCredit !== '' &&
+                        subject.Score !== ''
                     ) {
                         groupCredit += subject.Credit
                     } else {
@@ -428,40 +428,114 @@ const applictionForm = (el) => {
             headStyles: styleDef,
             footStyle: styleDef,
             styles: styleDef,
-            margin: { top: 20 },
+            margin: {
+                top: 20
+            },
             didDrawPage: didDrawPage,
             body: [
-                [
-                    { content: '姓名', styles: { cellWidth: cellWidth } },
-                    { content: student.Name, styles: { cellWidth: cellWidth } },
-                    { content: '聯絡電話', styles: { cellWidth: cellWidth } },
-                    { content: '' },
-                    { content: '身分證字號', styles: { cellWidth: cellWidth } },
-                    { content: '', colSpan: 2 },
+                [{
+                        content: '姓名',
+                        styles: {
+                            cellWidth: cellWidth
+                        }
+                    },
+                    {
+                        content: student.Name,
+                        styles: {
+                            cellWidth: cellWidth
+                        }
+                    },
+                    {
+                        content: '聯絡電話',
+                        styles: {
+                            cellWidth: cellWidth
+                        }
+                    },
+                    {
+                        content: ''
+                    },
+                    {
+                        content: '身分證字號',
+                        styles: {
+                            cellWidth: cellWidth
+                        }
+                    },
+                    {
+                        content: '',
+                        colSpan: 2
+                    },
                 ],
-                [
-                    { content: '畢業學校系所', styles: { cellWidth: cellWidth } },
-                    { content: student.Major, colSpan: 3 },
-                    { content: '學號', styles: { cellWidth: cellWidth } },
-                    { content: student.Account, colSpan: 2 },
+                [{
+                        content: '畢業學校系所',
+                        styles: {
+                            cellWidth: cellWidth
+                        }
+                    },
+                    {
+                        content: student.Major,
+                        colSpan: 3
+                    },
+                    {
+                        content: '學號',
+                        styles: {
+                            cellWidth: cellWidth
+                        }
+                    },
+                    {
+                        content: student.Account,
+                        colSpan: 2
+                    },
                 ],
-                [
-                    { content: '申請任教科別', styles: { cellWidth: cellWidth } },
-                    { content: '', colSpan: 6 },
+                [{
+                        content: '申請任教科別',
+                        styles: {
+                            cellWidth: cellWidth
+                        }
+                    },
+                    {
+                        content: '',
+                        colSpan: 6
+                    },
                 ],
-                [
-                    { content: '資格', styles: { cellWidth: cellWidth } },
-                    { content: '□ 參加教師資格考試\n□ 加科/加另一類科（請附教師證書影本）', colSpan: 3 },
-                    { content: '學程編號', styles: { cellWidth: cellWidth } },
-                    { content: student.Number, colSpan: 2 },
+                [{
+                        content: '資格',
+                        styles: {
+                            cellWidth: cellWidth
+                        }
+                    },
+                    {
+                        content: '□ 參加教師資格考試\n□ 加科/加另一類科（請附教師證書影本）',
+                        colSpan: 3
+                    },
+                    {
+                        content: '學程編號',
+                        styles: {
+                            cellWidth: cellWidth
+                        }
+                    },
+                    {
+                        content: student.Number,
+                        colSpan: 2
+                    },
                 ],
-                [
-                    { content: '修習起訖期間', styles: { cellWidth: cellWidth } },
-                    { content: '   年   月   日～    年   月   日（   年   月   日～   年   月   日他校學分採認）', colSpan: 6 },
+                [{
+                        content: '修習起訖期間',
+                        styles: {
+                            cellWidth: cellWidth
+                        }
+                    },
+                    {
+                        content: '   年   月   日～    年   月   日（   年   月   日～   年   月   日他校學分採認）',
+                        colSpan: 6
+                    },
                 ],
-                [
-                    { content: '教育部核定專門課程文號：   年   月   日臺教師(   )字第                    號函', colSpan: 7, styles: { cellWidth: cellWidth } },
-                ],
+                [{
+                    content: '教育部核定專門課程文號：   年   月   日臺教師(   )字第                    號函',
+                    colSpan: 7,
+                    styles: {
+                        cellWidth: cellWidth
+                    }
+                }, ],
             ],
         });
 
@@ -470,32 +544,146 @@ const applictionForm = (el) => {
             headStyles: styleDef,
             footStyle: styleDef,
             styles: styleDef,
-            margin: { top: 20 },
+            margin: {
+                top: 20
+            },
             showHead: 'everyPage',
             rowPageBreak: 'avoid',
             didDrawPage: didDrawPage,
             head: [
-                [
-                    { content: '師資生自行填寫（請用電腦打字）', colSpan: 10, styles: { halign: 'center' } },
-                    { content: '系所審查意見', colSpan: 3, rowSpan: 2, styles: { halign: 'center' } },
+                [{
+                        content: '師資生自行填寫（請用電腦打字）',
+                        colSpan: 10,
+                        styles: {
+                            halign: 'center'
+                        }
+                    },
+                    {
+                        content: '系所審查意見',
+                        colSpan: 3,
+                        rowSpan: 2,
+                        styles: {
+                            halign: 'center'
+                        }
+                    },
                 ],
-                [
-                    { content: '編號', colSpan: 1, rowSpan: 2, styles: { cellWidth: 9, fillColor: gray, halign: 'center' } },
-                    { content: '課程類別', colSpan: 2, rowSpan: 2, styles: { fillColor: gray, halign: 'center' } },
-                    { content: '教育部核定科目', colSpan: 2, cellWidth: 15, styles: { fillColor: gray, halign: 'center' } },
-                    { content: '師資生已修習科目（依成績單確實填寫）', colSpan: 5, styles: { fillColor: gray, halign: 'center' } },
+                [{
+                        content: '編號',
+                        colSpan: 1,
+                        rowSpan: 2,
+                        styles: {
+                            cellWidth: 9,
+                            fillColor: gray,
+                            halign: 'center'
+                        }
+                    },
+                    {
+                        content: '課程類別',
+                        colSpan: 2,
+                        rowSpan: 2,
+                        styles: {
+                            fillColor: gray,
+                            halign: 'center'
+                        }
+                    },
+                    {
+                        content: '教育部核定科目',
+                        colSpan: 2,
+                        cellWidth: 15,
+                        styles: {
+                            fillColor: gray,
+                            halign: 'center'
+                        }
+                    },
+                    {
+                        content: '師資生已修習科目（依成績單確實填寫）',
+                        colSpan: 5,
+                        styles: {
+                            fillColor: gray,
+                            halign: 'center'
+                        }
+                    },
                 ],
-                [
-                    { content: '科目名稱', cellWidth: 15, styles: { fillColor: gray, halign: 'center' } },
-                    { content: '學分', styles: { cellWidth: 9, fillColor: gray, halign: 'center' } },
-                    { content: '學年', styles: { cellWidth: 9, fillColor: gray, halign: 'center' } },
-                    { content: '學期', styles: { cellWidth: 9, fillColor: gray, halign: 'center' } },
-                    { content: '科目名稱', cellWidth: 15, styles: { fillColor: gray, halign: 'center' } },
-                    { content: '學分', styles: { cellWidth: 9, fillColor: gray, halign: 'center' } },
-                    { content: '成績', styles: { cellWidth: 9, fillColor: gray, halign: 'center' } },
-                    { content: '完全採認', styles: { cellWidth: 12, fillColor: gray, halign: 'center' } },
-                    { content: '不能採認', styles: { cellWidth: 12, fillColor: gray, halign: 'center' } },
-                    { content: '系主任簽章', styles: { cellWidth: 12, fillColor: gray, halign: 'center' } },
+                [{
+                        content: '科目名稱',
+                        cellWidth: 15,
+                        styles: {
+                            fillColor: gray,
+                            halign: 'center'
+                        }
+                    },
+                    {
+                        content: '學分',
+                        styles: {
+                            cellWidth: 9,
+                            fillColor: gray,
+                            halign: 'center'
+                        }
+                    },
+                    {
+                        content: '學年',
+                        styles: {
+                            cellWidth: 9,
+                            fillColor: gray,
+                            halign: 'center'
+                        }
+                    },
+                    {
+                        content: '學期',
+                        styles: {
+                            cellWidth: 9,
+                            fillColor: gray,
+                            halign: 'center'
+                        }
+                    },
+                    {
+                        content: '科目名稱',
+                        cellWidth: 15,
+                        styles: {
+                            fillColor: gray,
+                            halign: 'center'
+                        }
+                    },
+                    {
+                        content: '學分',
+                        styles: {
+                            cellWidth: 9,
+                            fillColor: gray,
+                            halign: 'center'
+                        }
+                    },
+                    {
+                        content: '成績',
+                        styles: {
+                            cellWidth: 9,
+                            fillColor: gray,
+                            halign: 'center'
+                        }
+                    },
+                    {
+                        content: '完全採認',
+                        styles: {
+                            cellWidth: 12,
+                            fillColor: gray,
+                            halign: 'center'
+                        }
+                    },
+                    {
+                        content: '不能採認',
+                        styles: {
+                            cellWidth: 12,
+                            fillColor: gray,
+                            halign: 'center'
+                        }
+                    },
+                    {
+                        content: '系主任簽章',
+                        styles: {
+                            cellWidth: 12,
+                            fillColor: gray,
+                            halign: 'center'
+                        }
+                    },
                 ],
             ],
             body: [],
@@ -506,31 +694,104 @@ const applictionForm = (el) => {
                 let temp = []
                 for (const group of type.Groups) {
                     for (const subject of group.Subjects) {
-                        if (subject.Year !== ''
-                            && subject.Semester !== ''
-                            && subject.StudentName !== ''
-                            && subject.StudentCredit !== ''
-                            && subject.Score !== ''
+                        if (subject.Year !== '' &&
+                            subject.Semester !== '' &&
+                            subject.StudentName !== '' &&
+                            subject.StudentCredit !== '' &&
+                            subject.Score !== ''
                         ) {
-                            temp.push([
-                                { content: '', styles: { fillColor: white } },
-                                { content: subject.Compulsory ? '必修' : '選修', styles: { fillColor: white, cellWidth: 7 } },
-                                { content: subject.Name, styles: { fillColor: white } },
-                                { content: subject.Credit, styles: { fillColor: white, halign: 'center' } },
-                                { content: subject.Year.split(',').join('\n'), styles: { fillColor: white, halign: 'center' } },
-                                { content: subject.Semester.split(',').join('\n'), styles: { fillColor: white, halign: 'center' } },
-                                { content: subject.StudentName.split(',').join('\n'), styles: { fillColor: white, halign: 'center' } },
-                                { content: subject.StudentCredit.split(',').join('\n'), styles: { fillColor: white, halign: 'center' } },
-                                { content: subject.Score.split(',').join('\n'), styles: { fillColor: white, halign: 'center' } },
-                                { content: '', styles: { fillColor: white } },
-                                { content: '', styles: { fillColor: white } },
-                                { content: '', styles: { fillColor: white } },
+                            temp.push([{
+                                    content: '',
+                                    styles: {
+                                        fillColor: white
+                                    }
+                                },
+                                {
+                                    content: subject.Compulsory ? '必修' : '選修',
+                                    styles: {
+                                        fillColor: white,
+                                        cellWidth: 7
+                                    }
+                                },
+                                {
+                                    content: subject.Name,
+                                    styles: {
+                                        fillColor: white
+                                    }
+                                },
+                                {
+                                    content: subject.Credit,
+                                    styles: {
+                                        fillColor: white,
+                                        halign: 'center'
+                                    }
+                                },
+                                {
+                                    content: subject.Year.split(',').join('\n'),
+                                    styles: {
+                                        fillColor: white,
+                                        halign: 'center'
+                                    }
+                                },
+                                {
+                                    content: subject.Semester.split(',').join('\n'),
+                                    styles: {
+                                        fillColor: white,
+                                        halign: 'center'
+                                    }
+                                },
+                                {
+                                    content: subject.StudentName.split(',').join('\n'),
+                                    styles: {
+                                        fillColor: white,
+                                        halign: 'center'
+                                    }
+                                },
+                                {
+                                    content: subject.StudentCredit.split(',').join('\n'),
+                                    styles: {
+                                        fillColor: white,
+                                        halign: 'center'
+                                    }
+                                },
+                                {
+                                    content: subject.Score.split(',').join('\n'),
+                                    styles: {
+                                        fillColor: white,
+                                        halign: 'center'
+                                    }
+                                },
+                                {
+                                    content: '',
+                                    styles: {
+                                        fillColor: white
+                                    }
+                                },
+                                {
+                                    content: '',
+                                    styles: {
+                                        fillColor: white
+                                    }
+                                },
+                                {
+                                    content: '',
+                                    styles: {
+                                        fillColor: white
+                                    }
+                                },
                             ])
                         }
                     }
                 }
                 if (temp.length > 0) {
-                    temp[0].splice(1, 0, { content: type.Name, rowSpan: temp.length, styles: { fillColor: white, cellWidth: 7 } })
+                    temp[0].splice(1, 0, {
+                        content: type.Name,
+                        rowSpan: temp.length,
+                        styles: {
+                            fillColor: white,
+                            cellWidth: 7
+                        }
+                    })
                     lecture.body = lecture.body.concat(temp);
                 }
             }
@@ -542,7 +803,9 @@ const applictionForm = (el) => {
             theme: 'plain',
             startY: doc.autoTable.previous.finalY + 5,
             styles: styleDef,
-            margin: { top: 20 },
+            margin: {
+                top: 20
+            },
             rowPageBreak: 'avoid',
             didDrawPage: didDrawPage,
             body: [],
@@ -554,7 +817,9 @@ const applictionForm = (el) => {
                 content += `${category.Name}${type.Name}____學分，`
             }
         }
-        result.body.push([{ content: content }])
+        result.body.push([{
+            content: content
+        }])
 
         doc.autoTable(result);
 
@@ -569,31 +834,89 @@ const applictionForm = (el) => {
         doc.autoTable({
             startY: doc.autoTable.previous.finalY + 5,
             styles: styleDef,
-            margin: { top: 20 },
+            margin: {
+                top: 20
+            },
             rowPageBreak: 'avoid',
             didDrawPage: didDrawPage,
             body: [
-                [
-                    { content: '審查順序：師培中心彙整表件、初審→各系所審查、採認→師培中心複審、建檔→教務處註冊組製證', colSpan: 4, styles: { fillColor: white } },
+                [{
+                    content: '審查順序：師培中心彙整表件、初審→各系所審查、採認→師培中心複審、建檔→教務處註冊組製證',
+                    colSpan: 4,
+                    styles: {
+                        fillColor: white
+                    }
+                }, ],
+                [{
+                        content: '申請人簽章',
+                        styles: {
+                            fillColor: gray,
+                            halign: 'center'
+                        }
+                    },
+                    {
+                        content: '師培中心承辦人核章',
+                        styles: {
+                            fillColor: gray,
+                            halign: 'center'
+                        }
+                    },
+                    {
+                        content: '系所主任核章',
+                        styles: {
+                            fillColor: gray,
+                            halign: 'center'
+                        }
+                    },
+                    {
+                        content: '教務處註冊組核章',
+                        styles: {
+                            fillColor: gray,
+                            halign: 'center'
+                        }
+                    },
                 ],
-                [
-                    { content: '申請人簽章', styles: { fillColor: gray, halign: 'center' } },
-                    { content: '師培中心承辦人核章', styles: { fillColor: gray, halign: 'center' } },
-                    { content: '系所主任核章', styles: { fillColor: gray, halign: 'center' } },
-                    { content: '教務處註冊組核章', styles: { fillColor: gray, halign: 'center' } },
+                [{
+                        content: '',
+                        rowSpan: 2,
+                        styles: {
+                            fillColor: white
+                        }
+                    },
+                    {
+                        content: '',
+                        styles: {
+                            fillColor: white
+                        }
+                    },
+                    {
+                        content: '',
+                        rowSpan: 2,
+                        styles: {
+                            fillColor: white
+                        }
+                    },
+                    {
+                        content: '',
+                        rowSpan: 2,
+                        styles: {
+                            fillColor: white
+                        }
+                    },
                 ],
-                [
-                    { content: '', rowSpan: 2, styles: { fillColor: white } },
-                    { content: '', styles: { fillColor: white } },
-                    { content: '', rowSpan: 2, styles: { fillColor: white } },
-                    { content: '', rowSpan: 2, styles: { fillColor: white } },
-                ],
-                [
-                    { content: '', styles: { fillColor: white } },
-                ],
-                [
-                    { content: content, colSpan: 4, styles: { fillColor: white } },
-                ],
+                [{
+                    content: '',
+                    styles: {
+                        fillColor: white
+                    }
+                }, ],
+                [{
+                    content: content,
+                    colSpan: 4,
+                    styles: {
+                        fillColor: white
+                    }
+                }, ],
             ],
         })
 
