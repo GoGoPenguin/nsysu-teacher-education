@@ -160,23 +160,23 @@
                             <div class="file">
                                 <input name="textfield" id="textField-1" class="filename" placeholder="選擇單一檔案">
                                 <input type="button" class="btn-browse" value="瀏覽...">
-                                <input type="file" name="Reference" class="btn-file"
+                                <input type="file" id='reference' class="btn-file"
                                     onchange="browse_file('textField-1', this.value)">
                             </div>
                         </div>
                         <div class="form-group upload">
-                            <label for="reference">心得</label>
+                            <label for="review">心得</label>
                             <div class="file">
                                 <input name="textfield" id="textField-2" class="filename" placeholder="選擇單一檔案">
                                 <input type="button" class="btn-browse" value="瀏覽...">
-                                <input type="file" name="Review" class="btn-file"
+                                <input type="file" id="review" class="btn-file"
                                     onchange="browse_file('textField-2', this.value)">
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-secondary" type="button" data-dismiss="modal">取消</button>
-                        <button class="btn btn-primary">上傳</button>
+                        <button class="btn btn-primary" type="submit">上傳</button>
                     </div>
                 </form>
             </div>
@@ -192,7 +192,6 @@
 
     <!-- Bootstrap core JavaScript -->
     <script src="/node_modules/jquery/dist/jquery.min.js"></script>
-    <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/node_modules/bootstrap-fileinput/js/fileinput.js"></script>
     <script src="/node_modules/bootstrap-fileinput/themes/fas/theme.js"></script>
     <script src="/node_modules/bootstrap-fileinput/js/locales/zh-TW.js"></script>

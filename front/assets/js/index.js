@@ -11,8 +11,8 @@ let studentLectures = []
 let editedID = null
 let editedItem = null
 
+loading()
 $(document).ready(() => {
-    loading()
 
     Promise.all([
         getStudentCourses(),
@@ -258,7 +258,7 @@ const getInformation = (id, filename) => {
             setHeader(xhr)
         },
         error: (xhr) => {
-            errorHandle(xhr, "錯誤")
+            errorHandle(xhr, "下載失敗")
         },
         success: (response) => {
             let a = document.createElement('a');

@@ -16,14 +16,17 @@ $('#login-form').on('submit', (e) => {
             $('button#login').attr("disabled", true)
         },
         error: (xhr) => {
-            console.error(xhr)
+            errorHandle(xhr, "發生錯誤")
         },
         success: (response) => {
             if (response.code != 0) {
-                $('div.flex-sb-m div.alert-danger').show('fast')
-                setTimeout(() => {
-                    $('div.flex-sb-m div.alert-danger').hide('slow')
-                }, 2000)
+                swal({
+                    title: '',
+                    text: '登入失敗，帳號或密碼錯誤',
+                    icon: "error",
+                    timer: 1000,
+                    buttons: false,
+                })
             } else {
                 let date = new Date()
                 date.setTime(date.getTime() + (response.data.Expire * 1000));
