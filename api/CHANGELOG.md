@@ -4,6 +4,16 @@ All notable changes are documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.0.0] - 2020.03.05
+
+### Changed
+
+- 修改資料庫`course`欄位長度
+
+### Fixed
+
+- 修正一些小bug
+
 ## [0.2.0] - 2019.11.25
 
 ### Added
