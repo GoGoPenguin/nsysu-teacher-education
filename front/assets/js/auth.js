@@ -1,8 +1,8 @@
 $('#login-form').on('submit', (e) => {
     e.preventDefault();
 
-    let account = $('input.input100.account').val()
-    let password = $('input.input100.password').val()
+    let account = $('input#account').val()
+    let password = $('input#password').val()
 
     $.ajax({
         url: `${config.server}/v1/login`,
@@ -13,21 +13,20 @@ $('#login-form').on('submit', (e) => {
             'Role': 'student',
         },
         beforeSend: () => {
-            $('#login').html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>&nbsp載入中...')
-            $('#login').attr("disabled", true)
+            $('button#login').attr("disabled", true)
         },
         error: (xhr) => {
-            $('div.flex-sb-m div.alert-danger').show('fast')
-            setTimeout(() => {
-                $('div.flex-sb-m div.alert-danger').hide('slow')
-            }, 2000)
+            errorHandle(xhr, "發生錯誤")
         },
         success: (response) => {
             if (response.code != 0) {
-                $('div.flex-sb-m div.alert-danger').show('fast')
-                setTimeout(() => {
-                    $('div.flex-sb-m div.alert-danger').hide('slow')
-                }, 2000)
+                swal({
+                    title: '',
+                    text: '登入失敗，帳號或密碼錯誤',
+                    icon: "error",
+                    timer: 1000,
+                    buttons: false,
+                })
             } else {
                 let date = new Date()
                 date.setTime(date.getTime() + (response.data.Expire * 1000));
@@ -42,14 +41,17 @@ $('#login-form').on('submit', (e) => {
             }
         },
         complete: (jqXHR, textStatus) => {
-            $('#login').html('送出')
-            $('#login').attr("disabled", false)
+            $('button#login').attr("disabled", false)
         }
     });
 })
 
-$('div.flex-sb-m button.close').click(() => {
-    $('div.flex-sb-m div.alert-danger').hide('slow')
+$('li.logout').click(() => {
+    $('#logoutModal').modal('show')
+})
+
+$('li.logout a').click(() => {
+    $('#logoutModal').modal('show')
 })
 
 $('#logoutModal button.btn.btn-primary').click(() => {

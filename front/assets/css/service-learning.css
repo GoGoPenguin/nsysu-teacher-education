@@ -1,12 +1,475 @@
-html, body {
-    height: 100%;
+/* 導覽列開始 */
+
+.navbar {
+    display: block;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: auto;
+    background-color: rgba(25, 175, 201, .9);
+    color: #FFF;
+    z-index: 1;
 }
 
-body {
+.navbar .nav {
+    position: relative;
+    box-sizing: border-box;
+    width: 90%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0;
     display: flex;
-    flex-flow: column;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
 }
 
-section#student-service-learning {
-    flex-grow: 1;
+.navbar .logo {
+    display: block;
+    width: 410px;
 }
+
+.navbar .logo img {
+    width: 100%;
+}
+
+.navbar .main_menu {
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+
+.navbar .main_menu .greeting {
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.navbar .user {
+    display: inline-block;
+    margin-left: 40px;
+    padding: 26px 0;
+    cursor: pointer;
+}
+
+.navbar .user_img {
+    display: block;
+    width: 54px;
+    height: auto;
+}
+
+.navbar .main_menu .user .sub_menu {
+    display: block;
+    position: absolute;
+    background-color: rgba(25, 175, 201, .8);
+    width: 160px;
+    height: 0;
+    padding: 0;
+    top: 100%;
+    right: 0;
+    transition-duration: .5s;
+    overflow: hidden;
+}
+
+.navbar .main_menu .user .sub_menu li {
+    display: block;
+    padding: 10px 25px;
+    border-bottom: none;
+    transition: all .2s ease-in-out;
+    cursor: pointer;
+}
+
+.navbar .main_menu .user .sub_menu li:hover {
+    background-color: rgba(25, 175, 201, 1);
+    border-bottom: none;
+}
+
+.navbar .main_menu .user .sub_menu li a {
+    color: #FFF;
+    font-size: 1rem;
+}
+
+.navbar .main_menu .user .sub_menu .logout {
+    border-top: solid 1px #FFF;
+}
+
+.navbar .nav .nav_burger {
+    display: none;
+}
+
+.navbar .nav .mobile_menu {
+    display: none;
+}
+
+@media screen and (max-width:1060px) {
+    .navbar {
+        padding: 18px 0;
+    }
+
+    .navbar .nav {
+        margin: 0;
+        width: initial;
+    }
+
+    .navbar .nav .logo {
+        position: relative;
+        left: 5%;
+    }
+
+    .navbar .nav .main_menu {
+        display: none;
+    }
+
+    .navbar .nav .nav_burger {
+        display: block;
+        position: relative;
+        right: 5%;
+        padding: 10px;
+        height: 44px;
+        cursor: pointer;
+        z-index: 1;
+    }
+
+    .navbar .nav .nav_burger .burger_bar {
+        display: block;
+        width: 24px;
+        height: 3px;
+        background-color: #fff;
+        border-radius: 20px;
+        margin-bottom: 5px;
+        transition: all .3s ease-in-out;
+    }
+
+    .navbar .nav .nav_burger .burger_bar.open {
+        background-color: transparent;
+    }
+
+    .navbar .nav .nav_burger .burger_bar.bar_before.open {
+        background-color: #fff;
+        transform: translateY(8px) rotate(45deg);
+    }
+
+    .navbar .nav .nav_burger .burger_bar.bar_after.open {
+        background-color: #fff;
+        transform: translateY(4px) rotate(-45deg);
+        margin-top: -12px;
+    }
+
+    .navbar .nav .mobile_menu {
+        display: block;
+        position: absolute;
+        background-color: rgba(25, 175, 201, .9);
+        top: 0;
+        right: 0;
+        height: 100vh;
+        width: 0px;
+        padding: 100px 0;
+        margin-top: -18px;
+        opacity: 0;
+        transition: all .3s ease-in-out;
+    }
+
+    .navbar .nav .mobile_menu.open {
+        display: block;
+        opacity: 1;
+        width: 260px;
+    }
+
+    .navbar .nav .mobile_menu li {
+        display: block;
+        text-align: center;
+        border-bottom: none;
+        padding: 10%;
+        cursor: pointer;
+        transition: all .3s ease-in-out;
+    }
+
+    .navbar .nav .mobile_menu li:hover {
+        background-color: rgba(255, 255, 255, .2);
+    }
+
+    .navbar .nav .mobile_menu .logout {
+        display: block;
+        width: 90px;
+        margin: 10% auto;
+        border: solid 1px #FFF;
+        border-radius: 5px;
+        padding: 10px 25px;
+    }
+
+    .navbar .nav .mobile_menu li a {
+        color: #FFF;
+        font-weight: bold;
+    }
+}
+
+@media screen and (max-width:480px) {
+    .navbar .nav .mobile_menu.open {
+        width: 80%;
+    }
+}
+
+@media screen and (max-width:420px) {
+    .navbar .nav .mobile_menu li {
+        padding: 5%;
+    }
+}
+
+/* 導覽列結束 */
+
+/* 表格區塊開始 */
+
+.block {
+    width: 100%;
+    padding: 90px 0 45px;
+}
+
+.block .container {
+    width: 90%;
+    max-width: 1280px;
+    margin: 0 auto;
+}
+
+.block .block_title {
+    margin: 30px 0;
+}
+
+.block .block_title h2 {
+    font-size: 1.9rem;
+    display: inline-block;
+    padding: 0 16px;
+}
+
+.block .table {
+    border-spacing: 0 8px;
+}
+
+.block .table tr th:first-child {
+    border-radius: 10px 0 0 10px;
+    min-width: 105px;
+}
+
+.block .table tr th:last-child {
+    border-radius: 0 10px 10px 0;
+    text-align: right;
+    min-width: 110px;
+}
+
+#student-service-learning.block .table tr th:nth-child(3) {
+    min-width: 132px;
+}
+
+#student-service-learning.block .table tr th:nth-child(6) {
+    min-width: 70px;
+}
+
+.block .table tr td:first-child {
+    border-radius: 10px 0 0 10px;
+}
+
+.block .table tr td:last-child {
+    border-radius: 0 10px 10px 0;
+    text-align: right;
+}
+
+.block thead tr {
+    color: #FFF;
+}
+
+.block thead th {
+    text-align: initial;
+    padding: 13px 18px;
+}
+
+.block tbody tr {
+    color: #3A3A3A;
+    transition: all .2s ease-in-out;
+}
+
+.block tbody .success {
+    font-weight: bold;
+}
+
+.block tbody .success span {
+    color: #57CC67;
+    padding-right: 5px;
+}
+
+.block tbody .danger {
+    font-weight: bold;
+    color: #E85E5E;
+}
+
+.block tbody .danger span {
+    color: #E85E5E;
+    padding-right: 5px;
+}
+
+.block tbody .waiting {
+    font-weight: bold;
+}
+
+.block tbody .waiting span {
+    color: #FDA736;
+    padding-right: 5px;
+}
+
+.block tbody .btn_table {
+    color: #FFF;
+    padding: 8px 12px;
+    border-radius: 5px;
+    box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, .2);
+    transition: all .3s ease-in-out;
+}
+
+.block tbody .btn_table.disabled {
+    display: none;
+}
+
+@media screen and (max-width:960px) {
+    .block {
+        padding: 80px 0 0;
+    }
+
+    .block .block_title h2 {
+        margin: 10px 0;
+    }
+}
+
+@media screen and (max-width:420px) {
+    .block .block_title {
+        margin: 20px 0;
+    }
+}
+
+/* 表格區塊結束 */
+
+/* RWD TABLE 開始*/
+
+@media screen and (max-width:1160px) {
+    .block thead {
+        display: none;
+    }
+
+    .block td {
+        display: block;
+        position: relative;
+        padding: 10px;
+        padding-left: 35%;
+    }
+
+    .block td:before {
+        content: attr(data-title);
+        font-weight: bold;
+        position: absolute;
+        left: 10px;
+        padding-right: 10px;
+        width: 30%;
+    }
+
+    .block.blue td:before {
+        color: #19AFC9;
+    }
+
+    .block.yellow td:before {
+        color: #FDC236;
+    }
+
+    .block .table tr td:last-child:before {
+        display: none;
+    }
+
+    .block .table tr td:last-child {
+        text-align: center;
+        padding: 10px;
+        border-radius: 0 0 5px 5px;
+    }
+
+    .block tbody .btn_table {
+        display: block;
+    }
+}
+
+/* RWD TABLE 結束 */
+
+/* 藍色css開始 */
+
+.block.blue {
+    background-color: #FFF;
+}
+
+.block.blue .block_title h2 {
+    border-left: solid 7px #19AFC9;
+}
+
+.block.blue thead tr {
+    background-color: #19AFC9;
+}
+
+.block.blue tbody tr {
+    background-color: #F5F5F5;
+}
+
+.block.blue tbody tr:hover {
+    background-color: #E3EDEF;
+}
+
+.block.blue tbody .btn_table {
+    background-color: #19AFC9;
+    cursor: pointer;
+}
+
+.block.blue tbody .btn_table:hover {
+    background-color: #1294AB;
+}
+
+.block.blue tbody .btn_table.disabled {
+    background-color: #E9E9E9;
+}
+
+/* 藍色css結束 */
+
+/* Footer開始 */
+
+.footer {
+    display: block;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    background-color: #19AFC9;
+    margin-top: 70px;
+}
+
+.footer .container {
+    width: 90%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 20px 0;
+}
+
+.footer .container img {
+    display: block;
+    width: 360px;
+    height: auto;
+    margin: 0 auto;
+}
+
+.footer .container p {
+    color: #FFF;
+    text-align: center;
+    font-size: .9rem;
+    margin-bottom: 0;
+}
+
+@media screen and (max-width:1160px) {
+    .footer {
+        position: relative;
+    }
+}
+
+@media screen and (max-width:480px) {
+    .footer .container img {
+        width: 260px;
+    }
+}
+
+/* Footer結束 */

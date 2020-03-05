@@ -1,0 +1,43 @@
+* {
+    font-family: "微軟正黑體", "Micorosft JhengHei", sans-serif;
+    box-sizing: border-box;
+    /* border: solid 1px; */
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    color: #3a3a3a;
+}
+
+::selection {
+    background-color: #033139;
+    color: #FFF;
+}
+
+::-moz-selection {
+    background-color: #033139;
+    color: #FFF;
+    /* Code for Firefox */
+}
+
+h1, h2, h3, h4, h5, h6 {
+    padding: 0;
+    margin: 0;
+}
+
+ul {
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+.clearfix {
+    content: "";
+    display: table;
+    clear: both;
+}

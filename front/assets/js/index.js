@@ -6,18 +6,18 @@ const TYPE = {
 
 let studentCourses = []
 let studentServiceLearnings = []
-let studentLetures = []
+let studentLectures = []
 
 let editedID = null
 let editedItem = null
 
+loading()
 $(document).ready(() => {
-    loading()
 
     Promise.all([
         getStudentCourses(),
         getStudentServiceLearning(),
-        getStudentLeture(),
+        getStudentLecture(),
     ]).then(() => {
         unloading()
     }).catch(() => {
@@ -68,12 +68,12 @@ const getStudentServiceLearning = () => {
             }
         },
         complete: () => {
-            getLetures()
+            getLectures()
         }
     });
 }
 
-const getStudentLeture = () => {
+const getStudentLecture = () => {
     $.ajax({
         url: `${config.server}/v1/leture/student`,
         type: 'GET',
@@ -86,7 +86,7 @@ const getStudentLeture = () => {
         success: (response) => {
             if (response.list.length > 0) {
                 response.list.forEach((element, index) => {
-                    studentLetures.push(Object.assign({}, element))
+                    studentLectures.push(Object.assign({}, element))
                 })
             }
         },
@@ -116,9 +116,9 @@ const getCourses = () => {
             } else {
                 response.list.forEach((element, index) => {
                     let startDate = dayjs(element.Start).format('YYYY-MM-DD')
-                    let startTime = dayjs(element.Start).format('HH:mm:ss')
+                    let startTime = dayjs(element.Start).format('HH:mm')
                     let endDate = dayjs(element.End).format('YYYY-MM-DD')
-                    let endTime = dayjs(element.End).format('HH:mm:ss')
+                    let endTime = dayjs(element.End).format('HH:mm')
                     let time = ""
                     let action = ''
 
@@ -133,18 +133,17 @@ const getCourses = () => {
                     })
 
                     if (studentCourse !== undefined) {
-                        action = `<button class="btn btn-primary" disabled>已報名</button>`
+                        action = `<a class="btn_table disabled" disabled>已報名</a>`
                     } else {
-                        action = `<button class="btn btn-primary" onclick="signUpCourse(${element.ID}, this)">報名</button>`
+                        action = `<a class="btn_table" onclick="signUpCourse(${element.ID}, this)">報名</a>`
                     }
 
                     $('#course tbody').append(`
                         <tr>
-                            <th scope="row">${index}</th>
-                            <td>${element.Topic}</td>
-                            <td>${time}</td>
-                            <td class="info" onclick="getInformation(${element.ID}, '${element.Information}')">${element.Information}</td>
-                            <td>${element.Type}</td>
+                            <td data-title="演講主題">${element.Topic}</td>
+                            <td data-title="研習時段">${time}</td>
+                            <td data-title="研習資訊" class="info" onclick="getInformation(${element.ID}, '${element.Information}')">${element.Information}</td>
+                            <td data-title="類別">${element.Type}</td>
                             <td>${action}</td>
                         </tr>
                     `)
@@ -182,14 +181,13 @@ const getServiceLearning = () => {
                     })
 
                     if (studentServiceLearning !== undefined) {
-                        action = `<button class="btn btn-primary" disabled>已報名</button>`
+                        action = `<a class="btn_table">已報名</a>`
                     } else {
-                        action = `<button class="btn btn-primary" onclick="signUpServiceLearning(${element.ID}, this)">報名</button>`
+                        action = `<a class="btn_table" onclick="signUpServiceLearning(${element.ID}, this)">報名</a>`
                     }
 
                     $('#service-learning tbody').append(`
                         <tr>
-                            <th scope="row">${index}</th>
                             <td>${TYPE[element.Type]}</td>
                             <td>${element.Content}</td>
                             <td>${startDate} ~ ${endDate}</td>
@@ -204,7 +202,7 @@ const getServiceLearning = () => {
     });
 }
 
-const getLetures = () => {
+const getLectures = () => {
     return $.ajax({
         url: `${config.server}/v1/leture`,
         type: 'GET',
@@ -216,7 +214,7 @@ const getLetures = () => {
         },
         success: (response) => {
             if (response.list.length == 0) {
-                $('#leture tbody').append(`
+                $('#lecture tbody').append(`
                     <tr>
                         <td scope="row" colspan="7" style="text-align: center">尚無資料</td>
                     </tr>
@@ -225,23 +223,22 @@ const getLetures = () => {
                 response.list.forEach((element, index) => {
                     let action = ''
 
-                    let studentLeture = studentLetures.find(studentLeture => {
+                    let studentLecture = studentLectures.find(studentLeture => {
                         return element.ID === studentLeture.Leture.ID
                     })
 
-                    if (studentLeture !== undefined) {
-                        action = `<button class="btn btn-primary" disabled>已報名</button>`
+                    if (studentLecture !== undefined) {
+                        action = `<a class="btn_table disabled">已申請</a>`
                     } else {
-                        action = `<button class="btn btn-primary" onclick="signUpLeture(${element.ID}, this)">報名</button>`
+                        action = `<a class="btn_table" onclick="signUpLecture(${element.ID}, this)">申請</a>`
                     }
 
-                    $('#leture tbody').append(`
-                        <tr>
-                            <th scope="row">${index}</th>
-                            <td>${element.Name}</td>
-                            <td>${element.MinCredit}</td>
-                            <td>${element.Comment}</td>
-                            <td><button class="btn btn-secondary mr-3" onclick="detail(${element.ID}, this)">查看</button>${action}</td>
+                    $('#lecture tbody').append(`
+                        <tr onclick="detail(${element.ID})">
+                            <td data-title="科目名稱">${element.Name}</td>
+                            <td data-title="最低學分">${element.MinCredit}</td>
+                            <td data-title="備註">${element.Comment}</td>
+                            <td>${action}</td>
                         </tr>
                     `)
                 })
@@ -261,7 +258,7 @@ const getInformation = (id, filename) => {
             setHeader(xhr)
         },
         error: (xhr) => {
-            errorHandle(xhr, "錯誤")
+            errorHandle(xhr, "下載失敗")
         },
         success: (response) => {
             let a = document.createElement('a');
@@ -293,8 +290,7 @@ $('#courseModal form').on('submit', (e) => {
             'Meal': $('#meal').val(),
         },
         beforeSend: (xhr) => {
-            $('#courseModal div.modal-footer button.btn.btn-primary').html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>&nbsp載入中...')
-            $('#courseModal div.modal-footer button.btn.btn-primary').attr("disabled", true)
+            $('#courseModal div.modal-footer button.btn.btn-primary').toggleClass("disabled")
             setHeader(xhr)
         },
         error: (xhr) => {
@@ -310,7 +306,7 @@ $('#courseModal form').on('submit', (e) => {
                     buttons: false,
                 })
                 $(editedItem).html('已報名')
-                $(editedItem).attr("disabled", true)
+                $(editedItem).toggleClass("disabled")
             } else {
                 swal({
                     title: '',
@@ -324,7 +320,7 @@ $('#courseModal form').on('submit', (e) => {
         },
         complete: () => {
             $('#courseModal div.modal-footer button.btn.btn-primary').html('送出')
-            $('#courseModal div.modal-footer button.btn.btn-primary').attr("disabled", false)
+            $('#courseModal div.modal-footer button.btn.btn-primary').toggleClass("disabled")
             $('#courseModal').modal('hide')
 
             editedID = null
@@ -341,8 +337,7 @@ const signUpServiceLearning = (id, el) => {
             'ServiceLearningID': id,
         },
         beforeSend: (xhr) => {
-            $(el).html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>&nbsp載入中...')
-            $(el).attr("disabled", true)
+            $(el).toggleClass("disabled")
             setHeader(xhr)
         },
         error: (xhr) => {
@@ -367,19 +362,17 @@ const signUpServiceLearning = (id, el) => {
                     buttons: false,
                 })
                 $(el).html('報名')
-                $(el).attr("disabled", false)
+                $(el).toggleClass("disabled")
             }
         }
     });
 }
 
-const detail = (id, el) => {
+const detail = (id) => {
     $.ajax({
         url: `${config.server}/v1/leture/${id}`,
         type: 'GET',
         beforeSend: (xhr) => {
-            $(el).html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>&nbsp載入中...')
-            $(el).attr("disabled", true)
             setHeader(xhr)
         },
         error: (xhr) => {
@@ -387,10 +380,10 @@ const detail = (id, el) => {
         },
         success: (response) => {
             if (response.code === 0) {
-                let leture = response.data
+                let lecture = response.data
                 let html = ''
 
-                for (let category of leture.Categories) {
+                for (let category of lecture.Categories) {
                     let content = ''
                     let comment = ''
                     let subjects = 0
@@ -422,29 +415,29 @@ const detail = (id, el) => {
                                 let temp = '<tr>'
 
                                 if (condition1 && condition2 && condition3) {
-                                    temp += `<td colspan="2" rowspan="${subjects}" class="align-middle">${category.Name}</td>`
+                                    temp += `<td colspan="2" rowspan="${subjects}">${category.Name}</td>`
                                 }
 
                                 if (condition2 && condition3) {
-                                    temp += `<td colspan="2" rowspan="${subjectGroups}" class="align-middle">${type.Name}</td>`
+                                    temp += `<td colspan="2" rowspan="${subjectGroups}">${type.Name}</td>`
                                 }
 
-                                temp += `<td colspan="1" class="align-middle">${subject.Compulsory ? "必修" : "選修"}</td>`
+                                temp += `<td colspan="1">${subject.Compulsory ? "必修" : "選修"}</td>`
 
                                 if (group.MinCredit > 0) {
-                                    temp += `<td colspan="3" class="align-middle">${subject.Name}</td>`
+                                    temp += `<td colspan="3">${subject.Name}</td>`
 
                                     if (condition3) {
-                                        temp += `<td colspan="1" rowspan="${group.Subjects.length}" class="align-middle vericaltext">至少${group.MinCredit}學分</td>`
+                                        temp += `<td colspan="1" rowspan="${group.Subjects.length}">至少${group.MinCredit}學分</td>`
                                     }
                                 } else {
-                                    temp += `<td colspan="4" class="align-middle">${subject.Name}</td>`
+                                    temp += `<td colspan="4">${subject.Name}</td>`
                                 }
 
-                                temp += `<td colspan="1" class="align-middle">${subject.Credit}</td>`
+                                temp += `<td colspan="1">${subject.Credit}</td>`
 
                                 if (condition1 && condition2 && condition3) {
-                                    temp += `<td colspan="2" rowspan="${subjects}" class="align-middle">${comment}</td>`
+                                    temp += `<td colspan="2" rowspan="${subjects}">${comment}</td>`
                                 }
 
                                 temp += `</tr>`
@@ -456,10 +449,10 @@ const detail = (id, el) => {
                     html += content
                 }
 
-                $('#detailModal .modal-title').html(leture.Name)
-                $('#detailModal #name').html(leture.Name)
-                $('#detailModal #min_credit').html(leture.MinCredit)
-                $('#detailModal #comment').html(leture.Comment)
+                $('#detailModal .modal-title').html(lecture.Name)
+                $('#detailModal #name').html(lecture.Name)
+                $('#detailModal #min_credit').html(lecture.MinCredit)
+                $('#detailModal #comment').html(lecture.Comment)
                 $('#detailModal #categories').html(html)
                 $('#detailModal').modal('show')
             } else {
@@ -471,15 +464,11 @@ const detail = (id, el) => {
                     buttons: false,
                 })
             }
-        },
-        complete: () => {
-            $(el).html('查看')
-            $(el).attr("disabled", false)
         }
     });
 }
 
-const signUpLeture = (id, el) => {
+const signUpLecture = (id, el) => {
     $.ajax({
         url: `${config.server}/v1/leture/sign-up`,
         type: 'POST',
@@ -487,8 +476,7 @@ const signUpLeture = (id, el) => {
             'LetureID': id,
         },
         beforeSend: (xhr) => {
-            $(el).html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>&nbsp載入中...')
-            $(el).attr("disabled", true)
+            $(el).toggleClass("disabled")
             setHeader(xhr)
         },
         error: (xhr) => {
@@ -498,22 +486,22 @@ const signUpLeture = (id, el) => {
             if (response.code === 0) {
                 swal({
                     title: '',
-                    text: '報名成功',
+                    text: '申請成功',
                     icon: "success",
                     timer: 1500,
                     buttons: false,
                 })
-                $(el).html('已報名')
+                $(el).html('已申請')
             } else {
                 swal({
                     title: '',
-                    text: '報名失敗',
+                    text: '申請失敗',
                     icon: "error",
                     timer: 1500,
                     buttons: false,
                 })
-                $(el).html('報名')
-                $(el).attr("disabled", false)
+                $(el).html('申請')
+                $(el).toggleClass("disabled")
             }
         }
     });

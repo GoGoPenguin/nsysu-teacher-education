@@ -245,17 +245,12 @@
 
 .block .table tr th:first-child {
     border-radius: 10px 0 0 10px;
-    min-width: 110px;
 }
 
 .block .table tr th:last-child {
     border-radius: 0 10px 10px 0;
     text-align: right;
     min-width: 110px;
-}
-
-.block .table tr th:nth-child(5) {
-    min-width: 135px;
 }
 
 .block .table tr td:first-child {
@@ -274,7 +269,6 @@
 .block thead th {
     text-align: initial;
     padding: 13px 18px;
-    min-width: 70px;
 }
 
 .block tbody tr {
@@ -298,15 +292,6 @@
 
 .block tbody .danger span {
     color: #E85E5E;
-    padding-right: 5px;
-}
-
-.block tbody .waiting {
-    font-weight: bold;
-}
-
-.block tbody .waiting span {
-    color: #FDA736;
     padding-right: 5px;
 }
 
@@ -342,7 +327,7 @@
 
 /* RWD TABLE 開始*/
 
-@media screen and (max-width:1090px) {
+@media screen and (max-width:1000px) {
     .block thead {
         display: none;
     }
@@ -363,8 +348,8 @@
         width: 30%;
     }
 
-    .block.yellow td:before {
-        color: #FDC236;
+    .block.blue td:before {
+        color: #19AFC9;
     }
 
     .block.yellow td:before {
@@ -388,42 +373,42 @@
 
 /* RWD TABLE 結束 */
 
-/* 黃色css開始 */
+/* 藍色css開始 */
 
-.block.yellow {
+.block.blue {
     background-color: #FFF;
 }
 
-.block.yellow .block_title h2 {
-    border-left: solid 7px #FDC236;
+.block.blue .block_title h2 {
+    border-left: solid 7px #19AFC9;
 }
 
-.block.yellow thead tr {
-    background-color: #FDC236;
+.block.blue thead tr {
+    background-color: #19AFC9;
 }
 
-.block.yellow tbody tr {
+.block.blue tbody tr {
     background-color: #F5F5F5;
 }
 
-.block.yellow tbody tr:hover {
-    background-color: #F6EFDF;
+.block.blue tbody tr:hover {
+    background-color: #E3EDEF;
 }
 
-.block.yellow tbody .btn_table {
-    background-color: #FDC236;
+.block.blue tbody .btn_table {
+    background-color: #19AFC9;
     cursor: pointer;
 }
 
-.block.yellow tbody .btn_table:hover {
-    background-color: rgb(233, 166, 12);
+.block.blue tbody .btn_table:hover {
+    background-color: #1294AB;
 }
 
-.block.yellow tbody .btn_table.disabled {
+.block.blue tbody .btn_table.disabled {
     background-color: #E9E9E9;
 }
 
-/* 黃色css結束 */
+/* 藍色css結束 */
 
 /* Footer開始 */
 
@@ -457,7 +442,7 @@
     margin-bottom: 0;
 }
 
-@media screen and (max-width:1090px) {
+@media screen and (max-width:1000px) {
     .footer {
         position: relative;
     }

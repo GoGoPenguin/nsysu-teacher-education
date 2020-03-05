@@ -14,6 +14,7 @@ $(document).ready(() => {
     loading()
 
     Promise.all([
+        getStudentInformation(),
         getStudentCourses(),
     ]).then(() => {
         unloading()
@@ -23,6 +24,23 @@ $(document).ready(() => {
         }, 1500)
     })
 })
+
+const getStudentInformation = () => {
+    $.ajax({
+        url: `${config.server}/v1/user`,
+        type: 'GET',
+        beforeSend: (xhr) => {
+            setHeader(xhr)
+        },
+        error: (xhr) => {
+            errorHandle(xhr, "錯誤")
+        },
+        success: (response) => {
+            student = Object.assign({}, response.data)
+            $('div.greeting').html(`Hi, ${student.Name}同學`)
+        }
+    });
+}
 
 const getStudentCourses = () => {
     $.ajax({
@@ -43,13 +61,14 @@ const getStudentCourses = () => {
                 `)
             } else {
                 studentCourses = []
+                $('#student-course tbody').html('')
                 response.list.forEach((element, index) => {
                     studentCourses.push(Object.assign({}, element))
 
                     let startDate = dayjs(element.Course.Start).format('YYYY-MM-DD')
-                    let startTime = dayjs(element.Course.Start).format('HH:mm:ss')
+                    let startTime = dayjs(element.Course.Start).format('HH:mm')
                     let endDate = dayjs(element.Course.End).format('YYYY-MM-DD')
-                    let endTime = dayjs(element.Course.End).format('HH:mm:ss')
+                    let endTime = dayjs(element.Course.End).format('HH:mm')
                     let time = ""
 
                     if (startDate == endDate) {
@@ -58,29 +77,26 @@ const getStudentCourses = () => {
                         time = `${startDate} ${startTime} ~ ${endDate} ${endTime}`
                     }
 
-                    let color = 'class="text-dark"'
+                    let color = 'class="waiting"'
                     if (element.Status === 'pass') {
-                        color = 'class="text-success"'
+                        color = 'class="success"'
                     } else if (element.Status === 'failed') {
-                        color = 'class="text-danger"'
+                        color = 'class="danger"'
                     }
 
                     let result = `
                         <tr>
-                            <th scope="row">${index}</th>\
-                            <td ${color}>${STATUS[element.Status]}</td>\
-                            <td>${element.Course.Topic}</td>\
-                            <td>${time}</td>\
-                            <td>${element.Course.Type}</td>\
-                            <td>${MEAL[element.Meal]}</td>\
-                            <td>${element.Comment}</td>\
-                            <td>${element.Review}</td>\
+                            <td data-title="審核情況" ${color}><span>●</span>${STATUS[element.Status]}</td>\
+                            <td data-title="類別">${element.Course.Type}</td>\
+                            <td data-title="研習主題">${element.Course.Topic}</td>\
+                            <td data-title="研習時段">${time}</td>\
+                            <td data-title="審核結果說明">${element.Comment == "" ? "無" : element.Comment}</td>\
                     `
 
                     if (element.Status !== 'pass') {
-                        result = `${result}<td><button class="btn btn-primary" onclick="edit(${index})" id="${element.ID}">編輯</button></td></tr>`
+                        result = `${result}<td><a class="btn_table" onclick="edit(${index})" id="${element.ID}">編輯</a></td></tr>`
                     } else {
-                        result = `${result}<td></td></tr>`
+                        result = `${result}<td><a class="btn_table disabled">編輯</a></td></tr>`
                     }
 
                     $('#student-course tbody').append(result)
@@ -113,8 +129,7 @@ $('#updateReviewModal form').on('submit', (e) => {
             'Review': review,
         },
         beforeSend: (xhr) => {
-            $('#updateReviewModal button.btn.btn-primary').html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>&nbsp載入中...')
-            $('#updateReviewModal button.btn.btn-primary').attr("disabled", true)
+            $('#updateReviewModal .btn_table').addClass("disabled")
             setHeader(xhr)
         },
         error: (xhr) => {
@@ -129,6 +144,7 @@ $('#updateReviewModal form').on('submit', (e) => {
                     timer: 1500,
                     buttons: false,
                 })
+                getStudentCourses()
             } else {
                 swal({
                     title: '',
@@ -140,10 +156,8 @@ $('#updateReviewModal form').on('submit', (e) => {
             }
         },
         complete: () => {
-            $('#updateReviewModal button.btn.btn-primary').html('送出')
-            $('#updateReviewModal button.btn.btn-primary').attr("disabled", false)
+            $('#updateReviewModal .btn_table').removeClass("disabled")
             $('#updateReviewModal').modal('hide')
-            $(`button#${studentCourseID}`).parent().prev().html(review)
         }
     })
 })
