@@ -25,7 +25,7 @@ func GetCourseInformationHandler(ctx iris.Context) {
 	result, err := service.GetInformation(params.CourseID)
 
 	if err != (*errors.Error)(nil) {
-		failed(ctx, errors.ValidateError(err.Error()))
+		failed(ctx, err)
 		return
 	}
 
