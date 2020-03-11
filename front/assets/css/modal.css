@@ -314,6 +314,10 @@
     height: 100%;
 }
 
+.modal-body a.btn-browse {
+    text-align: center;
+}
+
 .modal-body .btn-file {
     position: absolute;
     top: 0;
@@ -401,6 +405,10 @@
 
     .modal-body .btn-browse {
         width: 30%;
+    }
+
+    .modal-body a.btn-browse {
+        line-height: 30px;
     }
 
     .modal-footer {
