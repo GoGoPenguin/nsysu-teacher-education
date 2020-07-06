@@ -25,22 +25,35 @@ func CreateCourse(topic, courseType string, file multipart.File, header *multipa
 		}
 	}()
 
-	course := &gorm.Course{
-		Topic:       topic,
-		Information: header.Filename,
-		Type:        courseType,
-		Start:       start,
-		End:         end,
-	}
-	gorm.CourseDao.New(tx, course)
+	logger.Debug(header)
 
-	f, err := os.OpenFile("./assets/course/"+typecast.ToString(course.ID), os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0666)
-	if err != nil {
-		panic(err)
-	}
-	defer f.Close()
+	if header != nil {
+		course := &gorm.Course{
+			Topic:       topic,
+			Information: header.Filename,
+			Type:        courseType,
+			Start:       start,
+			End:         end,
+		}
+		gorm.CourseDao.New(tx, course)
 
-	io.Copy(f, file)
+		f, err := os.OpenFile("./assets/course/"+typecast.ToString(course.ID), os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0666)
+		if err != nil {
+			panic(err)
+		}
+		defer f.Close()
+
+		io.Copy(f, file)
+	} else {
+		course := &gorm.Course{
+			Topic:       topic,
+			Information: "",
+			Type:        courseType,
+			Start:       start,
+			End:         end,
+		}
+		gorm.CourseDao.New(tx, course)
+	}
 
 	return "success", nil
 }

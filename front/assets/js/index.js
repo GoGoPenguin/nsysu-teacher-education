@@ -4,9 +4,9 @@ const TYPE = {
     'volunteer': '志工服務',
 }
 
-let studentCourses = []
-let studentServiceLearnings = []
-let studentLectures = []
+let studentCourses = [];
+let studentServiceLearnings = [];
+let studentLectures = [];
 
 let editedID = null
 let editedItem = null
@@ -35,13 +35,11 @@ const getStudentCourses = () => {
             setHeader(xhr)
         },
         error: (xhr) => {
-            errorHandle(xhr, "錯誤")
+            errorHandle(xhr, '錯誤')
         },
         success: (response) => {
             if (response.list.length > 0) {
-                response.list.forEach((element, index) => {
-                    studentCourses.push(Object.assign({}, element))
-                })
+                response.list.forEach((element, index) => { studentCourses.push(Object.assign({}, element)) })
             }
         },
         complete: () => {
@@ -58,13 +56,11 @@ const getStudentServiceLearning = () => {
             setHeader(xhr)
         },
         error: (xhr) => {
-            errorHandle(xhr, "錯誤")
+            errorHandle(xhr, '錯誤')
         },
         success: (response) => {
             if (response.list.length > 0) {
-                response.list.forEach((element, index) => {
-                    studentServiceLearnings.push(Object.assign({}, element))
-                })
+                response.list.forEach((element, index) => { studentServiceLearnings.push(Object.assign({}, element)) })
             }
         },
         complete: () => {
@@ -81,13 +77,11 @@ const getStudentLecture = () => {
             setHeader(xhr)
         },
         error: (xhr) => {
-            errorHandle(xhr, "錯誤")
+            errorHandle(xhr, '錯誤')
         },
         success: (response) => {
             if (response.list.length > 0) {
-                response.list.forEach((element, index) => {
-                    studentLectures.push(Object.assign({}, element))
-                })
+                response.list.forEach((element, index) => { studentLectures.push(Object.assign({}, element)) })
             }
         },
         complete: () => {
@@ -104,7 +98,7 @@ const getCourses = () => {
             setHeader(xhr)
         },
         error: (xhr) => {
-            errorHandle(xhr, "錯誤")
+            errorHandle(xhr, '錯誤')
         },
         success: (response) => {
             if (response.list.length == 0) {
@@ -119,30 +113,31 @@ const getCourses = () => {
                     let startTime = dayjs(element.Start).format('HH:mm')
                     let endDate = dayjs(element.End).format('YYYY-MM-DD')
                     let endTime = dayjs(element.End).format('HH:mm')
-                    let time = ""
+                    let time = ''
                     let action = ''
 
                     if (startDate == endDate) {
                         time = `${startDate} ${startTime} ~ ${endTime}`
-                    } else {
+                    }
+                    else {
                         time = `${startDate} ${startTime} ~ ${endDate}  ${endTime}`
                     }
 
-                    let studentCourse = studentCourses.find(studentCourse => {
-                        return element.ID === studentCourse.Course.ID
-                    })
+                    let studentCourse = studentCourses.find(studentCourse => { return element.ID === studentCourse.Course.ID })
 
                     if (studentCourse !== undefined) {
                         action = `<a class="btn_table disabled" disabled>已報名</a>`
-                    } else {
+                    }
+                    else {
                         action = `<a class="btn_table" onclick="signUpCourse(${element.ID}, this)">報名</a>`
                     }
 
-                    $('#course tbody').append(`
+                    $('#course tbody')
+                        .append(`
                         <tr>
                             <td data-title="演講主題">${element.Topic}</td>
                             <td data-title="研習時段">${time}</td>
-                            <td data-title="研習資訊" class="info" onclick="getInformation(${element.ID}, '${element.Information}')">${element.Information}</td>
+                            ${element.Information != '' ? `<td data-title="研習資訊" class="info" onclick="getInformation(${element.ID}, '${element.Information}')">${element.Information}</td>` : '<td data-title="研習資訊"></td>'}
                             <td data-title="類別">${element.Type}</td>
                             <td>${action}</td>
                         </tr>
@@ -161,7 +156,7 @@ const getServiceLearning = () => {
             setHeader(xhr)
         },
         error: (xhr) => {
-            errorHandle(xhr, "錯誤")
+            errorHandle(xhr, '錯誤')
         },
         success: (response) => {
             if (response.list.length == 0) {
@@ -176,17 +171,17 @@ const getServiceLearning = () => {
                     let endDate = dayjs(element.End).format('YYYY-MM-DD')
                     let action = ''
 
-                    let studentServiceLearning = studentServiceLearnings.find(studentServiceLearning => {
-                        return element.ID === studentServiceLearning.ServiceLearning.ID
-                    })
+                    let studentServiceLearning = studentServiceLearnings.find(studentServiceLearning => { return element.ID === studentServiceLearning.ServiceLearning.ID })
 
                     if (studentServiceLearning !== undefined) {
                         action = `<a class="btn_table">已報名</a>`
-                    } else {
+                    }
+                    else {
                         action = `<a class="btn_table" onclick="signUpServiceLearning(${element.ID}, this)">報名</a>`
                     }
 
-                    $('#service-learning tbody').append(`
+                    $('#service-learning tbody')
+                        .append(`
                         <tr>
                             <td>${TYPE[element.Type]}</td>
                             <td>${element.Content}</td>
@@ -210,7 +205,7 @@ const getLectures = () => {
             setHeader(xhr)
         },
         error: (xhr) => {
-            errorHandle(xhr, "錯誤")
+            errorHandle(xhr, '錯誤')
         },
         success: (response) => {
             if (response.list.length == 0) {
@@ -223,17 +218,17 @@ const getLectures = () => {
                 response.list.forEach((element, index) => {
                     let action = ''
 
-                    let studentLecture = studentLectures.find(studentLeture => {
-                        return element.ID === studentLeture.Leture.ID
-                    })
+                    let studentLecture = studentLectures.find(studentLeture => { return element.ID === studentLeture.Leture.ID })
 
                     if (studentLecture !== undefined) {
                         action = `<a class="btn_table disabled">已申請</a>`
-                    } else {
+                    }
+                    else {
                         action = `<a class="btn_table" onclick="signUpLecture(${element.ID}, this)">申請</a>`
                     }
 
-                    $('#lecture tbody').append(`
+                    $('#lecture tbody')
+                        .append(`
                         <tr onclick="detail(${element.ID})">
                             <td data-title="科目名稱">${element.Name}</td>
                             <td data-title="最低學分">${element.MinCredit}</td>
@@ -252,13 +247,13 @@ const getInformation = (id, filename) => {
         url: `${config.server}/v1/course/${id}`,
         type: 'GET',
         xhrFields: {
-            responseType: "blob"
+            responseType: 'blob'
         },
         beforeSend: (xhr) => {
             setHeader(xhr)
         },
         error: (xhr) => {
-            errorHandle(xhr, "下載失敗")
+            errorHandle(xhr, '下載失敗')
         },
         success: (response) => {
             let a = document.createElement('a');
@@ -279,55 +274,56 @@ const signUpCourse = (id, el) => {
     $('#courseModal').modal('show')
 }
 
-$('#courseModal form').on('submit', (e) => {
-    e.preventDefault();
+                                 $('#courseModal form')
+                                     .on('submit', (e) => {
+                                         e.preventDefault();
 
-    $.ajax({
-        url: `${config.server}/v1/course/sign-up`,
-        type: 'POST',
-        data: {
-            'CourseID': editedID,
-            'Meal': $('#meal').val(),
-        },
-        beforeSend: (xhr) => {
-            $('#courseModal div.modal-footer button.btn.btn-primary').toggleClass("disabled")
-            setHeader(xhr)
-        },
-        error: (xhr) => {
-            errorHandle(xhr, "錯誤")
-        },
-        success: (response) => {
-            if (response.code === 0) {
-                swal({
-                    title: '',
-                    text: '報名成功',
-                    icon: "success",
-                    timer: 1500,
-                    buttons: false,
-                })
-                $(editedItem).html('已報名')
-                $(editedItem).toggleClass("disabled")
-            } else {
-                swal({
-                    title: '',
-                    text: '報名失敗',
-                    icon: "error",
-                    timer: 1500,
-                    buttons: false,
-                })
-                $(editedItem).html('報名')
-            }
-        },
-        complete: () => {
-            $('#courseModal div.modal-footer button.btn.btn-primary').html('送出')
-            $('#courseModal div.modal-footer button.btn.btn-primary').toggleClass("disabled")
-            $('#courseModal').modal('hide')
+                                         $.ajax({
+                                             url: `${config.server}/v1/course/sign-up`,
+                                             type: 'POST',
+                                             data: {
+                                                 'CourseID': editedID,
+                                                 'Meal': $('#meal').val(),
+                                             },
+                                             beforeSend: (xhr) => {
+                                                 $('#courseModal div.modal-footer button.btn.btn-primary').toggleClass('disabled')
+                                                 setHeader(xhr)
+                                             },
+                                             error: (xhr) => {
+                                                 errorHandle(xhr, '錯誤')
+                                             },
+                                             success: (response) => {
+                                                 if (response.code === 0) {
+                                                     swal({
+                                                         title: '',
+                                                         text: '報名成功',
+                                                         icon: 'success',
+                                                         timer: 1500,
+                                                         buttons: false,
+                                                     })
+                                                     $(editedItem).html('已報名')
+                                                     $(editedItem).toggleClass('disabled')
+                                                 } else {
+                                                     swal({
+                                                         title: '',
+                                                         text: '報名失敗',
+                                                         icon: 'error',
+                                                         timer: 1500,
+                                                         buttons: false,
+                                                     })
+                                                     $(editedItem).html('報名')
+                                                 }
+                                             },
+                                             complete: () => {
+                                                 $('#courseModal div.modal-footer button.btn.btn-primary').html('送出')
+                                                 $('#courseModal div.modal-footer button.btn.btn-primary').toggleClass('disabled')
+                                                 $('#courseModal').modal('hide')
 
-            editedID = null
-            editedItem = null
-        }
-    });
-})
+                                                 editedID = null
+                                                 editedItem = null
+                                             }
+                                         });
+                                     })
 
 const signUpServiceLearning = (id, el) => {
     $.ajax({
@@ -337,18 +333,18 @@ const signUpServiceLearning = (id, el) => {
             'ServiceLearningID': id,
         },
         beforeSend: (xhr) => {
-            $(el).toggleClass("disabled")
+            $(el).toggleClass('disabled')
             setHeader(xhr)
         },
         error: (xhr) => {
-            errorHandle(xhr, "錯誤")
+            errorHandle(xhr, '錯誤')
         },
         success: (response) => {
             if (response.code === 0) {
                 swal({
                     title: '',
                     text: '報名成功',
-                    icon: "success",
+                    icon: 'success',
                     timer: 1500,
                     buttons: false,
                 })
@@ -357,12 +353,12 @@ const signUpServiceLearning = (id, el) => {
                 swal({
                     title: '',
                     text: '報名失敗',
-                    icon: "error",
+                    icon: 'error',
                     timer: 1500,
                     buttons: false,
                 })
                 $(el).html('報名')
-                $(el).toggleClass("disabled")
+                $(el).toggleClass('disabled')
             }
         }
     });
@@ -422,7 +418,7 @@ const detail = (id) => {
                                     temp += `<td colspan="2" rowspan="${subjectGroups}">${type.Name}</td>`
                                 }
 
-                                temp += `<td colspan="1">${subject.Compulsory ? "必修" : "選修"}</td>`
+                                temp += `<td colspan="1">${subject.Compulsory ? '必修' : '選修'}</td>`
 
                                 if (group.MinCredit > 0) {
                                     temp += `<td colspan="3">${subject.Name}</td>`
@@ -430,7 +426,8 @@ const detail = (id) => {
                                     if (condition3) {
                                         temp += `<td colspan="1" rowspan="${group.Subjects.length}">至少${group.MinCredit}學分</td>`
                                     }
-                                } else {
+                                }
+                                else {
                                     temp += `<td colspan="4">${subject.Name}</td>`
                                 }
 
@@ -459,7 +456,7 @@ const detail = (id) => {
                 swal({
                     title: '',
                     text: '失敗',
-                    icon: "error",
+                    icon: 'error',
                     timer: 1500,
                     buttons: false,
                 })
@@ -476,18 +473,18 @@ const signUpLecture = (id, el) => {
             'LetureID': id,
         },
         beforeSend: (xhr) => {
-            $(el).toggleClass("disabled")
+            $(el).toggleClass('disabled')
             setHeader(xhr)
         },
         error: (xhr) => {
-            errorHandle(xhr, "錯誤")
+            errorHandle(xhr, '錯誤')
         },
         success: (response) => {
             if (response.code === 0) {
                 swal({
                     title: '',
                     text: '申請成功',
-                    icon: "success",
+                    icon: 'success',
                     timer: 1500,
                     buttons: false,
                 })
@@ -496,12 +493,12 @@ const signUpLecture = (id, el) => {
                 swal({
                     title: '',
                     text: '申請失敗',
-                    icon: "error",
+                    icon: 'error',
                     timer: 1500,
                     buttons: false,
                 })
                 $(el).html('申請')
-                $(el).toggleClass("disabled")
+                $(el).toggleClass('disabled')
             }
         }
     });
