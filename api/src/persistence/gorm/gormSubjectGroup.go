@@ -7,9 +7,9 @@ import (
 // SubjectGroup model
 type SubjectGroup struct {
 	gorm.Model
-	LetureTypeID uint      `gorm:"column:leture_type_id;"`
-	MinCredit    uint      `gorm:"column:min_credit;"`
-	Subjects     []Subject `gorm:"foreignkey:SubjectGroupID"`
+	LectureTypeID uint      `gorm:"column:lecture_type_id;"`
+	MinCredit     uint      `gorm:"column:min_credit;"`
+	Subjects      []Subject `gorm:"foreignkey:SubjectGroupID"`
 }
 
 type subjectGroupDao struct {
@@ -56,7 +56,7 @@ func (dao *subjectGroupDao) GetByIDAndType(tx *gorm.DB, id, typeID uint) *Subjec
 	result := SubjectGroup{}
 	err := tx.Table(dao.table).
 		Where("id = ?", id).
-		Where("leture_type_id = ?", typeID).
+		Where("lecture_type_id = ?", typeID).
 		Where("deleted_at IS NULL").
 		Scan(&result).Error
 

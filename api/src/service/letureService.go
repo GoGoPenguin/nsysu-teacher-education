@@ -9,8 +9,8 @@ import (
 	"github.com/nsysu/teacher-education/src/utils/typecast"
 )
 
-// GetLetures get leture list
-func GetLetures(account, start, length, search string) (result map[string]interface{}, e *errors.Error) {
+// GetLectures get lecture list
+func GetLectures(account, start, length, search string) (result map[string]interface{}, e *errors.Error) {
 	tx := gorm.DB()
 
 	defer func() {
@@ -21,12 +21,12 @@ func GetLetures(account, start, length, search string) (result map[string]interf
 	}()
 
 	var (
-		letures  *[]gorm.Leture
+		lectures *[]gorm.Lecture
 		filtered int
 	)
 
 	if operator := gorm.AdminDao.GetByAccount(tx, account); operator != nil {
-		letures = gorm.LetureDao.Query(
+		lectures = gorm.LectureDao.Query(
 			tx,
 			specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
 			specification.OrderSpecification("created_at", specification.OrderDirectionASC),
@@ -34,27 +34,27 @@ func GetLetures(account, start, length, search string) (result map[string]interf
 			specification.IsNullSpecification("deleted_at"),
 		)
 
-		filtered = gorm.LetureDao.Count(
+		filtered = gorm.LectureDao.Count(
 			tx,
 			specification.LikeSpecification([]string{"name", "comment", "min_credit", "status"}, search),
 			specification.IsNullSpecification("deleted_at"),
 		)
 	} else {
-		letures = gorm.LetureDao.Query(
+		lectures = gorm.LectureDao.Query(
 			tx,
 			specification.OrderSpecification("created_at", specification.OrderDirectionASC),
-			specification.StatusSpecification(gorm.LetureDao.Enable),
+			specification.StatusSpecification(gorm.LectureDao.Enable),
 			specification.IsNullSpecification("deleted_at"),
 		)
 	}
 
-	total := gorm.LetureDao.Count(
+	total := gorm.LectureDao.Count(
 		tx,
 		specification.IsNullSpecification("deleted_at"),
 	)
 
 	result = map[string]interface{}{
-		"list":            assembler.LeturesDTO(letures),
+		"list":            assembler.LecturesDTO(lectures),
 		"recordsTotal":    total,
 		"recordsFiltered": filtered,
 	}
@@ -63,8 +63,8 @@ func GetLetures(account, start, length, search string) (result map[string]interf
 
 }
 
-// GetLetureDetail get leture detail
-func GetLetureDetail(letureID string) (result interface{}, e *errors.Error) {
+// GetLectureDetail get lecture detail
+func GetLectureDetail(lectureID string) (result interface{}, e *errors.Error) {
 	tx := gorm.DB().Set("gorm:auto_preload", true)
 
 	defer func() {
@@ -74,12 +74,12 @@ func GetLetureDetail(letureID string) (result interface{}, e *errors.Error) {
 		}
 	}()
 
-	leture := gorm.LetureDao.GetByID(tx, typecast.StringToUint(letureID))
-	return leture, nil
+	lecture := gorm.LectureDao.GetByID(tx, typecast.StringToUint(lectureID))
+	return lecture, nil
 }
 
-// SingUpLeture sudent sign up leture
-func SingUpLeture(account, letureID string) (result interface{}, e *errors.Error) {
+// SingUpLecture sudent sign up lecture
+func SingUpLecture(account, lectureID string) (result interface{}, e *errors.Error) {
 	tx := gorm.DB().Set("gorm:auto_preload", true).Begin()
 
 	defer func() {
@@ -96,32 +96,32 @@ func SingUpLeture(account, letureID string) (result interface{}, e *errors.Error
 		return nil, errors.NotFoundError("Student " + account)
 	}
 
-	leture := gorm.LetureDao.Query(
+	lecture := gorm.LectureDao.Query(
 		tx,
-		specification.IDSpecification(letureID),
+		specification.IDSpecification(lectureID),
 		specification.IsNullSpecification("deleted_at"),
-		specification.StatusSpecification(gorm.LetureDao.Enable),
+		specification.StatusSpecification(gorm.LectureDao.Enable),
 	)
 
-	if len(*leture) == 0 {
-		return nil, errors.NotFoundError("service-learning ID " + letureID)
+	if len(*lecture) == 0 {
+		return nil, errors.NotFoundError("service-learning ID " + lectureID)
 	}
 
-	studentLeture := &gorm.StudentLeture{
+	studentLecture := &gorm.StudentLecture{
 		StudentID: student.ID,
-		LetureID:  typecast.StringToUint(letureID),
+		LectureID: typecast.StringToUint(lectureID),
 		Pass:      false,
 	}
 
-	gorm.StudentLetureDao.New(tx, studentLeture)
+	gorm.StudentLectureDao.New(tx, studentLecture)
 
-	for _, category := range (*leture)[0].Categories {
-		for _, letureType := range category.Types {
-			for _, group := range letureType.Groups {
+	for _, category := range (*lecture)[0].Categories {
+		for _, lectureType := range category.Types {
+			for _, group := range lectureType.Groups {
 				for _, subject := range group.Subjects {
 					studentSubject := &gorm.StudentSubject{
-						StudentLetureID: studentLeture.ID,
-						SubjectID:       subject.ID,
+						StudentLectureID: studentLecture.ID,
+						SubjectID:        subject.ID,
 					}
 					gorm.StudentSubjectDao.New(tx, studentSubject)
 				}
@@ -137,8 +137,8 @@ func SingUpLeture(account, letureID string) (result interface{}, e *errors.Error
 	return "success", nil
 }
 
-// GetSutdentLetureList get the list of student leture
-func GetSutdentLetureList(account, start, length string) (result map[string]interface{}, e *errors.Error) {
+// GetStudentLectureList get the list of student lecture
+func GetStudentLectureList(account, start, length string) (result map[string]interface{}, e *errors.Error) {
 	tx := gorm.DB()
 
 	defer func() {
@@ -149,40 +149,40 @@ func GetSutdentLetureList(account, start, length string) (result map[string]inte
 	}()
 
 	var (
-		studentLetures *[]gorm.StudentLeture
-		filtered       int
+		studentLectures *[]gorm.StudentLecture
+		filtered        int
 	)
 
 	if operator := gorm.AdminDao.GetByAccount(tx, account); operator != nil {
-		studentLetures = gorm.StudentLetureDao.Query(
-			tx.Preload("Leture").Preload("Student"),
+		studentLectures = gorm.StudentLectureDao.Query(
+			tx.Preload("Lecture").Preload("Student"),
 			specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
-			specification.OrderSpecification("`student_leture`."+specification.IDColumn, specification.OrderDirectionDESC),
+			specification.OrderSpecification("`student_lecture`."+specification.IDColumn, specification.OrderDirectionDESC),
 			specification.IsNullSpecification("deleted_at"),
 		)
 
-		filtered = gorm.StudentLetureDao.Count(
+		filtered = gorm.StudentLectureDao.Count(
 			tx,
 			specification.IsNullSpecification("deleted_at"),
 		)
 	} else {
 		student := gorm.StudentDao.GetByAccount(tx, account)
-		studentLetures = gorm.StudentLetureDao.Query(
-			tx.Preload("Leture"),
+		studentLectures = gorm.StudentLectureDao.Query(
+			tx.Preload("Lecture"),
 			specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
-			specification.OrderSpecification("`student_leture`."+specification.IDColumn, specification.OrderDirectionDESC),
+			specification.OrderSpecification("`student_lecture`."+specification.IDColumn, specification.OrderDirectionDESC),
 			specification.IsNullSpecification("deleted_at"),
 			specification.StudentSpecification(student.ID),
 		)
 	}
 
-	total := gorm.StudentLetureDao.Count(
+	total := gorm.StudentLectureDao.Count(
 		tx,
 		specification.IsNullSpecification("deleted_at"),
 	)
 
 	result = map[string]interface{}{
-		"list":            assembler.StudentLeturesDTO(studentLetures),
+		"list":            assembler.StudentLecturesDTO(studentLectures),
 		"recordsTotal":    total,
 		"recordsFiltered": filtered,
 	}
@@ -190,9 +190,9 @@ func GetSutdentLetureList(account, start, length string) (result map[string]inte
 	return
 }
 
-// GetStudentLetureDetail get studnet leture detail
-func GetStudentLetureDetail(studentLetureID string) (result interface{}, e *errors.Error) {
-	tx := gorm.DB().Preload("Leture.Categories.Types.Groups.Subjects.StudentSubject")
+// GetStudentLectureDetail get studnet lecture detail
+func GetStudentLectureDetail(studentLectureID string) (result interface{}, e *errors.Error) {
+	tx := gorm.DB().Preload("Lecture.Categories.Types.Groups.Subjects.StudentSubject")
 
 	defer func() {
 		if r := recover(); r != nil {
@@ -201,13 +201,13 @@ func GetStudentLetureDetail(studentLetureID string) (result interface{}, e *erro
 		}
 	}()
 
-	studentLeture := gorm.StudentLetureDao.GetByID(tx, typecast.StringToUint(studentLetureID))
+	studentLecture := gorm.StudentLectureDao.GetByID(tx, typecast.StringToUint(studentLectureID))
 
-	return assembler.StudentLeturesDetailDTO(studentLeture), nil
+	return assembler.StudentLecturesDetailDTO(studentLecture), nil
 }
 
 // UpdateStudentSubject update student subject
-func UpdateStudentSubject(account, studentLetureID, subjectID, name, year, semester, credit, score string) (result interface{}, e *errors.Error) {
+func UpdateStudentSubject(account, studentLectureID, subjectID, name, year, semester, credit, score string) (result interface{}, e *errors.Error) {
 	tx := gorm.DB()
 
 	defer func() {
@@ -221,7 +221,7 @@ func UpdateStudentSubject(account, studentLetureID, subjectID, name, year, semes
 		return nil, errors.NotFoundError("Student " + account)
 	}
 
-	studentSbject := gorm.StudentSubjectDao.GetByLetureAndSubject(tx, typecast.StringToUint(studentLetureID), typecast.StringToUint(subjectID))
+	studentSbject := gorm.StudentSubjectDao.GetByLectureAndSubject(tx, typecast.StringToUint(studentLectureID), typecast.StringToUint(subjectID))
 
 	if studentSbject == nil {
 		return nil, errors.NotFoundError("Student Subject")
@@ -238,8 +238,8 @@ func UpdateStudentSubject(account, studentLetureID, subjectID, name, year, semes
 	return "success", nil
 }
 
-// UpdateStudentLetuerPass update student leture pass
-func UpdateStudentLetuerPass(account, letureID, pass string) (result interface{}, e *errors.Error) {
+// UpdateStudentLetuerPass update student lecture pass
+func UpdateStudentLetuerPass(account, lectureID, pass string) (result interface{}, e *errors.Error) {
 	tx := gorm.DB()
 
 	defer func() {
@@ -254,13 +254,13 @@ func UpdateStudentLetuerPass(account, letureID, pass string) (result interface{}
 		return nil, errors.NotFoundError("Student " + account)
 	}
 
-	studentLeture := gorm.StudentLetureDao.GetByLetureAndStudent(tx, typecast.StringToUint(letureID), stduent.ID)
-	if studentLeture == nil {
-		return nil, errors.NotFoundError("Student Leture")
+	studentLecture := gorm.StudentLectureDao.GetByLectureAndStudent(tx, typecast.StringToUint(lectureID), stduent.ID)
+	if studentLecture == nil {
+		return nil, errors.NotFoundError("Student Lecture")
 	}
 
-	studentLeture.Pass = typecast.StringToBool(pass)
-	gorm.StudentLetureDao.Update(tx, studentLeture)
+	studentLecture.Pass = typecast.StringToBool(pass)
+	gorm.StudentLectureDao.Update(tx, studentLecture)
 
 	return "success", nil
 }

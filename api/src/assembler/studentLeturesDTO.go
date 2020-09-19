@@ -4,31 +4,31 @@ import (
 	"github.com/nsysu/teacher-education/src/persistence/gorm"
 )
 
-// StudentLeturesDTO student-leture data transfer object
-func StudentLeturesDTO(studentLetures *[]gorm.StudentLeture) []map[string]interface{} {
+// StudentLecturesDTO student-lecture data transfer object
+func StudentLecturesDTO(studentLectures *[]gorm.StudentLecture) []map[string]interface{} {
 	result := []map[string]interface{}{}
 
-	for _, studentLeture := range *studentLetures {
-		if studentLeture.Leture.ID != 0 {
+	for _, studentLecture := range *studentLectures {
+		if studentLecture.Lecture.ID != 0 {
 			temp := map[string]interface{}{
-				"ID": studentLeture.ID,
+				"ID": studentLecture.ID,
 
-				"Leture": map[string]interface{}{
-					"ID":        studentLeture.Leture.ID,
-					"Name":      studentLeture.Leture.Name,
-					"MinCredit": studentLeture.Leture.MinCredit,
-					"Comment":   studentLeture.Leture.Comment,
-					"Status":    studentLeture.Leture.Status,
+				"Lecture": map[string]interface{}{
+					"ID":        studentLecture.Lecture.ID,
+					"Name":      studentLecture.Lecture.Name,
+					"MinCredit": studentLecture.Lecture.MinCredit,
+					"Comment":   studentLecture.Lecture.Comment,
+					"Status":    studentLecture.Lecture.Status,
 				},
-				"Pass": studentLeture.Pass,
+				"Pass": studentLecture.Pass,
 			}
-			if studentLeture.Student.ID != 0 {
+			if studentLecture.Student.ID != 0 {
 				temp["Student"] = map[string]interface{}{
-					"ID":      studentLeture.Student.ID,
-					"Name":    studentLeture.Student.Name,
-					"Account": studentLeture.Student.Account,
-					"Major":   studentLeture.Student.Major,
-					"Number":  studentLeture.Student.Number,
+					"ID":      studentLecture.Student.ID,
+					"Name":    studentLecture.Student.Name,
+					"Account": studentLecture.Student.Account,
+					"Major":   studentLecture.Student.Major,
+					"Number":  studentLecture.Student.Number,
 				}
 			}
 			result = append(result, temp)

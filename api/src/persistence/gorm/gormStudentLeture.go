@@ -4,17 +4,17 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-// StudentLeture model
-type StudentLeture struct {
+// StudentLecture model
+type StudentLecture struct {
 	gorm.Model
 	StudentID uint    `gorm:"column:student_id;"`
 	Student   Student `gorm:"foreignkey:StudentID;"`
-	LetureID  uint    `gorm:"column:leture_id;"`
-	Leture    Leture  `gorm:"foreignkey:LetureID;"`
+	LectureID uint    `gorm:"column:lecture_id;"`
+	Lecture   Lecture `gorm:"foreignkey:LectureID;"`
 	Pass      bool    `gorm:"column:pass;"`
 }
 
-type studentLetureDao struct {
+type studentLectureDao struct {
 	table        string
 	Meat         string
 	Vegetable    string
@@ -22,15 +22,15 @@ type studentLetureDao struct {
 	StatusFailed string
 }
 
-// StudentLetureDao student leture data access object
-var StudentLetureDao = &studentLetureDao{
-	table: "student_leture",
+// StudentLectureDao student lecture data access object
+var StudentLectureDao = &studentLectureDao{
+	table: "student_lecture",
 }
 
 // New a record
-func (dao *studentLetureDao) New(tx *gorm.DB, studentLeture *StudentLeture) {
+func (dao *studentLectureDao) New(tx *gorm.DB, studentLecture *StudentLecture) {
 	err := tx.Table(dao.table).
-		Create(studentLeture).Error
+		Create(studentLecture).Error
 
 	if err != nil {
 		panic(err)
@@ -38,8 +38,8 @@ func (dao *studentLetureDao) New(tx *gorm.DB, studentLeture *StudentLeture) {
 }
 
 // GetByID get a record by id
-func (dao *studentLetureDao) GetByID(tx *gorm.DB, id uint) *StudentLeture {
-	result := StudentLeture{
+func (dao *studentLectureDao) GetByID(tx *gorm.DB, id uint) *StudentLecture {
+	result := StudentLecture{
 		Model: gorm.Model{
 			ID: id,
 		},
@@ -57,13 +57,13 @@ func (dao *studentLetureDao) GetByID(tx *gorm.DB, id uint) *StudentLeture {
 }
 
 // GetByID get a record by id
-func (dao *studentLetureDao) GetByLetureAndStudent(tx *gorm.DB, letureID, studentID uint) *StudentLeture {
-	var result StudentLeture
+func (dao *studentLectureDao) GetByLectureAndStudent(tx *gorm.DB, lectureID, studentID uint) *StudentLecture {
+	var result StudentLecture
 
 	err := tx.Table(dao.table).
-		Where(&StudentLeture{
+		Where(&StudentLecture{
 			StudentID: studentID,
-			LetureID:  letureID,
+			LectureID: lectureID,
 		}).
 		Find(&result).Error
 
@@ -77,10 +77,10 @@ func (dao *studentLetureDao) GetByLetureAndStudent(tx *gorm.DB, letureID, studen
 }
 
 // Update record
-func (dao *studentLetureDao) Update(tx *gorm.DB, studentLeture *StudentLeture) {
-	err := tx.Model(&studentLeture).
+func (dao *studentLectureDao) Update(tx *gorm.DB, studentLecture *StudentLecture) {
+	err := tx.Model(&studentLecture).
 		Updates(map[string]interface{}{
-			"Pass": studentLeture.Pass,
+			"Pass": studentLecture.Pass,
 		}).Error
 
 	if gorm.IsRecordNotFoundError(err) {
@@ -92,7 +92,7 @@ func (dao *studentLetureDao) Update(tx *gorm.DB, studentLeture *StudentLeture) {
 }
 
 // Count get total count
-func (dao *studentLetureDao) Count(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) int {
+func (dao *studentLectureDao) Count(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) int {
 	var count int
 	tx.Table(dao.table).
 		Scopes(funcs...).
@@ -102,8 +102,8 @@ func (dao *studentLetureDao) Count(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB
 }
 
 // Query custom query
-func (dao *studentLetureDao) Query(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) *[]StudentLeture {
-	var result []StudentLeture
+func (dao *studentLectureDao) Query(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) *[]StudentLecture {
+	var result []StudentLecture
 	err := tx.Table(dao.table).
 		Select("*").
 		Scopes(funcs...).

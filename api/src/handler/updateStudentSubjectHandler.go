@@ -11,23 +11,23 @@ import (
 // UpdateStudentSubjectHandler update student subject
 func UpdateStudentSubjectHandler(ctx iris.Context) {
 	type rule struct {
-		StudentLetureID string `valid:"required"`
-		SubjectID       string `valid:"required"`
-		Name            string `valid:"-"`
-		Year            string `valid:"-"`
-		Semester        string `valid:"-"`
-		Credit          string `valid:"-"`
-		Score           string `valid:"-"`
+		StudentLectureID string `valid:"required"`
+		SubjectID        string `valid:"required"`
+		Name             string `valid:"-"`
+		Year             string `valid:"-"`
+		Semester         string `valid:"-"`
+		Credit           string `valid:"-"`
+		Score            string `valid:"-"`
 	}
 
 	params := &rule{
-		StudentLetureID: ctx.FormValue("StudentLetureID"),
-		SubjectID:       ctx.FormValue("SubjectID"),
-		Name:            ctx.FormValue("Name"),
-		Year:            ctx.FormValue("Year"),
-		Semester:        ctx.FormValue("Semester"),
-		Credit:          ctx.FormValue("Credit"),
-		Score:           ctx.FormValue("Score"),
+		StudentLectureID: ctx.FormValue("StudentLectureID"),
+		SubjectID:        ctx.FormValue("SubjectID"),
+		Name:             ctx.FormValue("Name"),
+		Year:             ctx.FormValue("Year"),
+		Semester:         ctx.FormValue("Semester"),
+		Credit:           ctx.FormValue("Credit"),
+		Score:            ctx.FormValue("Score"),
 	}
 
 	if _, err := govalidator.ValidateStruct(params); err != nil {
@@ -38,7 +38,7 @@ func UpdateStudentSubjectHandler(ctx iris.Context) {
 	account := auth.Account(ctx)
 	result, err := service.UpdateStudentSubject(
 		account,
-		params.StudentLetureID,
+		params.StudentLectureID,
 		params.SubjectID,
 		params.Name,
 		params.Year,

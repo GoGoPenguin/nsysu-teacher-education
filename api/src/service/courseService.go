@@ -175,8 +175,8 @@ func SingUpCourse(account, courseID, meal string) (result interface{}, e *errors
 	return "success", nil
 }
 
-// GetSutdentCourseList get the list of student course
-func GetSutdentCourseList(account, start, length string) (result map[string]interface{}, e *errors.Error) {
+// GetStudentCourseList get the list of student course
+func GetStudentCourseList(account, start, length string) (result map[string]interface{}, e *errors.Error) {
 	tx := gorm.DB()
 
 	defer func() {

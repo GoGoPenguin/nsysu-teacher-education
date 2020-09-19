@@ -30,7 +30,7 @@ func GetStudentsServiceLearningHandler(ctx iris.Context) {
 	}
 
 	operator := auth.Account(ctx)
-	result, err := service.GetSutdentServiceLearningList(operator, params.Start, params.Length)
+	result, err := service.GetStudentServiceLearningList(operator, params.Start, params.Length)
 
 	if err != (*errors.Error)(nil) {
 		json(ctx, map[string]interface{}{

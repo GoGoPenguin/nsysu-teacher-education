@@ -8,14 +8,14 @@ import (
 	"github.com/nsysu/teacher-education/src/utils/auth"
 )
 
-// SignUpLetureHandler sign up leture
-func SignUpLetureHandler(ctx iris.Context) {
+// SignUpLectureHandler sign up lecture
+func SignUpLectureHandler(ctx iris.Context) {
 	type rule struct {
-		LetureID string `valid:"required"`
+		LectureID string `valid:"required"`
 	}
 
 	params := &rule{
-		LetureID: ctx.FormValue("LetureID"),
+		LectureID: ctx.FormValue("LectureID"),
 	}
 
 	if _, err := govalidator.ValidateStruct(params); err != nil {
@@ -24,7 +24,7 @@ func SignUpLetureHandler(ctx iris.Context) {
 	}
 
 	account := auth.Account(ctx)
-	result, err := service.SingUpLeture(account, params.LetureID)
+	result, err := service.SingUpLecture(account, params.LectureID)
 
 	if err != (*errors.Error)(nil) {
 		failed(ctx, err)

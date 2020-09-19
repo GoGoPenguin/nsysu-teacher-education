@@ -8,8 +8,8 @@ import (
 	"github.com/nsysu/teacher-education/src/utils/auth"
 )
 
-// GetLeturesHandler get leture list
-func GetLeturesHandler(ctx iris.Context) {
+// GetLecturesHandler get lecture list
+func GetLecturesHandler(ctx iris.Context) {
 	type rule struct {
 		Start  string `valid:"required"`
 		Length string `valid:"required"`
@@ -32,7 +32,7 @@ func GetLeturesHandler(ctx iris.Context) {
 	}
 
 	operator := auth.Account(ctx)
-	result, err := service.GetLetures(operator, params.Start, params.Length, params.Search)
+	result, err := service.GetLectures(operator, params.Start, params.Length, params.Search)
 
 	if err != (*errors.Error)(nil) {
 		json(ctx, map[string]interface{}{

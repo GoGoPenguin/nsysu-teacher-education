@@ -4,17 +4,17 @@ import (
 	"github.com/nsysu/teacher-education/src/persistence/gorm"
 )
 
-// LeturesDTO leture data transfer object
-func LeturesDTO(letures *[]gorm.Leture) []map[string]interface{} {
+// LecturesDTO lecture data transfer object
+func LecturesDTO(lectures *[]gorm.Lecture) []map[string]interface{} {
 	result := []map[string]interface{}{}
 
-	for _, leture := range *letures {
+	for _, lecture := range *lectures {
 		result = append(result, map[string]interface{}{
-			"ID":        leture.ID,
-			"Name":      leture.Name,
-			"MinCredit": leture.MinCredit,
-			"Comment":   leture.Comment,
-			"Status":    leture.Status,
+			"ID":        lecture.ID,
+			"Name":      lecture.Name,
+			"MinCredit": lecture.MinCredit,
+			"Comment":   lecture.Comment,
+			"Status":    lecture.Status,
 		})
 	}
 	return result

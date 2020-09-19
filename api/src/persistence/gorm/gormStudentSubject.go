@@ -7,13 +7,13 @@ import (
 // StudentSubject model
 type StudentSubject struct {
 	gorm.Model
-	StudentLetureID uint   `gorm:"column:student_leture_id;"`
-	SubjectID       uint   `gorm:"column:subject_id;"`
-	Name            string `gorm:"column:name;"`
-	Year            string `gorm:"column:year;"`
-	Semester        string `gorm:"column:semester;"`
-	Credit          string `gorm:"column:credit;"`
-	Score           string `gorm:"column:score;"`
+	StudentLectureID uint   `gorm:"column:student_lecture_id;"`
+	SubjectID        uint   `gorm:"column:subject_id;"`
+	Name             string `gorm:"column:name;"`
+	Year             string `gorm:"column:year;"`
+	Semester         string `gorm:"column:semester;"`
+	Credit           string `gorm:"column:credit;"`
+	Score            string `gorm:"column:score;"`
 }
 
 type studentSubjectDao struct {
@@ -55,13 +55,13 @@ func (dao *studentSubjectDao) GetByID(tx *gorm.DB, id uint) *StudentSubject {
 }
 
 // GetByID get a record by id
-func (dao *studentSubjectDao) GetByLetureAndSubject(tx *gorm.DB, letureID, subjectID uint) *StudentSubject {
+func (dao *studentSubjectDao) GetByLectureAndSubject(tx *gorm.DB, lectureID, subjectID uint) *StudentSubject {
 	var result StudentSubject
 
 	err := tx.Table(dao.table).
 		Where(&StudentSubject{
-			StudentLetureID: letureID,
-			SubjectID:       subjectID,
+			StudentLectureID: lectureID,
+			SubjectID:        subjectID,
 		}).
 		Find(&result).Error
 

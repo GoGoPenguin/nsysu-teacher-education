@@ -4,29 +4,29 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-// LetureCategory model
-type LetureCategory struct {
+// LectureCategory model
+type LectureCategory struct {
 	gorm.Model
-	LetureID  uint         `gorm:"column:leture_id;"`
-	Name      string       `gorm:"column:name;"`
-	MinCredit uint         `gorm:"column:min_credit;"`
-	MinType   uint         `gorm:"column:min_type;"`
-	Types     []LetureType `gorm:"foreignkey:LetureCategoryID"`
+	LectureID uint          `gorm:"column:lecture_id;"`
+	Name      string        `gorm:"column:name;"`
+	MinCredit uint          `gorm:"column:min_credit;"`
+	MinType   uint          `gorm:"column:min_type;"`
+	Types     []LectureType `gorm:"foreignkey:LectureCategoryID"`
 }
 
-type letureCategoryDao struct {
+type lectureCategoryDao struct {
 	table string
 }
 
-// LetureCategoryDao leture_category data access object
-var LetureCategoryDao = &letureCategoryDao{
-	table: "leture_category",
+// LectureCategoryDao lecture_category data access object
+var LectureCategoryDao = &lectureCategoryDao{
+	table: "lecture_category",
 }
 
 // New a record
-func (dao *letureCategoryDao) New(tx *gorm.DB, letureCategory *LetureCategory) {
+func (dao *lectureCategoryDao) New(tx *gorm.DB, lectureCategory *LectureCategory) {
 	err := tx.Table(dao.table).
-		Create(letureCategory).Error
+		Create(lectureCategory).Error
 
 	if err != nil {
 		panic(err)
@@ -34,8 +34,8 @@ func (dao *letureCategoryDao) New(tx *gorm.DB, letureCategory *LetureCategory) {
 }
 
 // GetByID get a record by id
-func (dao *letureCategoryDao) GetByID(tx *gorm.DB, id uint) *LetureCategory {
-	result := LetureCategory{}
+func (dao *lectureCategoryDao) GetByID(tx *gorm.DB, id uint) *LectureCategory {
+	result := LectureCategory{}
 	err := tx.Table(dao.table).
 		Where("id = ?", id).
 		Where("deleted_at IS NULL").
@@ -50,12 +50,12 @@ func (dao *letureCategoryDao) GetByID(tx *gorm.DB, id uint) *LetureCategory {
 	return &result
 }
 
-// GetByAccount get a record by leture and name
-func (dao *letureCategoryDao) GetByLetureAndName(tx *gorm.DB, letureID uint, name string) *LetureCategory {
-	result := LetureCategory{}
+// GetByAccount get a record by lecture and name
+func (dao *lectureCategoryDao) GetByLectureAndName(tx *gorm.DB, lectureID uint, name string) *LectureCategory {
+	result := LectureCategory{}
 	err := tx.Table(dao.table).
 		Where("name = ?", name).
-		Where("leture_id = ?", letureID).
+		Where("lecture_id = ?", lectureID).
 		Where("deleted_at IS NULL").
 		Scan(&result).Error
 
@@ -69,8 +69,8 @@ func (dao *letureCategoryDao) GetByLetureAndName(tx *gorm.DB, letureID uint, nam
 }
 
 // Query custom query
-func (dao *letureCategoryDao) Query(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) *[]LetureCategory {
-	var result []LetureCategory
+func (dao *lectureCategoryDao) Query(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) *[]LectureCategory {
+	var result []LectureCategory
 	err := tx.Table(dao.table).
 		Scopes(funcs...).
 		Scan(&result).Error
