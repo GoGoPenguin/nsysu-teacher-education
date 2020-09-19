@@ -1,4 +1,4 @@
-FROM golang:1.12.7
+FROM golang:1.14.4
 
 ENV TZ=Asia/Taipei
 
