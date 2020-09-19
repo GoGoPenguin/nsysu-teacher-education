@@ -78,7 +78,7 @@ func GetLectureDetail(lectureID string) (result interface{}, e *errors.Error) {
 	return lecture, nil
 }
 
-// SingUpLecture sudent sign up lecture
+// SingUpLecture student sign up lecture
 func SingUpLecture(account, lectureID string) (result interface{}, e *errors.Error) {
 	tx := gorm.DB().Set("gorm:auto_preload", true).Begin()
 
@@ -221,19 +221,19 @@ func UpdateStudentSubject(account, studentLectureID, subjectID, name, year, seme
 		return nil, errors.NotFoundError("Student " + account)
 	}
 
-	studentSbject := gorm.StudentSubjectDao.GetByLectureAndSubject(tx, typecast.StringToUint(studentLectureID), typecast.StringToUint(subjectID))
+	studentSubject := gorm.StudentSubjectDao.GetByLectureAndSubject(tx, typecast.StringToUint(studentLectureID), typecast.StringToUint(subjectID))
 
-	if studentSbject == nil {
+	if studentSubject == nil {
 		return nil, errors.NotFoundError("Student Subject")
 	}
 
-	studentSbject.Name = name
-	studentSbject.Year = year
-	studentSbject.Semester = semester
-	studentSbject.Credit = credit
-	studentSbject.Score = score
+	studentSubject.Name = name
+	studentSubject.Year = year
+	studentSubject.Semester = semester
+	studentSubject.Credit = credit
+	studentSubject.Score = score
 
-	gorm.StudentSubjectDao.Update(tx, studentSbject)
+	gorm.StudentSubjectDao.Update(tx, studentSubject)
 
 	return "success", nil
 }

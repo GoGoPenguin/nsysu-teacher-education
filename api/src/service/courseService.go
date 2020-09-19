@@ -136,7 +136,7 @@ func GetInformation(courseID string) (result map[string]string, e *errors.Error)
 	}, nil
 }
 
-// SingUpCourse sudent sign up course
+// SingUpCourse student sign up course
 func SingUpCourse(account, courseID, meal string) (result interface{}, e *errors.Error) {
 	tx := gorm.DB()
 

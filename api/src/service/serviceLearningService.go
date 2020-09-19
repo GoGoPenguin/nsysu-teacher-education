@@ -102,7 +102,7 @@ func GetServiceLearningList(account, start, length, search string) (result map[s
 	return
 }
 
-// SingUpServiceLearning sudent sign up service-learning
+// SingUpServiceLearning student sign up service-learning
 func SingUpServiceLearning(account, serviceLearningID string) (result interface{}, e *errors.Error) {
 	tx := gorm.DB()
 
