@@ -2,20 +2,20 @@ let STATUS = {
     'enable': '啟用',
     'disabled': '停用',
 }
-let letures = []
+let lectures = []
 
-const courseTable = $('table#leture').DataTable({
+const courseTable = $('table#lecture').DataTable({
     processing: true,
     serverSide: true,
     ordering: false,
     ajax: {
-        url: `${config.server}/v1/leture`,
+        url: `${config.server}/v1/lecture`,
         type: 'GET',
         dataSrc: (d) => {
-            letures = []
+            lectures = []
 
             d.list.forEach((element, index, array) => {
-                letures.push(Object.assign({}, element))
+                lectures.push(Object.assign({}, element))
 
                 array[index].Button = `
                     <button class="btn btn-secondary mr-1" onclick="detail(${index}, this)">查看</button>
@@ -47,10 +47,10 @@ const courseTable = $('table#leture').DataTable({
 });
 
 const detail = (index, el) => {
-    let leture = letures[index]
+    let lecture = lectures[index]
 
     $.ajax({
-        url: `${config.server}/v1/leture/${leture.ID}`,
+        url: `${config.server}/v1/lecture/${lecture.ID}`,
         type: 'GET',
         beforeSend: (xhr) => {
             $(el).html('<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>&nbsp載入中...')
@@ -62,10 +62,10 @@ const detail = (index, el) => {
         },
         success: (response) => {
             if (response.code === 0) {
-                let leture = response.data
+                let lecture = response.data
                 let html = ''
 
-                for (let category of leture.Categories) {
+                for (let category of lecture.Categories) {
                     let content = ''
                     let comment = ''
                     let subjects = 0
@@ -131,10 +131,10 @@ const detail = (index, el) => {
                     html += content
                 }
 
-                $('#detailModal .modal-title').html(leture.Name)
-                $('#detailModal #name').html(leture.Name)
-                $('#detailModal #min_credit').html(leture.MinCredit)
-                $('#detailModal #comment').html(leture.Comment)
+                $('#detailModal .modal-title').html(lecture.Name)
+                $('#detailModal #name').html(lecture.Name)
+                $('#detailModal #min_credit').html(lecture.MinCredit)
+                $('#detailModal #comment').html(lecture.Comment)
                 $('#detailModal #categories').html(html)
                 $('#detailModal').modal('show')
             } else {
