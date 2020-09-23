@@ -9,6 +9,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ### Changed
 
 - 審核服務學習時可以手動填入時數
+- 修改取得講座列表的順序, 由新到舊
+- 取得講座列表一次最多顯示50筆資料
 
 ## [1.0.0] - 2020.03.05
 
