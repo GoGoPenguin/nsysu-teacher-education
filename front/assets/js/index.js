@@ -71,7 +71,7 @@ const getStudentServiceLearning = () => {
 
 const getStudentLecture = () => {
     $.ajax({
-        url: `${config.server}/v1/leture/student`,
+        url: `${config.server}/v1/lecture/student`,
         type: 'GET',
         beforeSend: (xhr) => {
             setHeader(xhr)
@@ -199,7 +199,7 @@ const getServiceLearning = () => {
 
 const getLectures = () => {
     return $.ajax({
-        url: `${config.server}/v1/leture`,
+        url: `${config.server}/v1/lecture`,
         type: 'GET',
         beforeSend: (xhr) => {
             setHeader(xhr)
@@ -218,7 +218,7 @@ const getLectures = () => {
                 response.list.forEach((element, index) => {
                     let action = ''
 
-                    let studentLecture = studentLectures.find(studentLeture => { return element.ID === studentLeture.Leture.ID })
+                    let studentLecture = studentLectures.find(studentlecture => { return element.ID === studentlecture.lecture.ID })
 
                     if (studentLecture !== undefined) {
                         action = `<a class="btn_table disabled">已申請</a>`
@@ -366,7 +366,7 @@ const signUpServiceLearning = (id, el) => {
 
 const detail = (id) => {
     $.ajax({
-        url: `${config.server}/v1/leture/${id}`,
+        url: `${config.server}/v1/lecture/${id}`,
         type: 'GET',
         beforeSend: (xhr) => {
             setHeader(xhr)
@@ -467,10 +467,10 @@ const detail = (id) => {
 
 const signUpLecture = (id, el) => {
     $.ajax({
-        url: `${config.server}/v1/leture/sign-up`,
+        url: `${config.server}/v1/lecture/sign-up`,
         type: 'POST',
         data: {
-            'LetureID': id,
+            'lectureID': id,
         },
         beforeSend: (xhr) => {
             $(el).toggleClass('disabled')

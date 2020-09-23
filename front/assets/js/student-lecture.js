@@ -34,7 +34,7 @@ const getStudentInformation = () => {
 
 const getStudentLecture = () => {
     $.ajax({
-        url: `${config.server}/v1/leture/student`,
+        url: `${config.server}/v1/lecture/student`,
         type: 'GET',
         beforeSend: (xhr) => {
             setHeader(xhr)
@@ -55,9 +55,9 @@ const getStudentLecture = () => {
                     html += `
                         <tr>
                             <td data-title="狀態" class="${element.Pass ? 'success' : 'danger'}"><span>●</span>${element.Pass ? '通過' : '未通過'}</td>
-                            <td data-title="科目名稱">${element.Leture.Name}</td>
-                            <td data-title="最低學分">${element.Leture.MinCredit}</td>
-                            <td data-title="備註">${element.Leture.Comment}</td>
+                            <td data-title="科目名稱">${element.lecture.Name}</td>
+                            <td data-title="最低學分">${element.lecture.MinCredit}</td>
+                            <td data-title="備註">${element.lecture.Comment}</td>
                             <td><a class="btn_table" onclick="getStudentLectureDetail(${element.ID})">編輯</a></td>
                         </tr>
                     `
@@ -70,7 +70,7 @@ const getStudentLecture = () => {
 
 const getStudentLectureDetail = (id) => {
     $.ajax({
-        url: `${config.server}/v1/leture/student/detail/${id}`,
+        url: `${config.server}/v1/lecture/student/detail/${id}`,
         type: 'GET',
         beforeSend: (xhr) => {
             setHeader(xhr)
@@ -80,8 +80,8 @@ const getStudentLectureDetail = (id) => {
         },
         success: (response) => {
             if (response.code === 0) {
-                editedItem = response.data.Leture
-                let lecture = response.data.Leture
+                editedItem = response.data.lecture
+                let lecture = response.data.lecture
                 let html = ''
 
                 for (const category of lecture.Categories) {
@@ -198,10 +198,10 @@ const getStudentLectureDetail = (id) => {
 
 const updateSubject = (studentLectureID, subjectID) => {
     $.ajax({
-        url: `${config.server}/v1/leture/student/subject`,
+        url: `${config.server}/v1/lecture/student/subject`,
         type: 'PATCH',
         data: {
-            'StudentLetureID': studentLectureID,
+            'StudentlectureID': studentLectureID,
             'SubjectID': subjectID,
             'Name': $(`#studentName${subjectID}`).val(),
             'Year': $(`#year${subjectID}`).val(),
@@ -233,7 +233,7 @@ const updateSubject = (studentLectureID, subjectID) => {
 
 const reloadLecture = (id) => {
     $.ajax({
-        url: `${config.server}/v1/leture/student/detail/${id}`,
+        url: `${config.server}/v1/lecture/student/detail/${id}`,
         type: 'GET',
         beforeSend: (xhr) => {
             setHeader(xhr)
@@ -243,7 +243,7 @@ const reloadLecture = (id) => {
         },
         success: (response) => {
             if (response.code === 0) {
-                editedItem = response.data.Leture
+                editedItem = response.data.lecture
             } else {
                 swal({
                     title: '',
@@ -359,10 +359,10 @@ const check = () => {
 
 const updateStudentLecturePass = (lectureID, pass) => {
     $.ajax({
-        url: `${config.server}/v1/leture/student/pass`,
+        url: `${config.server}/v1/lecture/student/pass`,
         type: 'PATCH',
         data: {
-            'LetureID': lectureID,
+            'lectureID': lectureID,
             'Pass': pass,
         },
         beforeSend: (xhr) => {
