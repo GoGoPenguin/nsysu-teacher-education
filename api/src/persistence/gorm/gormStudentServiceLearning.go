@@ -14,6 +14,7 @@ type StudentServiceLearning struct {
 	Status            string          `gorm:"column:status"`
 	Review            string          `gorm:"column:review"`
 	Reference         string          `gorm:"column:reference"`
+	Hours             *uint           `gorm:"column:hours"`
 	Comment           string          `gorm:"column:comment"`
 }
 
@@ -66,6 +67,7 @@ func (dao *studentServiceLearningDao) Update(tx *gorm.DB, studentServiceLearning
 			"Status":            studentServiceLearning.Status,
 			"Review":            studentServiceLearning.Review,
 			"Reference":         studentServiceLearning.Reference,
+			"Hours":             studentServiceLearning.Hours,
 			"Comment":           studentServiceLearning.Comment,
 		}).Error
 

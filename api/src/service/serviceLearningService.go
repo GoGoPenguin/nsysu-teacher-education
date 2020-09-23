@@ -263,7 +263,7 @@ func UpdateStudentServiceLearning(reference, review multipart.File, studentServi
 }
 
 // UpdateStudentServiceLearningStatus update student-service-learning status
-func UpdateStudentServiceLearningStatus(studentServiceLearningID, status, comment string) (result string, e *errors.Error) {
+func UpdateStudentServiceLearningStatus(studentServiceLearningID, status, comment string, hours uint) (result string, e *errors.Error) {
 	tx := gorm.DB()
 
 	defer func() {
@@ -276,6 +276,7 @@ func UpdateStudentServiceLearningStatus(studentServiceLearningID, status, commen
 	studentServiceLearning := gorm.StudentServiceLearningDao.GetByID(tx, typecast.StringToUint(studentServiceLearningID))
 	studentServiceLearning.Status = status
 	studentServiceLearning.Comment = comment
+	studentServiceLearning.Hours = &hours
 	gorm.StudentServiceLearningDao.Update(tx, studentServiceLearning)
 
 	return "success", nil

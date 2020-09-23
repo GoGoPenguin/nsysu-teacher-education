@@ -30,6 +30,7 @@ func StudentServiceLearningsDTO(studentServiceLearnings *[]gorm.StudentServiceLe
 				"Status":    studentServiceLearning.Status,
 				"Review":    studentServiceLearning.Review,
 				"Reference": studentServiceLearning.Reference,
+				"Hours":     studentServiceLearning.Hours,
 				"Comment":   studentServiceLearning.Comment,
 			})
 		}
