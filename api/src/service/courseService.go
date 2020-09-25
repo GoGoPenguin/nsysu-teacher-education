@@ -91,10 +91,9 @@ func GetCourse(account, start, length, search string) (result map[string]interfa
 	} else {
 		courses = gorm.CourseDao.Query(
 			tx,
-			// specification.BiggerSpecification("start", time.Now().String()),
-			specification.OrderSpecification("start", specification.OrderDirectionDESC),
+			specification.BiggerSpecification("start", time.Now().String()),
+			specification.OrderSpecification("start", specification.OrderDirectionASC),
 			specification.IsNullSpecification("deleted_at"),
-			specification.LimitSpecification(50),
 		)
 	}
 
