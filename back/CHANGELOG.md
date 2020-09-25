@@ -4,6 +4,16 @@ All notable changes are documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+### Removed
+
+- 移除儀表板
+
+### Changed
+
+- 更改新增學生的提示，提醒使用者使用`UTF-8`編碼
+
 ## [1.0.0] - 2019.03.05
 
 ## [0.2.0] - 2019.11.25
