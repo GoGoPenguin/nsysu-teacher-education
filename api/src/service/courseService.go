@@ -164,19 +164,19 @@ func SingUpCourse(account, courseID, meal string) (result interface{}, e *errors
 		return nil, errors.NotFoundError("course ID " + courseID)
 	}
 
-	srudentCourse := &gorm.StudentCourse{
+	studentCourse := &gorm.StudentCourse{
 		StudentID: student.ID,
 		CourseID:  typecast.StringToUint(courseID),
 		Meal:      meal,
 	}
 
-	gorm.StudentCourseDao.New(tx, srudentCourse)
+	gorm.StudentCourseDao.New(tx, studentCourse)
 
 	return "success", nil
 }
 
 // GetStudentCourseList get the list of student course
-func GetStudentCourseList(account, start, length string) (result map[string]interface{}, e *errors.Error) {
+func GetStudentCourseList(account, start, length, search string) (result map[string]interface{}, e *errors.Error) {
 	tx := gorm.DB()
 
 	defer func() {
@@ -195,12 +195,14 @@ func GetStudentCourseList(account, start, length string) (result map[string]inte
 		studentCourses = gorm.StudentCourseDao.Query(
 			tx,
 			specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
+			specification.PreloadSpecification("Student", "concat(name,account,number,major) LIKE (?)", "%"+search+"%"),
 			specification.OrderSpecification("`student_course`."+specification.IDColumn, specification.OrderDirectionDESC),
 			specification.IsNullSpecification("deleted_at"),
 		)
 
 		filtered = gorm.StudentCourseDao.Count(
 			tx,
+			specification.PreloadSpecification("Student", "concat(name,account,number,major) LIKE (?)", "%"+search+"%"),
 			specification.IsNullSpecification("deleted_at"),
 		)
 	} else {

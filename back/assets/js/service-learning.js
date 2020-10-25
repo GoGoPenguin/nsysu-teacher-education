@@ -64,7 +64,7 @@ const studentServiceLearningTable = $('table#student-service-learning').DataTabl
     processing: true,
     serverSide: true,
     ordering: false,
-    searching: false,
+    // searching: false,
     ajax: {
         url: `${config.server}/v1/service-learning/student`,
         type: 'GET',

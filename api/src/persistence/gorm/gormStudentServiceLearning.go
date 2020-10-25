@@ -92,8 +92,9 @@ func (dao *studentServiceLearningDao) Count(tx *gorm.DB, funcs ...func(*gorm.DB)
 // Query custom query
 func (dao *studentServiceLearningDao) Query(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) *[]StudentServiceLearning {
 	var result []StudentServiceLearning
-	err := tx.Preload("Student").
-		Preload("ServiceLearning").
+	err := tx.
+		// Preload("Student").
+		// Preload("ServiceLearning").
 		Table(dao.table).
 		Select("*").
 		Scopes(funcs...).

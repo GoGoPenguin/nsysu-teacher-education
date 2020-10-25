@@ -141,8 +141,8 @@ func SingUpServiceLearning(account, serviceLearningID string) (result interface{
 }
 
 // GetStudentServiceLearningList get the list of student service-learning
-func GetStudentServiceLearningList(account, start, length string) (result map[string]interface{}, e *errors.Error) {
-	tx := gorm.DB()
+func GetStudentServiceLearningList(account, start, length, search string) (result map[string]interface{}, e *errors.Error) {
+	tx := gorm.DB().Debug()
 
 	defer func() {
 		if r := recover(); r != nil {
@@ -161,11 +161,17 @@ func GetStudentServiceLearningList(account, start, length string) (result map[st
 			tx,
 			specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
 			specification.OrderSpecification("`student_service_learning`."+specification.IDColumn, specification.OrderDirectionDESC),
+			specification.PreloadSpecification("ServiceLearning"),
+			specification.LikeSpecification([]string{"hours"}, search),
+			specification.PreloadSpecification("Student", "concat(name,account,number,major) LIKE (?)", "%"+search+"%"),
 			specification.IsNullSpecification("deleted_at"),
 		)
 
 		filtered = gorm.StudentServiceLearningDao.Count(
 			tx,
+			specification.PreloadSpecification("ServiceLearning"),
+			specification.LikeSpecification([]string{"hours"}, search),
+			specification.PreloadSpecification("Student", "concat(name,account,number,major) LIKE (?)", "%"+search+"%"),
 			specification.IsNullSpecification("deleted_at"),
 		)
 	} else {
@@ -282,7 +288,7 @@ func UpdateStudentServiceLearningStatus(studentServiceLearningID, status, commen
 	return "success", nil
 }
 
-// GetStudentServiceLearningFile get student-service-learning refernce or review file
+// GetStudentServiceLearningFile get student-service-learning reference or review file
 func GetStudentServiceLearningFile(studentServiceLearningID, file string) (result map[string]string, e *errors.Error) {
 	tx := gorm.DB()
 

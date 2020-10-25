@@ -76,7 +76,7 @@ const studentCourseTable = $('table#student-course').DataTable({
     processing: true,
     serverSide: true,
     ordering: false,
-    searching: false,
+    // searching: false,
     ajax: {
         url: `${config.server}/v1/course/student`,
         type: 'GET',

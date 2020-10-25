@@ -28,7 +28,7 @@ type studentCourseDao struct {
 // StudentCourseDao student course data access object
 var StudentCourseDao = &studentCourseDao{
 	table:        "student_course",
-	Meat:         "meate",
+	Meat:         "meat",
 	Vegetable:    "vegetable",
 	StatusPass:   "pass",
 	StatusFailed: "failed",
