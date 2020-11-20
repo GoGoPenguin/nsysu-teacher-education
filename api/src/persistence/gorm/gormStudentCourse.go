@@ -94,8 +94,8 @@ func (dao *studentCourseDao) Count(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB
 // Query custom query
 func (dao *studentCourseDao) Query(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) *[]StudentCourse {
 	var result []StudentCourse
-	err := tx.Preload("Student").
-		Preload("Course").
+	err := tx.Joins("join student on student_course.student_id=student.id").
+		Joins("join course on student_course.course_id=course.id").
 		Table(dao.table).
 		Select("*").
 		Scopes(funcs...).

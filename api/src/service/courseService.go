@@ -71,7 +71,6 @@ func GetCourse(account, start, length, search string) (result map[string]interfa
 
 	var (
 		courses *[]gorm.Course
-		filered int
 	)
 
 	if operator := gorm.AdminDao.GetByAccount(tx, account); operator != nil {
@@ -79,12 +78,6 @@ func GetCourse(account, start, length, search string) (result map[string]interfa
 			tx,
 			specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
 			specification.OrderSpecification("start", specification.OrderDirectionDESC),
-			specification.LikeSpecification([]string{"topic", "information", "type", "start", "end"}, search),
-			specification.IsNullSpecification("deleted_at"),
-		)
-
-		filered = gorm.CourseDao.Count(
-			tx,
 			specification.LikeSpecification([]string{"topic", "information", "type", "start", "end"}, search),
 			specification.IsNullSpecification("deleted_at"),
 		)
@@ -102,10 +95,11 @@ func GetCourse(account, start, length, search string) (result map[string]interfa
 		specification.IsNullSpecification("deleted_at"),
 	)
 
+	list := assembler.CoursesDTO(courses)
 	result = map[string]interface{}{
-		"list":            assembler.CoursesDTO(courses),
+		"list":            list,
 		"recordsTotal":    total,
-		"recordsFiltered": filered,
+		"recordsFiltered": len(list),
 	}
 
 	return result, nil
@@ -188,22 +182,15 @@ func GetStudentCourseList(account, start, length, search string) (result map[str
 
 	var (
 		studentCourses *[]gorm.StudentCourse
-		filtered       int
 	)
 
 	if operator := gorm.AdminDao.GetByAccount(tx, account); operator != nil {
 		studentCourses = gorm.StudentCourseDao.Query(
 			tx,
 			specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
-			specification.PreloadSpecification("Student", "concat(name,account,number,major) LIKE (?)", "%"+search+"%"),
+			specification.LikeSpecification([]string{"concat(student.name,student.account,student.number,student.major,course.topic,course.type,course.start,course.end)"}, "123"),
 			specification.OrderSpecification("`student_course`."+specification.IDColumn, specification.OrderDirectionDESC),
-			specification.IsNullSpecification("deleted_at"),
-		)
-
-		filtered = gorm.StudentCourseDao.Count(
-			tx,
-			specification.PreloadSpecification("Student", "concat(name,account,number,major) LIKE (?)", "%"+search+"%"),
-			specification.IsNullSpecification("deleted_at"),
+			specification.IsNullSpecification("student_course.deleted_at"),
 		)
 	} else {
 		student := gorm.StudentDao.GetByAccount(tx, account)
@@ -211,20 +198,22 @@ func GetStudentCourseList(account, start, length, search string) (result map[str
 			tx,
 			specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
 			specification.OrderSpecification("`student_course`."+specification.IDColumn, specification.OrderDirectionDESC),
-			specification.IsNullSpecification("deleted_at"),
+			specification.IsNullSpecification("student_course.deleted_at"),
 			specification.StudentSpecification(student.ID),
 		)
 	}
 
 	total := gorm.StudentCourseDao.Count(
 		tx,
-		specification.IsNullSpecification("deleted_at"),
+		specification.IsNullSpecification("student_course.deleted_at"),
 	)
 
+	list := assembler.StudentCoursesDTO(studentCourses)
+
 	result = map[string]interface{}{
-		"list":            assembler.StudentCoursesDTO(studentCourses),
+		"list":            list,
 		"recordsTotal":    total,
-		"recordsFiltered": filtered,
+		"recordsFiltered": len(list),
 	}
 
 	return
