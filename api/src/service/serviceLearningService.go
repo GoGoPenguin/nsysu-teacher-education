@@ -142,7 +142,7 @@ func SingUpServiceLearning(account, serviceLearningID string) (result interface{
 
 // GetStudentServiceLearningList get the list of student service-learning
 func GetStudentServiceLearningList(account, start, length, search string) (result map[string]interface{}, e *errors.Error) {
-	tx := gorm.DB().Debug()
+	tx := gorm.DB()
 
 	defer func() {
 		if r := recover(); r != nil {
