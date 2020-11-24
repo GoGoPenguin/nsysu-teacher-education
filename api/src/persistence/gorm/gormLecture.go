@@ -77,10 +77,10 @@ func (dao *lectureDao) GetByName(tx *gorm.DB, name string) *Lecture {
 
 // Count get total count
 func (dao *lectureDao) Count(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) int64 {
-	var count int64
-	tx.Table(dao.table).
+	var result []Lecture
+	count := tx.Table(dao.table).
 		Scopes(funcs...).
-		Count(&count)
+		Find(&result).RowsAffected
 
 	return count
 }

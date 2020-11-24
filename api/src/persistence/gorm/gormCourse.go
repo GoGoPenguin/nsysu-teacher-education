@@ -95,10 +95,10 @@ func (dao *courseDao) GetByInformation(tx *gorm.DB, information string) *Course 
 
 // Count get total count
 func (dao *courseDao) Count(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) int64 {
-	var count int64
-	tx.Table(dao.table).
+	var result []Course
+	count := tx.Table(dao.table).
 		Scopes(funcs...).
-		Count(&count)
+		Scan(&result).RowsAffected
 
 	return count
 }

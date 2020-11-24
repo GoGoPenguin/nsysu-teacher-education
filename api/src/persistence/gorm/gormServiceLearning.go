@@ -62,10 +62,10 @@ func (dao *serviceLearningDao) GetByID(tx *gorm.DB, id uint) *ServiceLearning {
 
 // Count get total count
 func (dao *serviceLearningDao) Count(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) int64 {
-	var count int64
-	tx.Table(dao.table).
+	var result []ServiceLearning
+	count := tx.Table(dao.table).
 		Scopes(funcs...).
-		Count(&count)
+		Scan(&result).RowsAffected
 
 	return count
 }

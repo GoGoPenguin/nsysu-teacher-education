@@ -201,7 +201,7 @@ func GetStudentCourseList(account, start, length, search string) (result map[str
 		filtered = gorm.StudentCourseDao.Count(
 			tx,
 			specification.LikeSpecification([]string{"concat(Student.name,Student.account,Student.number,Student.major,Course.topic,Course.type,Course.start,Course.end)"}, search),
-			specification.IsNullSpecification("deleted_at"),
+			specification.IsNullSpecification("student_course.deleted_at"),
 		)
 	} else {
 		student := gorm.StudentDao.GetByAccount(tx, account)

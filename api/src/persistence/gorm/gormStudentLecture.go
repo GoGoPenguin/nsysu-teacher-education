@@ -95,10 +95,11 @@ func (dao *studentLectureDao) Update(tx *gorm.DB, studentLecture *StudentLecture
 
 // Count get total count
 func (dao *studentLectureDao) Count(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) int64 {
-	var count int64
-	tx.Table(dao.table).
+	var result []StudentLecture
+	count := tx.Table(dao.table).
+		Select("*").
 		Scopes(funcs...).
-		Count(&count)
+		Find(&result).RowsAffected
 
 	return count
 }
