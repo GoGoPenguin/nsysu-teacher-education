@@ -1,7 +1,9 @@
 package gorm
 
 import (
-	"github.com/jinzhu/gorm"
+	"errors"
+
+	"gorm.io/gorm"
 )
 
 // SubjectGroup model
@@ -42,7 +44,7 @@ func (dao *subjectGroupDao) GetByID(tx *gorm.DB, id uint) *SubjectGroup {
 		Where("deleted_at IS NULL").
 		Find(&result).Error
 
-	if gorm.IsRecordNotFoundError(err) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil
 	}
 	if err != nil {
@@ -60,7 +62,7 @@ func (dao *subjectGroupDao) GetByIDAndType(tx *gorm.DB, id, typeID uint) *Subjec
 		Where("deleted_at IS NULL").
 		Scan(&result).Error
 
-	if gorm.IsRecordNotFoundError(err) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil
 	}
 	if err != nil {
@@ -76,7 +78,7 @@ func (dao *subjectGroupDao) Query(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB)
 		Scopes(funcs...).
 		Scan(&result).Error
 
-	if gorm.IsRecordNotFoundError(err) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil
 	}
 	if err != nil {

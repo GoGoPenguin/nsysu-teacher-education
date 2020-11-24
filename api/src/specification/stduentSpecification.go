@@ -1,7 +1,7 @@
 package specification
 
 import (
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 // StudentSpecification generate student id query

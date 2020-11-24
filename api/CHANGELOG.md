@@ -10,6 +10,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 - 審核服務學習時可以手動填入時數
 - 修改取得講座列表的順序, 由時間近到遠
+- 升級套件`gorm`至`v2`
+
+### Added
+
+- 報名列表新增搜尋功能
+
+### Fixed
+
+- 修正錯字
 
 ## [1.0.0] - 2020.03.05
 

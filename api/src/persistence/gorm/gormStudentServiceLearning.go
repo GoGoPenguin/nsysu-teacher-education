@@ -1,7 +1,9 @@
 package gorm
 
 import (
-	"github.com/jinzhu/gorm"
+	"errors"
+
+	"gorm.io/gorm"
 )
 
 // StudentServiceLearning model
@@ -49,7 +51,7 @@ func (dao *studentServiceLearningDao) GetByID(tx *gorm.DB, id uint) *StudentServ
 		Where("deleted_at IS NULL").
 		Scan(&result).Error
 
-	if gorm.IsRecordNotFoundError(err) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil
 	}
 	if err != nil {
@@ -71,7 +73,7 @@ func (dao *studentServiceLearningDao) Update(tx *gorm.DB, studentServiceLearning
 			"Comment":           studentServiceLearning.Comment,
 		}).Error
 
-	if gorm.IsRecordNotFoundError(err) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return
 	}
 	if err != nil {
@@ -80,8 +82,8 @@ func (dao *studentServiceLearningDao) Update(tx *gorm.DB, studentServiceLearning
 }
 
 // Count get total count
-func (dao *studentServiceLearningDao) Count(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) int {
-	var count int
+func (dao *studentServiceLearningDao) Count(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) int64 {
+	var count int64
 	tx.Table(dao.table).
 		Scopes(funcs...).
 		Count(&count)
@@ -93,14 +95,14 @@ func (dao *studentServiceLearningDao) Count(tx *gorm.DB, funcs ...func(*gorm.DB)
 func (dao *studentServiceLearningDao) Query(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) *[]StudentServiceLearning {
 	var result []StudentServiceLearning
 	err := tx.
-		// Preload("Student").
-		// Preload("ServiceLearning").
+		Joins("Student").
+		Joins("ServiceLearning").
 		Table(dao.table).
 		Select("*").
 		Scopes(funcs...).
 		Find(&result).Error
 
-	if gorm.IsRecordNotFoundError(err) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil
 	}
 	if err != nil {

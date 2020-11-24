@@ -60,7 +60,7 @@ func GetServiceLearningList(account, start, length, search string) (result map[s
 
 	var (
 		serviceLearnings *[]gorm.ServiceLearning
-		filtered         int
+		filtered         int64
 	)
 
 	if operator := gorm.AdminDao.GetByAccount(tx, account); operator != nil {
@@ -153,7 +153,7 @@ func GetStudentServiceLearningList(account, start, length, search string) (resul
 
 	var (
 		studentServiceLearnings *[]gorm.StudentServiceLearning
-		filtered                int
+		filtered                int64
 	)
 
 	if operator := gorm.AdminDao.GetByAccount(tx, account); operator != nil {
@@ -161,18 +161,14 @@ func GetStudentServiceLearningList(account, start, length, search string) (resul
 			tx,
 			specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
 			specification.OrderSpecification("`student_service_learning`."+specification.IDColumn, specification.OrderDirectionDESC),
-			specification.PreloadSpecification("ServiceLearning"),
-			specification.LikeSpecification([]string{"hours"}, search),
-			specification.PreloadSpecification("Student", "concat(name,account,number,major) LIKE (?)", "%"+search+"%"),
-			specification.IsNullSpecification("deleted_at"),
+			specification.LikeSpecification([]string{"concat(Student.name,Student.account,Student.number,Student.major,ServiceLearning.hours)"}, search),
+			specification.IsNullSpecification("student_service_learning.deleted_at"),
 		)
 
 		filtered = gorm.StudentServiceLearningDao.Count(
 			tx,
-			specification.PreloadSpecification("ServiceLearning"),
-			specification.LikeSpecification([]string{"hours"}, search),
-			specification.PreloadSpecification("Student", "concat(name,account,number,major) LIKE (?)", "%"+search+"%"),
-			specification.IsNullSpecification("deleted_at"),
+			specification.LikeSpecification([]string{"concat(Student.name,Student.account,Student.number,Student.major,ServiceLearning.hours)"}, search),
+			specification.IsNullSpecification("student_service_learning.deleted_at"),
 		)
 	} else {
 		student := gorm.StudentDao.GetByAccount(tx, account)

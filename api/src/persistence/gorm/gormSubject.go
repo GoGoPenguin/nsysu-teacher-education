@@ -1,7 +1,9 @@
 package gorm
 
 import (
-	"github.com/jinzhu/gorm"
+	"errors"
+
+	"gorm.io/gorm"
 )
 
 // Subject model
@@ -10,7 +12,7 @@ type Subject struct {
 	SubjectGroupID uint           `gorm:"column:subject_group_id;"`
 	Name           string         `gorm:"column:name;"`
 	Credit         uint           `gorm:"column:credit;"`
-	Compulsory     bool           `grom:"column:compulsory;"`
+	Compulsory     bool           `gorm:"column:compulsory;"`
 	Status         string         `gorm:"column:status; default:'enable'"`
 	StudentSubject StudentSubject `gorm:"foreignkey:SubjectID; PRELOAD:false"`
 }
@@ -49,7 +51,7 @@ func (dao *subjectDao) GetByID(tx *gorm.DB, id uint) *Subject {
 		Where("deleted_at IS NULL").
 		Find(&result).Error
 
-	if gorm.IsRecordNotFoundError(err) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil
 	}
 	if err != nil {
@@ -67,7 +69,7 @@ func (dao *subjectDao) GetByNameAndGroup(tx *gorm.DB, name string, groupID uint)
 		Where("deleted_at IS NULL").
 		Scan(&result).Error
 
-	if gorm.IsRecordNotFoundError(err) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil
 	}
 	if err != nil {
@@ -83,7 +85,7 @@ func (dao *subjectDao) Query(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) *[]S
 		Scopes(funcs...).
 		Scan(&result).Error
 
-	if gorm.IsRecordNotFoundError(err) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil
 	}
 	if err != nil {

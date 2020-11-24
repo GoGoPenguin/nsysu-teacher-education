@@ -1,7 +1,9 @@
 package gorm
 
 import (
-	"github.com/jinzhu/gorm"
+	"errors"
+
+	"gorm.io/gorm"
 )
 
 // LectureType model
@@ -40,7 +42,7 @@ func (dao *lectureTypeDao) GetByID(tx *gorm.DB, id uint) *LectureType {
 		Where("deleted_at IS NULL").
 		Scan(&result).Error
 
-	if gorm.IsRecordNotFoundError(err) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil
 	}
 	if err != nil {
@@ -58,7 +60,7 @@ func (dao *lectureTypeDao) GetByCategoryAndName(tx *gorm.DB, categoryID uint, na
 		Where("deleted_at IS NULL").
 		Scan(&result).Error
 
-	if gorm.IsRecordNotFoundError(err) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil
 	}
 	if err != nil {
@@ -74,7 +76,7 @@ func (dao *lectureTypeDao) Query(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) 
 		Scopes(funcs...).
 		Scan(&result).Error
 
-	if gorm.IsRecordNotFoundError(err) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil
 	}
 	if err != nil {

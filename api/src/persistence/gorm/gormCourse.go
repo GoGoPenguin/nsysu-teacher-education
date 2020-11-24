@@ -1,9 +1,10 @@
 package gorm
 
 import (
+	"errors"
 	"time"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 // Course model
@@ -49,7 +50,7 @@ func (dao *courseDao) GetByID(tx *gorm.DB, id uint) *Course {
 		Where("deleted_at IS NULL").
 		Scan(&result).Error
 
-	if gorm.IsRecordNotFoundError(err) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil
 	}
 	if err != nil {
@@ -66,7 +67,7 @@ func (dao *courseDao) GetByTopic(tx *gorm.DB, topic string) *Course {
 		Where("deleted_at IS NULL").
 		Scan(&result).Error
 
-	if gorm.IsRecordNotFoundError(err) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil
 	}
 	if err != nil {
@@ -83,7 +84,7 @@ func (dao *courseDao) GetByInformation(tx *gorm.DB, information string) *Course 
 		Where("deleted_at IS NULL").
 		Scan(&result).Error
 
-	if gorm.IsRecordNotFoundError(err) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil
 	}
 	if err != nil {
@@ -93,8 +94,8 @@ func (dao *courseDao) GetByInformation(tx *gorm.DB, information string) *Course 
 }
 
 // Count get total count
-func (dao *courseDao) Count(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) int {
-	var count int
+func (dao *courseDao) Count(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) int64 {
+	var count int64
 	tx.Table(dao.table).
 		Scopes(funcs...).
 		Count(&count)
@@ -109,7 +110,7 @@ func (dao *courseDao) Query(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) *[]Co
 		Scopes(funcs...).
 		Scan(&result).Error
 
-	if gorm.IsRecordNotFoundError(err) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil
 	}
 	if err != nil {

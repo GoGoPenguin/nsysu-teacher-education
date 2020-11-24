@@ -1,7 +1,9 @@
 package gorm
 
 import (
-	"github.com/jinzhu/gorm"
+	"errors"
+
+	"gorm.io/gorm"
 )
 
 // StudentCourse model
@@ -52,7 +54,7 @@ func (dao *studentCourseDao) GetByID(tx *gorm.DB, id uint) *StudentCourse {
 		Where("deleted_at IS NULL").
 		Scan(&result).Error
 
-	if gorm.IsRecordNotFoundError(err) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil
 	}
 	if err != nil {
@@ -73,7 +75,7 @@ func (dao *studentCourseDao) Update(tx *gorm.DB, studentCourse *StudentCourse) {
 			"Comment":   studentCourse.Comment,
 		}).Error
 
-	if gorm.IsRecordNotFoundError(err) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return
 	}
 	if err != nil {
@@ -82,8 +84,8 @@ func (dao *studentCourseDao) Update(tx *gorm.DB, studentCourse *StudentCourse) {
 }
 
 // Count get total count
-func (dao *studentCourseDao) Count(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) int {
-	var count int
+func (dao *studentCourseDao) Count(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) int64 {
+	var count int64
 	tx.Table(dao.table).
 		Scopes(funcs...).
 		Count(&count)
@@ -94,14 +96,14 @@ func (dao *studentCourseDao) Count(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB
 // Query custom query
 func (dao *studentCourseDao) Query(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) *[]StudentCourse {
 	var result []StudentCourse
-	err := tx.Joins("join student on student_course.student_id=student.id").
-		Joins("join course on student_course.course_id=course.id").
+	err := tx.Joins("Student").
+		Joins("Course").
 		Table(dao.table).
 		Select("*").
 		Scopes(funcs...).
 		Find(&result).Error
 
-	if gorm.IsRecordNotFoundError(err) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil
 	}
 	if err != nil {

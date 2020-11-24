@@ -25,8 +25,6 @@ func CreateCourse(topic, courseType string, file multipart.File, header *multipa
 		}
 	}()
 
-	logger.Debug(header)
-
 	if header != nil {
 		course := &gorm.Course{
 			Topic:       topic,
@@ -188,7 +186,7 @@ func GetStudentCourseList(account, start, length, search string) (result map[str
 		studentCourses = gorm.StudentCourseDao.Query(
 			tx,
 			specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
-			specification.LikeSpecification([]string{"concat(student.name,student.account,student.number,student.major,course.topic,course.type,course.start,course.end)"}, "123"),
+			specification.LikeSpecification([]string{"concat(Student.name,Student.account,Student.number,Student.major,Course.topic,Course.type,Course.start,Course.end)"}, search),
 			specification.OrderSpecification("`student_course`."+specification.IDColumn, specification.OrderDirectionDESC),
 			specification.IsNullSpecification("student_course.deleted_at"),
 		)

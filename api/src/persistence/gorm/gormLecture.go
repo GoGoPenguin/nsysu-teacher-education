@@ -1,7 +1,9 @@
 package gorm
 
 import (
-	"github.com/jinzhu/gorm"
+	"errors"
+
+	"gorm.io/gorm"
 )
 
 // Lecture model
@@ -47,7 +49,7 @@ func (dao *lectureDao) GetByID(tx *gorm.DB, id uint) *Lecture {
 	err := tx.Table(dao.table).
 		Find(&result).Error
 
-	if gorm.IsRecordNotFoundError(err) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil
 	}
 	if err != nil {
@@ -64,7 +66,7 @@ func (dao *lectureDao) GetByName(tx *gorm.DB, name string) *Lecture {
 		Where("deleted_at IS NULL").
 		Scan(&result).Error
 
-	if gorm.IsRecordNotFoundError(err) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil
 	}
 	if err != nil {
@@ -74,8 +76,8 @@ func (dao *lectureDao) GetByName(tx *gorm.DB, name string) *Lecture {
 }
 
 // Count get total count
-func (dao *lectureDao) Count(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) int {
-	var count int
+func (dao *lectureDao) Count(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) int64 {
+	var count int64
 	tx.Table(dao.table).
 		Scopes(funcs...).
 		Count(&count)
@@ -90,7 +92,7 @@ func (dao *lectureDao) Query(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) *[]L
 		Scopes(funcs...).
 		Find(&result).Error
 
-	if gorm.IsRecordNotFoundError(err) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil
 	}
 	if err != nil {

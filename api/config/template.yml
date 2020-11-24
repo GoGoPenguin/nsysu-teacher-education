@@ -1,0 +1,33 @@
+log:
+  path: "logs/"
+  file: "app.log"
+server:
+  host: "0.0.0.0"
+  port: 80
+  dir: "api"
+  timezone: "Asia/Taipei"
+db:
+  user: "root"
+  password: "h65FZU5gtW7EdPTHtCejf49VmyKAPRwByRR4n6hnQCqY6dxUTv2L7v3j7LLPugYW"
+  host: "172.18.0.3"
+  port: 3306
+  database: "teacher_education"
+  flag: "charset=utf8mb4&parseTime=True&loc=Local&collation=utf8mb4_unicode_ci"
+redis:
+  host: "172.18.0.4"
+  port: 6379
+  database: 0
+  auth: "PuXKSqhYVpe7k4XU8sFJA3JRVXsgaUpqVF66pSsGkjEFxLRHYP99gCgpsm24bg3j"
+  max_idle: 80
+  max_active: 12000
+  idle_timeout: 2500
+jwt:
+  issuer: "ctep"
+  access_token_exp: 1440 # 24 minutes
+  refresh_token_exp: 259200 # 72 hours
+  secret: P%%+T#8w%n_qqFxx^DGY_6E7qRN%@SBWma87L^hW&FJ3k5hPU7fX&=y^FQ4g#pdu
+http:
+  header:
+    Access-Control-Allow-Origin: "*"
+    Access-Control-Allow-Headers: "Content-Type, Authorization"
+    Access-Control-Allow-Methods: "GET, POST, OPTIONS, HEAD, PATCH, DELETE"

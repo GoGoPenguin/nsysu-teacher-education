@@ -7,6 +7,7 @@ import (
 	"github.com/nsysu/teacher-education/src/specification"
 	"github.com/nsysu/teacher-education/src/utils/logger"
 	"github.com/nsysu/teacher-education/src/utils/typecast"
+	"gorm.io/gorm/clause"
 )
 
 // GetLectures get lecture list
@@ -22,7 +23,7 @@ func GetLectures(account, start, length, search string) (result map[string]inter
 
 	var (
 		lectures *[]gorm.Lecture
-		filtered int
+		filtered int64
 	)
 
 	if operator := gorm.AdminDao.GetByAccount(tx, account); operator != nil {
@@ -30,13 +31,13 @@ func GetLectures(account, start, length, search string) (result map[string]inter
 			tx,
 			specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
 			specification.OrderSpecification("created_at", specification.OrderDirectionASC),
-			specification.LikeSpecification([]string{"name", "comment", "min_credit", "status"}, search),
+			specification.LikeSpecification([]string{"concat(name,comment,min_credit,status,comment)"}, search),
 			specification.IsNullSpecification("deleted_at"),
 		)
 
 		filtered = gorm.LectureDao.Count(
 			tx,
-			specification.LikeSpecification([]string{"name", "comment", "min_credit", "status"}, search),
+			specification.LikeSpecification([]string{"concat(name,comment,min_credit,status,comment)"}, search),
 			specification.IsNullSpecification("deleted_at"),
 		)
 	} else {
@@ -65,7 +66,7 @@ func GetLectures(account, start, length, search string) (result map[string]inter
 
 // GetLectureDetail get lecture detail
 func GetLectureDetail(lectureID string) (result interface{}, e *errors.Error) {
-	tx := gorm.DB().Set("gorm:auto_preload", true)
+	tx := gorm.DB()
 
 	defer func() {
 		if r := recover(); r != nil {
@@ -74,6 +75,7 @@ func GetLectureDetail(lectureID string) (result interface{}, e *errors.Error) {
 		}
 	}()
 
+	tx = tx.Preload("Categories.Types.Groups.Subjects.StudentSubject").Preload(clause.Associations)
 	lecture := gorm.LectureDao.GetByID(tx, typecast.StringToUint(lectureID))
 	return lecture, nil
 }
@@ -150,7 +152,7 @@ func GetStudentLectureList(account, start, length string) (result map[string]int
 
 	var (
 		studentLectures *[]gorm.StudentLecture
-		filtered        int
+		filtered        int64
 	)
 
 	if operator := gorm.AdminDao.GetByAccount(tx, account); operator != nil {
@@ -238,8 +240,8 @@ func UpdateStudentSubject(account, studentLectureID, subjectID, name, year, seme
 	return "success", nil
 }
 
-// UpdateStudentLetuerPass update student lecture pass
-func UpdateStudentLetuerPass(account, lectureID, pass string) (result interface{}, e *errors.Error) {
+// UpdateStudentLecturePass update student lecture pass
+func UpdateStudentLecturePass(account, lectureID, pass string) (result interface{}, e *errors.Error) {
 	tx := gorm.DB()
 
 	defer func() {
@@ -249,12 +251,12 @@ func UpdateStudentLetuerPass(account, lectureID, pass string) (result interface{
 		}
 	}()
 
-	stduent := gorm.StudentDao.GetByAccount(tx, account)
-	if stduent == nil {
+	student := gorm.StudentDao.GetByAccount(tx, account)
+	if student == nil {
 		return nil, errors.NotFoundError("Student " + account)
 	}
 
-	studentLecture := gorm.StudentLectureDao.GetByLectureAndStudent(tx, typecast.StringToUint(lectureID), stduent.ID)
+	studentLecture := gorm.StudentLectureDao.GetByLectureAndStudent(tx, typecast.StringToUint(lectureID), student.ID)
 	if studentLecture == nil {
 		return nil, errors.NotFoundError("Student Lecture")
 	}
