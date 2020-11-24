@@ -92,9 +92,8 @@ func GetServiceLearningList(account, start, length, search string) (result map[s
 		specification.IsNullSpecification("deleted_at"),
 	)
 
-	list := assembler.ServiceLearningDTO(serviceLearnings)
 	result = map[string]interface{}{
-		"list":            list,
+		"list":            assembler.ServiceLearningDTO(serviceLearnings),
 		"recordsTotal":    total,
 		"recordsFiltered": filtered,
 	}
