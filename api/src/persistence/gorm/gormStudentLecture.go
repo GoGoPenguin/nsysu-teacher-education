@@ -47,7 +47,7 @@ func (dao *studentLectureDao) GetByID(tx *gorm.DB, id uint) *StudentLecture {
 		},
 	}
 	err := tx.Table(dao.table).
-		Find(&result).Error
+		First(&result).Error
 
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil
@@ -67,7 +67,7 @@ func (dao *studentLectureDao) GetByLectureAndStudent(tx *gorm.DB, lectureID, stu
 			StudentID: studentID,
 			LectureID: lectureID,
 		}).
-		Find(&result).Error
+		First(&result).Error
 
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil
@@ -85,9 +85,6 @@ func (dao *studentLectureDao) Update(tx *gorm.DB, studentLecture *StudentLecture
 			"Pass": studentLecture.Pass,
 		}).Error
 
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return
-	}
 	if err != nil {
 		panic(err)
 	}
@@ -112,9 +109,6 @@ func (dao *studentLectureDao) Query(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.D
 		Scopes(funcs...).
 		Find(&result).Error
 
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return nil
-	}
 	if err != nil {
 		panic(err)
 	}

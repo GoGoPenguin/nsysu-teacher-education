@@ -48,7 +48,7 @@ func (dao *courseDao) GetByID(tx *gorm.DB, id uint) *Course {
 	err := tx.Table(dao.table).
 		Where("id = ?", id).
 		Where("deleted_at IS NULL").
-		Scan(&result).Error
+		First(&result).Error
 
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil
@@ -65,7 +65,7 @@ func (dao *courseDao) GetByTopic(tx *gorm.DB, topic string) *Course {
 	err := tx.Table(dao.table).
 		Where("topic = ?", topic).
 		Where("deleted_at IS NULL").
-		Scan(&result).Error
+		First(&result).Error
 
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil
@@ -82,7 +82,7 @@ func (dao *courseDao) GetByInformation(tx *gorm.DB, information string) *Course 
 	err := tx.Table(dao.table).
 		Where("information = ?", information).
 		Where("deleted_at IS NULL").
-		Scan(&result).Error
+		First(&result).Error
 
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil
@@ -110,9 +110,7 @@ func (dao *courseDao) Query(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) *[]Co
 		Scopes(funcs...).
 		Scan(&result).Error
 
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return nil
-	}
+
 	if err != nil {
 		panic(err)
 	}

@@ -49,7 +49,7 @@ func (dao *serviceLearningDao) GetByID(tx *gorm.DB, id uint) *ServiceLearning {
 	err := tx.Table(dao.table).
 		Where("id = ?", id).
 		Where("deleted_at IS NULL").
-		Scan(&result).Error
+		First(&result).Error
 
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil
@@ -77,9 +77,6 @@ func (dao *serviceLearningDao) Query(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.
 		Scopes(funcs...).
 		Scan(&result).Error
 
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return nil
-	}
 	if err != nil {
 		panic(err)
 	}

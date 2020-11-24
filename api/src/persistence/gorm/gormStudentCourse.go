@@ -52,7 +52,7 @@ func (dao *studentCourseDao) GetByID(tx *gorm.DB, id uint) *StudentCourse {
 	err := tx.Table(dao.table).
 		Where("id = ?", id).
 		Where("deleted_at IS NULL").
-		Scan(&result).Error
+		First(&result).Error
 
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil
@@ -75,9 +75,6 @@ func (dao *studentCourseDao) Update(tx *gorm.DB, studentCourse *StudentCourse) {
 			"Comment":   studentCourse.Comment,
 		}).Error
 
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return
-	}
 	if err != nil {
 		panic(err)
 	}
@@ -106,9 +103,6 @@ func (dao *studentCourseDao) Query(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB
 		Scopes(funcs...).
 		Find(&result).Error
 
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return nil
-	}
 	if err != nil {
 		panic(err)
 	}
