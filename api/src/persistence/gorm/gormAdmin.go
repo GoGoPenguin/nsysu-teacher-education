@@ -40,7 +40,7 @@ func (dao *adminDao) GetByID(tx *gorm.DB, id uint) *Admin {
 	err := tx.Table(dao.table).
 		Where("id = ?", id).
 		Where("deleted_at IS NULL").
-		Scan(&result).Error
+		First(&result).Error
 
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil
@@ -52,12 +52,12 @@ func (dao *adminDao) GetByID(tx *gorm.DB, id uint) *Admin {
 }
 
 // GetByAccount get a record by account
-func (dao *adminDao) GetByAccount(tx *gorm.DB, acount string) *Admin {
+func (dao *adminDao) GetByAccount(tx *gorm.DB, account string) *Admin {
 	result := Admin{}
 	err := tx.Table(dao.table).
-		Where("account = ?", acount).
+		Where("account = ?", account).
 		Where("deleted_at IS NULL").
-		Scan(&result).Error
+		First(&result).Error
 
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil
@@ -75,9 +75,6 @@ func (dao *adminDao) Query(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) *[]Adm
 		Scopes(funcs...).
 		Scan(&result).Error
 
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return nil
-	}
 	if err != nil {
 		panic(err)
 	}

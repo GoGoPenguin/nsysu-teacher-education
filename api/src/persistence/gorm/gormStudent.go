@@ -43,7 +43,7 @@ func (dao *studentDao) GetByID(tx *gorm.DB, id uint) *Student {
 	err := tx.Table(dao.table).
 		Where("id = ?", id).
 		Where("deleted_at IS NULL").
-		Scan(&result).Error
+		First(&result).Error
 
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil
@@ -60,7 +60,7 @@ func (dao *studentDao) GetByAccount(tx *gorm.DB, account string) *Student {
 	err := tx.Table(dao.table).
 		Where("account = ?", account).
 		Where("deleted_at IS NULL").
-		Scan(&result).Error
+		First(&result).Error
 
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil
@@ -73,10 +73,10 @@ func (dao *studentDao) GetByAccount(tx *gorm.DB, account string) *Student {
 
 // Count get total count
 func (dao *studentDao) Count(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) int64 {
-	var count int64
-	tx.Table(dao.table).
+	var result []Student
+	count := tx.Table(dao.table).
 		Scopes(funcs...).
-		Count(&count)
+		Scan(&result).RowsAffected
 
 	return count
 }
@@ -88,9 +88,6 @@ func (dao *studentDao) Query(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) *[]S
 		Scopes(funcs...).
 		Scan(&result).Error
 
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return nil
-	}
 	if err != nil {
 		panic(err)
 	}

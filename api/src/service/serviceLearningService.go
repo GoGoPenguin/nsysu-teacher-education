@@ -175,14 +175,14 @@ func GetStudentServiceLearningList(account, start, length, search string) (resul
 			tx,
 			specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
 			specification.OrderSpecification("`student_service_learning`."+specification.IDColumn, specification.OrderDirectionDESC),
-			specification.IsNullSpecification("deleted_at"),
+			specification.IsNullSpecification("student_service_learning.deleted_at"),
 			specification.StudentSpecification(student.ID),
 		)
 	}
 
 	total := gorm.StudentServiceLearningDao.Count(
 		tx,
-		specification.IsNullSpecification("deleted_at"),
+		specification.IsNullSpecification("student_service_learning.deleted_at"),
 	)
 
 	result = map[string]interface{}{

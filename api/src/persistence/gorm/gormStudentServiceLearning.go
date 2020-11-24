@@ -49,7 +49,7 @@ func (dao *studentServiceLearningDao) GetByID(tx *gorm.DB, id uint) *StudentServ
 	err := tx.Table(dao.table).
 		Where("id = ?", id).
 		Where("deleted_at IS NULL").
-		Scan(&result).Error
+		First(&result).Error
 
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil
@@ -73,9 +73,6 @@ func (dao *studentServiceLearningDao) Update(tx *gorm.DB, studentServiceLearning
 			"Comment":           studentServiceLearning.Comment,
 		}).Error
 
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return
-	}
 	if err != nil {
 		panic(err)
 	}
@@ -83,10 +80,14 @@ func (dao *studentServiceLearningDao) Update(tx *gorm.DB, studentServiceLearning
 
 // Count get total count
 func (dao *studentServiceLearningDao) Count(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) int64 {
-	var count int64
-	tx.Table(dao.table).
+	var result []StudentServiceLearning
+	count := tx.
+		Joins("Student").
+		Joins("ServiceLearning").
+		Table(dao.table).
+		Select("*").
 		Scopes(funcs...).
-		Count(&count)
+		Find(&result).RowsAffected
 
 	return count
 }

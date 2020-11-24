@@ -49,7 +49,7 @@ func (dao *subjectDao) GetByID(tx *gorm.DB, id uint) *Subject {
 	}
 	err := tx.Table(dao.table).
 		Where("deleted_at IS NULL").
-		Find(&result).Error
+		First(&result).Error
 
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil
@@ -67,7 +67,7 @@ func (dao *subjectDao) GetByNameAndGroup(tx *gorm.DB, name string, groupID uint)
 		Where("name = ?", name).
 		Where("subject_group_id = ?", groupID).
 		Where("deleted_at IS NULL").
-		Scan(&result).Error
+		First(&result).Error
 
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil
@@ -85,9 +85,6 @@ func (dao *subjectDao) Query(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) *[]S
 		Scopes(funcs...).
 		Scan(&result).Error
 
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return nil
-	}
 	if err != nil {
 		panic(err)
 	}

@@ -42,7 +42,7 @@ func (dao *subjectGroupDao) GetByID(tx *gorm.DB, id uint) *SubjectGroup {
 	}
 	err := tx.Table(dao.table).
 		Where("deleted_at IS NULL").
-		Find(&result).Error
+		First(&result).Error
 
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil
@@ -60,7 +60,7 @@ func (dao *subjectGroupDao) GetByIDAndType(tx *gorm.DB, id, typeID uint) *Subjec
 		Where("id = ?", id).
 		Where("lecture_type_id = ?", typeID).
 		Where("deleted_at IS NULL").
-		Scan(&result).Error
+		First(&result).Error
 
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil
@@ -78,9 +78,6 @@ func (dao *subjectGroupDao) Query(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB)
 		Scopes(funcs...).
 		Scan(&result).Error
 
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return nil
-	}
 	if err != nil {
 		panic(err)
 	}

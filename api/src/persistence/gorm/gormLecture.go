@@ -47,7 +47,7 @@ func (dao *lectureDao) GetByID(tx *gorm.DB, id uint) *Lecture {
 		},
 	}
 	err := tx.Table(dao.table).
-		Find(&result).Error
+		First(&result).Error
 
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil
@@ -64,7 +64,7 @@ func (dao *lectureDao) GetByName(tx *gorm.DB, name string) *Lecture {
 	err := tx.Table(dao.table).
 		Where("name = ?", name).
 		Where("deleted_at IS NULL").
-		Scan(&result).Error
+		First(&result).Error
 
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil
@@ -77,10 +77,10 @@ func (dao *lectureDao) GetByName(tx *gorm.DB, name string) *Lecture {
 
 // Count get total count
 func (dao *lectureDao) Count(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) int64 {
-	var count int64
-	tx.Table(dao.table).
+	var result []Lecture
+	count := tx.Table(dao.table).
 		Scopes(funcs...).
-		Count(&count)
+		Find(&result).RowsAffected
 
 	return count
 }
@@ -92,9 +92,7 @@ func (dao *lectureDao) Query(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) *[]L
 		Scopes(funcs...).
 		Find(&result).Error
 
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return nil
-	}
+
 	if err != nil {
 		panic(err)
 	}
