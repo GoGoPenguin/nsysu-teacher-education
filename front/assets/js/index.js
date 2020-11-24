@@ -274,56 +274,55 @@ const signUpCourse = (id, el) => {
     $('#courseModal').modal('show')
 }
 
-                                 $('#courseModal form')
-                                     .on('submit', (e) => {
-                                         e.preventDefault();
+$('#courseModal form').on('submit', (e) => {
+    e.preventDefault();
 
-                                         $.ajax({
-                                             url: `${config.server}/v1/course/sign-up`,
-                                             type: 'POST',
-                                             data: {
-                                                 'CourseID': editedID,
-                                                 'Meal': $('#meal').val(),
-                                             },
-                                             beforeSend: (xhr) => {
-                                                 $('#courseModal div.modal-footer button.btn.btn-primary').toggleClass('disabled')
-                                                 setHeader(xhr)
-                                             },
-                                             error: (xhr) => {
-                                                 errorHandle(xhr, '錯誤')
-                                             },
-                                             success: (response) => {
-                                                 if (response.code === 0) {
-                                                     swal({
-                                                         title: '',
-                                                         text: '報名成功',
-                                                         icon: 'success',
-                                                         timer: 1500,
-                                                         buttons: false,
-                                                     })
-                                                     $(editedItem).html('已報名')
-                                                     $(editedItem).toggleClass('disabled')
-                                                 } else {
-                                                     swal({
-                                                         title: '',
-                                                         text: '報名失敗',
-                                                         icon: 'error',
-                                                         timer: 1500,
-                                                         buttons: false,
-                                                     })
-                                                     $(editedItem).html('報名')
-                                                 }
-                                             },
-                                             complete: () => {
-                                                 $('#courseModal div.modal-footer button.btn.btn-primary').html('送出')
-                                                 $('#courseModal div.modal-footer button.btn.btn-primary').toggleClass('disabled')
-                                                 $('#courseModal').modal('hide')
+    $.ajax({
+        url: `${config.server}/v1/course/sign-up`,
+        type: 'POST',
+        data: {
+            'CourseID': editedID,
+            'Meal': $('#meal').val(),
+        },
+        beforeSend: (xhr) => {
+            $('#courseModal div.modal-footer button.btn.btn-primary').toggleClass('disabled')
+            setHeader(xhr)
+        },
+        error: (xhr) => {
+            errorHandle(xhr, '錯誤')
+        },
+        success: (response) => {
+            if (response.code === 0) {
+                swal({
+                    title: '',
+                    text: '報名成功',
+                    icon: 'success',
+                    timer: 1500,
+                    buttons: false,
+                })
+                $(editedItem).html('已報名')
+                $(editedItem).toggleClass('disabled')
+            } else {
+                swal({
+                    title: '',
+                    text: '報名失敗',
+                    icon: 'error',
+                    timer: 1500,
+                    buttons: false,
+                })
+                $(editedItem).html('報名')
+            }
+        },
+        complete: () => {
+            $('#courseModal div.modal-footer button.btn.btn-primary').html('送出')
+            $('#courseModal div.modal-footer button.btn.btn-primary').toggleClass('disabled')
+            $('#courseModal').modal('hide')
 
-                                                 editedID = null
-                                                 editedItem = null
-                                             }
-                                         });
-                                     })
+            editedID = null
+            editedItem = null
+        }
+    });
+});
 
 const signUpServiceLearning = (id, el) => {
     $.ajax({
