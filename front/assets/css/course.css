@@ -1,3 +1,8 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
 /* 導覽列開始 */
 
 .navbar {
@@ -104,21 +109,17 @@
     .navbar {
         padding: 18px 0;
     }
-
     .navbar .nav {
         margin: 0;
         width: initial;
     }
-
     .navbar .nav .logo {
         position: relative;
         left: 5%;
     }
-
     .navbar .nav .main_menu {
         display: none;
     }
-
     .navbar .nav .nav_burger {
         display: block;
         position: relative;
@@ -128,7 +129,6 @@
         cursor: pointer;
         z-index: 1;
     }
-
     .navbar .nav .nav_burger .burger_bar {
         display: block;
         width: 24px;
@@ -138,22 +138,18 @@
         margin-bottom: 5px;
         transition: all .3s ease-in-out;
     }
-
     .navbar .nav .nav_burger .burger_bar.open {
         background-color: transparent;
     }
-
     .navbar .nav .nav_burger .burger_bar.bar_before.open {
         background-color: #fff;
         transform: translateY(8px) rotate(45deg);
     }
-
     .navbar .nav .nav_burger .burger_bar.bar_after.open {
         background-color: #fff;
         transform: translateY(4px) rotate(-45deg);
         margin-top: -12px;
     }
-
     .navbar .nav .mobile_menu {
         display: block;
         position: absolute;
@@ -167,13 +163,11 @@
         opacity: 0;
         transition: all .3s ease-in-out;
     }
-
     .navbar .nav .mobile_menu.open {
         display: block;
         opacity: 1;
         width: 260px;
     }
-
     .navbar .nav .mobile_menu li {
         display: block;
         text-align: center;
@@ -182,11 +176,9 @@
         cursor: pointer;
         transition: all .3s ease-in-out;
     }
-
     .navbar .nav .mobile_menu li:hover {
         background-color: rgba(255, 255, 255, .2);
     }
-
     .navbar .nav .mobile_menu .logout {
         display: block;
         width: 90px;
@@ -195,7 +187,6 @@
         border-radius: 5px;
         padding: 10px 25px;
     }
-
     .navbar .nav .mobile_menu li a {
         color: #FFF;
         font-weight: bold;
@@ -221,6 +212,9 @@
 .block {
     width: 100%;
     padding: 90px 0 45px;
+    padding-bottom: 200px;
+    /*減去footer高度*/
+    min-height: calc(100% - 120px);
 }
 
 .block .container {
@@ -326,7 +320,6 @@
     .block {
         padding: 80px 0 0;
     }
-
     .block .block_title h2 {
         margin: 10px 0;
     }
@@ -346,14 +339,12 @@
     .block thead {
         display: none;
     }
-
     .block td {
         display: block;
         position: relative;
         padding: 10px;
         padding-left: 35%;
     }
-
     .block td:before {
         content: attr(data-title);
         font-weight: bold;
@@ -362,25 +353,20 @@
         padding-right: 10px;
         width: 30%;
     }
-
     .block.yellow td:before {
         color: #FDC236;
     }
-
     .block.yellow td:before {
         color: #FDC236;
     }
-
     .block .table tr td:last-child:before {
         display: none;
     }
-
     .block .table tr td:last-child {
         text-align: center;
         padding: 10px;
         border-radius: 0 0 5px 5px;
     }
-
     .block tbody .btn_table {
         display: block;
     }
@@ -430,10 +416,8 @@
 .footer {
     display: block;
     width: 100%;
-    position: absolute;
-    bottom: 0;
+    height: 120px;
     background-color: #19AFC9;
-    margin-top: 70px;
 }
 
 .footer .container {
