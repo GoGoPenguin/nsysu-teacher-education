@@ -20,5 +20,11 @@
     "oAria": {
         "sSortAscending": "以升序排列",
         "sSortDescending": ": 以降序排列"
+    },
+    "select": {
+        "rows": {
+            "1": "選擇 %d 列",
+            "_": ""
+        }
     }
 }

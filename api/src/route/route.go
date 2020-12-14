@@ -41,12 +41,13 @@ func Run() {
 
 		course := v1.Party("/course")
 		{
-			course.Get("/", hero.Handler(handler.GetCourseHandler))                      // 取得講座列表
-			course.Get("/{courseID}", hero.Handler(handler.GetCourseInformationHandler)) // 取得講座資訊
-			course.Post("/", hero.Handler(handler.CreateCourseHandler))                  // 新增講座
-			course.Post("/sign-up", hero.Handler(handler.SignUpCourseHandler))           // 報名講座
-			course.Patch("/", hero.Handler(handler.UpdateCourseHandler))                 // 修改講座
-			course.Delete("/{courseID}", hero.Handler(handler.DeleteCourseHandler))      // 刪除講座
+			course.Get("/", hero.Handler(handler.GetCourseHandler))                         // 取得講座列表
+			course.Get("/{courseID}", hero.Handler(handler.GetCourseInformationHandler))    // 取得講座資訊
+			course.Post("/", hero.Handler(handler.CreateCourseHandler))                     // 新增講座
+			course.Post("/sign-up", hero.Handler(handler.SignUpCourseHandler))              // 報名講座
+			course.Patch("/{courseID}", hero.Handler(handler.UpdateCourseHandler))          // 修改講座
+			course.Delete("/{courseID}", hero.Handler(handler.DeleteCourseHandler))         // 刪除講座
+			course.Patch("/show/{courseID}", hero.Handler(handler.UpdateCourseShowHandler)) // 修改講座顯示狀態
 
 			student := course.Party("/student")
 			{

@@ -13,6 +13,7 @@ type Course struct {
 	Topic       string    `gorm:"column:topic;"`
 	Information string    `gorm:"column:information;"`
 	Type        string    `gorm:"column:type;"`
+	Show        *bool     `gorm:"column:show"`
 	Start       time.Time `gorm:"column:start"`
 	End         time.Time `gorm:"column:end"`
 }
@@ -110,7 +111,6 @@ func (dao *courseDao) Query(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) *[]Co
 		Scopes(funcs...).
 		Scan(&result).Error
 
-
 	if err != nil {
 		panic(err)
 	}
@@ -137,6 +137,7 @@ func (dao *courseDao) Update(tx *gorm.DB, course *Course) {
 		"Topic":       course.Topic,
 		"Information": course.Information,
 		"Type":        course.Type,
+		"Show":        course.Show,
 		"Start":       course.Start,
 		"End":         course.End,
 	}

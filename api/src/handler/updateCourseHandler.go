@@ -43,7 +43,7 @@ func UpdateCourseHandler(ctx iris.Context) {
 	}
 
 	params := &rule{
-		CourseID: ctx.FormValue("CourseID"),
+		CourseID: ctx.Params().Get("courseID"),
 		Topic:    ctx.FormValue("Topic"),
 		Type:     ctx.FormValue("Type"),
 		Start:    startTime,
