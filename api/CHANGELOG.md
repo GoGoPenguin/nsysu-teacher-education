@@ -15,6 +15,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 ### Added
 
 - 報名列表新增搜尋功能
+- 新增修改課程顯示狀態功能
 
 ### Fixed
 
