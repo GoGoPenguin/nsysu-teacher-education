@@ -48,7 +48,7 @@ $('input#upload').fileinput({
         timer: 1500,
         buttons: false,
     })
-    studentTable.ajax.reload()
+    studentTable.reload(null, false)
     $('input#upload').fileinput('clear')
 }).on('fileuploaderror', (event, data, msg) => {
     swal({

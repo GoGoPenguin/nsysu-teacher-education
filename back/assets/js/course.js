@@ -289,7 +289,7 @@ $('#course-form').on('submit', (e) => {
                     timer: 1000,
                     buttons: false,
                 })
-                courseTable.ajax.reload();
+                courseTable.reload(null, false)
             } else {
                 swal({
                     title: '',
@@ -361,7 +361,7 @@ $('#checkModal .btn-primary').click(() => {
                     timer: 1500,
                     buttons: false,
                 })
-                studentCourseTable.ajax.reload()
+                studentCourseTable.reload(null, false)
             } else {
                 swal({
                     title: '',
@@ -406,7 +406,7 @@ $('#checkModal .btn-danger').click(() => {
                     timer: 1500,
                     buttons: false,
                 })
-                studentCourseTable.ajax.reload()
+                studentCourseTable.reload(null, false)
             } else {
                 swal({
                     title: '',
@@ -499,7 +499,7 @@ $('#update-form').on('submit', (e) => {
                     timer: 1000,
                     buttons: false,
                 })
-                courseTable.ajax.reload()
+                courseTable.reload(null, false)
             } else {
                 swal({
                     title: '',
@@ -540,7 +540,7 @@ const deleteCourse = () => {
                     timer: 1000,
                     buttons: false,
                 })
-                courseTable.ajax.reload()
+                courseTable.reload(null, false)
             } else {
                 swal({
                     title: '',
@@ -582,7 +582,7 @@ const showOrNotShow = (id) => {
         },
         success: (response) => {
             if (response.code === 0) {
-                courseTable.ajax.reload()
+                courseTable.ajax.reload(null, false)
             } else {
                 swal({
                     title: '',
