@@ -9,7 +9,7 @@ func StudentServiceLearningsDTO(studentServiceLearnings *[]gorm.StudentServiceLe
 	result := []map[string]interface{}{}
 
 	for _, studentServiceLearning := range *studentServiceLearnings {
-		if studentServiceLearning.ServiceLearning.ID != 0 {
+		if studentServiceLearning.ServiceLearning.ID != 0 && studentServiceLearning.Student.ID != 0 {
 			result = append(result, map[string]interface{}{
 				"ID": studentServiceLearning.ID,
 				"Student": map[string]interface{}{
@@ -30,6 +30,7 @@ func StudentServiceLearningsDTO(studentServiceLearnings *[]gorm.StudentServiceLe
 				"Status":    studentServiceLearning.Status,
 				"Review":    studentServiceLearning.Review,
 				"Reference": studentServiceLearning.Reference,
+				"Hours":     studentServiceLearning.Hours,
 				"Comment":   studentServiceLearning.Comment,
 			})
 		}

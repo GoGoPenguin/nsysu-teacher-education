@@ -1,9 +1,10 @@
 package gorm
 
 import (
+	"errors"
 	"time"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 // Course model
@@ -12,6 +13,7 @@ type Course struct {
 	Topic       string    `gorm:"column:topic;"`
 	Information string    `gorm:"column:information;"`
 	Type        string    `gorm:"column:type;"`
+	Show        *bool     `gorm:"column:show"`
 	Start       time.Time `gorm:"column:start"`
 	End         time.Time `gorm:"column:end"`
 }
@@ -47,9 +49,9 @@ func (dao *courseDao) GetByID(tx *gorm.DB, id uint) *Course {
 	err := tx.Table(dao.table).
 		Where("id = ?", id).
 		Where("deleted_at IS NULL").
-		Scan(&result).Error
+		First(&result).Error
 
-	if gorm.IsRecordNotFoundError(err) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil
 	}
 	if err != nil {
@@ -64,9 +66,9 @@ func (dao *courseDao) GetByTopic(tx *gorm.DB, topic string) *Course {
 	err := tx.Table(dao.table).
 		Where("topic = ?", topic).
 		Where("deleted_at IS NULL").
-		Scan(&result).Error
+		First(&result).Error
 
-	if gorm.IsRecordNotFoundError(err) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil
 	}
 	if err != nil {
@@ -81,9 +83,9 @@ func (dao *courseDao) GetByInformation(tx *gorm.DB, information string) *Course 
 	err := tx.Table(dao.table).
 		Where("information = ?", information).
 		Where("deleted_at IS NULL").
-		Scan(&result).Error
+		First(&result).Error
 
-	if gorm.IsRecordNotFoundError(err) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil
 	}
 	if err != nil {
@@ -93,11 +95,11 @@ func (dao *courseDao) GetByInformation(tx *gorm.DB, information string) *Course 
 }
 
 // Count get total count
-func (dao *courseDao) Count(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) int {
-	var count int
-	tx.Table(dao.table).
+func (dao *courseDao) Count(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) int64 {
+	var result []Course
+	count := tx.Table(dao.table).
 		Scopes(funcs...).
-		Count(&count)
+		Scan(&result).RowsAffected
 
 	return count
 }
@@ -109,9 +111,6 @@ func (dao *courseDao) Query(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) *[]Co
 		Scopes(funcs...).
 		Scan(&result).Error
 
-	if gorm.IsRecordNotFoundError(err) {
-		return nil
-	}
 	if err != nil {
 		panic(err)
 	}
@@ -138,6 +137,7 @@ func (dao *courseDao) Update(tx *gorm.DB, course *Course) {
 		"Topic":       course.Topic,
 		"Information": course.Information,
 		"Type":        course.Type,
+		"Show":        course.Show,
 		"Start":       course.Start,
 		"End":         course.End,
 	}

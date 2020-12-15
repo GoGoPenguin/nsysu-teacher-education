@@ -72,12 +72,6 @@
         <!-- Sidebar -->
         <ul class="sidebar navbar-nav">
             <li class="nav-item">
-                <a class="nav-link" href="/">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>儀表板</span>
-                </a>
-            </li>
-            <li class="nav-item">
                 <a class="nav-link" href="/students.html">
                     <i class="fas fa-users"></i>
                     <span>學生管理</span>
@@ -96,7 +90,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/leture.html">
+                <a class="nav-link" href="/lecture.html">
                     <i class="fas fa-book"></i>
                     <span>專門科目</span>
                 </a>
@@ -115,9 +109,6 @@
 
                 <!-- Breadcrumbs-->
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item">
-                        <a href="/">儀表板</a>
-                    </li>
                     <li class="breadcrumb-item active">服務學習管理</li>
                 </ol>
 
@@ -377,9 +368,13 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class=" col-3"><strong>類別</strong></label>
+                        <label class="col-sm col-form-label"><strong>類別</strong></label>
                         <div class="col type">
                             <input type="text" readonly class="form-control-plaintext">
+                        </div>
+                        <label class="col-sm col-form-label"><strong>時數</strong></label>
+                        <div class="col hours">
+                            <input type="number" class="form-control">
                         </div>
                     </div>
                     <div class="form-group">
@@ -551,7 +546,6 @@
     <!-- Page level plugin JavaScript-->
     <script src="/node_modules/datatables.net/js/jquery.dataTables.js"></script>
     <script src="/node_modules/datatables.net-bs4/js/dataTables.bootstrap4.js"></script>
-    <script src="/node_modules/datatables.net-scroller-bs4/js/scroller.bootstrap4.js"></script>
     <script src="/node_modules/sweetalert/dist/sweetalert.min.js"></script>
     <script src="/node_modules/dayjs/dayjs.min.js"></script>
 

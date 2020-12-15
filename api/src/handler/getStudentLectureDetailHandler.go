@@ -5,17 +5,16 @@ import (
 	"github.com/kataras/iris"
 	"github.com/nsysu/teacher-education/src/errors"
 	"github.com/nsysu/teacher-education/src/service"
-	"github.com/nsysu/teacher-education/src/utils/auth"
 )
 
-// SignUpLetureHandler sign up leture
-func SignUpLetureHandler(ctx iris.Context) {
+// GetStudentLectureDetailHandler get student-lecture detail
+func GetStudentLectureDetailHandler(ctx iris.Context) {
 	type rule struct {
-		LetureID string `valid:"required"`
+		StudentLectureID string `valid:"required"`
 	}
 
 	params := &rule{
-		LetureID: ctx.FormValue("LetureID"),
+		StudentLectureID: ctx.Params().Get("studentLectureID"),
 	}
 
 	if _, err := govalidator.ValidateStruct(params); err != nil {
@@ -23,8 +22,7 @@ func SignUpLetureHandler(ctx iris.Context) {
 		return
 	}
 
-	account := auth.Account(ctx)
-	result, err := service.SingUpLeture(account, params.LetureID)
+	result, err := service.GetStudentLectureDetail(params.StudentLectureID)
 
 	if err != (*errors.Error)(nil) {
 		failed(ctx, err)

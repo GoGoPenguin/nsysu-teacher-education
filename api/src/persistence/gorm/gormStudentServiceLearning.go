@@ -1,7 +1,9 @@
 package gorm
 
 import (
-	"github.com/jinzhu/gorm"
+	"errors"
+
+	"gorm.io/gorm"
 )
 
 // StudentServiceLearning model
@@ -14,6 +16,7 @@ type StudentServiceLearning struct {
 	Status            string          `gorm:"column:status"`
 	Review            string          `gorm:"column:review"`
 	Reference         string          `gorm:"column:reference"`
+	Hours             *uint           `gorm:"column:hours"`
 	Comment           string          `gorm:"column:comment"`
 }
 
@@ -46,9 +49,9 @@ func (dao *studentServiceLearningDao) GetByID(tx *gorm.DB, id uint) *StudentServ
 	err := tx.Table(dao.table).
 		Where("id = ?", id).
 		Where("deleted_at IS NULL").
-		Scan(&result).Error
+		First(&result).Error
 
-	if gorm.IsRecordNotFoundError(err) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil
 	}
 	if err != nil {
@@ -66,23 +69,25 @@ func (dao *studentServiceLearningDao) Update(tx *gorm.DB, studentServiceLearning
 			"Status":            studentServiceLearning.Status,
 			"Review":            studentServiceLearning.Review,
 			"Reference":         studentServiceLearning.Reference,
+			"Hours":             studentServiceLearning.Hours,
 			"Comment":           studentServiceLearning.Comment,
 		}).Error
 
-	if gorm.IsRecordNotFoundError(err) {
-		return
-	}
 	if err != nil {
 		panic(err)
 	}
 }
 
 // Count get total count
-func (dao *studentServiceLearningDao) Count(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) int {
-	var count int
-	tx.Table(dao.table).
+func (dao *studentServiceLearningDao) Count(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) int64 {
+	var result []StudentServiceLearning
+	count := tx.
+		Joins("Student").
+		Joins("ServiceLearning").
+		Table(dao.table).
+		Select("*").
 		Scopes(funcs...).
-		Count(&count)
+		Find(&result).RowsAffected
 
 	return count
 }
@@ -90,14 +95,15 @@ func (dao *studentServiceLearningDao) Count(tx *gorm.DB, funcs ...func(*gorm.DB)
 // Query custom query
 func (dao *studentServiceLearningDao) Query(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) *[]StudentServiceLearning {
 	var result []StudentServiceLearning
-	err := tx.Preload("Student").
-		Preload("ServiceLearning").
+	err := tx.
+		Joins("Student").
+		Joins("ServiceLearning").
 		Table(dao.table).
 		Select("*").
 		Scopes(funcs...).
 		Find(&result).Error
 
-	if gorm.IsRecordNotFoundError(err) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil
 	}
 	if err != nil {

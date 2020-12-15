@@ -1,7 +1,9 @@
 package gorm
 
 import (
-	"github.com/jinzhu/gorm"
+	"errors"
+
+	"gorm.io/gorm"
 )
 
 // Student model
@@ -41,9 +43,9 @@ func (dao *studentDao) GetByID(tx *gorm.DB, id uint) *Student {
 	err := tx.Table(dao.table).
 		Where("id = ?", id).
 		Where("deleted_at IS NULL").
-		Scan(&result).Error
+		First(&result).Error
 
-	if gorm.IsRecordNotFoundError(err) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil
 	}
 	if err != nil {
@@ -58,9 +60,9 @@ func (dao *studentDao) GetByAccount(tx *gorm.DB, account string) *Student {
 	err := tx.Table(dao.table).
 		Where("account = ?", account).
 		Where("deleted_at IS NULL").
-		Scan(&result).Error
+		First(&result).Error
 
-	if gorm.IsRecordNotFoundError(err) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil
 	}
 	if err != nil {
@@ -70,11 +72,11 @@ func (dao *studentDao) GetByAccount(tx *gorm.DB, account string) *Student {
 }
 
 // Count get total count
-func (dao *studentDao) Count(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) int {
-	var count int
-	tx.Table(dao.table).
+func (dao *studentDao) Count(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) int64 {
+	var result []Student
+	count := tx.Table(dao.table).
 		Scopes(funcs...).
-		Count(&count)
+		Scan(&result).RowsAffected
 
 	return count
 }
@@ -86,9 +88,6 @@ func (dao *studentDao) Query(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) *[]S
 		Scopes(funcs...).
 		Scan(&result).Error
 
-	if gorm.IsRecordNotFoundError(err) {
-		return nil
-	}
 	if err != nil {
 		panic(err)
 	}

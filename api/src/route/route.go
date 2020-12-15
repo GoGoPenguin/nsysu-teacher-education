@@ -41,12 +41,13 @@ func Run() {
 
 		course := v1.Party("/course")
 		{
-			course.Get("/", hero.Handler(handler.GetCourseHandler))                      // 取得講座列表
-			course.Get("/{courseID}", hero.Handler(handler.GetCourseInformationHandler)) // 取得講座資訊
-			course.Post("/", hero.Handler(handler.CreateCourseHandler))                  // 新增講座
-			course.Post("/sign-up", hero.Handler(handler.SignUpCourseHandler))           // 報名講座
-			course.Patch("/", hero.Handler(handler.UpdateCourseHandler))                 // 修改講座
-			course.Delete("/{courseID}", hero.Handler(handler.DeleteCourseHandler))      // 刪除講座
+			course.Get("/", hero.Handler(handler.GetCourseHandler))                         // 取得講座列表
+			course.Get("/{courseID}", hero.Handler(handler.GetCourseInformationHandler))    // 取得講座資訊
+			course.Post("/", hero.Handler(handler.CreateCourseHandler))                     // 新增講座
+			course.Post("/sign-up", hero.Handler(handler.SignUpCourseHandler))              // 報名講座
+			course.Patch("/{courseID}", hero.Handler(handler.UpdateCourseHandler))          // 修改講座
+			course.Delete("/{courseID}", hero.Handler(handler.DeleteCourseHandler))         // 刪除講座
+			course.Patch("/show/{courseID}", hero.Handler(handler.UpdateCourseShowHandler)) // 修改講座顯示狀態
 
 			student := course.Party("/student")
 			{
@@ -73,18 +74,18 @@ func Run() {
 			}
 		}
 
-		leture := v1.Party("/leture")
+		lecture := v1.Party("/lecture")
 		{
-			leture.Get("/", hero.Handler(handler.GetLeturesHandler))               // 取得課程列表
-			leture.Get("/{letureID}", hero.Handler(handler.GetLeturDetailHandler)) // 取得課程詳細資料
-			leture.Post("/sign-up", hero.Handler(handler.SignUpLetureHandler))     // 報名課程
+			lecture.Get("/", hero.Handler(handler.GetLecturesHandler))                 // 取得課程列表
+			lecture.Get("/{lectureID}", hero.Handler(handler.GetLectureDetailHandler)) // 取得課程詳細資料
+			lecture.Post("/sign-up", hero.Handler(handler.SignUpLectureHandler))       // 報名課程
 
-			student := leture.Party("/student")
+			student := lecture.Party("/student")
 			{
-				student.Get("/", hero.Handler(handler.GetStudentLetureHandler))                               // 取得報名課程列表
-				student.Get("/detail/{studentLetureID}", hero.Handler(handler.GetStudentLetureDetailHandler)) // 取得學生課程詳細資料
-				student.Patch("/subject", hero.Handler(handler.UpdateStudentSubjectHandler))                  // 更新學生成績
-				student.Patch("/pass", hero.Handler(handler.UpdateStudentLetureStatusHandler))                // 更新狀態
+				student.Get("/", hero.Handler(handler.GetStudentLectureHandler))                                // 取得報名課程列表
+				student.Get("/detail/{studentLectureID}", hero.Handler(handler.GetStudentLectureDetailHandler)) // 取得學生課程詳細資料
+				student.Patch("/subject", hero.Handler(handler.UpdateStudentSubjectHandler))                    // 更新學生成績
+				student.Patch("/pass", hero.Handler(handler.UpdateStudentLectureStatusHandler))                 // 更新狀態
 			}
 		}
 	}

@@ -1,19 +1,21 @@
 package gorm
 
 import (
-	"github.com/jinzhu/gorm"
+	"errors"
+
+	"gorm.io/gorm"
 )
 
 // StudentSubject model
 type StudentSubject struct {
 	gorm.Model
-	StudentLetureID uint   `gorm:"column:student_leture_id;"`
-	SubjectID       uint   `gorm:"column:subject_id;"`
-	Name            string `gorm:"column:name;"`
-	Year            string `gorm:"column:year;"`
-	Semester        string `gorm:"column:semester;"`
-	Credit          string `gorm:"column:credit;"`
-	Score           string `gorm:"column:score;"`
+	StudentLectureID uint   `gorm:"column:student_lecture_id;"`
+	SubjectID        uint   `gorm:"column:subject_id;"`
+	Name             string `gorm:"column:name;"`
+	Year             string `gorm:"column:year;"`
+	Semester         string `gorm:"column:semester;"`
+	Credit           string `gorm:"column:credit;"`
+	Score            string `gorm:"column:score;"`
 }
 
 type studentSubjectDao struct {
@@ -43,9 +45,9 @@ func (dao *studentSubjectDao) GetByID(tx *gorm.DB, id uint) *StudentSubject {
 		},
 	}
 	err := tx.Table(dao.table).
-		Find(&result).Error
+		First(&result).Error
 
-	if gorm.IsRecordNotFoundError(err) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil
 	}
 	if err != nil {
@@ -55,17 +57,17 @@ func (dao *studentSubjectDao) GetByID(tx *gorm.DB, id uint) *StudentSubject {
 }
 
 // GetByID get a record by id
-func (dao *studentSubjectDao) GetByLetureAndSubject(tx *gorm.DB, letureID, subjectID uint) *StudentSubject {
+func (dao *studentSubjectDao) GetByLectureAndSubject(tx *gorm.DB, lectureID, subjectID uint) *StudentSubject {
 	var result StudentSubject
 
 	err := tx.Table(dao.table).
 		Where(&StudentSubject{
-			StudentLetureID: letureID,
-			SubjectID:       subjectID,
+			StudentLectureID: lectureID,
+			SubjectID:        subjectID,
 		}).
-		Find(&result).Error
+		First(&result).Error
 
-	if gorm.IsRecordNotFoundError(err) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil
 	}
 	if err != nil {
@@ -81,9 +83,6 @@ func (dao *studentSubjectDao) Query(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.D
 		Scopes(funcs...).
 		Find(&result).Error
 
-	if gorm.IsRecordNotFoundError(err) {
-		return nil
-	}
 	if err != nil {
 		panic(err)
 	}

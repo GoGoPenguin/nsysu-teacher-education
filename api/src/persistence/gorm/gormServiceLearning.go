@@ -1,9 +1,10 @@
 package gorm
 
 import (
+	"errors"
 	"time"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 // ServiceLearning model
@@ -48,9 +49,9 @@ func (dao *serviceLearningDao) GetByID(tx *gorm.DB, id uint) *ServiceLearning {
 	err := tx.Table(dao.table).
 		Where("id = ?", id).
 		Where("deleted_at IS NULL").
-		Scan(&result).Error
+		First(&result).Error
 
-	if gorm.IsRecordNotFoundError(err) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil
 	}
 	if err != nil {
@@ -60,11 +61,11 @@ func (dao *serviceLearningDao) GetByID(tx *gorm.DB, id uint) *ServiceLearning {
 }
 
 // Count get total count
-func (dao *serviceLearningDao) Count(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) int {
-	var count int
-	tx.Table(dao.table).
+func (dao *serviceLearningDao) Count(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) int64 {
+	var result []ServiceLearning
+	count := tx.Table(dao.table).
 		Scopes(funcs...).
-		Count(&count)
+		Scan(&result).RowsAffected
 
 	return count
 }
@@ -76,9 +77,6 @@ func (dao *serviceLearningDao) Query(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.
 		Scopes(funcs...).
 		Scan(&result).Error
 
-	if gorm.IsRecordNotFoundError(err) {
-		return nil
-	}
 	if err != nil {
 		panic(err)
 	}

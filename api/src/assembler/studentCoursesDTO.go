@@ -9,7 +9,7 @@ func StudentCoursesDTO(studentCourses *[]gorm.StudentCourse) []map[string]interf
 	result := []map[string]interface{}{}
 
 	for _, studentCourse := range *studentCourses {
-		if studentCourse.Course.ID != 0 {
+		if studentCourse.Course.ID != 0 && studentCourse.Student.ID != 0 {
 			result = append(result, map[string]interface{}{
 				"ID": studentCourse.ID,
 				"Student": map[string]interface{}{

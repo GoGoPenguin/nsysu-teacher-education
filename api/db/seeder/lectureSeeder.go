@@ -5,7 +5,7 @@ import (
 	"github.com/nsysu/teacher-education/src/utils/logger"
 )
 
-func letureSeeder() {
+func lectureSeeder() {
 	tx := gorm.DB().Begin()
 
 	defer func() {
@@ -15,7 +15,7 @@ func letureSeeder() {
 		}
 	}()
 
-	letureData := []map[string]interface{}{
+	lectureData := []map[string]interface{}{
 		map[string]interface{}{"ID": uint(1), "Name": "自然科學領域化學專長", "MinCredit": uint(42), "Comment": "適合化學系所等"},
 		map[string]interface{}{"ID": uint(2), "Name": "藝術領域藝術生活科－表演藝術專長", "MinCredit": uint(38), "Comment": "適合劇場藝術學系所等"},
 		map[string]interface{}{"ID": uint(3), "Name": "藝術領域表演藝術專長", "MinCredit": uint(44), "Comment": "適合劇場藝術學系所等"},
@@ -28,232 +28,232 @@ func letureSeeder() {
 		map[string]interface{}{"ID": uint(10), "Name": "藝術領域音樂專長", "MinCredit": uint(44), "Comment": "音樂學系所等"},
 	}
 
-	for _, data := range letureData {
-		leture := &gorm.Leture{
+	for _, data := range lectureData {
+		lecture := &gorm.Lecture{
 			Name:      data["Name"].(string),
 			MinCredit: data["MinCredit"].(uint),
 			Comment:   data["Comment"].(string),
 		}
-		leture.ID = data["ID"].(uint)
+		lecture.ID = data["ID"].(uint)
 
-		if gorm.LetureDao.GetByName(tx, leture.Name) == nil {
-			gorm.LetureDao.New(tx, leture)
+		if gorm.LectureDao.GetByName(tx, lecture.Name) == nil {
+			gorm.LectureDao.New(tx, lecture)
 		}
 	}
 
 	categoryData := []map[string]interface{}{
-		map[string]interface{}{"ID": uint(1), "LetureID": uint(1), "Name": "領域核心課程", "MinCredit": uint(4), "MinType": uint(0)},
-		map[string]interface{}{"ID": uint(2), "LetureID": uint(1), "Name": "領域內跨科課程", "MinCredit": uint(8), "MinType": uint(2)},
-		map[string]interface{}{"ID": uint(3), "LetureID": uint(1), "Name": "化學專長課程", "MinCredit": uint(30), "MinType": uint(0)},
+		map[string]interface{}{"ID": uint(1), "LectureID": uint(1), "Name": "領域核心課程", "MinCredit": uint(4), "MinType": uint(0)},
+		map[string]interface{}{"ID": uint(2), "LectureID": uint(1), "Name": "領域內跨科課程", "MinCredit": uint(8), "MinType": uint(2)},
+		map[string]interface{}{"ID": uint(3), "LectureID": uint(1), "Name": "化學專長課程", "MinCredit": uint(30), "MinType": uint(0)},
 
-		map[string]interface{}{"ID": uint(4), "LetureID": uint(2), "Name": "領域核心課程", "MinCredit": uint(3), "MinType": uint(0)},
-		map[string]interface{}{"ID": uint(5), "LetureID": uint(2), "Name": "表演藝術專長課程", "MinCredit": uint(30), "MinType": uint(0)},
+		map[string]interface{}{"ID": uint(4), "LectureID": uint(2), "Name": "領域核心課程", "MinCredit": uint(3), "MinType": uint(0)},
+		map[string]interface{}{"ID": uint(5), "LectureID": uint(2), "Name": "表演藝術專長課程", "MinCredit": uint(30), "MinType": uint(0)},
 
-		map[string]interface{}{"ID": uint(6), "LetureID": uint(3), "Name": "領域核心", "MinCredit": uint(3), "MinType": uint(0)},
-		map[string]interface{}{"ID": uint(7), "LetureID": uint(3), "Name": "表演藝術專長課程", "MinCredit": uint(34), "MinType": uint(0)},
+		map[string]interface{}{"ID": uint(6), "LectureID": uint(3), "Name": "領域核心", "MinCredit": uint(3), "MinType": uint(0)},
+		map[string]interface{}{"ID": uint(7), "LectureID": uint(3), "Name": "表演藝術專長課程", "MinCredit": uint(34), "MinType": uint(0)},
 
-		map[string]interface{}{"ID": uint(8), "LetureID": uint(4), "Name": "主修專長課程", "MinCredit": uint(0), "MinType": uint(0)},
+		map[string]interface{}{"ID": uint(8), "LectureID": uint(4), "Name": "主修專長課程", "MinCredit": uint(0), "MinType": uint(0)},
 
-		map[string]interface{}{"ID": uint(9), "LetureID": uint(5), "Name": "主修專長課程", "MinCredit": uint(0), "MinType": uint(0)},
+		map[string]interface{}{"ID": uint(9), "LectureID": uint(5), "Name": "主修專長課程", "MinCredit": uint(0), "MinType": uint(0)},
 
-		map[string]interface{}{"ID": uint(10), "LetureID": uint(6), "Name": "主修專長課程", "MinCredit": uint(0), "MinType": uint(0)},
+		map[string]interface{}{"ID": uint(10), "LectureID": uint(6), "Name": "主修專長課程", "MinCredit": uint(0), "MinType": uint(0)},
 
-		map[string]interface{}{"ID": uint(11), "LetureID": uint(7), "Name": "領域核心課程", "MinCredit": uint(4), "MinType": uint(0)},
-		map[string]interface{}{"ID": uint(12), "LetureID": uint(7), "Name": "領域內跨科課程", "MinCredit": uint(12), "MinType": uint(3)},
-		map[string]interface{}{"ID": uint(13), "LetureID": uint(7), "Name": "公民與社會專長課程", "MinCredit": uint(34), "MinType": uint(0)},
+		map[string]interface{}{"ID": uint(11), "LectureID": uint(7), "Name": "領域核心課程", "MinCredit": uint(4), "MinType": uint(0)},
+		map[string]interface{}{"ID": uint(12), "LectureID": uint(7), "Name": "領域內跨科課程", "MinCredit": uint(12), "MinType": uint(3)},
+		map[string]interface{}{"ID": uint(13), "LectureID": uint(7), "Name": "公民與社會專長課程", "MinCredit": uint(34), "MinType": uint(0)},
 
-		map[string]interface{}{"ID": uint(14), "LetureID": uint(8), "Name": "領域核心課程", "MinCredit": uint(4), "MinType": uint(0)},
-		map[string]interface{}{"ID": uint(15), "LetureID": uint(8), "Name": "領域內跨科課程", "MinCredit": uint(8), "MinType": uint(2)},
-		map[string]interface{}{"ID": uint(16), "LetureID": uint(8), "Name": "生物專長課程", "MinCredit": uint(5), "MinType": uint(0)},
+		map[string]interface{}{"ID": uint(14), "LectureID": uint(8), "Name": "領域核心課程", "MinCredit": uint(4), "MinType": uint(0)},
+		map[string]interface{}{"ID": uint(15), "LectureID": uint(8), "Name": "領域內跨科課程", "MinCredit": uint(8), "MinType": uint(2)},
+		map[string]interface{}{"ID": uint(16), "LectureID": uint(8), "Name": "生物專長課程", "MinCredit": uint(5), "MinType": uint(0)},
 
-		map[string]interface{}{"ID": uint(17), "LetureID": uint(9), "Name": "領域核心課程", "MinCredit": uint(4), "MinType": uint(0)},
-		map[string]interface{}{"ID": uint(18), "LetureID": uint(9), "Name": "領域內跨科課程", "MinCredit": uint(8), "MinType": uint(2)},
-		map[string]interface{}{"ID": uint(19), "LetureID": uint(9), "Name": "物理專長課程", "MinCredit": uint(30), "MinType": uint(0)},
+		map[string]interface{}{"ID": uint(17), "LectureID": uint(9), "Name": "領域核心課程", "MinCredit": uint(4), "MinType": uint(0)},
+		map[string]interface{}{"ID": uint(18), "LectureID": uint(9), "Name": "領域內跨科課程", "MinCredit": uint(8), "MinType": uint(2)},
+		map[string]interface{}{"ID": uint(19), "LectureID": uint(9), "Name": "物理專長課程", "MinCredit": uint(30), "MinType": uint(0)},
 
-		map[string]interface{}{"ID": uint(20), "LetureID": uint(10), "Name": "領域核心課程", "MinCredit": uint(2), "MinType": uint(0)},
-		map[string]interface{}{"ID": uint(21), "LetureID": uint(10), "Name": "音樂專長課程", "MinCredit": uint(30), "MinType": uint(0)},
+		map[string]interface{}{"ID": uint(20), "LectureID": uint(10), "Name": "領域核心課程", "MinCredit": uint(2), "MinType": uint(0)},
+		map[string]interface{}{"ID": uint(21), "LectureID": uint(10), "Name": "音樂專長課程", "MinCredit": uint(30), "MinType": uint(0)},
 	}
 
 	for _, data := range categoryData {
-		letureCategory := &gorm.LetureCategory{
-			LetureID:  data["LetureID"].(uint),
+		lectureCategory := &gorm.LectureCategory{
+			LectureID: data["LectureID"].(uint),
 			Name:      data["Name"].(string),
 			MinCredit: data["MinCredit"].(uint),
 			MinType:   data["MinType"].(uint),
 		}
-		letureCategory.ID = data["ID"].(uint)
+		lectureCategory.ID = data["ID"].(uint)
 
-		if gorm.LetureCategoryDao.GetByLetureAndName(tx, letureCategory.LetureID, letureCategory.Name) == nil {
-			gorm.LetureCategoryDao.New(tx, letureCategory)
+		if gorm.LectureCategoryDao.GetByLectureAndName(tx, lectureCategory.LectureID, lectureCategory.Name) == nil {
+			gorm.LectureCategoryDao.New(tx, lectureCategory)
 		}
 	}
 
 	typeData := []map[string]interface{}{
-		map[string]interface{}{"ID": uint(1), "LetureCategoryID": uint(1), "Name": "探究與實作", "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(2), "LetureCategoryID": uint(2), "Name": "生物專長", "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(3), "LetureCategoryID": uint(2), "Name": "物理專長", "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(4), "LetureCategoryID": uint(2), "Name": "地球科學專長", "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(5), "LetureCategoryID": uint(3), "Name": "化學基本知識", "MinCredit": uint(15)},
-		map[string]interface{}{"ID": uint(6), "LetureCategoryID": uint(3), "Name": "化學實驗能力", "MinCredit": uint(7)},
-		map[string]interface{}{"ID": uint(7), "LetureCategoryID": uint(3), "Name": "跨學科與應用知識", "MinCredit": uint(2)},
+		map[string]interface{}{"ID": uint(1), "LectureCategoryID": uint(1), "Name": "探究與實作", "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(2), "LectureCategoryID": uint(2), "Name": "生物專長", "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(3), "LectureCategoryID": uint(2), "Name": "物理專長", "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(4), "LectureCategoryID": uint(2), "Name": "地球科學專長", "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(5), "LectureCategoryID": uint(3), "Name": "化學基本知識", "MinCredit": uint(15)},
+		map[string]interface{}{"ID": uint(6), "LectureCategoryID": uint(3), "Name": "化學實驗能力", "MinCredit": uint(7)},
+		map[string]interface{}{"ID": uint(7), "LectureCategoryID": uint(3), "Name": "跨學科與應用知識", "MinCredit": uint(2)},
 
-		map[string]interface{}{"ID": uint(8), "LetureCategoryID": uint(4), "Name": "藝術領域核心", "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(9), "LetureCategoryID": uint(5), "Name": "理解與應用", "MinCredit": uint(10)},
-		map[string]interface{}{"ID": uint(10), "LetureCategoryID": uint(5), "Name": "實踐與展現", "MinCredit": uint(12)},
-		map[string]interface{}{"ID": uint(11), "LetureCategoryID": uint(5), "Name": "表演藝術進階跨科/跨領域", "MinCredit": uint(6)},
-		map[string]interface{}{"ID": uint(12), "LetureCategoryID": uint(5), "Name": "教學知能", "MinCredit": uint(2)},
+		map[string]interface{}{"ID": uint(8), "LectureCategoryID": uint(4), "Name": "藝術領域核心", "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(9), "LectureCategoryID": uint(5), "Name": "理解與應用", "MinCredit": uint(10)},
+		map[string]interface{}{"ID": uint(10), "LectureCategoryID": uint(5), "Name": "實踐與展現", "MinCredit": uint(12)},
+		map[string]interface{}{"ID": uint(11), "LectureCategoryID": uint(5), "Name": "表演藝術進階跨科/跨領域", "MinCredit": uint(6)},
+		map[string]interface{}{"ID": uint(12), "LectureCategoryID": uint(5), "Name": "教學知能", "MinCredit": uint(2)},
 
-		map[string]interface{}{"ID": uint(13), "LetureCategoryID": uint(6), "Name": "藝術領域核心", "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(14), "LetureCategoryID": uint(7), "Name": "理解與應用", "MinCredit": uint(12)},
-		map[string]interface{}{"ID": uint(15), "LetureCategoryID": uint(7), "Name": "實踐與展現", "MinCredit": uint(20)},
-		map[string]interface{}{"ID": uint(16), "LetureCategoryID": uint(7), "Name": "教學知能", "MinCredit": uint(2)},
+		map[string]interface{}{"ID": uint(13), "LectureCategoryID": uint(6), "Name": "藝術領域核心", "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(14), "LectureCategoryID": uint(7), "Name": "理解與應用", "MinCredit": uint(12)},
+		map[string]interface{}{"ID": uint(15), "LectureCategoryID": uint(7), "Name": "實踐與展現", "MinCredit": uint(20)},
+		map[string]interface{}{"ID": uint(16), "LectureCategoryID": uint(7), "Name": "教學知能", "MinCredit": uint(2)},
 
-		map[string]interface{}{"ID": uint(17), "LetureCategoryID": uint(8), "Name": "語言知能課群", "MinCredit": uint(10)},
-		map[string]interface{}{"ID": uint(18), "LetureCategoryID": uint(8), "Name": "文學知能課群", "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(19), "LetureCategoryID": uint(8), "Name": "哲學知能課群", "MinCredit": uint(7)},
-		map[string]interface{}{"ID": uint(20), "LetureCategoryID": uint(8), "Name": "國學知能課群", "MinCredit": uint(7)},
-		map[string]interface{}{"ID": uint(21), "LetureCategoryID": uint(8), "Name": "語文應用、創作、傳播與相關教學知能課群", "MinCredit": uint(6)},
+		map[string]interface{}{"ID": uint(17), "LectureCategoryID": uint(8), "Name": "語言知能課群", "MinCredit": uint(10)},
+		map[string]interface{}{"ID": uint(18), "LectureCategoryID": uint(8), "Name": "文學知能課群", "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(19), "LectureCategoryID": uint(8), "Name": "哲學知能課群", "MinCredit": uint(7)},
+		map[string]interface{}{"ID": uint(20), "LectureCategoryID": uint(8), "Name": "國學知能課群", "MinCredit": uint(7)},
+		map[string]interface{}{"ID": uint(21), "LectureCategoryID": uint(8), "Name": "語文應用、創作、傳播與相關教學知能課群", "MinCredit": uint(6)},
 
-		map[string]interface{}{"ID": uint(22), "LetureCategoryID": uint(9), "Name": "基礎課程", "MinCredit": uint(35)},
-		map[string]interface{}{"ID": uint(23), "LetureCategoryID": uint(9), "Name": "進階課程", "MinCredit": uint(3)},
-		map[string]interface{}{"ID": uint(24), "LetureCategoryID": uint(9), "Name": "應用課程", "MinCredit": uint(6)},
+		map[string]interface{}{"ID": uint(22), "LectureCategoryID": uint(9), "Name": "基礎課程", "MinCredit": uint(35)},
+		map[string]interface{}{"ID": uint(23), "LectureCategoryID": uint(9), "Name": "進階課程", "MinCredit": uint(3)},
+		map[string]interface{}{"ID": uint(24), "LectureCategoryID": uint(9), "Name": "應用課程", "MinCredit": uint(6)},
 
-		map[string]interface{}{"ID": uint(25), "LetureCategoryID": uint(10), "Name": "國際情勢", "MinCredit": uint(4)},
-		map[string]interface{}{"ID": uint(26), "LetureCategoryID": uint(10), "Name": "國家安全", "MinCredit": uint(4)},
-		map[string]interface{}{"ID": uint(27), "LetureCategoryID": uint(10), "Name": "全民國防概論", "MinCredit": uint(10)},
-		map[string]interface{}{"ID": uint(28), "LetureCategoryID": uint(10), "Name": "防衛動員與災害防救演練", "MinCredit": uint(10)},
+		map[string]interface{}{"ID": uint(25), "LectureCategoryID": uint(10), "Name": "國際情勢", "MinCredit": uint(4)},
+		map[string]interface{}{"ID": uint(26), "LectureCategoryID": uint(10), "Name": "國家安全", "MinCredit": uint(4)},
+		map[string]interface{}{"ID": uint(27), "LectureCategoryID": uint(10), "Name": "全民國防概論", "MinCredit": uint(10)},
+		map[string]interface{}{"ID": uint(28), "LectureCategoryID": uint(10), "Name": "防衛動員與災害防救演練", "MinCredit": uint(10)},
 
-		map[string]interface{}{"ID": uint(29), "LetureCategoryID": uint(11), "Name": "領域課程理論基礎", "MinCredit": uint(2)},
-		map[string]interface{}{"ID": uint(30), "LetureCategoryID": uint(11), "Name": "探究與實作", "MinCredit": uint(2)},
-		map[string]interface{}{"ID": uint(31), "LetureCategoryID": uint(12), "Name": "自然地理類", "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(32), "LetureCategoryID": uint(12), "Name": "人文地理類", "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(33), "LetureCategoryID": uint(12), "Name": "區域地理類", "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(34), "LetureCategoryID": uint(12), "Name": "地理學方法類", "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(35), "LetureCategoryID": uint(12), "Name": "歷史專長課程", "MinCredit": uint(6)},
-		map[string]interface{}{"ID": uint(36), "LetureCategoryID": uint(13), "Name": "公民教育理論基礎", "MinCredit": uint(4)},
-		map[string]interface{}{"ID": uint(37), "LetureCategoryID": uint(13), "Name": "政治學", "MinCredit": uint(5)},
-		map[string]interface{}{"ID": uint(38), "LetureCategoryID": uint(13), "Name": "法律學", "MinCredit": uint(5)},
+		map[string]interface{}{"ID": uint(29), "LectureCategoryID": uint(11), "Name": "領域課程理論基礎", "MinCredit": uint(2)},
+		map[string]interface{}{"ID": uint(30), "LectureCategoryID": uint(11), "Name": "探究與實作", "MinCredit": uint(2)},
+		map[string]interface{}{"ID": uint(31), "LectureCategoryID": uint(12), "Name": "自然地理類", "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(32), "LectureCategoryID": uint(12), "Name": "人文地理類", "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(33), "LectureCategoryID": uint(12), "Name": "區域地理類", "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(34), "LectureCategoryID": uint(12), "Name": "地理學方法類", "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(35), "LectureCategoryID": uint(12), "Name": "歷史專長課程", "MinCredit": uint(6)},
+		map[string]interface{}{"ID": uint(36), "LectureCategoryID": uint(13), "Name": "公民教育理論基礎", "MinCredit": uint(4)},
+		map[string]interface{}{"ID": uint(37), "LectureCategoryID": uint(13), "Name": "政治學", "MinCredit": uint(5)},
+		map[string]interface{}{"ID": uint(38), "LectureCategoryID": uint(13), "Name": "法律學", "MinCredit": uint(5)},
 
-		map[string]interface{}{"ID": uint(39), "LetureCategoryID": uint(14), "Name": "探究與實作", "MinCredit": uint(4)},
-		map[string]interface{}{"ID": uint(40), "LetureCategoryID": uint(15), "Name": "化學專長", "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(41), "LetureCategoryID": uint(15), "Name": "物理專長", "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(42), "LetureCategoryID": uint(15), "Name": "地球科學專長", "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(43), "LetureCategoryID": uint(16), "Name": "生物學基本知識", "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(44), "LetureCategoryID": uint(16), "Name": "生物學探究能力", "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(45), "LetureCategoryID": uint(16), "Name": "生物學進階知識", "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(39), "LectureCategoryID": uint(14), "Name": "探究與實作", "MinCredit": uint(4)},
+		map[string]interface{}{"ID": uint(40), "LectureCategoryID": uint(15), "Name": "化學專長", "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(41), "LectureCategoryID": uint(15), "Name": "物理專長", "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(42), "LectureCategoryID": uint(15), "Name": "地球科學專長", "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(43), "LectureCategoryID": uint(16), "Name": "生物學基本知識", "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(44), "LectureCategoryID": uint(16), "Name": "生物學探究能力", "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(45), "LectureCategoryID": uint(16), "Name": "生物學進階知識", "MinCredit": uint(0)},
 
-		map[string]interface{}{"ID": uint(46), "LetureCategoryID": uint(17), "Name": "探究與實作", "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(47), "LetureCategoryID": uint(18), "Name": "化學專長", "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(48), "LetureCategoryID": uint(18), "Name": "生物專長", "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(49), "LetureCategoryID": uint(18), "Name": "地球科學專長", "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(50), "LetureCategoryID": uint(19), "Name": "普通物理學", "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(51), "LetureCategoryID": uint(19), "Name": "古典物理學", "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(52), "LetureCategoryID": uint(19), "Name": "近代物理學", "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(53), "LetureCategoryID": uint(19), "Name": "物理學之探究與實作", "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(54), "LetureCategoryID": uint(19), "Name": "跨學科、跨領域物理學", "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(55), "LetureCategoryID": uint(19), "Name": "新興科技物理學", "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(46), "LectureCategoryID": uint(17), "Name": "探究與實作", "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(47), "LectureCategoryID": uint(18), "Name": "化學專長", "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(48), "LectureCategoryID": uint(18), "Name": "生物專長", "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(49), "LectureCategoryID": uint(18), "Name": "地球科學專長", "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(50), "LectureCategoryID": uint(19), "Name": "普通物理學", "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(51), "LectureCategoryID": uint(19), "Name": "古典物理學", "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(52), "LectureCategoryID": uint(19), "Name": "近代物理學", "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(53), "LectureCategoryID": uint(19), "Name": "物理學之探究與實作", "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(54), "LectureCategoryID": uint(19), "Name": "跨學科、跨領域物理學", "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(55), "LectureCategoryID": uint(19), "Name": "新興科技物理學", "MinCredit": uint(0)},
 
-		map[string]interface{}{"ID": uint(56), "LetureCategoryID": uint(20), "Name": "藝術領域核心課程", "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(57), "LetureCategoryID": uint(21), "Name": "音樂知識", "MinCredit": uint(16)},
-		map[string]interface{}{"ID": uint(58), "LetureCategoryID": uint(21), "Name": "音樂技能", "MinCredit": uint(14)},
+		map[string]interface{}{"ID": uint(56), "LectureCategoryID": uint(20), "Name": "藝術領域核心課程", "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(57), "LectureCategoryID": uint(21), "Name": "音樂知識", "MinCredit": uint(16)},
+		map[string]interface{}{"ID": uint(58), "LectureCategoryID": uint(21), "Name": "音樂技能", "MinCredit": uint(14)},
 	}
 
 	for _, data := range typeData {
-		letureType := &gorm.LetureType{
-			LetureCategoryID: data["LetureCategoryID"].(uint),
-			Name:             data["Name"].(string),
-			MinCredit:        data["MinCredit"].(uint),
+		lectureType := &gorm.LectureType{
+			LectureCategoryID: data["LectureCategoryID"].(uint),
+			Name:              data["Name"].(string),
+			MinCredit:         data["MinCredit"].(uint),
 		}
-		letureType.ID = data["ID"].(uint)
+		lectureType.ID = data["ID"].(uint)
 
-		if gorm.LetureTypeDao.GetByCategoryAndName(tx, letureType.LetureCategoryID, letureType.Name) == nil {
-			gorm.LetureTypeDao.New(tx, letureType)
+		if gorm.LectureTypeDao.GetByCategoryAndName(tx, lectureType.LectureCategoryID, lectureType.Name) == nil {
+			gorm.LectureTypeDao.New(tx, lectureType)
 		}
 	}
 
 	groupData := []map[string]interface{}{
-		map[string]interface{}{"ID": uint(1), "LetureTypeID": uint(1), "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(2), "LetureTypeID": uint(2), "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(3), "LetureTypeID": uint(3), "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(4), "LetureTypeID": uint(4), "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(5), "LetureTypeID": uint(5), "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(6), "LetureTypeID": uint(6), "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(7), "LetureTypeID": uint(7), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(1), "LectureTypeID": uint(1), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(2), "LectureTypeID": uint(2), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(3), "LectureTypeID": uint(3), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(4), "LectureTypeID": uint(4), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(5), "LectureTypeID": uint(5), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(6), "LectureTypeID": uint(6), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(7), "LectureTypeID": uint(7), "MinCredit": uint(0)},
 
-		map[string]interface{}{"ID": uint(8), "LetureTypeID": uint(8), "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(9), "LetureTypeID": uint(9), "MinCredit": uint(4)},
-		map[string]interface{}{"ID": uint(10), "LetureTypeID": uint(9), "MinCredit": uint(6)},
-		map[string]interface{}{"ID": uint(11), "LetureTypeID": uint(10), "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(12), "LetureTypeID": uint(11), "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(13), "LetureTypeID": uint(12), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(8), "LectureTypeID": uint(8), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(9), "LectureTypeID": uint(9), "MinCredit": uint(4)},
+		map[string]interface{}{"ID": uint(10), "LectureTypeID": uint(9), "MinCredit": uint(6)},
+		map[string]interface{}{"ID": uint(11), "LectureTypeID": uint(10), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(12), "LectureTypeID": uint(11), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(13), "LectureTypeID": uint(12), "MinCredit": uint(0)},
 
-		map[string]interface{}{"ID": uint(14), "LetureTypeID": uint(13), "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(15), "LetureTypeID": uint(14), "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(16), "LetureTypeID": uint(15), "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(17), "LetureTypeID": uint(16), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(14), "LectureTypeID": uint(13), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(15), "LectureTypeID": uint(14), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(16), "LectureTypeID": uint(15), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(17), "LectureTypeID": uint(16), "MinCredit": uint(0)},
 
-		map[string]interface{}{"ID": uint(18), "LetureTypeID": uint(17), "MinCredit": uint(5)},
-		map[string]interface{}{"ID": uint(19), "LetureTypeID": uint(17), "MinCredit": uint(2)},
-		map[string]interface{}{"ID": uint(20), "LetureTypeID": uint(18), "MinCredit": uint(10)},
-		map[string]interface{}{"ID": uint(21), "LetureTypeID": uint(18), "MinCredit": uint(8)},
-		map[string]interface{}{"ID": uint(22), "LetureTypeID": uint(19), "MinCredit": uint(3)},
-		map[string]interface{}{"ID": uint(23), "LetureTypeID": uint(19), "MinCredit": uint(2)},
-		map[string]interface{}{"ID": uint(24), "LetureTypeID": uint(20), "MinCredit": uint(2)},
-		map[string]interface{}{"ID": uint(25), "LetureTypeID": uint(20), "MinCredit": uint(2)},
-		map[string]interface{}{"ID": uint(26), "LetureTypeID": uint(21), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(18), "LectureTypeID": uint(17), "MinCredit": uint(5)},
+		map[string]interface{}{"ID": uint(19), "LectureTypeID": uint(17), "MinCredit": uint(2)},
+		map[string]interface{}{"ID": uint(20), "LectureTypeID": uint(18), "MinCredit": uint(10)},
+		map[string]interface{}{"ID": uint(21), "LectureTypeID": uint(18), "MinCredit": uint(8)},
+		map[string]interface{}{"ID": uint(22), "LectureTypeID": uint(19), "MinCredit": uint(3)},
+		map[string]interface{}{"ID": uint(23), "LectureTypeID": uint(19), "MinCredit": uint(2)},
+		map[string]interface{}{"ID": uint(24), "LectureTypeID": uint(20), "MinCredit": uint(2)},
+		map[string]interface{}{"ID": uint(25), "LectureTypeID": uint(20), "MinCredit": uint(2)},
+		map[string]interface{}{"ID": uint(26), "LectureTypeID": uint(21), "MinCredit": uint(0)},
 
-		map[string]interface{}{"ID": uint(27), "LetureTypeID": uint(22), "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(28), "LetureTypeID": uint(23), "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(29), "LetureTypeID": uint(24), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(27), "LectureTypeID": uint(22), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(28), "LectureTypeID": uint(23), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(29), "LectureTypeID": uint(24), "MinCredit": uint(0)},
 
-		map[string]interface{}{"ID": uint(30), "LetureTypeID": uint(25), "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(31), "LetureTypeID": uint(26), "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(32), "LetureTypeID": uint(27), "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(33), "LetureTypeID": uint(28), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(30), "LectureTypeID": uint(25), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(31), "LectureTypeID": uint(26), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(32), "LectureTypeID": uint(27), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(33), "LectureTypeID": uint(28), "MinCredit": uint(0)},
 
-		map[string]interface{}{"ID": uint(34), "LetureTypeID": uint(29), "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(35), "LetureTypeID": uint(30), "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(36), "LetureTypeID": uint(31), "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(37), "LetureTypeID": uint(32), "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(38), "LetureTypeID": uint(33), "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(39), "LetureTypeID": uint(34), "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(40), "LetureTypeID": uint(35), "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(41), "LetureTypeID": uint(36), "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(42), "LetureTypeID": uint(37), "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(43), "LetureTypeID": uint(38), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(34), "LectureTypeID": uint(29), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(35), "LectureTypeID": uint(30), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(36), "LectureTypeID": uint(31), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(37), "LectureTypeID": uint(32), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(38), "LectureTypeID": uint(33), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(39), "LectureTypeID": uint(34), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(40), "LectureTypeID": uint(35), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(41), "LectureTypeID": uint(36), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(42), "LectureTypeID": uint(37), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(43), "LectureTypeID": uint(38), "MinCredit": uint(0)},
 
-		map[string]interface{}{"ID": uint(44), "LetureTypeID": uint(39), "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(45), "LetureTypeID": uint(40), "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(46), "LetureTypeID": uint(41), "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(47), "LetureTypeID": uint(42), "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(48), "LetureTypeID": uint(43), "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(49), "LetureTypeID": uint(44), "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(50), "LetureTypeID": uint(45), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(44), "LectureTypeID": uint(39), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(45), "LectureTypeID": uint(40), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(46), "LectureTypeID": uint(41), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(47), "LectureTypeID": uint(42), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(48), "LectureTypeID": uint(43), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(49), "LectureTypeID": uint(44), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(50), "LectureTypeID": uint(45), "MinCredit": uint(0)},
 
-		map[string]interface{}{"ID": uint(51), "LetureTypeID": uint(46), "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(52), "LetureTypeID": uint(47), "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(53), "LetureTypeID": uint(48), "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(54), "LetureTypeID": uint(49), "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(55), "LetureTypeID": uint(50), "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(56), "LetureTypeID": uint(51), "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(57), "LetureTypeID": uint(52), "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(58), "LetureTypeID": uint(53), "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(59), "LetureTypeID": uint(54), "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(60), "LetureTypeID": uint(55), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(51), "LectureTypeID": uint(46), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(52), "LectureTypeID": uint(47), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(53), "LectureTypeID": uint(48), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(54), "LectureTypeID": uint(49), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(55), "LectureTypeID": uint(50), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(56), "LectureTypeID": uint(51), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(57), "LectureTypeID": uint(52), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(58), "LectureTypeID": uint(53), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(59), "LectureTypeID": uint(54), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(60), "LectureTypeID": uint(55), "MinCredit": uint(0)},
 
-		map[string]interface{}{"ID": uint(61), "LetureTypeID": uint(56), "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(62), "LetureTypeID": uint(57), "MinCredit": uint(0)},
-		map[string]interface{}{"ID": uint(63), "LetureTypeID": uint(58), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(61), "LectureTypeID": uint(56), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(62), "LectureTypeID": uint(57), "MinCredit": uint(0)},
+		map[string]interface{}{"ID": uint(63), "LectureTypeID": uint(58), "MinCredit": uint(0)},
 	}
 
 	for _, data := range groupData {
 		subjectGroup := &gorm.SubjectGroup{
-			LetureTypeID: data["LetureTypeID"].(uint),
-			MinCredit:    data["MinCredit"].(uint),
+			LectureTypeID: data["LectureTypeID"].(uint),
+			MinCredit:     data["MinCredit"].(uint),
 		}
 		subjectGroup.ID = data["ID"].(uint)
 
-		if gorm.SubjectGroupDao.GetByIDAndType(tx, subjectGroup.ID, subjectGroup.LetureTypeID) == nil {
+		if gorm.SubjectGroupDao.GetByIDAndType(tx, subjectGroup.ID, subjectGroup.LectureTypeID) == nil {
 			gorm.SubjectGroupDao.New(tx, subjectGroup)
 		}
 	}

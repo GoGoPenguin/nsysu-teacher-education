@@ -7,14 +7,14 @@ import (
 	"github.com/nsysu/teacher-education/src/service"
 )
 
-// GetStudentLetureDetailHandler get student-leture detail
-func GetStudentLetureDetailHandler(ctx iris.Context) {
+// GetLectureDetailHandler get lecture detail
+func GetLectureDetailHandler(ctx iris.Context) {
 	type rule struct {
-		StudentLetureID string `valid:"required"`
+		LectureID string `valid:"required"`
 	}
 
 	params := &rule{
-		StudentLetureID: ctx.Params().Get("studentLetureID"),
+		LectureID: ctx.Params().Get("lectureID"),
 	}
 
 	if _, err := govalidator.ValidateStruct(params); err != nil {
@@ -22,7 +22,7 @@ func GetStudentLetureDetailHandler(ctx iris.Context) {
 		return
 	}
 
-	result, err := service.GetStudentLetureDetail(params.StudentLetureID)
+	result, err := service.GetLectureDetail(params.LectureID)
 
 	if err != (*errors.Error)(nil) {
 		failed(ctx, err)

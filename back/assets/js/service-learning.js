@@ -64,7 +64,7 @@ const studentServiceLearningTable = $('table#student-service-learning').DataTabl
     processing: true,
     serverSide: true,
     ordering: false,
-    searching: false,
+    // searching: false,
     ajax: {
         url: `${config.server}/v1/service-learning/student`,
         type: 'GET',
@@ -81,6 +81,7 @@ const studentServiceLearningTable = $('table#student-service-learning').DataTabl
                 array[index].ServiceLearning.Type = TYPE[element.ServiceLearning.Type];
                 array[index].Status = STATUS[array[index].Status]
                 array[index].Date = `${dayjs(element.ServiceLearning.Start).format('YYYY-MM-DD')} ~ ${dayjs(element.ServiceLearning.End).format('YYYY-MM-DD')}`
+                array[index].Hours = array[index].Hours == null ? array[index].ServiceLearning.Hours : array[index].Hours;
 
                 studentServiceLearnings.push(element)
             })
@@ -103,7 +104,7 @@ const studentServiceLearningTable = $('table#student-service-learning').DataTabl
         { data: "ServiceLearning.Content" },
         { data: "Date" },
         { data: "ServiceLearning.Session" },
-        { data: "ServiceLearning.Hours" },
+        { data: "Hours" },
         { data: "Button" },
     ],
     language: {
@@ -236,7 +237,7 @@ $('#service-learning-form').on('submit', (e) => {
                     timer: 1000,
                     buttons: false,
                 })
-                serviceLearningTable.ajax.reload()
+                serviceLearningTable.reload(null, false)
             } else {
                 swal({
                     title: '',
@@ -260,15 +261,34 @@ const check = (index, readonly) => {
 
     if (readonly) {
         $('#checkModal .modal-footer').hide()
-        $('#comment').attr('readonly', true)
-        $('#comment').addClass('form-control-plaintext')
-        $('#comment').removeClass('form-control')
+
+        $('#comment').attr({
+            'readonly': true,
+            'class': 'form-control-plaintext',
+        })
+
+        $('#checkModal .hours input').attr({
+            'readonly': true,
+            'class': 'form-control-plaintext',
+        })
     } else {
         $('#checkModal .modal-footer').show()
-        $('#comment').attr('readonly', false)
-        $('#comment').removeClass('form-control-plaintext')
-        $('#comment').addClass('form-control')
+
+        $('#comment').attr({
+            'readonly': false,
+            'class': 'form-control',
+        })
+
+        $('#checkModal .hours input').attr({
+            'readonly': false,
+            'class': 'form-control',
+        })
     }
+
+    $('#checkModal .hours input').attr({
+        'max': studentServiceLearnings[index].ServiceLearning.Hours,
+        'min': 0,
+    })
 
     $('#checkModal .status p').html(studentServiceLearnings[index].Status)
     $('#checkModal .name input').val(studentServiceLearnings[index].Student.Name)
@@ -276,6 +296,7 @@ const check = (index, readonly) => {
     $('#checkModal .account input').val(studentServiceLearnings[index].Student.Account)
     $('#checkModal .number input').val(studentServiceLearnings[index].Student.Number)
     $('#checkModal .type input').val(studentServiceLearnings[index].ServiceLearning.Type)
+    $('#checkModal .hours input').val(studentServiceLearnings[index].Hours)
     $('#checkModal .content').val(studentServiceLearnings[index].ServiceLearning.Content)
     $('#checkModal .reference input').val(studentServiceLearnings[index].Reference)
     $('#checkModal .review input').val(studentServiceLearnings[index].Review)
@@ -321,6 +342,20 @@ const getFile = (file) => {
 
 const updateStatus = (status) => {
     let ID = studentServiceLearnings[studentServiceLearningIndex].ID
+    let hours = $('#checkModal .hours input').val()
+    let max = studentServiceLearnings[studentServiceLearningIndex].ServiceLearning.Hours
+    let min = 0
+
+    if (hours > max || hours < min) {
+        swal({
+            title: '',
+            text: `時數必須介於${min}到${max}之間`,
+            icon: "error",
+            timer: 1500,
+            buttons: false,
+        })
+        return
+    }
 
     $.ajax({
         url: `${config.server}/v1/service-learning/student/status`,
@@ -328,6 +363,7 @@ const updateStatus = (status) => {
         data: {
             'StudentServiceLearningID': ID,
             'Status': status,
+            "Hours": hours,
             'Comment': $('#comment').val(),
         },
         beforeSend: (xhr) => {
@@ -352,7 +388,8 @@ const updateStatus = (status) => {
                     timer: 1000,
                     buttons: false,
                 })
-                studentServiceLearningTable.ajax.reload()
+                studentServiceLearnings[studentServiceLearningIndex].Hours = hours;
+                studentServiceLearningTable.reload(null, false)
             } else {
                 swal({
                     title: '',
@@ -429,7 +466,7 @@ $('#update-form').on('submit', (e) => {
                     timer: 1000,
                     buttons: false,
                 })
-                serviceLearningTable.ajax.reload()
+                serviceLearningTable.reload(null, false)
             } else {
                 swal({
                     title: '',
@@ -469,7 +506,7 @@ const deleteServiceLearning = () => {
                     timer: 1000,
                     buttons: false,
                 })
-                serviceLearningTable.ajax.reload()
+                serviceLearningTable.reload(null, false)
             } else {
                 swal({
                     title: '',

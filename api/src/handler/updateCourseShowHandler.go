@@ -5,16 +5,19 @@ import (
 	"github.com/kataras/iris"
 	"github.com/nsysu/teacher-education/src/errors"
 	"github.com/nsysu/teacher-education/src/service"
+	"github.com/nsysu/teacher-education/src/utils/typecast"
 )
 
-// GetLeturDetailHandler get leture detail
-func GetLeturDetailHandler(ctx iris.Context) {
+// UpdateCourseShowHandler update course's state of show
+func UpdateCourseShowHandler(ctx iris.Context) {
 	type rule struct {
-		LetureID string `valid:"required"`
+		CourseID string `valid:"required"`
+		Show     string `valid:"required, boolean"`
 	}
 
 	params := &rule{
-		LetureID: ctx.Params().Get("letureID"),
+		CourseID: ctx.Params().Get("courseID"),
+		Show:     ctx.FormValue("Show"),
 	}
 
 	if _, err := govalidator.ValidateStruct(params); err != nil {
@@ -22,7 +25,7 @@ func GetLeturDetailHandler(ctx iris.Context) {
 		return
 	}
 
-	result, err := service.GetLetureDetail(params.LetureID)
+	result, err := service.UpdateStateOfShow(params.CourseID, typecast.StringToBool(params.Show))
 
 	if err != (*errors.Error)(nil) {
 		failed(ctx, err)

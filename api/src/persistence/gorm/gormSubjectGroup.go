@@ -1,15 +1,17 @@
 package gorm
 
 import (
-	"github.com/jinzhu/gorm"
+	"errors"
+
+	"gorm.io/gorm"
 )
 
 // SubjectGroup model
 type SubjectGroup struct {
 	gorm.Model
-	LetureTypeID uint      `gorm:"column:leture_type_id;"`
-	MinCredit    uint      `gorm:"column:min_credit;"`
-	Subjects     []Subject `gorm:"foreignkey:SubjectGroupID"`
+	LectureTypeID uint      `gorm:"column:lecture_type_id;"`
+	MinCredit     uint      `gorm:"column:min_credit;"`
+	Subjects      []Subject `gorm:"foreignkey:SubjectGroupID"`
 }
 
 type subjectGroupDao struct {
@@ -40,9 +42,9 @@ func (dao *subjectGroupDao) GetByID(tx *gorm.DB, id uint) *SubjectGroup {
 	}
 	err := tx.Table(dao.table).
 		Where("deleted_at IS NULL").
-		Find(&result).Error
+		First(&result).Error
 
-	if gorm.IsRecordNotFoundError(err) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil
 	}
 	if err != nil {
@@ -56,11 +58,11 @@ func (dao *subjectGroupDao) GetByIDAndType(tx *gorm.DB, id, typeID uint) *Subjec
 	result := SubjectGroup{}
 	err := tx.Table(dao.table).
 		Where("id = ?", id).
-		Where("leture_type_id = ?", typeID).
+		Where("lecture_type_id = ?", typeID).
 		Where("deleted_at IS NULL").
-		Scan(&result).Error
+		First(&result).Error
 
-	if gorm.IsRecordNotFoundError(err) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil
 	}
 	if err != nil {
@@ -76,9 +78,6 @@ func (dao *subjectGroupDao) Query(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB)
 		Scopes(funcs...).
 		Scan(&result).Error
 
-	if gorm.IsRecordNotFoundError(err) {
-		return nil
-	}
 	if err != nil {
 		panic(err)
 	}

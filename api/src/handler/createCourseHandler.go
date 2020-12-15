@@ -21,11 +21,9 @@ func CreateCourseHandler(ctx iris.Context) {
 
 	file, header, err := ctx.FormFile("Information")
 
-	if err != nil {
-		failed(ctx, errors.ValidateError("Information: non zero value required"))
-		return
+	if err == nil {
+		defer file.Close()
 	}
-	defer file.Close()
 
 	loc, _ := time.LoadLocation("Asia/Taipei")
 	startTime, err := time.ParseInLocation(t.DateTime, ctx.FormValue("Start"), loc)

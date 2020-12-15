@@ -31,12 +31,12 @@ src/service/       | Bussiness logic
 src/specification/ | SQL query templete
 src/utils/         | Some useful functions
 
-## Libaray
+## Library
 
 - [kataras/iris](https://github.com/kataras/iris)
 - [iris-contrib/middleware](https://github.com/iris-contrib/middleware)
 - [spf13/viper](https://github.com/spf13/viper)
-- [jinzhu/gorm](https://github.com/jinzhu/gorm)
+- [gorm.io/gorm](https://gorm.io/gorm)
 - [go-sql-driver/mysql](https://github.com/go-sql-driver/mysql)
 - [rubenv/sql-migrate](https://github.com/rubenv/sql-migrate)
 - [gomodule/redigo](https://github.com/gomodule/redigo)

@@ -30,10 +30,12 @@ const courseTable = $('table#course').DataTable({
             d.list.forEach((element, index, array) => {
                 courses.push(Object.assign({}, element))
 
+                let today = dayjs(new Date())
                 let startDate = dayjs(element.Start).format('YYYY-MM-DD')
                 let startTime = dayjs(element.Start).format('HH:mm:ss')
                 let endDate = dayjs(element.End).format('YYYY-MM-DD')
                 let endTime = dayjs(element.End).format('HH:mm:ss')
+                let checked = element.Show || (element.Show == null && dayjs(element.Start).isAfter(today)) ? 'checked' : ''
 
                 if (startDate == endDate) {
                     array[index].Time = `${startDate} ${startTime} ~ ${endTime}`
@@ -45,6 +47,8 @@ const courseTable = $('table#course').DataTable({
                     <button class="btn btn-primary mr-1" onclick="update(${index})">編輯</button>
                     <button class="btn btn-danger" onclick="$('#deleteModal').modal('show'); courseID=${element.ID}">刪除</button>
                 `
+
+                array[index].CheckBox = `<input id="checkbox-${element.ID}" class="form-check-input" type="checkbox" style="margin: auto" ${checked} onclick="showOrNotShow(${element.ID})"></input>`
 
                 array[index].Information = `<div onclick="getInformation(${element.ID}, '${element.Information}')">${element.Information}</div>`
             })
@@ -58,6 +62,7 @@ const courseTable = $('table#course').DataTable({
         }
     },
     columns: [
+        { data: "CheckBox" },
         { data: "Topic" },
         { data: "Time" },
         { data: "Information" },
@@ -76,7 +81,7 @@ const studentCourseTable = $('table#student-course').DataTable({
     processing: true,
     serverSide: true,
     ordering: false,
-    searching: false,
+    // searching: false,
     ajax: {
         url: `${config.server}/v1/course/student`,
         type: 'GET',
@@ -284,7 +289,7 @@ $('#course-form').on('submit', (e) => {
                     timer: 1000,
                     buttons: false,
                 })
-                courseTable.ajax.reload();
+                courseTable.reload(null, false)
             } else {
                 swal({
                     title: '',
@@ -356,7 +361,7 @@ $('#checkModal .btn-primary').click(() => {
                     timer: 1500,
                     buttons: false,
                 })
-                studentCourseTable.ajax.reload()
+                studentCourseTable.reload(null, false)
             } else {
                 swal({
                     title: '',
@@ -401,7 +406,7 @@ $('#checkModal .btn-danger').click(() => {
                     timer: 1500,
                     buttons: false,
                 })
-                studentCourseTable.ajax.reload()
+                studentCourseTable.reload(null, false)
             } else {
                 swal({
                     title: '',
@@ -448,7 +453,6 @@ $('#update-form').on('submit', (e) => {
     })
 
     let form = new FormData()
-    form.append("CourseID", courseID)
     form.append("Topic", $('#update-topic').val())
     form.append("Type", $('#update-type').val())
     form.append("Start", $('#update-start input').val())
@@ -473,7 +477,7 @@ $('#update-form').on('submit', (e) => {
     }
 
     $.ajax({
-        url: `${config.server}/v1/course`,
+        url: `${config.server}/v1/course/${courseID}`,
         type: 'PATCH',
         data: form,
         contentType: false,
@@ -495,7 +499,7 @@ $('#update-form').on('submit', (e) => {
                     timer: 1000,
                     buttons: false,
                 })
-                courseTable.ajax.reload()
+                courseTable.reload(null, false)
             } else {
                 swal({
                     title: '',
@@ -536,7 +540,7 @@ const deleteCourse = () => {
                     timer: 1000,
                     buttons: false,
                 })
-                courseTable.ajax.reload()
+                courseTable.reload(null, false)
             } else {
                 swal({
                     title: '',
@@ -551,6 +555,43 @@ const deleteCourse = () => {
             $('#deleteModal div.modal-footer button.btn.btn-danger').html('送出')
             $('#deleteModal div.modal-footer button.btn.btn-danger').attr("disabled", false)
             $('#deleteModal').modal('hide')
+        }
+    });
+}
+
+const showOrNotShow = (id) => {
+    let checkbox = $(`#checkbox-${id}`)
+
+    $.ajax({
+        url: `${config.server}/v1/course/show/${id}`,
+        type: 'PATCH',
+        data: {
+            Show: checkbox.prop('checked'),
+        },
+        beforeSend: (xhr) => {
+            setHeader(xhr)
+        },
+        error: (xhr) => {
+            swal({
+                title: '',
+                text: '失敗',
+                icon: "error",
+                timer: 1000,
+                buttons: false,
+            })
+        },
+        success: (response) => {
+            if (response.code === 0) {
+                courseTable.ajax.reload(null, false)
+            } else {
+                swal({
+                    title: '',
+                    text: '失敗',
+                    icon: "error",
+                    timer: 1000,
+                    buttons: false,
+                })
+            }
         }
     });
 }

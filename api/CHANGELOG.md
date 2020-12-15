@@ -4,6 +4,23 @@ All notable changes are documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2020.12.15
+
+### Changed
+
+- 審核服務學習時可以手動填入時數
+- 修改取得講座列表的順序, 由時間近到遠
+- 升級套件`gorm`至`v2`
+
+### Added
+
+- 報名列表新增搜尋功能
+- 新增修改課程顯示狀態功能
+
+### Fixed
+
+- 修正錯字
+
 ## [1.0.0] - 2020.03.05
 
 ### Changed

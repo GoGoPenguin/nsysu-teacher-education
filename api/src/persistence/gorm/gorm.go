@@ -4,17 +4,16 @@ import (
 	"fmt"
 	"time"
 
-	_ "github.com/go-sql-driver/mysql" // init mysql driver
-	"github.com/jinzhu/gorm"
 	"github.com/nsysu/teacher-education/src/utils/config"
 	"github.com/nsysu/teacher-education/src/utils/logger"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
+	"gorm.io/gorm/schema"
 )
 
 var (
-	db       *gorm.DB
-	interval = config.Get("db.interval").(int)
-	dialect  = config.Get("db.dialect").(string)
-	source   = fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?%s",
+	db  *gorm.DB
+	dsn = fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?%s",
 		config.Get("db.user"),
 		config.Get("db.password"),
 		config.Get("db.host"),
@@ -25,13 +24,13 @@ var (
 )
 
 func init() {
-	db = connect(dialect, source)
+	db = connect(dsn)
 }
 
 // DB return database instance
 func DB() *gorm.DB {
 	if db == nil {
-		connect(dialect, source)
+		connect(dsn)
 	}
 	return db
 }
@@ -39,37 +38,44 @@ func DB() *gorm.DB {
 // Close close database connection
 func Close() {
 	if db != nil {
-		if err := db.Close(); err != nil {
+		sqldb, _ := db.DB()
+		if err := sqldb.Close(); err != nil {
 			logger.Error(err.Error())
 		}
 	}
 }
 
-func connect(dialect string, source string) *gorm.DB {
-	conn, err := gorm.Open(dialect, source)
+func connect(dsn string) *gorm.DB {
+	conn, err := gorm.Open(
+		mysql.New(mysql.Config{
+			DSN: dsn,
+		}),
+		&gorm.Config{
+			AllowGlobalUpdate: false,
+			NamingStrategy: schema.NamingStrategy{
+				SingularTable: true,
+			},
+		},
+	)
 
 	if err != nil {
 		panic(err)
 	}
 
-	// use singular table by default
-	conn.SingularTable(true)
+	sqldb, err := conn.DB()
 
-	// generates an error on update/delete without where clause.
-	// prevent eventual error with empty objects updates/deletions
-	conn.BlockGlobalUpdate(true)
+	if err != nil {
+		panic(err)
+	}
 
-	// sets the maximum number of connections in the idle connection pool.
-	conn.DB().SetMaxIdleConns(10)
+	// SetMaxIdleConns sets the maximum number of connections in the idle connection pool.
+	sqldb.SetMaxIdleConns(10)
 
-	// sets the maximum number of open connections to the database.
-	conn.DB().SetMaxOpenConns(100)
+	// SetMaxOpenConns sets the maximum number of open connections to the database.
+	sqldb.SetMaxOpenConns(100)
 
-	// sets the maximum amount of time a connection may be reused.
-	conn.DB().SetConnMaxLifetime(time.Hour)
-
-	// the number of seconds the server waits for activity on a noninteractive connection before closing it.
-	conn.Exec("SET wait_timeout=300")
+	// SetConnMaxLifetime sets the maximum amount of time a connection may be reused.
+	sqldb.SetConnMaxLifetime(time.Hour)
 
 	return conn
 }

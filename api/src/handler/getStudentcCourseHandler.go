@@ -14,12 +14,14 @@ func GetStudentCourseHandler(ctx iris.Context) {
 		Start  string `valid:"required"`
 		Length string `valid:"required"`
 		Draw   string `valid:"-"`
+		Search string `valid:"-"`
 	}
 
 	params := &rule{
 		Start:  ctx.URLParamDefault("start", "0"),
 		Length: ctx.URLParamDefault("length", "30"),
 		Draw:   ctx.URLParam("draw"),
+		Search: ctx.URLParam("search[value]"),
 	}
 
 	if _, err := govalidator.ValidateStruct(params); err != nil {
@@ -30,7 +32,7 @@ func GetStudentCourseHandler(ctx iris.Context) {
 	}
 
 	operator := auth.Account(ctx)
-	result, err := service.GetSutdentCourseList(operator, params.Start, params.Length)
+	result, err := service.GetStudentCourseList(operator, params.Start, params.Length, params.Search)
 
 	if err != (*errors.Error)(nil) {
 		json(ctx, map[string]interface{}{

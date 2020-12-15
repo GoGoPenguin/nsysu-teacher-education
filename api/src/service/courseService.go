@@ -1,6 +1,7 @@
 package service
 
 import (
+	"fmt"
 	"io"
 	"mime/multipart"
 	"os"
@@ -25,22 +26,33 @@ func CreateCourse(topic, courseType string, file multipart.File, header *multipa
 		}
 	}()
 
-	course := &gorm.Course{
-		Topic:       topic,
-		Information: header.Filename,
-		Type:        courseType,
-		Start:       start,
-		End:         end,
-	}
-	gorm.CourseDao.New(tx, course)
+	if header != nil {
+		course := &gorm.Course{
+			Topic:       topic,
+			Information: header.Filename,
+			Type:        courseType,
+			Start:       start,
+			End:         end,
+		}
+		gorm.CourseDao.New(tx, course)
 
-	f, err := os.OpenFile("./assets/course/"+typecast.ToString(course.ID), os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0666)
-	if err != nil {
-		panic(err)
-	}
-	defer f.Close()
+		f, err := os.OpenFile("./assets/course/"+typecast.ToString(course.ID), os.O_WRONLY|os.O_CREATE|os.O_TRUNC, 0666)
+		if err != nil {
+			panic(err)
+		}
+		defer f.Close()
 
-	io.Copy(f, file)
+		io.Copy(f, file)
+	} else {
+		course := &gorm.Course{
+			Topic:       topic,
+			Information: "",
+			Type:        courseType,
+			Start:       start,
+			End:         end,
+		}
+		gorm.CourseDao.New(tx, course)
+	}
 
 	return "success", nil
 }
@@ -58,7 +70,7 @@ func GetCourse(account, start, length, search string) (result map[string]interfa
 
 	var (
 		courses *[]gorm.Course
-		filered int
+		filered int64
 	)
 
 	if operator := gorm.AdminDao.GetByAccount(tx, account); operator != nil {
@@ -78,7 +90,7 @@ func GetCourse(account, start, length, search string) (result map[string]interfa
 	} else {
 		courses = gorm.CourseDao.Query(
 			tx,
-			// specification.BiggerSpecification("start", time.Now().String()),
+			specification.OrSpecification(fmt.Sprintf("`start` > \"%s\"", time.Now().String()), "`show` = \"1\""),
 			specification.OrderSpecification("start", specification.OrderDirectionASC),
 			specification.IsNullSpecification("deleted_at"),
 		)
@@ -123,7 +135,7 @@ func GetInformation(courseID string) (result map[string]string, e *errors.Error)
 	}, nil
 }
 
-// SingUpCourse sudent sign up course
+// SingUpCourse student sign up course
 func SingUpCourse(account, courseID, meal string) (result interface{}, e *errors.Error) {
 	tx := gorm.DB()
 
@@ -151,19 +163,19 @@ func SingUpCourse(account, courseID, meal string) (result interface{}, e *errors
 		return nil, errors.NotFoundError("course ID " + courseID)
 	}
 
-	srudentCourse := &gorm.StudentCourse{
+	studentCourse := &gorm.StudentCourse{
 		StudentID: student.ID,
 		CourseID:  typecast.StringToUint(courseID),
 		Meal:      meal,
 	}
 
-	gorm.StudentCourseDao.New(tx, srudentCourse)
+	gorm.StudentCourseDao.New(tx, studentCourse)
 
 	return "success", nil
 }
 
-// GetSutdentCourseList get the list of student course
-func GetSutdentCourseList(account, start, length string) (result map[string]interface{}, e *errors.Error) {
+// GetStudentCourseList get the list of student course
+func GetStudentCourseList(account, start, length, search string) (result map[string]interface{}, e *errors.Error) {
 	tx := gorm.DB()
 
 	defer func() {
@@ -175,20 +187,22 @@ func GetSutdentCourseList(account, start, length string) (result map[string]inte
 
 	var (
 		studentCourses *[]gorm.StudentCourse
-		filtered       int
+		filtered       int64
 	)
 
 	if operator := gorm.AdminDao.GetByAccount(tx, account); operator != nil {
 		studentCourses = gorm.StudentCourseDao.Query(
 			tx,
 			specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
+			specification.LikeSpecification([]string{"concat(Student.name,Student.account,Student.number,Student.major,Course.topic,Course.type,Course.start,Course.end)"}, search),
 			specification.OrderSpecification("`student_course`."+specification.IDColumn, specification.OrderDirectionDESC),
-			specification.IsNullSpecification("deleted_at"),
+			specification.IsNullSpecification("student_course.deleted_at"),
 		)
 
 		filtered = gorm.StudentCourseDao.Count(
 			tx,
-			specification.IsNullSpecification("deleted_at"),
+			specification.LikeSpecification([]string{"concat(Student.name,Student.account,Student.number,Student.major,Course.topic,Course.type,Course.start,Course.end)"}, search),
+			specification.IsNullSpecification("student_course.deleted_at"),
 		)
 	} else {
 		student := gorm.StudentDao.GetByAccount(tx, account)
@@ -196,14 +210,14 @@ func GetSutdentCourseList(account, start, length string) (result map[string]inte
 			tx,
 			specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
 			specification.OrderSpecification("`student_course`."+specification.IDColumn, specification.OrderDirectionDESC),
-			specification.IsNullSpecification("deleted_at"),
+			specification.IsNullSpecification("student_course.deleted_at"),
 			specification.StudentSpecification(student.ID),
 		)
 	}
 
 	total := gorm.StudentCourseDao.Count(
 		tx,
-		specification.IsNullSpecification("deleted_at"),
+		specification.IsNullSpecification("student_course.deleted_at"),
 	)
 
 	result = map[string]interface{}{
@@ -303,6 +317,25 @@ func UpdateCourse(courseID, topic, courseType string, file multipart.File, heade
 
 		io.Copy(f, file)
 	}
+
+	gorm.CourseDao.Update(tx, course)
+
+	return "success", nil
+}
+
+// UpdateStateOfShow update courses's state of show
+func UpdateStateOfShow(courseID string, show bool) (result interface{}, e *errors.Error) {
+	tx := gorm.DB()
+
+	defer func() {
+		if r := recover(); r != nil {
+			logger.Error(r)
+			e = errors.UnexpectedError()
+		}
+	}()
+
+	course := gorm.CourseDao.GetByID(tx, typecast.StringToUint(courseID))
+	course.Show = &show
 
 	gorm.CourseDao.Update(tx, course)
 

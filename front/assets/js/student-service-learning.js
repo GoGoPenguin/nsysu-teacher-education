@@ -99,8 +99,8 @@ const edit = id => {
 }
 
 const browse_file = (id, value) => {
-    let splited = value.split('\\')
-    $(`#${id}`).val(splited[splited.length - 1])
+    let splitted = value.split('\\')
+    $(`#${id}`).val(splitted[splitted.length - 1])
 }
 
 $('#Modal form').on('submit', (e) => {
