@@ -10,7 +10,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) a
 
 - 修正Footer位置
 
-  ## [1.0.0] - 2020.03.05
+## [1.0.0] - 2020.03.05
 
 ### Changed
 
