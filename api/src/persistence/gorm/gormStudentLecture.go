@@ -94,7 +94,6 @@ func (dao *studentLectureDao) Update(tx *gorm.DB, studentLecture *StudentLecture
 func (dao *studentLectureDao) Count(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) int64 {
 	var result []StudentLecture
 	count := tx.Table(dao.table).
-		Select("*").
 		Scopes(funcs...).
 		Find(&result).RowsAffected
 
@@ -105,7 +104,6 @@ func (dao *studentLectureDao) Count(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.D
 func (dao *studentLectureDao) Query(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) *[]StudentLecture {
 	var result []StudentLecture
 	err := tx.Table(dao.table).
-		Select("*").
 		Scopes(funcs...).
 		Find(&result).Error
 

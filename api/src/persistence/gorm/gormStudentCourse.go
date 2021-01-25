@@ -86,7 +86,6 @@ func (dao *studentCourseDao) Count(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB
 	count := tx.Joins("Student").
 		Joins("Course").
 		Table(dao.table).
-		Select("*").
 		Scopes(funcs...).
 		Find(&result).RowsAffected
 
@@ -99,7 +98,6 @@ func (dao *studentCourseDao) Query(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB
 	err := tx.Joins("Student").
 		Joins("Course").
 		Table(dao.table).
-		Select("*").
 		Scopes(funcs...).
 		Find(&result).Error
 
