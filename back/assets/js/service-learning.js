@@ -237,7 +237,7 @@ $('#service-learning-form').on('submit', (e) => {
                     timer: 1000,
                     buttons: false,
                 })
-                serviceLearningTable.reload(null, false)
+                serviceLearningTable.ajax.reload(null, false)
             } else {
                 swal({
                     title: '',
@@ -389,7 +389,7 @@ const updateStatus = (status) => {
                     buttons: false,
                 })
                 studentServiceLearnings[studentServiceLearningIndex].Hours = hours;
-                studentServiceLearningTable.reload(null, false)
+                studentServiceLearningTable.ajax.reload(null, false)
             } else {
                 swal({
                     title: '',
@@ -466,7 +466,7 @@ $('#update-form').on('submit', (e) => {
                     timer: 1000,
                     buttons: false,
                 })
-                serviceLearningTable.reload(null, false)
+                serviceLearningTable.ajax.reload(null, false)
             } else {
                 swal({
                     title: '',
@@ -506,7 +506,7 @@ const deleteServiceLearning = () => {
                     timer: 1000,
                     buttons: false,
                 })
-                serviceLearningTable.reload(null, false)
+                serviceLearningTable.ajax.reload(null, false)
             } else {
                 swal({
                     title: '',
