@@ -12,7 +12,7 @@
     "datatables.net": "^1.10.22",
     "datatables.net-bs4": "^1.10.19",
     "dayjs": "^1.8.17",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "jquery.cookie": "^1.4.1",
     "showdown": "^1.9.1",
     "startbootstrap-sb-admin": "^5.1.1",
