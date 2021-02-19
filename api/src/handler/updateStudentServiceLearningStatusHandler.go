@@ -14,7 +14,7 @@ func UpdateStudentServiceLearningStatusHandler(ctx iris.Context) {
 		StudentServiceLearningID string `valid:"required"`
 		Status                   string `valid:"required, in(pass|failed)"`
 		Hours                    uint   `valid:"required, int"`
-		Comment                  string `valid:"length(0|150)"`
+		Comment                  string `valid:"length(0|300)"`
 	}
 
 	params := &rule{

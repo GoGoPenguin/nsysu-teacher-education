@@ -11,7 +11,7 @@ import (
 func UpdateStudentCourseReviewHandler(ctx iris.Context) {
 	type rule struct {
 		StudentCourseID string `valid:"required"`
-		Review          string `valid:"required, length(0|150)"`
+		Review          string `valid:"required, length(0|300)"`
 	}
 
 	params := &rule{
