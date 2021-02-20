@@ -141,40 +141,42 @@ $('#Modal form').on('submit', (e) => {
         formData.append('Review', review)
     }
 
-    // $.ajax({
-    //     url: `${config.server}/v1/service-learning/student`,
-    //     type: 'PATCH',
-    //     data: formData,
-    //     cache: false,
-    //     contentType: false,
-    //     processData: false,
-    //     beforeSend: (xhr) => {
-    //         setHeader(xhr)
-    //     },
-    //     error: (xhr) => {
-    //         errorHandle(xhr, "上傳失敗")
-    //     },
-    //     success: (response) => {
-    //         if (response.code == 0) {
-    //             swal({
-    //                 title: '',
-    //                 text: '成功',
-    //                 icon: "success",
-    //                 timer: 1500,
-    //                 buttons: false,
-    //             })
-    //         } else {
-    //             swal({
-    //                 title: '',
-    //                 text: '失敗',
-    //                 icon: "error",
-    //                 timer: 1500,
-    //                 buttons: false,
-    //             })
-    //         }
-    //     },
-    //     complete: () => {
-    //         $('#Modal form')[0].reset()
-    //     }
-    // });
+    $.ajax({
+        url: `${config.server}/v1/service-learning/student`,
+        type: 'PATCH',
+        data: formData,
+        cache: false,
+        contentType: false,
+        processData: false,
+        beforeSend: (xhr) => {
+            setHeader(xhr)
+        },
+        error: (xhr) => {
+            errorHandle(xhr, "上傳失敗")
+        },
+        success: (response) => {
+            if (response.code == 0) {
+                swal({
+                    title: '',
+                    text: '成功',
+                    icon: "success",
+                    timer: 1500,
+                    buttons: false,
+                }).then(() => {
+                    $('#Modal').modal('hide')
+                })
+            } else {
+                swal({
+                    title: '',
+                    text: '失敗',
+                    icon: "error",
+                    timer: 1500,
+                    buttons: false,
+                })
+            }
+        },
+        complete: () => {
+            $('#Modal form')[0].reset()
+        }
+    });
 })
