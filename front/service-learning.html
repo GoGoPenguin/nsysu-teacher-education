@@ -27,7 +27,6 @@
     <link href="/node_modules/bootstrap-fileinput/css/fileinput-rtl.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="/node_modules/startbootstrap-scrolling-nav/css/scrolling-nav.css" rel="stylesheet">
     <link href="/assets/css/style.css" rel="stylesheet">
     <link href="/assets/css/service-learning.css?v=0.2.0" rel="stylesheet">
     <link href="/assets/css/overlay.css?v=0.2.0" rel="stylesheet">
@@ -110,6 +109,91 @@
                 <tbody></tbody>
                 </tbody>
             </table>
+            <div class="block_title">
+                <h2>新增服務學習</h2>
+            </div>
+            <form>
+                <div class="form-group">
+                    <label for="type">類別</label>
+                    <select required class="form-control" id="type"
+                        oninvalid="this.setCustomValidity('請輸入服務學習類別')"
+                        oninput="this.setCustomValidity('')">
+                        <option value="" selected disabled>請選擇</option>
+                        <option value="internship">實習服務</option>
+                        <option value="volunteer">志工服務</option>
+                        <option value="both">同時認列教育實習服務暨志工服務</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="content">服務內容說明</label>
+                    <textarea class="form-control" id="content"
+                        oninvalid="this.setCustomValidity('請輸入服務內容說明')" oninput="this.setCustomValidity('')"
+                        required></textarea>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col">
+                            <label>開始日期</label>
+                            <div class="input-group date" id="start-date" data-target-input="nearest">
+                                <input type="text" class="form-control datetimepicker-input"
+                                    data-target="#start-date" oninvalid="this.setCustomValidity('請輸入開始日期')"
+                                    oninput="this.setCustomValidity('')" required />
+                                <div class="input-group-append" data-target="#start-date"
+                                    data-toggle="datetimepicker">
+                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <label>結束日期</label>
+                            <div class="input-group date" id="end-date" data-target-input="nearest">
+                                <input type="text" class="form-control datetimepicker-input"
+                                    data-target="#end-date" oninvalid="this.setCustomValidity('請輸入結束日期')"
+                                    oninput="this.setCustomValidity('')" required />
+                                <div class="input-group-append" data-target="#end-date"
+                                    data-toggle="datetimepicker">
+                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col">
+                            <label>開始時間</label>
+                            <div class="input-group date" id="start-time" data-target-input="nearest">
+                                <input type="text" class="form-control datetimepicker-input"
+                                    data-target="#start-time" oninvalid="this.setCustomValidity('請輸入開始時間')"
+                                    oninput="this.setCustomValidity('')" required />
+                                <div class="input-group-append" data-target="#start-time"
+                                    data-toggle="datetimepicker">
+                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <label>結束時間</label>
+                            <div class="input-group date" id="end-time" data-target-input="nearest">
+                                <input type="text" class="form-control datetimepicker-input"
+                                    data-target="#end-time" oninvalid="this.setCustomValidity('請輸入結束時間')"
+                                    oninput="this.setCustomValidity('')" required />
+                                <div class="input-group-append" data-target="#end-time"
+                                    data-toggle="datetimepicker">
+                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="hours">時數</label>
+                    <input type="number" class="form-control" id="hours"
+                        oninvalid="this.setCustomValidity('請輸入時數')" oninput="this.setCustomValidity('')"
+                        required></input>
+                </div>
+                <a class="btn_table disabled">編輯</a>
+            </form>
         </div>
     </section>
 
@@ -204,7 +288,6 @@
     <script src="/node_modules/dayjs/dayjs.min.js"></script>
 
     <!-- Custom JavaScript for this theme -->
-    <script src="/node_modules/startbootstrap-scrolling-nav/js/scrolling-nav.js"></script>
 
     <script src="/assets/js/auth.js?v=0.2.0"></script>
     <script src="/assets/js/loading.js?v=0.2.0"></script>
