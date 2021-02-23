@@ -48,6 +48,7 @@ const getStudentServiceLearning = () => {
         url: `${config.server}/v1/service-learning/student`,
         type: 'GET',
         beforeSend: (xhr) => {
+            $('#student-service-learning tbody').html('')
             setHeader(xhr)
         },
         error: (xhr) => {
@@ -179,4 +180,88 @@ $('#Modal form').on('submit', (e) => {
             $('#Modal form')[0].reset()
         }
     });
+})
+
+const newServiceLearning = () => {
+    $('#submit').click()
+}
+
+$('#form').on('submit', (e) => {
+    e.preventDefault();
+
+    let type = $("#type").val()
+    let content = $("#content").val()
+    let startDate = $("#start-date input").val();
+    let endDate = $("#end-date input").val();
+    let startTime = $("#start-time input").val();
+    let endTime = $("#end-time input").val();
+    let hours = $("#hours").val()
+
+    $.ajax({
+        url: `${config.server}/v1/service-learning`,
+        type: 'POST',
+        data: {
+            'Type': type,
+            'Content': content,
+            'Start': startDate,
+            'End': endDate,
+            'Session': `${startTime} ~ ${endTime}`,
+            'Hours': hours
+        },
+        beforeSend: (xhr) => {
+            loading()
+            setHeader(xhr)
+        },
+        error: (xhr) => {
+            swal({
+                title: '',
+                text: '發生錯誤',
+                icon: "error",
+                timer: 1500,
+                buttons: false,
+            })
+        },
+        success: (response) => {
+            if (response.code == 0) {
+                swal({
+                    title: '',
+                    text: '成功',
+                    icon: "success",
+                    timer: 1500,
+                    buttons: false,
+                }).then(() => {
+                    $('#Modal').modal('hide')
+                })
+            } else {
+                swal({
+                    title: '',
+                    text: '發生錯誤',
+                    icon: "error",
+                    timer: 1500,
+                    buttons: false,
+                })
+            }
+        },
+        complete: () => {
+            $('#form')[0].reset()
+            getStudentServiceLearning()
+            unloading()
+        }
+    });
+})
+
+$("#start-date input").on('change', () => {
+    $("#end-date input").attr('min', $("#start-date input").val())
+})
+
+$("#end-date input").on('change', () => {
+    $("#start-date input").attr('max', $("#end-date input").val())
+})
+
+$("#start-time input").on('change', () => {
+    $("#end-time input").attr('min', $("#start-time input").val())
+})
+
+$("#end-time input").on('change', () => {
+    $("#start-time input").attr('max', $("#end-time input").val())
 })

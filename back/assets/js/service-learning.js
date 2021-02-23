@@ -37,6 +37,7 @@ const serviceLearningTable = $('table#service-learning').DataTable({
                     <button class="btn btn-primary mr-1" onclick="update(${index})">編輯</button>
                     <button class="btn btn-danger" onclick="$('#deleteModal').modal('show'); serviceLearningID=${element.ID}">刪除</button>
                 `
+                array[index].CreatedBy = element.CreatedBy == "" ? "管理者" : element.CreatedBy
             })
             return d.list
         },
@@ -53,6 +54,7 @@ const serviceLearningTable = $('table#service-learning').DataTable({
         { data: "Date" },
         { data: "Session" },
         { data: "Hours" },
+        { data: "CreatedBy" },
         { data: "Button" },
     ],
     language: {
@@ -403,10 +405,10 @@ const updateStatus = (status) => {
         complete: (data) => {
             if (status == 'pass') {
                 $('#checkModal div.modal-footer button.btn.btn-primary').html('通過')
-                $('#checkModal div.modal-footer button.btn.btn-primary').attr("disabled", true)
+                $('#checkModal div.modal-footer button.btn.btn-primary').attr("disabled", false)
             } else if (status == 'failed') {
                 $('#checkModal div.modal-footer button.btn.btn-danger').html('未通過')
-                $('#checkModal div.modal-footer button.btn.btn-danger').attr("disabled", true)
+                $('#checkModal div.modal-footer button.btn.btn-danger').attr("disabled", false)
             }
             $('#checkModal').modal('hide')
         }

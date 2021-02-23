@@ -10,13 +10,14 @@ func ServiceLearningDTO(serviceLearnings *[]gorm.ServiceLearning) []map[string]i
 
 	for _, serviceLearning := range *serviceLearnings {
 		result = append(result, map[string]interface{}{
-			"ID":      serviceLearning.ID,
-			"Type":    serviceLearning.Type,
-			"Content": serviceLearning.Content,
-			"Session": serviceLearning.Session,
-			"Hours":   serviceLearning.Hours,
-			"Start":   serviceLearning.Start,
-			"End":     serviceLearning.End,
+			"ID":        serviceLearning.ID,
+			"Type":      serviceLearning.Type,
+			"Content":   serviceLearning.Content,
+			"Session":   serviceLearning.Session,
+			"Hours":     serviceLearning.Hours,
+			"Start":     serviceLearning.Start,
+			"End":       serviceLearning.End,
+			"CreatedBy": serviceLearning.Student.Name,
 		})
 	}
 	return result

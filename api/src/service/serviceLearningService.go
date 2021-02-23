@@ -5,6 +5,7 @@ import (
 	"io"
 	"mime/multipart"
 	"os"
+	"strconv"
 	"time"
 
 	"github.com/nsysu/teacher-education/src/assembler"
@@ -16,7 +17,7 @@ import (
 )
 
 // CreateServieLearning create service-learning
-func CreateServieLearning(serviceType, content, session string, hours uint, start, end time.Time) (result interface{}, e *errors.Error) {
+func CreateServieLearning(account, serviceType, content, session string, hours uint, start, end time.Time) (result interface{}, e *errors.Error) {
 	tx := gorm.DB()
 
 	defer func() {
@@ -27,14 +28,23 @@ func CreateServieLearning(serviceType, content, session string, hours uint, star
 	}()
 
 	serviceLearning := &gorm.ServiceLearning{
-		Type:    serviceType,
-		Content: content,
-		Session: session,
-		Hours:   hours,
-		Start:   start,
-		End:     end,
+		Type:      serviceType,
+		Content:   content,
+		Session:   session,
+		Hours:     hours,
+		Start:     start,
+		End:       end,
+		CreatedBy: nil,
 	}
-	gorm.ServiceLearningDao.New(tx, serviceLearning)
+
+	if operator := gorm.StudentDao.GetByAccount(tx, account); operator != nil {
+		serviceLearning.CreatedBy = &operator.ID
+		gorm.ServiceLearningDao.New(tx, serviceLearning)
+
+		SingUpServiceLearning(account, strconv.Itoa(int(serviceLearning.ID)))
+	} else {
+		gorm.ServiceLearningDao.New(tx, serviceLearning)
+	}
 
 	return "success", nil
 }
@@ -65,17 +75,17 @@ func GetServiceLearningList(account, start, length, search string) (result map[s
 
 	if operator := gorm.AdminDao.GetByAccount(tx, account); operator != nil {
 		serviceLearnings = gorm.ServiceLearningDao.Query(
-			tx,
+			tx.Joins("Student"),
 			specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
 			specification.OrderSpecification("start", specification.OrderDirectionDESC),
 			specification.LikeSpecification([]string{"type", "content", "start", "end", "hours"}, search),
-			specification.IsNullSpecification("deleted_at"),
+			specification.IsNullSpecification("service_learning.deleted_at"),
 		)
 
 		filtered = gorm.ServiceLearningDao.Count(
 			tx,
 			specification.LikeSpecification([]string{"type", "content", "start", "end", "hours"}, search),
-			specification.IsNullSpecification("deleted_at"),
+			specification.IsNullSpecification("service_learning.deleted_at"),
 		)
 	} else {
 		serviceLearnings = gorm.ServiceLearningDao.Query(
@@ -83,7 +93,8 @@ func GetServiceLearningList(account, start, length, search string) (result map[s
 			specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
 			specification.BiggerSpecification("start", time.Now().String()),
 			specification.OrderSpecification("start", specification.OrderDirectionASC),
-			specification.IsNullSpecification("deleted_at"),
+			specification.IsNullSpecification("service_learning.deleted_at"),
+			specification.IsNullSpecification("created_by"),
 		)
 	}
 
@@ -91,6 +102,8 @@ func GetServiceLearningList(account, start, length, search string) (result map[s
 		tx,
 		specification.IsNullSpecification("deleted_at"),
 	)
+
+	logger.Debug(serviceLearnings)
 
 	result = map[string]interface{}{
 		"list":            assembler.ServiceLearningDTO(serviceLearnings),
@@ -162,12 +175,14 @@ func GetStudentServiceLearningList(account, start, length, search string) (resul
 			specification.OrderSpecification("`student_service_learning`."+specification.IDColumn, specification.OrderDirectionDESC),
 			specification.LikeSpecification([]string{"concat(Student.name,Student.account,Student.number,Student.major,ServiceLearning.hours)"}, search),
 			specification.IsNullSpecification("student_service_learning.deleted_at"),
+			specification.IsNullSpecification("ServiceLearning.deleted_at"),
 		)
 
 		filtered = gorm.StudentServiceLearningDao.Count(
 			tx,
 			specification.LikeSpecification([]string{"concat(Student.name,Student.account,Student.number,Student.major,ServiceLearning.hours)"}, search),
 			specification.IsNullSpecification("student_service_learning.deleted_at"),
+			specification.IsNullSpecification("ServiceLearning.deleted_at"),
 		)
 	} else {
 		student := gorm.StudentDao.GetByAccount(tx, account)
@@ -176,6 +191,7 @@ func GetStudentServiceLearningList(account, start, length, search string) (resul
 			specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
 			specification.OrderSpecification("`student_service_learning`."+specification.IDColumn, specification.OrderDirectionDESC),
 			specification.IsNullSpecification("student_service_learning.deleted_at"),
+			specification.IsNullSpecification("ServiceLearning.deleted_at"),
 			specification.StudentSpecification(student.ID),
 		)
 	}
@@ -183,6 +199,7 @@ func GetStudentServiceLearningList(account, start, length, search string) (resul
 	total := gorm.StudentServiceLearningDao.Count(
 		tx,
 		specification.IsNullSpecification("student_service_learning.deleted_at"),
+		specification.IsNullSpecification("ServiceLearning.deleted_at"),
 	)
 
 	result = map[string]interface{}{

@@ -10,12 +10,14 @@ import (
 // ServiceLearning model
 type ServiceLearning struct {
 	gorm.Model
-	Type    string    `gorm:"column:type;"`
-	Content string    `gorm:"column:content;"`
-	Session string    `gorm:"column:session;"`
-	Hours   uint      `gormn:"column:hours"`
-	Start   time.Time `gorm:"column:start"`
-	End     time.Time `gorm:"column:end"`
+	Type      string    `gorm:"column:type;"`
+	Content   string    `gorm:"column:content;"`
+	Session   string    `gorm:"column:session;"`
+	Hours     uint      `gorm:"column:hours"`
+	Start     time.Time `gorm:"column:start"`
+	End       time.Time `gorm:"column:end"`
+	CreatedBy *uint     `gorm:"column:created_by;"`
+	Student   Student   `gorm:"foreignkey:CreatedBy;"`
 }
 
 type serviceLearningDao struct {
@@ -75,7 +77,7 @@ func (dao *serviceLearningDao) Query(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.
 	var result []ServiceLearning
 	err := tx.Table(dao.table).
 		Scopes(funcs...).
-		Scan(&result).Error
+		Find(&result).Error
 
 	if err != nil {
 		panic(err)

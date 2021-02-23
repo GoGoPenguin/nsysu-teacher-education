@@ -7,6 +7,7 @@ import (
 	"github.com/kataras/iris"
 	"github.com/nsysu/teacher-education/src/errors"
 	"github.com/nsysu/teacher-education/src/service"
+	"github.com/nsysu/teacher-education/src/utils/auth"
 	t "github.com/nsysu/teacher-education/src/utils/time"
 	"github.com/nsysu/teacher-education/src/utils/typecast"
 )
@@ -54,7 +55,8 @@ func CreateServiceLearningHandler(ctx iris.Context) {
 		return
 	}
 
-	result, err := service.CreateServieLearning(params.Type, params.Content, params.Session, params.Hours, startTime, endTime)
+	account := auth.Account(ctx)
+	result, err := service.CreateServieLearning(account, params.Type, params.Content, params.Session, params.Hours, startTime, endTime)
 
 	if err != (*errors.Error)(nil) {
 		failed(ctx, err)

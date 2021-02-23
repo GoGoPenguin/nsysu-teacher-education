@@ -63,7 +63,7 @@ func Error(msg interface{}) {
 }
 
 func output(level string, msg interface{}) {
-	logger.Println(fmt.Sprintf("] %s - %s : %v", level, callStack(), msg))
+	logger.Println(fmt.Sprintf("] %s - %s : %+v", level, callStack(), msg))
 }
 
 func callStack() string {
