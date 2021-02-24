@@ -101,7 +101,7 @@ func GetServiceLearningList(account, start, length, search string) (result map[s
 			)
 
 			filtered = gorm.ServiceLearningDao.Count(
-				tx,
+				tx.Joins("Student"),
 				specification.LikeSpecification([]string{"type", "content", "start", "end", "hours", "session", "Student.name"}, search),
 				specification.IsNullSpecification("service_learning.deleted_at"),
 			)
