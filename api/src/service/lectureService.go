@@ -1,6 +1,8 @@
 package service
 
 import (
+	"strings"
+
 	"github.com/nsysu/teacher-education/src/assembler"
 	"github.com/nsysu/teacher-education/src/errors"
 	"github.com/nsysu/teacher-education/src/persistence/gorm"
@@ -27,6 +29,7 @@ func GetLectures(account, start, length, search string) (result map[string]inter
 	)
 
 	if operator := gorm.AdminDao.GetByAccount(tx, account); operator != nil {
+		search = strings.TrimSpace(search)
 		lectures = gorm.LectureDao.Query(
 			tx,
 			specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),

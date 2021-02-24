@@ -6,6 +6,7 @@ import (
 	"mime/multipart"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/nsysu/teacher-education/src/assembler"
@@ -60,33 +61,52 @@ func GetServiceLearningList(account, start, length, search string) (result map[s
 		}
 	}()
 
-	if search == "同時認列教育實習服務暨志工服務" {
-		search = "both"
-	} else if search == "實習服務" {
-		search = "internship"
-	} else if search == "志工服務" {
-		search = "volunteer"
-	}
-
 	var (
 		serviceLearnings *[]gorm.ServiceLearning
 		filtered         int64
 	)
 
 	if operator := gorm.AdminDao.GetByAccount(tx, account); operator != nil {
-		serviceLearnings = gorm.ServiceLearningDao.Query(
-			tx.Joins("Student"),
-			specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
-			specification.OrderSpecification("start", specification.OrderDirectionDESC),
-			specification.LikeSpecification([]string{"type", "content", "start", "end", "hours"}, search),
-			specification.IsNullSpecification("service_learning.deleted_at"),
-		)
+		search = strings.TrimSpace(search)
 
-		filtered = gorm.ServiceLearningDao.Count(
-			tx,
-			specification.LikeSpecification([]string{"type", "content", "start", "end", "hours"}, search),
-			specification.IsNullSpecification("service_learning.deleted_at"),
-		)
+		if search != "" && strings.Contains("管理者", search) {
+			serviceLearnings = gorm.ServiceLearningDao.Query(
+				tx.Joins("Student"),
+				specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
+				specification.OrderSpecification("start", specification.OrderDirectionDESC),
+				specification.IsNullSpecification("service_learning.deleted_at"),
+				specification.IsNullSpecification("service_learning.created_by"),
+			)
+
+			filtered = gorm.ServiceLearningDao.Count(
+				tx,
+				specification.IsNullSpecification("service_learning.deleted_at"),
+				specification.IsNullSpecification("service_learning.created_by"),
+			)
+		} else {
+			if search == "同時認列教育實習服務暨志工服務" {
+				search = "both"
+			} else if search == "實習服務" {
+				search = "internship"
+			} else if search == "志工服務" {
+				search = "volunteer"
+			}
+
+			serviceLearnings = gorm.ServiceLearningDao.Query(
+				tx.Joins("Student"),
+				specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
+				specification.OrderSpecification("start", specification.OrderDirectionDESC),
+				specification.LikeSpecification([]string{"type", "content", "start", "end", "hours", "session", "Student.name"}, search),
+				specification.IsNullSpecification("service_learning.deleted_at"),
+			)
+
+			filtered = gorm.ServiceLearningDao.Count(
+				tx,
+				specification.LikeSpecification([]string{"type", "content", "start", "end", "hours", "session", "Student.name"}, search),
+				specification.IsNullSpecification("service_learning.deleted_at"),
+			)
+
+		}
 	} else {
 		serviceLearnings = gorm.ServiceLearningDao.Query(
 			tx,

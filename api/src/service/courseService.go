@@ -5,6 +5,7 @@ import (
 	"io"
 	"mime/multipart"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/nsysu/teacher-education/src/assembler"
@@ -191,6 +192,7 @@ func GetStudentCourseList(account, start, length, search string) (result map[str
 	)
 
 	if operator := gorm.AdminDao.GetByAccount(tx, account); operator != nil {
+		search = strings.TrimSpace(search)
 		studentCourses = gorm.StudentCourseDao.Query(
 			tx,
 			specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
