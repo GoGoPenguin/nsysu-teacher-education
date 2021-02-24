@@ -17,6 +17,7 @@ func ServiceLearningDTO(serviceLearnings *[]gorm.ServiceLearning) []map[string]i
 			"Hours":     serviceLearning.Hours,
 			"Start":     serviceLearning.Start,
 			"End":       serviceLearning.End,
+			"Show":      serviceLearning.Show,
 			"CreatedBy": serviceLearning.Student.Name,
 		})
 	}

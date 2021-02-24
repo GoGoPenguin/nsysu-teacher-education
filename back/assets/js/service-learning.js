@@ -31,12 +31,16 @@ const serviceLearningTable = $('table#service-learning').DataTable({
             d.list.forEach((element, index, array) => {
                 serviceLearnings.push(Object.assign({}, element))
 
+                let today = dayjs(new Date())
+                let checked = element.Show || (element.Show == null && dayjs(element.Start).isAfter(today)) ? 'checked' : ''
+
                 array[index].Type = TYPE[element.Type];
                 array[index].Date = `${dayjs(element.Start).format('YYYY-MM-DD')} ~ ${dayjs(element.End).format('YYYY-MM-DD')}`
                 array[index].Button = `
                     <button class="btn btn-primary mr-1" onclick="update(${index})">編輯</button>
                     <button class="btn btn-danger" onclick="$('#deleteModal').modal('show'); serviceLearningID=${element.ID}">刪除</button>
                 `
+                array[index].CheckBox = element.CreatedBy == "" ? `<input id="checkbox-${element.ID}" class="form-check-input" type="checkbox" style="margin: auto" ${checked} onclick="showOrNotShow(${element.ID})"></input>` : ""
                 array[index].CreatedBy = element.CreatedBy == "" ? "管理者" : element.CreatedBy
             })
             return d.list
@@ -49,6 +53,7 @@ const serviceLearningTable = $('table#service-learning').DataTable({
         }
     },
     columns: [
+        { data: "CheckBox" },
         { data: "Type" },
         { data: "Content" },
         { data: "Date" },
@@ -523,6 +528,43 @@ const deleteServiceLearning = () => {
             $('#deleteModal div.modal-footer button.btn.btn-danger').html('送出')
             $('#deleteModal div.modal-footer button.btn.btn-danger').attr("disabled", false)
             $('#deleteModal').modal('hide')
+        }
+    });
+}
+
+const showOrNotShow = (id) => {
+    let checkbox = $(`#checkbox-${id}`)
+
+    $.ajax({
+        url: `${config.server}/v1/service-learning/show/${id}`,
+        type: 'PATCH',
+        data: {
+            Show: checkbox.prop('checked'),
+        },
+        beforeSend: (xhr) => {
+            setHeader(xhr)
+        },
+        error: (xhr) => {
+            swal({
+                title: '',
+                text: '失敗',
+                icon: "error",
+                timer: 1000,
+                buttons: false,
+            })
+        },
+        success: (response) => {
+            if (response.code === 0) {
+                serviceLearningTable.ajax.reload(null, false)
+            } else {
+                swal({
+                    title: '',
+                    text: '失敗',
+                    icon: "error",
+                    timer: 1000,
+                    buttons: false,
+                })
+            }
         }
     });
 }

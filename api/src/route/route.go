@@ -59,11 +59,12 @@ func Run() {
 
 		serviceLearning := v1.Party("/service-learning")
 		{
-			serviceLearning.Get("/", hero.Handler(handler.GetServiceLearningHandler))                          // 取得服務學習列表
-			serviceLearning.Post("/", hero.Handler(handler.CreateServiceLearningHandler))                      // 新增服務學習
-			serviceLearning.Post("/sign-up", hero.Handler(handler.SignUpServiceLearningHandler))               // 報名服務學習
-			serviceLearning.Patch("/", hero.Handler(handler.UpdateServiceLearningHandler))                     // 修改服務學習
-			serviceLearning.Delete("/{serviceLearnginID}", hero.Handler(handler.DeleteServiceLearningHandler)) // 刪除服務學習
+			serviceLearning.Get("/", hero.Handler(handler.GetServiceLearningHandler))                                  // 取得服務學習列表
+			serviceLearning.Post("/", hero.Handler(handler.CreateServiceLearningHandler))                              // 新增服務學習
+			serviceLearning.Post("/sign-up", hero.Handler(handler.SignUpServiceLearningHandler))                       // 報名服務學習
+			serviceLearning.Patch("/", hero.Handler(handler.UpdateServiceLearningHandler))                             // 修改服務學習
+			serviceLearning.Delete("/{serviceLearnginID}", hero.Handler(handler.DeleteServiceLearningHandler))         // 刪除服務學習
+			serviceLearning.Patch("/show/{serviceLearnginID}", hero.Handler(handler.UpdateServiceLearningShowHandler)) // 修改服務學習顯示狀態
 
 			student := serviceLearning.Party("/student")
 			{

@@ -16,6 +16,7 @@ type ServiceLearning struct {
 	Hours     uint      `gorm:"column:hours"`
 	Start     time.Time `gorm:"column:start"`
 	End       time.Time `gorm:"column:end"`
+	Show      *bool     `gorm:"column:show;"`
 	CreatedBy *uint     `gorm:"column:created_by;"`
 	Student   Student   `gorm:"foreignkey:CreatedBy;"`
 }
@@ -108,6 +109,7 @@ func (dao *serviceLearningDao) Update(tx *gorm.DB, serviceLearning *ServiceLearn
 		"Hours":   serviceLearning.Hours,
 		"Start":   serviceLearning.Start,
 		"End":     serviceLearning.End,
+		"Show":    serviceLearning.Show,
 	}
 	err := tx.Model(serviceLearning).
 		Where("id = ?", serviceLearning.ID).

@@ -91,7 +91,7 @@ func GetServiceLearningList(account, start, length, search string) (result map[s
 		serviceLearnings = gorm.ServiceLearningDao.Query(
 			tx,
 			specification.PaginationSpecification(typecast.StringToInt(start), typecast.StringToInt(length)),
-			specification.BiggerSpecification("start", time.Now().String()),
+			specification.OrSpecification(fmt.Sprintf("`start` > \"%s\"", time.Now().String()), "`show` = \"1\""),
 			specification.OrderSpecification("start", specification.OrderDirectionASC),
 			specification.IsNullSpecification("service_learning.deleted_at"),
 			specification.IsNullSpecification("created_by"),
@@ -102,8 +102,6 @@ func GetServiceLearningList(account, start, length, search string) (result map[s
 		tx,
 		specification.IsNullSpecification("deleted_at"),
 	)
-
-	logger.Debug(serviceLearnings)
 
 	result = map[string]interface{}{
 		"list":            assembler.ServiceLearningDTO(serviceLearnings),
@@ -373,6 +371,25 @@ func UpdateServieLearning(serviceLearningID, serviceType, content, session strin
 	serviceLearning.Hours = hours
 	serviceLearning.Start = start
 	serviceLearning.End = end
+
+	gorm.ServiceLearningDao.Update(tx, serviceLearning)
+
+	return "success", nil
+}
+
+// UpdateServiceLearningStateOfShow update service-learning's state of show
+func UpdateServiceLearningStateOfShow(serviceLearningID string, show bool) (result interface{}, e *errors.Error) {
+	tx := gorm.DB()
+
+	defer func() {
+		if r := recover(); r != nil {
+			logger.Error(r)
+			e = errors.UnexpectedError()
+		}
+	}()
+
+	serviceLearning := gorm.ServiceLearningDao.GetByID(tx, typecast.StringToUint(serviceLearningID))
+	serviceLearning.Show = &show
 
 	gorm.ServiceLearningDao.Update(tx, serviceLearning)
 
