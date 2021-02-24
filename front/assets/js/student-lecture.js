@@ -1,18 +1,8 @@
 let editedItem = null
 let student = null
 
-loading()
 $(document).ready(() => {
-    Promise.all([
-        getStudentLecture(),
-        getStudentInformation()
-    ]).then(() => {
-        unloading()
-    }).catch(() => {
-        setTimeout(() => {
-            removeCookie()
-        }, 1500)
-    })
+    $('#applicationButton').attr('disabled', false)
 })
 
 const getStudentInformation = () => {
@@ -67,6 +57,18 @@ const getStudentLecture = () => {
         }
     });
 }
+
+loading()
+Promise.all([
+    getStudentLecture(),
+    getStudentInformation()
+]).catch(() => {
+    setTimeout(() => {
+        removeCookie()
+    }, 1500)
+}).finally(() => {
+    unloading()
+})
 
 const getStudentLectureDetail = (id) => {
     $.ajax({
@@ -178,7 +180,7 @@ const getStudentLectureDetail = (id) => {
 
                 let buttons = '<button class="btn btn-primary" type="button" onclick="check()">審核</button>'
                 if (response.data.Pass) {
-                    buttons += '<button class="btn btn-secondary ml-3" onclick="applicationForm(this)">下載申請書</button>'
+                    buttons += '<button class="btn btn-secondary ml-3" id="applicationButton" onclick="applicationForm(this)" disabled>下載申請書</button>'
                 }
 
                 $('#detailModal .modal-footer').html(buttons)
