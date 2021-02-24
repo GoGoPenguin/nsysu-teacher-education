@@ -85,7 +85,7 @@ func GetLectureDetail(lectureID string) (result interface{}, e *errors.Error) {
 
 // SingUpLecture student sign up lecture
 func SingUpLecture(account, lectureID string) (result interface{}, e *errors.Error) {
-	tx := gorm.DB().Set("gorm:auto_preload", true).Begin()
+	tx := gorm.DB().Begin()
 
 	defer func() {
 		if r := recover(); r != nil {
@@ -102,14 +102,14 @@ func SingUpLecture(account, lectureID string) (result interface{}, e *errors.Err
 	}
 
 	lecture := gorm.LectureDao.Query(
-		tx,
+		tx.Preload("Categories.Types.Groups.Subjects.StudentSubject").Preload(clause.Associations),
 		specification.IDSpecification(lectureID),
 		specification.IsNullSpecification("deleted_at"),
 		specification.StatusSpecification(gorm.LectureDao.Enable),
 	)
 
 	if len(*lecture) == 0 {
-		return nil, errors.NotFoundError("service-learning ID " + lectureID)
+		return nil, errors.NotFoundError("lecture ID " + lectureID)
 	}
 
 	studentLecture := &gorm.StudentLecture{
@@ -133,7 +133,6 @@ func SingUpLecture(account, lectureID string) (result interface{}, e *errors.Err
 			}
 		}
 	}
-	tx.Rollback()
 
 	if err := tx.Commit().Error; err != nil {
 		panic(err)

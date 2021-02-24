@@ -217,14 +217,13 @@ const getLectures = () => {
             } else {
                 response.list.forEach((element, index) => {
                     let action = ''
-
-                    let studentLecture = studentLectures.find(studentlecture => { return element.ID === studentlecture.lecture.ID })
+                    let studentLecture = studentLectures.find(studentlecture => { return element.ID === studentlecture.Lecture.ID })
 
                     if (studentLecture !== undefined) {
                         action = `<a class="btn_table disabled">已申請</a>`
                     }
                     else {
-                        action = `<a class="btn_table" onclick="signUpLecture(${element.ID}, this)">申請</a>`
+                        action = `<a class="btn_table" onclick="event.stopPropagation();signUpLecture(${element.ID}, this)">申請</a>`
                     }
 
                     $('#lecture tbody')
@@ -454,7 +453,7 @@ const detail = (id) => {
             } else {
                 swal({
                     title: '',
-                    text: '失敗',
+                    text: '發生錯誤，請聯絡管理員',
                     icon: 'error',
                     timer: 1500,
                     buttons: false,
@@ -469,7 +468,7 @@ const signUpLecture = (id, el) => {
         url: `${config.server}/v1/lecture/sign-up`,
         type: 'POST',
         data: {
-            'lectureID': id,
+            'LectureID': id,
         },
         beforeSend: (xhr) => {
             $(el).toggleClass('disabled')

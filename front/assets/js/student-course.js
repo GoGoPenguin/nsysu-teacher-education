@@ -148,7 +148,7 @@ $('#updateReviewModal form').on('submit', (e) => {
             } else {
                 swal({
                     title: '',
-                    text: '失敗',
+                    text: '發生錯誤，請聯絡管理員',
                     icon: "error",
                     timer: 1500,
                     buttons: false,

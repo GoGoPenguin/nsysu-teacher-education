@@ -92,7 +92,6 @@ func (dao *lectureDao) Query(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.DB) *[]L
 		Scopes(funcs...).
 		Find(&result).Error
 
-
 	if err != nil {
 		panic(err)
 	}

@@ -55,9 +55,9 @@ const getStudentLecture = () => {
                     html += `
                         <tr>
                             <td data-title="狀態" class="${element.Pass ? 'success' : 'danger'}"><span>●</span>${element.Pass ? '通過' : '未通過'}</td>
-                            <td data-title="科目名稱">${element.lecture.Name}</td>
-                            <td data-title="最低學分">${element.lecture.MinCredit}</td>
-                            <td data-title="備註">${element.lecture.Comment}</td>
+                            <td data-title="科目名稱">${element.Lecture.Name}</td>
+                            <td data-title="最低學分">${element.Lecture.MinCredit}</td>
+                            <td data-title="備註">${element.Lecture.Comment}</td>
                             <td><a class="btn_table" onclick="getStudentLectureDetail(${element.ID})">編輯</a></td>
                         </tr>
                     `
@@ -80,8 +80,8 @@ const getStudentLectureDetail = (id) => {
         },
         success: (response) => {
             if (response.code === 0) {
-                editedItem = response.data.lecture
-                let lecture = response.data.lecture
+                editedItem = response.data.Lecture
+                let lecture = response.data.Lecture
                 let html = ''
 
                 for (const category of lecture.Categories) {
@@ -178,7 +178,7 @@ const getStudentLectureDetail = (id) => {
 
                 let buttons = '<button class="btn btn-primary" type="button" onclick="check()">審核</button>'
                 if (response.data.Pass) {
-                    buttons += '<button class="btn btn-secondary ml-3" onclick="applictionForm(this)">下載申請書</button>'
+                    buttons += '<button class="btn btn-secondary ml-3" onclick="applicationForm(this)">下載申請書</button>'
                 }
 
                 $('#detailModal .modal-footer').html(buttons)
@@ -186,7 +186,7 @@ const getStudentLectureDetail = (id) => {
             } else {
                 swal({
                     title: '',
-                    text: '失敗',
+                    text: '發生錯誤，請聯絡管理員',
                     icon: "error",
                     timer: 1500,
                     buttons: false,
@@ -201,7 +201,7 @@ const updateSubject = (studentLectureID, subjectID) => {
         url: `${config.server}/v1/lecture/student/subject`,
         type: 'PATCH',
         data: {
-            'StudentlectureID': studentLectureID,
+            'StudentLectureID': studentLectureID,
             'SubjectID': subjectID,
             'Name': $(`#studentName${subjectID}`).val(),
             'Year': $(`#year${subjectID}`).val(),
@@ -221,7 +221,7 @@ const updateSubject = (studentLectureID, subjectID) => {
             } else {
                 swal({
                     title: '',
-                    text: '失敗',
+                    text: '發生錯誤，請聯絡管理員',
                     icon: "error",
                     timer: 1500,
                     buttons: false,
@@ -243,11 +243,11 @@ const reloadLecture = (id) => {
         },
         success: (response) => {
             if (response.code === 0) {
-                editedItem = response.data.lecture
+                editedItem = response.data.Lecture
             } else {
                 swal({
                     title: '',
-                    text: '失敗',
+                    text: '發生錯誤，請聯絡管理員',
                     icon: "error",
                     timer: 1500,
                     buttons: false,
@@ -340,13 +340,13 @@ const check = () => {
         updateStudentLecturePass(lecture.ID, true)
 
         let buttons = '<button class="btn btn-primary" type="button" onclick="check()">審核</button>'
-        buttons += '<button class="btn btn-secondary ml-3" onclick="applictionForm(this)">下載申請書</button>'
+        buttons += '<button class="btn btn-secondary ml-3" onclick="applicationForm(this)">下載申請書</button>'
         $('#detailModal .modal-footer').html(buttons)
     } else {
         swal({
             title: '',
             text: '未通過',
-            icon: "error",
+            icon: "warning",
             timer: 1500,
             buttons: false,
         })
@@ -362,7 +362,7 @@ const updateStudentLecturePass = (lectureID, pass) => {
         url: `${config.server}/v1/lecture/student/pass`,
         type: 'PATCH',
         data: {
-            'lectureID': lectureID,
+            'LectureID': lectureID,
             'Pass': pass,
         },
         beforeSend: (xhr) => {
@@ -375,7 +375,7 @@ const updateStudentLecturePass = (lectureID, pass) => {
             if (response.code !== 0) {
                 swal({
                     title: '',
-                    text: '失敗',
+                    text: '發生錯誤，請聯絡管理員',
                     icon: "error",
                     timer: 1500,
                     buttons: false,
@@ -388,7 +388,7 @@ const updateStudentLecturePass = (lectureID, pass) => {
     })
 }
 
-const applictionForm = (el) => {
+const applicationForm = (el) => {
     $(el).addClass('disabled')
 
     setTimeout(() => {
