@@ -518,12 +518,12 @@ form .btn_table:hover {
     width: 100%;
 }
 
-.input-group > .form-control:not(:last-child) {
+.input-group>.form-control:not(:last-child) {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
 }
 
-.input-group > .form-control {
+.input-group>.form-control {
     position: relative;
     -ms-flex: 1 1 auto;
     flex: 1 1 auto;
@@ -555,4 +555,34 @@ form .btn_table:hover {
     margin-left: -1px;
     display: flex;
     box-sizing: border-box;
+}
+
+input[type="date"], input[type='time'] {
+    position: relative;
+}
+
+input[type="date"]:after {
+    font-family: "Font Awesome 5 Free";
+    content: "\f073";
+    padding: 0 5px;
+}
+
+input[type="time"]:after {
+    font-family: "Font Awesome 5 Free";
+    content: "\f017";
+    padding: 0 5px;
+}
+
+/* make the native arrow invisible and stretch it over the whole field so you can click anywhere in the input field to trigger the native datepicker*/
+
+input[type="date"]::-webkit-calendar-picker-indicator, input[type="time"]::-webkit-calendar-picker-indicator {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: auto;
+    height: auto;
+    color: transparent;
+    background: transparent;
 }
