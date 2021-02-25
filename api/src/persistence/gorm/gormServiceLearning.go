@@ -68,7 +68,7 @@ func (dao *serviceLearningDao) Count(tx *gorm.DB, funcs ...func(*gorm.DB) *gorm.
 	var result []ServiceLearning
 	count := tx.Table(dao.table).
 		Scopes(funcs...).
-		Scan(&result).RowsAffected
+		Find(&result).RowsAffected
 
 	return count
 }
