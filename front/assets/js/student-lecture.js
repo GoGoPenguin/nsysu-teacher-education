@@ -178,9 +178,10 @@ const getStudentLectureDetail = (id) => {
                 $('#detailModal #comment').html(lecture.Comment)
                 $('#detailModal #categories').html(html)
 
+                let disabled = document.readyState == 'complete' ? '' : 'disabled';
                 let buttons = '<button class="btn btn-primary" type="button" onclick="check()">審核</button>'
                 if (response.data.Pass) {
-                    buttons += '<button class="btn btn-secondary ml-3" id="applicationButton" onclick="applicationForm(this)" disabled>下載申請書</button>'
+                    buttons += `<button class="btn btn-secondary ml-3" id="applicationButton" onclick="applicationForm(this)" ${disabled}>下載申請書</button>`
                 }
 
                 $('#detailModal .modal-footer').html(buttons)
