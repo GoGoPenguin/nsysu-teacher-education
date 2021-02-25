@@ -561,19 +561,9 @@ input[type="date"], input[type='time'] {
     position: relative;
 }
 
-input[type="date"]:after {
-    font-family: "Font Awesome 5 Free";
-    content: "\f073";
+input[type="date"]:after, input[type="time"]:after {
     padding: 0 5px;
 }
-
-input[type="time"]:after {
-    font-family: "Font Awesome 5 Free";
-    content: "\f017";
-    padding: 0 5px;
-}
-
-/* make the native arrow invisible and stretch it over the whole field so you can click anywhere in the input field to trigger the native datepicker*/
 
 input[type="date"]::-webkit-calendar-picker-indicator, input[type="time"]::-webkit-calendar-picker-indicator {
     position: absolute;
