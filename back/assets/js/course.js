@@ -3,6 +3,11 @@ const STATUS = {
     'pass': '通過',
     'failed': '未通過',
 }
+const STATUS_COLOR = {
+    '': 'text-dark',
+    'pass': 'text-success',
+    'failed': 'text-danger',
+}
 const MEAL = {
     'vegetable': '素',
     'meat': '葷',
@@ -106,7 +111,7 @@ const studentCourseTable = $('table#student-course').DataTable({
                     array[index].Button = `<button class="btn btn-secondary" onclick="check(${index}, true)">查看</button>`
                 }
 
-                array[index].Status = STATUS[array[index].Status]
+                array[index].Status = `<span class="${STATUS_COLOR[array[index].Status]}">${STATUS[array[index].Status]}</span>`
                 array[index].Meal = MEAL[array[index].Meal]
 
                 studentCourses.push(element)

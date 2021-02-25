@@ -8,6 +8,11 @@ const STATUS = {
     'pass': '通過',
     'failed': '未通過',
 }
+const STATUS_COLOR = {
+    '': 'text-dark',
+    'pass': 'text-success',
+    'failed': 'text-danger',
+}
 
 let serviceLearningID = null
 let serviceLearnings = []
@@ -86,7 +91,7 @@ const studentServiceLearningTable = $('table#student-service-learning').DataTabl
                 }
 
                 array[index].ServiceLearning.Type = TYPE[element.ServiceLearning.Type];
-                array[index].Status = STATUS[array[index].Status]
+                array[index].Status = `<span class="${STATUS_COLOR[array[index].Status]}">${STATUS[array[index].Status]}</span>`
                 array[index].Date = `${dayjs(element.ServiceLearning.Start).format('YYYY-MM-DD')} ~ ${dayjs(element.ServiceLearning.End).format('YYYY-MM-DD')}`
                 array[index].Hours = array[index].Hours == null ? array[index].ServiceLearning.Hours : array[index].Hours;
 
