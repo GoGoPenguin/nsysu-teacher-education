@@ -15,15 +15,17 @@ import (
 	"github.com/nsysu/teacher-education/src/specification"
 	"github.com/nsysu/teacher-education/src/utils/logger"
 	"github.com/nsysu/teacher-education/src/utils/typecast"
+	db "gorm.io/gorm"
 )
 
 // CreateServieLearning create service-learning
 func CreateServieLearning(account, serviceType, content, session string, hours uint, start, end time.Time) (result interface{}, e *errors.Error) {
-	tx := gorm.DB()
+	tx := gorm.DB().Begin()
 
 	defer func() {
 		if r := recover(); r != nil {
 			logger.Error(r)
+			tx.Rollback()
 			e = errors.UnexpectedError()
 		}
 	}()
@@ -42,10 +44,14 @@ func CreateServieLearning(account, serviceType, content, session string, hours u
 		serviceLearning.CreatedBy = &operator.ID
 		gorm.ServiceLearningDao.New(tx, serviceLearning)
 
-		SingUpServiceLearning(account, strconv.Itoa(int(serviceLearning.ID)))
+		if _, err := SingUpServiceLearning(tx, account, strconv.Itoa(int(serviceLearning.ID))); err != nil {
+			panic(err)
+		}
 	} else {
 		gorm.ServiceLearningDao.New(tx, serviceLearning)
 	}
+
+	tx.Commit()
 
 	return "success", nil
 }
@@ -133,8 +139,10 @@ func GetServiceLearningList(account, start, length, search string) (result map[s
 }
 
 // SingUpServiceLearning student sign up service-learning
-func SingUpServiceLearning(account, serviceLearningID string) (result interface{}, e *errors.Error) {
-	tx := gorm.DB()
+func SingUpServiceLearning(tx *db.DB, account, serviceLearningID string) (result interface{}, e *errors.Error) {
+	if tx == nil {
+		tx = gorm.DB()
+	}
 
 	defer func() {
 		if r := recover(); r != nil {
@@ -153,7 +161,6 @@ func SingUpServiceLearning(account, serviceLearningID string) (result interface{
 		tx,
 		specification.IDSpecification(serviceLearningID),
 		specification.IsNullSpecification("deleted_at"),
-		specification.BiggerSpecification("End", time.Now().String()),
 	)
 
 	if len(*serviceLearning) == 0 {

@@ -24,7 +24,7 @@ func SignUpServiceLearningHandler(ctx iris.Context) {
 	}
 
 	account := auth.Account(ctx)
-	result, err := service.SingUpServiceLearning(account, params.ServiceLearningID)
+	result, err := service.SingUpServiceLearning(nil, account, params.ServiceLearningID)
 
 	if err != (*errors.Error)(nil) {
 		failed(ctx, err)
