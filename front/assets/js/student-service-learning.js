@@ -121,10 +121,20 @@ $('#Modal form').on('submit', (e) => {
         return
     }
 
-    if (reference.name.length > 36 || review.name.length > 36) {
+    if (reference && reference.name.length > 36) {
         swal({
             title: '',
-            text: '檔名過長',
+            text: '佐證資料檔名過長',
+            icon: "error",
+            timer: 1000,
+            buttons: false,
+        })
+        return
+    }
+    if (review && review.name.length > 36) {
+        swal({
+            title: '',
+            text: '心得檔名過長',
             icon: "error",
             timer: 1000,
             buttons: false,
